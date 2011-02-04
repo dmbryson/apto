@@ -52,7 +52,7 @@ namespace Apto {
 
 inline int Apto::Atomic::Add(volatile int* atomic, int value)
 {
-  return InterlockedExchangeAdd(reinterpret_cast<volatile LONG*>(atomic), static_cast<LONG>(value)) + value;
+  return OSAtomicAdd32Barrier(value, atomic);
 }
 
 inline int Apto::Atomic::Get(volatile int* atomic)
@@ -71,7 +71,7 @@ inline void Apto::Atomic::Set(volatile int* atomic, int value)
 
 inline int Apto::Atomic::Add(volatile int* atomic, int value)
 {
-  return OSAtomicAdd32Barrier(value, atomic);
+  return InterlockedExchangeAdd(reinterpret_cast<volatile LONG*>(atomic), static_cast<LONG>(value)) + value;
 }
 
 inline int Apto::Atomic::Get(volatile int* atomic)

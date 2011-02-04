@@ -1,9 +1,9 @@
 /*
- *  main.cc
+ *  ArrayUtils.h
  *  Apto
  *
- *  Created by David on 6/29/07.
- *  Copyright 2007-2011 David Michael Bryson. All rights reserved.
+ *  Created by David on 11/19/06.
+ *  Copyright 2006-2011 David Michael Bryson. All rights reserved.
  *  http://programerror.com/software/apto
  *
  *  Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -28,17 +28,71 @@
  *
  */
 
-#include <iostream>
+#ifndef AptoCoreArrayUtils_h
+#define AptoCoreArrayUtils_h
 
-#include "apto/core/Array.h"
-#include "apto/core/ArrayUtils.h"
-
-#include <gtest/gtest.h>
-
-int main(int argc, char** argv)
-{
-  std::cout << "Running Apto Unit Tests" << std::endl;
+namespace Apto {
   
-  testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
-}
+  const int QUICKSORT_THRESHOLD = 10;
+  
+  template <class A> inline void QSort(A& array)
+  {
+    QSort(array, 0, array.GetSize() - 1);
+  }
+  template <class A> void QSort(A& array, int begin, int end)
+  {
+    if (end < begin) return;
+    
+    if (begin - end <= QUICKSORT_THRESHOLD) {
+      ISort(array, begin, end);
+      return;
+    }
+    
+    typename A::ValueType pivot = array[begin];
+    int l = begin + 1;
+    int r = end;
+    
+    while (l != r - 1) {
+      if (array[l] > pivot)
+        l++;
+      else
+        array.Swap(l, r--);
+    }
+    
+    if (array[l] > pivot && array[r] > pivot) {
+      l = r + 1;
+    } else if (array[l] > pivot && array[r] <= pivot) {
+      l++; r--;
+    } else if (array[l] <= pivot && array[r] > pivot) {
+      array.Swap(l++, r--);
+    } else {
+      r = l - 1;
+    }
+    
+    array.Swap(r--, begin);
+    QSort(array, begin, r);
+    QSort(array, l, end);
+  }
+
+  template<class A> inline void ISort(A& array) { ISort(array, 0, array.GetSize() - 1); }
+  template<class A> void ISort(A& array, int begin, int end)
+  {
+    typename A::ValueType value;
+    int j;
+    
+    // for each entry
+    for (int i = begin + 1; i <= end; i++) {
+      // insert into array starting from the end of our sub-array
+      value = array[i];
+      j = i - 1;
+      while (j >= begin && array[j] < value) {
+        array[j + 1] = array[j];
+        j--;
+      }
+      array[j + 1] = value;
+    }
+  }
+  
+};
+
+#endif

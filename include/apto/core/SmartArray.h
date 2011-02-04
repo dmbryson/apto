@@ -50,6 +50,8 @@ private:
   int m_reserve;
   
 public:
+  typedef T ValueType;
+  
   explicit SmartArray(int size = 0, int reserve = 0)
     : m_data(NULL), m_size(0), m_active(0), m_reserve(reserve) { ResizeClear(size); }
   SmartArray(const SmartArray& rhs) : m_data(NULL), m_size(0), m_active(0), m_reserve(0) { this->operator=(rhs); }

@@ -42,6 +42,8 @@ private:
   int m_size;  // Number of Elements
   
 public:
+  typedef T ValueType;
+  
   explicit ManagedPointerArray(const int _size = 0) : m_data(NULL), m_size(0) { ResizeClear(_size); }
   ManagedPointerArray(const ManagedPointerArray& rhs) : m_data(NULL), m_size(0) { this->operator=(rhs); }
 

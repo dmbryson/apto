@@ -30,4 +30,4 @@
 
 #include "apto/core/RefCount.h"
 
-Apto::RefCount::~RefCount() { ; }
+Apto::RCObject::~RCObject() { ; }

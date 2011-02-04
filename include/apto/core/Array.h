@@ -43,6 +43,8 @@ namespace Apto {
     int m_size;   // Array Size
     
   public:
+    typedef T ValueType;
+    
     explicit Array(int size = 0) : m_data(NULL), m_size(0) { ResizeClear(size); }
     Array(const Array& rhs) : m_data(NULL), m_size(0) { this->operator=(rhs); }
     
@@ -108,13 +110,13 @@ namespace Apto {
     T& operator[](const int index)
     {
       assert(index >= 0);       // Lower Bounds Error
-      assert(index < m_active); // Upper Bounds Error
+      assert(index < m_size); // Upper Bounds Error
       return m_data[index];
     }
     const T& operator[](const int index) const
     {
       assert(index >= 0);       // Lower Bounds Error
-      assert(index < m_active); // Upper Bounds Error
+      assert(index < m_size); // Upper Bounds Error
       return m_data[index];
     }
     
