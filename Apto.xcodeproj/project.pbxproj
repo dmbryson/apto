@@ -18,6 +18,8 @@
 		7023367712FC53AC000C7BE5 /* libapto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7023364912FC50C1000C7BE5 /* libapto.a */; };
 		7023367812FC53AE000C7BE5 /* libgtest.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7023366B12FC5320000C7BE5 /* libgtest.a */; };
 		7023369E12FC5F51000C7BE5 /* Thread.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7023369D12FC5F51000C7BE5 /* Thread.cc */; };
+		706B1E9712FC9C2C006EAB7F /* RefCount.cc in Sources */ = {isa = PBXBuildFile; fileRef = 706B1E9612FC9C2C006EAB7F /* RefCount.cc */; };
+		706B1E9912FC9C44006EAB7F /* EntryHandle.cc in Sources */ = {isa = PBXBuildFile; fileRef = 706B1E9812FC9C44006EAB7F /* EntryHandle.cc */; };
 		8DD76F650486A84900D96B5E /* main.cc in Sources */ = {isa = PBXBuildFile; fileRef = 08FB7796FE84155DC02AAC07 /* main.cc */; settings = {ATTRIBUTES = (); }; };
 /* End PBXBuildFile section */
 
@@ -26,14 +28,14 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 7023364812FC50C1000C7BE5 /* apto */;
+			remoteGlobalIDString = 7023364812FC50C1000C7BE5;
 			remoteInfo = apto;
 		};
 		7023367512FC5399000C7BE5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 7023366A12FC5320000C7BE5 /* gtest */;
+			remoteGlobalIDString = 7023366A12FC5320000C7BE5;
 			remoteInfo = gtest;
 		};
 /* End PBXContainerItemProxy section */
@@ -103,6 +105,9 @@
 		702336B712FC9106000C7BE5 /* RefCount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RefCount.h; sourceTree = "<group>"; };
 		702336C112FC9489000C7BE5 /* ArrayMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArrayMap.h; sourceTree = "<group>"; };
 		702336C212FC94AA000C7BE5 /* Pair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pair.h; sourceTree = "<group>"; };
+		706B1E9512FC9BA2006EAB7F /* EntryHandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntryHandle.h; sourceTree = "<group>"; };
+		706B1E9612FC9C2C006EAB7F /* RefCount.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RefCount.cc; sourceTree = "<group>"; };
+		706B1E9812FC9C44006EAB7F /* EntryHandle.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EntryHandle.cc; sourceTree = "<group>"; };
 		8DD76F6C0486A84900D96B5E /* apto-test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "apto-test"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -176,7 +181,9 @@
 		702335C612FB4274000C7BE5 /* core */ = {
 			isa = PBXGroup;
 			children = (
+				706B1E9812FC9C44006EAB7F /* EntryHandle.cc */,
 				7023362012FB5A77000C7BE5 /* FileSystem.cc */,
+				706B1E9612FC9C2C006EAB7F /* RefCount.cc */,
 				7023369D12FC5F51000C7BE5 /* Thread.cc */,
 			);
 			name = core;
@@ -285,6 +292,7 @@
 				702336C112FC9489000C7BE5 /* ArrayMap.h */,
 				702336AF12FC8012000C7BE5 /* Atomic.h */,
 				702336A812FC64AC000C7BE5 /* ConditionVariable.h */,
+				706B1E9512FC9BA2006EAB7F /* EntryHandle.h */,
 				7023362112FB5AA1000C7BE5 /* FileSystem.h */,
 				7023361E12FB5900000C7BE5 /* ManagedPointerArray.h */,
 				7023369F12FC5FDD000C7BE5 /* Mutex.h */,
@@ -397,7 +405,14 @@
 			isa = PBXProject;
 			buildConfigurationList = 1DEB923508733DC60010E9CD /* Build configuration list for PBXProject "Apto" */;
 			compatibilityVersion = "Xcode 3.1";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
 			mainGroup = 08FB7794FE84155DC02AAC07 /* Apto */;
 			productRefGroup = 08FB7794FE84155DC02AAC07 /* Apto */;
 			projectDirPath = "";
@@ -418,6 +433,8 @@
 				7023366512FC52DF000C7BE5 /* FileSystem.cc in Sources */,
 				7023366612FC52E0000C7BE5 /* Platform.cc in Sources */,
 				7023369E12FC5F51000C7BE5 /* Thread.cc in Sources */,
+				706B1E9712FC9C2C006EAB7F /* RefCount.cc in Sources */,
+				706B1E9912FC9C44006EAB7F /* EntryHandle.cc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
