@@ -110,6 +110,7 @@
 		706B1E9812FC9C44006EAB7F /* EntryHandle.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EntryHandle.cc; sourceTree = "<group>"; };
 		706B1E9A12FC9E97006EAB7F /* Iterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Iterator.h; sourceTree = "<group>"; };
 		706B1E9B12FC9F2A006EAB7F /* SparseVectorList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SparseVectorList.h; sourceTree = "<group>"; };
+		706B1E9D12FCA29C006EAB7F /* ArraySet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArraySet.h; sourceTree = "<group>"; };
 		8DD76F6C0486A84900D96B5E /* apto-test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "apto-test"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -292,6 +293,7 @@
 			children = (
 				7023369B12FC57BE000C7BE5 /* Array.h */,
 				702336C112FC9489000C7BE5 /* ArrayMap.h */,
+				706B1E9D12FCA29C006EAB7F /* ArraySet.h */,
 				702336AF12FC8012000C7BE5 /* Atomic.h */,
 				702336A812FC64AC000C7BE5 /* ConditionVariable.h */,
 				706B1E9512FC9BA2006EAB7F /* EntryHandle.h */,
