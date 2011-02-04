@@ -99,6 +99,7 @@
 		702336A812FC64AC000C7BE5 /* ConditionVariable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConditionVariable.h; sourceTree = "<group>"; };
 		702336A912FC7203000C7BE5 /* ThreadSpecific.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThreadSpecific.h; sourceTree = "<group>"; };
 		702336AA12FC7309000C7BE5 /* RWLock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RWLock.h; sourceTree = "<group>"; };
+		702336AF12FC8012000C7BE5 /* Atomic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Atomic.h; sourceTree = "<group>"; };
 		8DD76F6C0486A84900D96B5E /* apto-test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "apto-test"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -278,6 +279,7 @@
 			isa = PBXGroup;
 			children = (
 				7023369B12FC57BE000C7BE5 /* Array.h */,
+				702336AF12FC8012000C7BE5 /* Atomic.h */,
 				702336A812FC64AC000C7BE5 /* ConditionVariable.h */,
 				7023362112FB5AA1000C7BE5 /* FileSystem.h */,
 				7023361E12FB5900000C7BE5 /* ManagedPointerArray.h */,
