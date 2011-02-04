@@ -91,6 +91,7 @@
 		7023364412FC4E31000C7BE5 /* Platform.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Platform.cc; sourceTree = "<group>"; };
 		7023364912FC50C1000C7BE5 /* libapto.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libapto.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		7023366B12FC5320000C7BE5 /* libgtest.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libgtest.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		7023369B12FC57BE000C7BE5 /* Array.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Array.h; sourceTree = "<group>"; };
 		8DD76F6C0486A84900D96B5E /* apto-test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "apto-test"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -268,6 +269,7 @@
 		7023361D12FB5900000C7BE5 /* core */ = {
 			isa = PBXGroup;
 			children = (
+				7023369B12FC57BE000C7BE5 /* Array.h */,
 				7023362112FB5AA1000C7BE5 /* FileSystem.h */,
 				7023361E12FB5900000C7BE5 /* ManagedPointerArray.h */,
 				7023361F12FB5900000C7BE5 /* SmartArray.h */,

@@ -161,10 +161,10 @@ public:
   
   void Swap(int idx1, int idx2)
   {
-    assert(idx1 >= 0);     // Lower Bounds Error
-    assert(idx1 < m_active); // Upper Bounds Error
-    assert(idx2 >= 0);     // Lower Bounds Error
-    assert(idx2 < m_active); // Upper Bounds Error
+    assert(idx1 >= 0);        // Lower Bounds Error
+    assert(idx1 < m_active);  // Upper Bounds Error
+    assert(idx2 >= 0);        // Lower Bounds Error
+    assert(idx2 < m_active);  // Upper Bounds Error
     
     T v = m_data[idx1];
     m_data[idx1] = m_data[idx2];

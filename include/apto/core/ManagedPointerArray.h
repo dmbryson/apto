@@ -155,14 +155,14 @@ public:
   
   T& operator[](const int index)
   {
-    assert(index >= 0);    // Lower Bounds Error
-    assert(index < m_size);  // Upper Bounds Error
+    assert(index >= 0);     // Lower Bounds Error
+    assert(index < m_size); // Upper Bounds Error
     return *m_data[index];
   }
   const T& operator[](const int index) const
   {
-    assert(index >= 0);    // Lower Bounds Error
-    assert(index < m_size);  // Upper Bounds Error
+    assert(index >= 0);     // Lower Bounds Error
+    assert(index < m_size); // Upper Bounds Error
     return *m_data[index];
   }
   
