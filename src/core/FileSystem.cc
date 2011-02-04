@@ -30,6 +30,33 @@
 
 #include "apto/core/FileSystem.h"
 
+#include "apto/platform/Platform.h"
+
+#include <cerrno>
+#include <sys/stat.h>
+#include <cstdio>
+
+
+// mkdir undefined in ms windows
+#if APTO_PLATFORM(WINDOWS)
+# include <direct.h>
+# ifndef ACCESSPERMS
+#  define ACCESSPERMS 0
+# endif
+# ifndef mkdir
+#  define mkdir(path, ignored_mode) _mkdir(path)
+# endif
+# ifndef mode_t
+#  define mode_t unsigned int
+# endif
+#endif
+
+#if APTO_PLATFORM(WINDOWS)
+# include <direct.h>
+#else
+# include <unistd.h>
+#endif
+
 
 namespace Apto {
   namespace FileSystem {

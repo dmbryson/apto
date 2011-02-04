@@ -1,8 +1,8 @@
 /*
- *  main.cc
+ *  Platform.h
  *  Apto
  *
- *  Created by David on 6/29/07.
+ *  Created by David on 5/20/07.
  *  Copyright 2007-2011 David Michael Bryson. All rights reserved.
  *  http://programerror.com/software/apto
  *
@@ -28,14 +28,39 @@
  *
  */
 
-#include <iostream>
+#ifndef AptoPlatformFloatingPoint_h
+#define AptoPlatformFloatingPoint_h
 
-#include <gtest/gtest.h>
+namespace Apto {
+  namespace Platform {
+    
+#if !defined(__APPLE__) && (defined(__i386__) || defined(i386) || defined(_M_IX86) || defined(_X86_) || defined(__THW_INTEL))
+# define FPE_X86 1
+#else
+# define FPE_X86 0
+#endif
+    
+#if FPE_X86
+    void set_fpu (unsigned int mode)
+    { 
+#ifdef WIN32
+      __asm fldcw mode;
+#else
+      asm("fldcw %0" : : "m" (*&mode));
+#endif
+    }
+#endif
+    
+    inline void SetupFloatingPointEnvironment()
+    {
+#if FPE_X86
+      set_fpu(0x27F); // Set the global rounding mode to double-precision
+#endif
+    }
+    
+  };
+};
 
-int main(int argc, char** argv)
-{
-  std::cout << "Running Apto Unit Tests" << std::endl;
-  
-  testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
-}
+#undef FPE_X86
+
+#endif

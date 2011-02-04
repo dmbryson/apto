@@ -7,8 +7,35 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7023366512FC52DF000C7BE5 /* FileSystem.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7023362012FB5A77000C7BE5 /* FileSystem.cc */; };
+		7023366612FC52E0000C7BE5 /* Platform.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7023364412FC4E31000C7BE5 /* Platform.cc */; };
+		7023366E12FC533E000C7BE5 /* gtest.cc in Sources */ = {isa = PBXBuildFile; fileRef = 702335D412FB51EF000C7BE5 /* gtest.cc */; };
+		7023366F12FC5344000C7BE5 /* gtest-death-test.cc in Sources */ = {isa = PBXBuildFile; fileRef = 702335CF12FB51EF000C7BE5 /* gtest-death-test.cc */; };
+		7023367012FC5348000C7BE5 /* gtest-filepath.cc in Sources */ = {isa = PBXBuildFile; fileRef = 702335D012FB51EF000C7BE5 /* gtest-filepath.cc */; };
+		7023367112FC534E000C7BE5 /* gtest-port.cc in Sources */ = {isa = PBXBuildFile; fileRef = 702335D112FB51EF000C7BE5 /* gtest-port.cc */; };
+		7023367212FC5352000C7BE5 /* gtest-test-part.cc in Sources */ = {isa = PBXBuildFile; fileRef = 702335D212FB51EF000C7BE5 /* gtest-test-part.cc */; };
+		7023367312FC5357000C7BE5 /* gtest-typed-test.cc in Sources */ = {isa = PBXBuildFile; fileRef = 702335D312FB51EF000C7BE5 /* gtest-typed-test.cc */; };
+		7023367712FC53AC000C7BE5 /* libapto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7023364912FC50C1000C7BE5 /* libapto.a */; };
+		7023367812FC53AE000C7BE5 /* libgtest.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7023366B12FC5320000C7BE5 /* libgtest.a */; };
 		8DD76F650486A84900D96B5E /* main.cc in Sources */ = {isa = PBXBuildFile; fileRef = 08FB7796FE84155DC02AAC07 /* main.cc */; settings = {ATTRIBUTES = (); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		7023366312FC52CD000C7BE5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7023364812FC50C1000C7BE5 /* apto */;
+			remoteInfo = apto;
+		};
+		7023367512FC5399000C7BE5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7023366A12FC5320000C7BE5 /* gtest */;
+			remoteInfo = gtest;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		8DD76F690486A84900D96B5E /* CopyFiles */ = {
@@ -59,14 +86,35 @@
 		7023361F12FB5900000C7BE5 /* SmartArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SmartArray.h; sourceTree = "<group>"; };
 		7023362012FB5A77000C7BE5 /* FileSystem.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystem.cc; sourceTree = "<group>"; };
 		7023362112FB5AA1000C7BE5 /* FileSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileSystem.h; sourceTree = "<group>"; };
+		7023364112FC4E19000C7BE5 /* FloatingPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FloatingPoint.h; sourceTree = "<group>"; };
+		7023364212FC4E19000C7BE5 /* Platform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Platform.h; sourceTree = "<group>"; };
+		7023364412FC4E31000C7BE5 /* Platform.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Platform.cc; sourceTree = "<group>"; };
+		7023364912FC50C1000C7BE5 /* libapto.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libapto.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		7023366B12FC5320000C7BE5 /* libgtest.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libgtest.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8DD76F6C0486A84900D96B5E /* apto-test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "apto-test"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		7023364712FC50C1000C7BE5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7023366912FC5320000C7BE5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8DD76F660486A84900D96B5E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7023367812FC53AE000C7BE5 /* libgtest.a in Frameworks */,
+				7023367712FC53AC000C7BE5 /* libapto.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -89,6 +137,7 @@
 			isa = PBXGroup;
 			children = (
 				702335C612FB4274000C7BE5 /* core */,
+				7023364312FC4E31000C7BE5 /* platform */,
 			);
 			name = src;
 			sourceTree = "<group>";
@@ -97,6 +146,8 @@
 			isa = PBXGroup;
 			children = (
 				8DD76F6C0486A84900D96B5E /* apto-test */,
+				7023364912FC50C1000C7BE5 /* libapto.a */,
+				7023366B12FC5320000C7BE5 /* libgtest.a */,
 			);
 			name = products;
 			sourceTree = "<group>";
@@ -208,6 +259,7 @@
 			isa = PBXGroup;
 			children = (
 				7023361D12FB5900000C7BE5 /* core */,
+				7023364012FC4E19000C7BE5 /* platform */,
 			);
 			name = include;
 			path = include/apto;
@@ -223,9 +275,78 @@
 			path = core;
 			sourceTree = "<group>";
 		};
+		7023364012FC4E19000C7BE5 /* platform */ = {
+			isa = PBXGroup;
+			children = (
+				7023364112FC4E19000C7BE5 /* FloatingPoint.h */,
+				7023364212FC4E19000C7BE5 /* Platform.h */,
+			);
+			path = platform;
+			sourceTree = "<group>";
+		};
+		7023364312FC4E31000C7BE5 /* platform */ = {
+			isa = PBXGroup;
+			children = (
+				7023364412FC4E31000C7BE5 /* Platform.cc */,
+			);
+			name = platform;
+			path = src/platform;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
+/* Begin PBXHeadersBuildPhase section */
+		7023364512FC50C1000C7BE5 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7023366712FC5320000C7BE5 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
 /* Begin PBXNativeTarget section */
+		7023364812FC50C1000C7BE5 /* apto */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7023364D12FC50C1000C7BE5 /* Build configuration list for PBXNativeTarget "apto" */;
+			buildPhases = (
+				7023364512FC50C1000C7BE5 /* Headers */,
+				7023364612FC50C1000C7BE5 /* Sources */,
+				7023364712FC50C1000C7BE5 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = apto;
+			productName = apto;
+			productReference = 7023364912FC50C1000C7BE5 /* libapto.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		7023366A12FC5320000C7BE5 /* gtest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7023367412FC5375000C7BE5 /* Build configuration list for PBXNativeTarget "gtest" */;
+			buildPhases = (
+				7023366712FC5320000C7BE5 /* Headers */,
+				7023366812FC5320000C7BE5 /* Sources */,
+				7023366912FC5320000C7BE5 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = gtest;
+			productName = gtest;
+			productReference = 7023366B12FC5320000C7BE5 /* libgtest.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 		8DD76F620486A84900D96B5E /* apto-test */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1DEB923108733DC60010E9CD /* Build configuration list for PBXNativeTarget "apto-test" */;
@@ -237,6 +358,8 @@
 			buildRules = (
 			);
 			dependencies = (
+				7023366412FC52CD000C7BE5 /* PBXTargetDependency */,
+				7023367612FC5399000C7BE5 /* PBXTargetDependency */,
 			);
 			name = "apto-test";
 			productInstallPath = "$(HOME)/bin";
@@ -253,15 +376,40 @@
 			compatibilityVersion = "Xcode 3.1";
 			hasScannedForEncodings = 1;
 			mainGroup = 08FB7794FE84155DC02AAC07 /* Apto */;
+			productRefGroup = 08FB7794FE84155DC02AAC07 /* Apto */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
+				7023364812FC50C1000C7BE5 /* apto */,
 				8DD76F620486A84900D96B5E /* apto-test */,
+				7023366A12FC5320000C7BE5 /* gtest */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
+		7023364612FC50C1000C7BE5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7023366512FC52DF000C7BE5 /* FileSystem.cc in Sources */,
+				7023366612FC52E0000C7BE5 /* Platform.cc in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7023366812FC5320000C7BE5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7023366E12FC533E000C7BE5 /* gtest.cc in Sources */,
+				7023366F12FC5344000C7BE5 /* gtest-death-test.cc in Sources */,
+				7023367012FC5348000C7BE5 /* gtest-filepath.cc in Sources */,
+				7023367112FC534E000C7BE5 /* gtest-port.cc in Sources */,
+				7023367212FC5352000C7BE5 /* gtest-test-part.cc in Sources */,
+				7023367312FC5357000C7BE5 /* gtest-typed-test.cc in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8DD76F640486A84900D96B5E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -271,6 +419,19 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		7023366412FC52CD000C7BE5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7023364812FC50C1000C7BE5 /* apto */;
+			targetProxy = 7023366312FC52CD000C7BE5 /* PBXContainerItemProxy */;
+		};
+		7023367612FC5399000C7BE5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7023366A12FC5320000C7BE5 /* gtest */;
+			targetProxy = 7023367512FC5399000C7BE5 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		1DEB923208733DC60010E9CD /* Debug */ = {
@@ -283,6 +444,10 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INSTALL_PATH = /usr/local/bin;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/build/Debug\"",
+				);
 				PRODUCT_NAME = "apto-test";
 			};
 			name = Debug;
@@ -294,6 +459,10 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_MODEL_TUNING = G5;
 				INSTALL_PATH = /usr/local/bin;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/build/Debug\"",
+				);
 				PRODUCT_NAME = "apto-test";
 			};
 			name = Release;
@@ -306,6 +475,10 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					include,
+					utils/unittest/googletest/include,
+				);
 				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
 				SDKROOT = macosx10.6;
@@ -316,11 +489,91 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_ALTIVEC_EXTENSIONS = YES;
+				GCC_AUTO_VECTORIZATION = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = YES;
+				GCC_ENABLE_SSE3_EXTENSIONS = YES;
+				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = NDEBUG;
+				GCC_STRICT_ALIASING = YES;
+				GCC_UNROLL_LOOPS = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					include,
+					utils/unittest/googletest/include,
+				);
+				PER_ARCH_CFLAGS_ppc = "-mno-fused-madd -falign-loops-max-skip=15 -falign-jumps-max-skip=15 -falign-loops=16 -falign-jumps=16 -falign-functions=16 -falign-labels=16 -ftree-loop-linear -fsched-interblock -fgcse-sm -fgcse-las -mmultiple -mstring";
 				PREBINDING = NO;
 				SDKROOT = macosx10.6;
+				WARNING_CFLAGS = (
+					"-Wno-unknown-pragmas",
+					"-Wno-four-char-constants",
+					"-Wextra",
+				);
+			};
+			name = Release;
+		};
+		7023364B12FC50C1000C7BE5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = /usr/local/lib;
+				PREBINDING = NO;
+				PRODUCT_NAME = apto;
+			};
+			name = Debug;
+		};
+		7023364C12FC50C1000C7BE5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/lib;
+				PREBINDING = NO;
+				PRODUCT_NAME = apto;
+			};
+			name = Release;
+		};
+		7023366C12FC5320000C7BE5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = /usr/local/lib;
+				PREBINDING = NO;
+				PRODUCT_NAME = gtest;
+			};
+			name = Debug;
+		};
+		7023366D12FC5320000C7BE5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/lib;
+				PREBINDING = NO;
+				PRODUCT_NAME = gtest;
+				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
@@ -341,6 +594,24 @@
 			buildConfigurations = (
 				1DEB923608733DC60010E9CD /* Debug */,
 				1DEB923708733DC60010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7023364D12FC50C1000C7BE5 /* Build configuration list for PBXNativeTarget "apto" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7023364B12FC50C1000C7BE5 /* Debug */,
+				7023364C12FC50C1000C7BE5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7023367412FC5375000C7BE5 /* Build configuration list for PBXNativeTarget "gtest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7023366C12FC5320000C7BE5 /* Debug */,
+				7023366D12FC5320000C7BE5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

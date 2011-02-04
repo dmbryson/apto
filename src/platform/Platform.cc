@@ -1,5 +1,5 @@
 /*
- *  main.cc
+ *  Platform.cc
  *  Apto
  *
  *  Created by David on 6/29/07.
@@ -28,14 +28,38 @@
  *
  */
 
-#include <iostream>
+#include "apto/Platform/Platform.h"
 
-#include <gtest/gtest.h>
+#if APTO_PLATFORM(APPLE)
+# include <mach/mach.h>
+#elif APTO_PLATFORM(UNIX)
+# include <unistd.h>
+#endif
 
-int main(int argc, char** argv)
+#include "apto/Platform/FloatingPoint.h"
+
+
+// Initialize various platform settings and system handlers
+void Apto::Platform::Initialize()
 {
-  std::cout << "Running Apto Unit Tests" << std::endl;
+  SetupFloatingPointEnvironment();
+}
+
+
+// Autodetect the number of CPUs on a box, if available.  Otherwise, return 1.
+int Apto::Platform::AvailableCPUs()
+{
+  int ncpus = 1;
   
-  testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
+#if APTO_PLATFORM(APPLE)
+  kern_return_t kr;
+  host_basic_info_data_t p_host_info;     
+  mach_msg_type_number_t count = HOST_BASIC_INFO_COUNT;
+  kr = host_info(mach_host_self(), HOST_BASIC_INFO, (host_info_t)&p_host_info, &count);
+  if (kr == KERN_SUCCESS) ncpus = (int)(p_host_info.avail_cpus);
+#elif APTO_PLATFORM(UNIX) && defined(_SC_NPROCESSORS_ONLN)
+  ncpus = (int)sysconf(_SC_NPROCESSORS_ONLN);
+#endif
+  
+  return ncpus;
 }

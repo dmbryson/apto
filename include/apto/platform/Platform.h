@@ -1,8 +1,8 @@
 /*
- *  main.cc
+ *  Platform.h
  *  Apto
  *
- *  Created by David on 6/29/07.
+ *  Created by David on 3/2/07.
  *  Copyright 2007-2011 David Michael Bryson. All rights reserved.
  *  http://programerror.com/software/apto
  *
@@ -28,14 +28,70 @@
  *
  */
 
-#include <iostream>
+#ifndef AptoPlatformPlatform_h
+#define AptoPlatformPlatform_h
 
-#include <gtest/gtest.h>
+// spaces between defined's parentheses and contained value are required by Visual Studio's preprocessor
+#define APTO_PLATFORM(PROP) (defined( APTO_PLATFORM_ ## PROP ) && APTO_PLATFORM_##PROP)
 
-int main(int argc, char** argv)
-{
-  std::cout << "Running Apto Unit Tests" << std::endl;
-  
-  testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
-}
+#if defined(WIN32) || defined(_WIN32)
+# define APTO_PLATFORM_WINDOWS 1
+# ifdef ENABLE_THREADS
+#  define APTO_PLATFORM_THREADS 1
+# else
+#  define APTO_PLATFORM_THREADS 0
+# endif
+// Disable warning C4355: 'this' : used in base member initializer list
+# pragma warning( disable : 4355 )
+#endif
+
+#if defined(__APPLE__) || defined(unix) || defined(__unix) || defined(__unix__) || defined (__NetBSD__) || defined(_AIX) || defined(__FreeBSD__)
+# define APTO_PLATFORM_UNIX 1
+# define APTO_PLATFORM_THREADS 1
+#endif
+
+#if defined(__FreeBSD__)
+# define APTO_PLATFORM_FREEBSD 1
+#endif
+
+#if defined(__APPLE__)
+# define APTO_PLATFORM_APPLE 1
+#endif
+
+#if defined(__hppa__) || defined(__m68k__) || defined(mc68000) || defined(_M_M68K) || \
+(defined(__MIPS__) && defined(__MISPEB__)) || defined(__ppc__) || defined(__POWERPC__) || defined(_M_PPC) || \
+defined(__sparc__)
+# define APTO_PLATFORM_BIG_ENDIAN 1
+# define APTO_PLATFORM_LITTLE_ENDIAN 0
+#else
+# define APTO_PLATFORM_BIG_ENDIAN 0
+# define APTO_PLATFORM_LITTLE_ENDIAN 1
+#endif
+
+
+#ifdef DEBUG
+# include <cstdlib>
+# include <iostream>
+# define ASSERT_MSG(VALUE, MSG) if (!(VALUE)) { std::cerr << "Error: " << MSG << std::endl; abort(); }
+#else
+# define ASSERT_MSG(VALUE, MSG)
+#endif
+
+
+#ifndef NULL
+#define NULL 0
+#endif
+
+
+namespace Apto {
+  namespace Platform
+  {
+    void Initialize();
+    
+    int AvailableCPUs();
+  };
+};
+
+
+
+#endif
