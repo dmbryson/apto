@@ -100,6 +100,7 @@
 		702336A912FC7203000C7BE5 /* ThreadSpecific.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThreadSpecific.h; sourceTree = "<group>"; };
 		702336AA12FC7309000C7BE5 /* RWLock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RWLock.h; sourceTree = "<group>"; };
 		702336AF12FC8012000C7BE5 /* Atomic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Atomic.h; sourceTree = "<group>"; };
+		702336B712FC9106000C7BE5 /* RefCount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RefCount.h; sourceTree = "<group>"; };
 		8DD76F6C0486A84900D96B5E /* apto-test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "apto-test"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -285,6 +286,7 @@
 				7023361E12FB5900000C7BE5 /* ManagedPointerArray.h */,
 				7023369F12FC5FDD000C7BE5 /* Mutex.h */,
 				702336AA12FC7309000C7BE5 /* RWLock.h */,
+				702336B712FC9106000C7BE5 /* RefCount.h */,
 				7023361F12FB5900000C7BE5 /* SmartArray.h */,
 				7023369C12FC5F33000C7BE5 /* Thread.h */,
 				702336A912FC7203000C7BE5 /* ThreadSpecific.h */,
