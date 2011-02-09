@@ -111,6 +111,9 @@
 		706B1E9B12FC9F2A006EAB7F /* SparseVectorList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SparseVectorList.h; sourceTree = "<group>"; };
 		706B1E9D12FCA29C006EAB7F /* ArraySet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArraySet.h; sourceTree = "<group>"; };
 		706B1E9E12FCA5C9006EAB7F /* ArrayUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArrayUtils.h; sourceTree = "<group>"; };
+		70E1ECDA1300E2CB00F75FA2 /* SmartPtr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SmartPtr.h; sourceTree = "<group>"; };
+		70E1ECDB1301C85A00F75FA2 /* TypeSelect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TypeSelect.h; sourceTree = "<group>"; };
+		70E1ECDC1301D40500F75FA2 /* RefTransport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RefTransport.h; sourceTree = "<group>"; };
 		8DD76F6C0486A84900D96B5E /* apto-test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "apto-test"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -305,10 +308,13 @@
 				702336C212FC94AA000C7BE5 /* Pair.h */,
 				702336AA12FC7309000C7BE5 /* RWLock.h */,
 				702336B712FC9106000C7BE5 /* RefCount.h */,
+				70E1ECDC1301D40500F75FA2 /* RefTransport.h */,
+				70E1ECDA1300E2CB00F75FA2 /* SmartPtr.h */,
 				7023361F12FB5900000C7BE5 /* SmartArray.h */,
 				706B1E9B12FC9F2A006EAB7F /* SparseVectorList.h */,
 				7023369C12FC5F33000C7BE5 /* Thread.h */,
 				702336A912FC7203000C7BE5 /* ThreadSpecific.h */,
+				70E1ECDB1301C85A00F75FA2 /* TypeSelect.h */,
 			);
 			path = core;
 			sourceTree = "<group>";

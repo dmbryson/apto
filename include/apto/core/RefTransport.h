@@ -1,9 +1,9 @@
 /*
- *  RefCount.h
+ *  RefTransport.h
  *  Apto
  *
- *  Created by David on 11/12/08.
- *  Copyright 2008-2011 David Michael Bryson. All rights reserved.
+ *  Created by David on 2/8/11.
+ *  Copyright 2011 David Michael Bryson. All rights reserved.
  *  http://programerror.com/software/apto
  *
  *  Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -28,28 +28,22 @@
  *
  */
 
-#ifndef AptoCoreRefCount_h
-#define AptoCoreRefCount_h
+#ifndef AptoCoreRefTransport_h
+#define AptoCoreRefTransport_h
 
-#include "apto/core/Atomic.h"
-
-
-namespace Apto {
-  class RCObject
-  {
-  private:
-    volatile int m_ref_count;
-    
-  public:
-    RCObject() { Atomic::Set(&m_ref_count, 0); }
-    RCObject(const RCObject&) { Atomic::Set(&m_ref_count, 0); }
-    virtual ~RCObject() = 0;
-    
-    RCObject& operator=(const RCObject&) { return *this; }
-    
-    void AddReference() { Atomic::Inc(&m_ref_count); }
-    void RemoveReference() { if (Atomic::DecAndTest(&m_ref_count)) delete this; }
-  };
+template <class T> class RefTransport
+{
+private:
+  T& m_ref;
+  
+  RefTransport(); // @not_implemented
+  RefTransport& operator=(const RefTransport); // @not_implemented
+  
+public:
+  inline RefTransport(T& ref) : m_ref(ref) { ; }
+  inline RefTransport(const RefTransport& rhs) : m_ref(rhs.m_ref) { ; }
+  
+  inline operator T&() const { return m_ref; }
 };
 
 #endif

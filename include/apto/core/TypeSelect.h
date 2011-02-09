@@ -1,9 +1,9 @@
 /*
- *  RefCount.h
+ *  TypeSelect.h
  *  Apto
  *
- *  Created by David on 11/12/08.
- *  Copyright 2008-2011 David Michael Bryson. All rights reserved.
+ *  Created by David on 2/8/11.
+ *  Copyright 2011 David Michael Bryson. All rights reserved.
  *  http://programerror.com/software/apto
  *
  *  Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -28,28 +28,12 @@
  *
  */
 
-#ifndef AptoCoreRefCount_h
-#define AptoCoreRefCount_h
-
-#include "apto/core/Atomic.h"
-
+#ifndef AptoCoreTypeSelect_h
+#define AptoCoreTypeSelect_h
 
 namespace Apto {
-  class RCObject
-  {
-  private:
-    volatile int m_ref_count;
-    
-  public:
-    RCObject() { Atomic::Set(&m_ref_count, 0); }
-    RCObject(const RCObject&) { Atomic::Set(&m_ref_count, 0); }
-    virtual ~RCObject() = 0;
-    
-    RCObject& operator=(const RCObject&) { return *this; }
-    
-    void AddReference() { Atomic::Inc(&m_ref_count); }
-    void RemoveReference() { if (Atomic::DecAndTest(&m_ref_count)) delete this; }
-  };
-};
+  template <bool flag, typename T, typename U> struct TypeSelect { typedef T Result; };
+  template <typename T, typename U> struct TypeSelect<false, T, U> { typedef U Result; };
+}
 
 #endif
