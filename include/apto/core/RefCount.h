@@ -35,17 +35,17 @@
 
 
 namespace Apto {
-  class RCObject
+  class RefCountObject
   {
   private:
     volatile int m_ref_count;
     
   public:
-    RCObject() { Atomic::Set(&m_ref_count, 0); }
-    RCObject(const RCObject&) { Atomic::Set(&m_ref_count, 0); }
+    RefCountObject() { Atomic::Set(&m_ref_count, 0); }
+    RefCountObject(const RefCountObject&) { Atomic::Set(&m_ref_count, 0); }
     virtual ~RCObject() = 0;
     
-    RCObject& operator=(const RCObject&) { return *this; }
+    RefCountObject& operator=(const RefCountObject&) { return *this; }
     
     void AddReference() { Atomic::Inc(&m_ref_count); }
     void RemoveReference() { if (Atomic::DecAndTest(&m_ref_count)) delete this; }

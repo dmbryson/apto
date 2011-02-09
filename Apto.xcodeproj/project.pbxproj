@@ -84,8 +84,6 @@
 		702335ED12FB51EF000C7BE5 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		702335EE12FB51EF000C7BE5 /* README.apto */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.apto; sourceTree = "<group>"; };
 		702335F012FB5281000C7BE5 /* SmartArray.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SmartArray.cc; sourceTree = "<group>"; };
-		7023361E12FB5900000C7BE5 /* ManagedPointerArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ManagedPointerArray.h; sourceTree = "<group>"; };
-		7023361F12FB5900000C7BE5 /* SmartArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SmartArray.h; sourceTree = "<group>"; };
 		7023362012FB5A77000C7BE5 /* FileSystem.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystem.cc; sourceTree = "<group>"; };
 		7023362112FB5AA1000C7BE5 /* FileSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileSystem.h; sourceTree = "<group>"; };
 		7023364112FC4E19000C7BE5 /* FloatingPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FloatingPoint.h; sourceTree = "<group>"; };
@@ -303,14 +301,12 @@
 				706B1E9512FC9BA2006EAB7F /* EntryHandle.h */,
 				7023362112FB5AA1000C7BE5 /* FileSystem.h */,
 				706B1E9A12FC9E97006EAB7F /* Iterator.h */,
-				7023361E12FB5900000C7BE5 /* ManagedPointerArray.h */,
 				7023369F12FC5FDD000C7BE5 /* Mutex.h */,
 				702336C212FC94AA000C7BE5 /* Pair.h */,
 				702336AA12FC7309000C7BE5 /* RWLock.h */,
 				702336B712FC9106000C7BE5 /* RefCount.h */,
 				70E1ECDC1301D40500F75FA2 /* RefTransport.h */,
 				70E1ECDA1300E2CB00F75FA2 /* SmartPtr.h */,
-				7023361F12FB5900000C7BE5 /* SmartArray.h */,
 				706B1E9B12FC9F2A006EAB7F /* SparseVectorList.h */,
 				7023369C12FC5F33000C7BE5 /* Thread.h */,
 				702336A912FC7203000C7BE5 /* ThreadSpecific.h */,
