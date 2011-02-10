@@ -30,4 +30,5 @@
 
 #include "apto/core/RefCount.h"
 
-Apto::RCObject::~RCObject() { ; }
+Apto::RefCountObject::~RefCountObject() { ; }
+Apto::MTRefCountObject::~MTRefCountObject() { ; }

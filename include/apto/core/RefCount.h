@@ -38,17 +38,42 @@ namespace Apto {
   class RefCountObject
   {
   private:
-    volatile int m_ref_count;
+    int m_ref_count;
     
   public:
-    RefCountObject() { Atomic::Set(&m_ref_count, 0); }
-    RefCountObject(const RefCountObject&) { Atomic::Set(&m_ref_count, 0); }
-    virtual ~RCObject() = 0;
+    RefCountObject() : m_ref_count(0) { ; }
+    RefCountObject(const RefCountObject&) : m_ref_count(0) { ; }
+    virtual ~RefCountObject() = 0;
     
     RefCountObject& operator=(const RefCountObject&) { return *this; }
     
+    void AddReference() { m_ref_count++; }
+    void RemoveReference() { if (!--m_ref_count) delete this; }
+  };
+
+
+  class MTRefCountObject
+  {
+  private:
+    volatile int m_ref_count;
+    
+  public:
+    MTRefCountObject() { Atomic::Set(&m_ref_count, 0); }
+    MTRefCountObject(const RefCountObject&) { Atomic::Set(&m_ref_count, 0); }
+    virtual ~MTRefCountObject() = 0;
+    
+    MTRefCountObject& operator=(const MTRefCountObject&) { return *this; }
+    
     void AddReference() { Atomic::Inc(&m_ref_count); }
     void RemoveReference() { if (Atomic::DecAndTest(&m_ref_count)) delete this; }
+  };
+  
+  struct ThreadSafe {
+    enum { UseThreadSafe = true; };
+  };
+  
+  struct SingleThreaded {
+    enum { UseThreadSafe = false; };
   };
 };
 

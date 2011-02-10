@@ -102,6 +102,7 @@
 		702336B712FC9106000C7BE5 /* RefCount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RefCount.h; sourceTree = "<group>"; };
 		702336C112FC9489000C7BE5 /* ArrayMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArrayMap.h; sourceTree = "<group>"; };
 		702336C212FC94AA000C7BE5 /* Pair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pair.h; sourceTree = "<group>"; };
+		7043BEA91304707200EA53D6 /* String.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = String.h; sourceTree = "<group>"; };
 		706B1E9512FC9BA2006EAB7F /* EntryHandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntryHandle.h; sourceTree = "<group>"; };
 		706B1E9612FC9C2C006EAB7F /* RefCount.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RefCount.cc; sourceTree = "<group>"; };
 		706B1E9812FC9C44006EAB7F /* EntryHandle.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EntryHandle.cc; sourceTree = "<group>"; };
@@ -308,6 +309,7 @@
 				70E1ECDC1301D40500F75FA2 /* RefTransport.h */,
 				70E1ECDA1300E2CB00F75FA2 /* SmartPtr.h */,
 				706B1E9B12FC9F2A006EAB7F /* SparseVectorList.h */,
+				7043BEA91304707200EA53D6 /* String.h */,
 				7023369C12FC5F33000C7BE5 /* Thread.h */,
 				702336A912FC7203000C7BE5 /* ThreadSpecific.h */,
 				70E1ECDB1301C85A00F75FA2 /* TypeSelect.h */,
@@ -414,7 +416,6 @@
 			isa = PBXProject;
 			buildConfigurationList = 1DEB923508733DC60010E9CD /* Build configuration list for PBXProject "Apto" */;
 			compatibilityVersion = "Xcode 3.1";
-			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
 				English,

@@ -1,5 +1,5 @@
 /*
- *  SmartArray.h
+ *  SmartPtr.h
  *  Apto
  *
  *  Created by David on 2/7/11.
