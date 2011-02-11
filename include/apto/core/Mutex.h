@@ -101,7 +101,7 @@ namespace Apto {
   };
 };
 
-#undef PTHREAD_MUTEX_CHKRTN(OP)
+#undef PTHREAD_MUTEX_CHKRTN
 
 
 #elif APTO_PLATFORM(THREADS) && APTO_PLATFORM(WINDOWS)
