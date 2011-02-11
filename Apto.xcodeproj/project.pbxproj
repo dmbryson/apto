@@ -86,36 +86,36 @@
 		702335EE12FB51EF000C7BE5 /* README.apto */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.apto; sourceTree = "<group>"; };
 		702335F012FB5281000C7BE5 /* SmartArray.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SmartArray.cc; sourceTree = "<group>"; };
 		7023362012FB5A77000C7BE5 /* FileSystem.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystem.cc; sourceTree = "<group>"; };
-		7023362112FB5AA1000C7BE5 /* FileSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileSystem.h; sourceTree = "<group>"; };
-		7023364112FC4E19000C7BE5 /* FloatingPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FloatingPoint.h; sourceTree = "<group>"; };
-		7023364212FC4E19000C7BE5 /* Platform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Platform.h; sourceTree = "<group>"; };
+		7023362112FB5AA1000C7BE5 /* FileSystem.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = FileSystem.h; sourceTree = "<group>"; };
+		7023364112FC4E19000C7BE5 /* FloatingPoint.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = FloatingPoint.h; sourceTree = "<group>"; };
+		7023364212FC4E19000C7BE5 /* Platform.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = Platform.h; sourceTree = "<group>"; };
 		7023364412FC4E31000C7BE5 /* Platform.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Platform.cc; sourceTree = "<group>"; };
 		7023364912FC50C1000C7BE5 /* libapto.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libapto.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		7023366B12FC5320000C7BE5 /* libgtest.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libgtest.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		7023369B12FC57BE000C7BE5 /* Array.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Array.h; sourceTree = "<group>"; };
-		7023369C12FC5F33000C7BE5 /* Thread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Thread.h; sourceTree = "<group>"; };
+		7023369B12FC57BE000C7BE5 /* Array.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = Array.h; sourceTree = "<group>"; };
+		7023369C12FC5F33000C7BE5 /* Thread.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = Thread.h; sourceTree = "<group>"; };
 		7023369D12FC5F51000C7BE5 /* Thread.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Thread.cc; sourceTree = "<group>"; };
-		7023369F12FC5FDD000C7BE5 /* Mutex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mutex.h; sourceTree = "<group>"; };
-		702336A812FC64AC000C7BE5 /* ConditionVariable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConditionVariable.h; sourceTree = "<group>"; };
-		702336A912FC7203000C7BE5 /* ThreadSpecific.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThreadSpecific.h; sourceTree = "<group>"; };
-		702336AA12FC7309000C7BE5 /* RWLock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RWLock.h; sourceTree = "<group>"; };
-		702336AF12FC8012000C7BE5 /* Atomic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Atomic.h; sourceTree = "<group>"; };
-		702336B712FC9106000C7BE5 /* RefCount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RefCount.h; sourceTree = "<group>"; };
-		702336C212FC94AA000C7BE5 /* Pair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pair.h; sourceTree = "<group>"; };
-		7043BEA91304707200EA53D6 /* String.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = String.h; sourceTree = "<group>"; };
-		7043BEE31305925600EA53D6 /* Map.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Map.h; sourceTree = "<group>"; };
-		7043BEE913059E1200EA53D6 /* ArrayStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArrayStorage.h; sourceTree = "<group>"; };
-		706B1E9512FC9BA2006EAB7F /* EntryHandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntryHandle.h; sourceTree = "<group>"; };
+		7023369F12FC5FDD000C7BE5 /* Mutex.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = Mutex.h; sourceTree = "<group>"; };
+		702336A812FC64AC000C7BE5 /* ConditionVariable.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = ConditionVariable.h; sourceTree = "<group>"; };
+		702336A912FC7203000C7BE5 /* ThreadSpecific.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = ThreadSpecific.h; sourceTree = "<group>"; };
+		702336AA12FC7309000C7BE5 /* RWLock.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = RWLock.h; sourceTree = "<group>"; };
+		702336AF12FC8012000C7BE5 /* Atomic.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = Atomic.h; sourceTree = "<group>"; };
+		702336B712FC9106000C7BE5 /* RefCount.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = RefCount.h; sourceTree = "<group>"; };
+		702336C212FC94AA000C7BE5 /* Pair.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = Pair.h; sourceTree = "<group>"; };
+		7043BEA91304707200EA53D6 /* String.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = String.h; sourceTree = "<group>"; };
+		7043BEE31305925600EA53D6 /* Map.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = Map.h; sourceTree = "<group>"; };
+		7043BEE913059E1200EA53D6 /* ArrayStorage.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = ArrayStorage.h; sourceTree = "<group>"; };
+		706B1E9512FC9BA2006EAB7F /* EntryHandle.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = EntryHandle.h; sourceTree = "<group>"; };
 		706B1E9612FC9C2C006EAB7F /* RefCount.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RefCount.cc; sourceTree = "<group>"; };
 		706B1E9812FC9C44006EAB7F /* EntryHandle.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EntryHandle.cc; sourceTree = "<group>"; };
-		706B1E9A12FC9E97006EAB7F /* Iterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Iterator.h; sourceTree = "<group>"; };
-		706B1E9B12FC9F2A006EAB7F /* SparseVectorList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SparseVectorList.h; sourceTree = "<group>"; };
-		706B1E9D12FCA29C006EAB7F /* ArraySet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArraySet.h; sourceTree = "<group>"; };
-		706B1E9E12FCA5C9006EAB7F /* ArrayUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArrayUtils.h; sourceTree = "<group>"; };
-		706B43221304D52000470F38 /* StringBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StringBuffer.h; sourceTree = "<group>"; };
-		70E1ECDA1300E2CB00F75FA2 /* SmartPtr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SmartPtr.h; sourceTree = "<group>"; };
-		70E1ECDB1301C85A00F75FA2 /* TypeSelect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TypeSelect.h; sourceTree = "<group>"; };
-		70E1ECDC1301D40500F75FA2 /* RefTransport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RefTransport.h; sourceTree = "<group>"; };
+		706B1E9A12FC9E97006EAB7F /* Iterator.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = Iterator.h; sourceTree = "<group>"; };
+		706B1E9B12FC9F2A006EAB7F /* SparseVectorList.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = SparseVectorList.h; sourceTree = "<group>"; };
+		706B1E9E12FCA5C9006EAB7F /* ArrayUtils.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = ArrayUtils.h; sourceTree = "<group>"; };
+		706B43221304D52000470F38 /* StringBuffer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = StringBuffer.h; sourceTree = "<group>"; };
+		70E1ECDA1300E2CB00F75FA2 /* SmartPtr.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = SmartPtr.h; sourceTree = "<group>"; };
+		70E1ECDB1301C85A00F75FA2 /* TypeSelect.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = TypeSelect.h; sourceTree = "<group>"; };
+		70E1ECDC1301D40500F75FA2 /* RefTransport.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = RefTransport.h; sourceTree = "<group>"; };
+		70EAB1FD1305E866005B0BBF /* Set.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Set.h; sourceTree = "<group>"; };
 		8DD76F6C0486A84900D96B5E /* apto-test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "apto-test"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -298,7 +298,6 @@
 			children = (
 				7023369B12FC57BE000C7BE5 /* Array.h */,
 				706B1E9E12FCA5C9006EAB7F /* ArrayUtils.h */,
-				706B1E9D12FCA29C006EAB7F /* ArraySet.h */,
 				7043BEE913059E1200EA53D6 /* ArrayStorage.h */,
 				702336AF12FC8012000C7BE5 /* Atomic.h */,
 				702336A812FC64AC000C7BE5 /* ConditionVariable.h */,
@@ -311,6 +310,7 @@
 				702336AA12FC7309000C7BE5 /* RWLock.h */,
 				702336B712FC9106000C7BE5 /* RefCount.h */,
 				70E1ECDC1301D40500F75FA2 /* RefTransport.h */,
+				70EAB1FD1305E866005B0BBF /* Set.h */,
 				70E1ECDA1300E2CB00F75FA2 /* SmartPtr.h */,
 				706B1E9B12FC9F2A006EAB7F /* SparseVectorList.h */,
 				7043BEA91304707200EA53D6 /* String.h */,

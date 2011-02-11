@@ -49,6 +49,16 @@ namespace Apto {
     
     inline int GetSize() const { return SP::GetSize(); }
     
+    template <template <class> SP1>
+    Map& operator=(const Map<KeyType, ValueType, SP1>& rhs)
+    {
+      SP::Resize(rhs.GetSize());
+      Iterator<Pair<KeyType, ValueType> > it = rhs.Iterator();
+      for (int i = 0; it->Next(); i++) SP::operator[](i) = *it->Get();
+      return *this;
+    }
+    
+    
     void Set(const KeyType& key, const ValueType& value)
     {
       for (int i = 0; i < GetSize(); i++) {
@@ -150,9 +160,12 @@ namespace Apto {
       KeyIterator(); // @not_implemented
       
     public:
-      KeyIterator(const Map& map) : m_map(map), m_index(0) { ; }
+      KeyIterator(const Map& map) : m_map(map), m_index(-1) { ; }
       
-      const KeyType* Get() { return (m_index < m_map.GetSize()) ? &(m_map.SP::operator[](m_index).Value1()) : NULL; }
+      const KeyType* Get()
+      {
+        return (m_index > 0 && m_index < m_map.GetSize()) ? &(m_map.SP::operator[](m_index).Value1()) : NULL;
+      }
       const KeyType* Next() { return (++m_index < m_map.GetSize()) ? &(m_map.SP::operator[](m_index).Value1()) : NULL; }
     };
     
@@ -165,9 +178,12 @@ namespace Apto {
       ValueIerator(); // @not_implemented
       
     public:
-      ValueIterator(const Map& map) : m_map(map), m_index(0) { ; }
+      ValueIterator(const Map& map) : m_map(map), m_index(-1) { ; }
       
-      const ValueType* Get() { return (m_index < m_map.GetSize()) ? &(m_map.SP::operator[](m_index).Value2()) : NULL; }
+      const ValueType* Get()
+      {
+        return (m_index > 0 && m_index < m_map.GetSize()) ? &(m_map.SP::operator[](m_index).Value2()) : NULL;
+      }
       const ValueType* Next() { return (++m_index < m_map.GetSize()) ? &(m_map.SP::operator[](m_index).Value2()) : NULL; }
     };
     
@@ -180,10 +196,16 @@ namespace Apto {
       PairIterator(); // @not_implemented
       
     public:
-      PairIterator(const Map& map) : m_map(map), m_index(0) { ; }
+      PairIterator(const Map& map) : m_map(map), m_index(-1) { ; }
       
-      const Pair<KeyType, ValueType>* Get() { return (m_index < m_map.GetSize()) ? &(m_map.SP::operator[](m_index)) : NULL; }
-      const Pair<KeyType, ValueType>* Next() { return (++m_index < m_map.GetSize()) ? &(m_map.SP::operator[](m_index)) : NULL; }
+      const Pair<KeyType, ValueType>* Get()
+      {
+        return (m_index > 0 && m_index < m_map.GetSize()) ? &(m_map.SP::operator[](m_index)) : NULL;
+      }
+      const Pair<KeyType, ValueType>* Next()
+      {
+        return (++m_index < m_map.GetSize()) ? &(m_map.SP::operator[](m_index)) : NULL;
+      }
     };
   };
 };
