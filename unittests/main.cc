@@ -30,10 +30,10 @@
 
 #include <iostream>
 
+#include <gtest/gtest.h>
+
 #include "apto/core/Array.h"
 #include "apto/core/ArrayUtils.h"
-
-#include <gtest/gtest.h>
 
 int main(int argc, char** argv)
 {

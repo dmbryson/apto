@@ -41,7 +41,7 @@
 
 namespace Apto {
   
-  template <class ThreadingModel = SingleThreaded> class String
+  template <class ThreadingModel = SingleThreaded> class BasicString
   {
   protected:
     class StringRep : public TypeSelect<ThreadingModel::UseThreadSafe, MTRefCountObject, RefCountObject>::Result
@@ -60,13 +60,13 @@ namespace Apto {
       StringRep(int size, const char* str) : m_size(size), m_data(new char[size + 1])
       {
         assert(m_data);
-        memcpy(str, m_data, m_size);
+        memcpy(m_data, str, m_size);
         m_data[size] = '\0';
       }
       StringRep(const StringRep& rhs) : m_size(rhs.m_size), m_data(new char[m_size + 1])
       {
         assert(m_data);
-        memcpy(rhs.m_data, m_data, m_size);
+        memcpy(m_data, rhs.m_data, m_size);
         m_data[m_size] = '\0';
       }
       
@@ -83,34 +83,34 @@ namespace Apto {
     StringRepPtr m_value;
     
     
-    String(StringRepPtr rep) : m_value(rep) { ; }
+    BasicString(StringRepPtr rep) : m_value(rep) { ; }
     
   public:
-    String(const char* str = "") : m_value((str) ? new StringRep(strlen(str), str) : new StringRep(0)) { assert(m_value); }
-    String(int size, const char* str) : m_value(new StringRep(size, str)) { assert(m_value); }
-    explicit String(int size) : m_value(new StringRep(size)) { assert(m_value); }
-    String(const String& rhs) : m_value(rhs.m_value) { ; }
-    template <class T1> String(const String<T1>& rhs) : m_value(new StringRep(rhs.GetSize(), rhs.GetData())) { assert(false); }
+    BasicString(const char* str = "") : m_value((str) ? new StringRep(strlen(str), str) : new StringRep(0)) { assert(m_value); }
+    BasicString(int size, const char* str) : m_value(new StringRep(size, str)) { assert(m_value); }
+    explicit BasicString(int size) : m_value(new StringRep(size)) { assert(m_value); }
+    BasicString(const BasicString& rhs) : m_value(rhs.m_value) { ; }
+    template <class T1> BasicString(const BasicString<T1>& rhs) : m_value(new StringRep(rhs.GetSize(), rhs.GetData())) { assert(false); }
     
-    ~String() { ; }
+    ~BasicString() { ; }
         
     inline int GetSize() const { return m_value->GetSize(); }
     const char* GetData() const { return m_value->GetRep(); }
     
     inline operator const char*() const { return m_value->GetRep(); }
 
-    inline String& operator=(const String& rhs) { m_value = rhs.m_value; return *this; }
-    template <class T1> inline String& operator=(const String<T1>& rhs)
+    inline BasicString& operator=(const BasicString& rhs) { m_value = rhs.m_value; return *this; }
+    template <class T1> inline BasicString& operator=(const BasicString<T1>& rhs)
     {
       m_value = new StringRep(rhs.GetSize(), rhs.GetData());
       assert(m_value);
       return *this;
     }
     
-    inline String& operator=(const char* rhs)
+    inline BasicString& operator=(const char* rhs)
     {
       assert(rhs);
-      m_value = new StringRep(strlen(rhs), rhs);
+      m_value = StringRepPtr(new StringRep(strlen(rhs), rhs));
       assert(m_value);
       return *this;
     }
@@ -128,14 +128,14 @@ namespace Apto {
       return -1;
     }
     
-    bool operator==(const String& rhs) const
+    bool operator==(const BasicString& rhs) const
     {
       if (rhs.GetSize() != GetSize()) return false;
       for (int i = 0; i < GetSize(); i++) if ((*this)[i] != rhs[i]) return false;
       return true;
     }
     inline bool operator==(const char* rhs) const { return Compare(rhs) == 0; }
-    inline bool operator!=(const String& rhs) const { return !operator==(rhs); }
+    inline bool operator!=(const BasicString& rhs) const { return !operator==(rhs); }
     inline bool operator!=(const char* rhs) const { return Compare(rhs) != 0; }
     inline bool operator<(const char* rhs) const { return Compare(rhs) < 0; }
     inline bool operator>(const char* rhs) const { return Compare(rhs) > 0; }
@@ -144,15 +144,15 @@ namespace Apto {
     
     inline char operator[](int index) const { return m_value->operator[](index); }
     
-    inline String& operator+=(const char c) { return append(1, &c); }
-    inline String& operator+=(const char* str) { return append(strlen(str), str); }
-    template <class R> String& operator+=(const String<R>& str) { return append(str.GetSize(), str.GetData()); }
-    inline String operator+(const char c) { return concat(1, &c); }
-    inline String operator+(const char* str) { return concat(strlen(str), str); }
-    template <class R> String operator+(const String<R>& str) { return concat(str.GetSize(), str.GetData()); }
+    inline BasicString& operator+=(const char c) { return append(1, &c); }
+    inline BasicString& operator+=(const char* str) { return append(strlen(str), str); }
+    template <class R> BasicString& operator+=(const BasicString<R>& str) { return append(str.GetSize(), str.GetData()); }
+    inline BasicString operator+(const char c) { return concat(1, &c); }
+    inline BasicString operator+(const char* str) { return concat(strlen(str), str); }
+    template <class R> BasicString operator+(const BasicString<R>& str) { return concat(str.GetSize(), str.GetData()); }
     
   protected:
-    String& append(int size, const char* str)
+    BasicString& append(int size, const char* str)
     {
       assert(size == 0 || str != NULL);
       StringRepPtr newstr(new StringRep(size + GetSize()));
@@ -163,17 +163,18 @@ namespace Apto {
       return (*this);
     }
     
-    String concat(int size, const char* str)
+    BasicString concat(int size, const char* str)
     {
-      if (size == 0) return String(*this);
+      if (size == 0) return BasicString(*this);
       assert(str != NULL);
       StringRepPtr newstr(new StringRep(size + GetSize()));
       for (int i = 0; i < GetSize(); i++) newstr->operator[](i) = m_value->operator[](i);
       for (int i = 0; i < size; i++) newstr->operator[](i + GetSize()) = str[i];
-      return String(newstr);
+      return BasicString(newstr);
     }
   };
   
+  typedef BasicString<> String;
 };
 
 #endif

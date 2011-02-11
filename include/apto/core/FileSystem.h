@@ -37,18 +37,18 @@ namespace Apto {
 
     const int MAXIMUM_DIRECTORY_LENGTH = 2048;
     
-    bool MkDir(const String<>& dirname);
-    String<> GetCWD();
-    String<> GetAbsolutePath(const String<>& path, const String<>& working_dir);
-    inline String<> PathAppend(const String<>& path, const String<>& path_add);
+    bool MkDir(const String& dirname);
+    String GetCWD();
+    String GetAbsolutePath(const String& path, const String& working_dir);
+    inline String PathAppend(const String& path, const String& path_add);
     
   };
 };
 
 
-inline Apto::String<> Apto::FileSystem::PathAppend(const String<>& path, const String<>& path_add)
+inline Apto::String Apto::FileSystem::PathAppend(const String& path, const String& path_add)
 {
-  return String<>(path) + "/" + path_add;
+  return String(path) + "/" + path_add;
 }
 
 

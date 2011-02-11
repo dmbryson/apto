@@ -31,253 +31,17 @@
 #ifndef AptoCoreArray_h
 #define AptoCoreArray_h
 
+#include "apto/core/ArrayStorage.h"
+#include "apto/core/Iterator.h"
+
 #include <cassert>
+
 
 namespace Apto {
   
-  // Storage Policies
-  // --------------------------------------------------------------------------------------------------------------  
-  template <class T> class BasicArray
-  {
-  private:
-    T* m_data;    // Data Array
-    int m_size;   // Array Size
-    
-  protected:  
-    typedef T StoredType;
-    
-    explicit BasicArray(int size = 0) : m_data(NULL), m_size(0) { ResizeClear(size); }
-    BasicArray(const BasicArray& rhs) : m_data(NULL), m_size(0) { this->operator=(rhs); }
-    ~BasicArray() { delete [] m_data; }
-    
-    int GetSize() const { return m_size; }
-    
-    void ResizeClear(const int in_size)
-    {
-      if (m_data != NULL) delete [] m_data;
-      
-      if (in_size > 0) {
-        m_data = new T[in_size];  // Allocate block for data
-        assert(m_data != NULL);   // Memory allocation error: Out of Memory?
-      }
-      else m_data = NULL;
-      
-      m_size = in_size;
-    }
-    
-    void Resize(int new_size)
-    {
-      // If we're already at the size we want, don't bother doing anything.
-      if (new_size == m_size) return;
-      
-      // If new size is 0, clean up and go!
-      if (new_size == 0) {
-        if (m_data != NULL) delete [] m_data;
-        m_data = NULL;
-        m_size = 0;
-        return;
-      }
-      
-      T* new_data = new T[new_size];
-      assert(new_data != NULL); // Memory Allocation Error: Out of Memory?
-      
-      // Copy over old data...
-      for (int i = 0; i < m_size && i < new_size; i++) new_data[i] = m_data[i];
-      if (m_data != NULL) delete [] m_data;  // remove old data if exists
-      
-      m_data = new_data;
-      m_size = new_size;
-    }
-    
-    inline T& operator[](const int index) { return m_data[index]; }
-    inline const T& operator[](const int index) const { return m_data[index]; }
-
-    void Swap(int idx1, int idx2)
-    {
-      T v = m_data[idx1];
-      m_data[idx1] = m_data[idx2];
-      m_data[idx2] = v;
-    }
-  };
-  
-  
-  template <class T> class SmartArray
-  {
-  private:
-    T* m_data;    // Data Array
-    int m_size;   // Array Size
-    int m_active; // Active Size
-    int m_reserve;
-    
-    // "I am so smart..."
-    static const int SMRT_INCREASE_MINIMUM = 10;
-    static const int SMRT_INCREASE_FACTOR = 2;
-    static const int SMRT_SHRINK_TEST_FACTOR = 4;
-
-  protected:    
-    typedef T StoredType;
-    
-    explicit SmartArray(int size = 0) : m_data(NULL), m_size(0), m_active(0), m_reserve(0) { ResizeClear(size); }
-    SmartArray(const SmartArray& rhs) : m_data(NULL), m_size(0), m_active(0), m_reserve(0) { this->operator=(rhs); }
-    SmartArray() { delete [] m_data; }
-    
-    int GetSize() const { return m_size; }
-    
-    void ResizeClear(const int in_size)
-    {
-      m_active = in_size;
-      m_size = (in_size >= m_reserve) ? in_size : m_reserve;    
-      
-      if (m_data != NULL) delete [] m_data;
-      
-      if (m_size > 0) {
-        m_data = new T[m_size];   // Allocate block for data
-        assert(m_data != NULL); // Memory allocation error: Out of Memory?
-      }
-      else m_data = NULL;
-    }
-    
-    void Resize(int new_size)
-    {
-      // If we're already at the size we want, don't bother doing anything.
-      if (new_size == m_active) return;
-      
-      // If new size is 0, clean up and go!
-      if (new_size == 0) {
-        if (m_data != NULL) delete [] m_data;
-        m_data = NULL;
-        m_size = 0;
-        m_active = 0;
-        return;
-      }
-      
-      // Determine if we need to adjust the allocated array sizes...
-      int shrink_test = new_size * SMRT_SHRINK_TEST_FACTOR;
-      if (new_size > m_size || (shrink_test < m_size && shrink_test >= m_reserve)) {
-        int new_array_size = new_size * SMRT_INCREASE_FACTOR;
-        const int new_array_min = new_size + SMRT_INCREASE_MINIMUM;
-        if (new_array_min > new_array_size) new_array_size = new_array_min;
-        
-        T* new_data = new T[new_array_size];
-        assert(new_data != NULL); // Memory Allocation Error: Out of Memory?
-        
-        // Copy over old data...
-        for (int i = 0; i < m_active && i < new_size; i++) {
-          new_data[i] = m_data[i];
-        }
-        if (m_data != NULL) delete [] m_data;  // remove old data if exists
-        m_data = new_data;
-        
-        m_size = new_array_size;
-      }
-      
-      m_active = new_size;
-    }
-    
-    inline T& operator[](const int index) { return m_data[index]; }
-    inline const T& operator[](const int index) const { return m_data[index]; }
-    
-    void Swap(int idx1, int idx2)
-    {
-      T v = m_data[idx1];
-      m_data[idx1] = m_data[idx2];
-      m_data[idx2] = v;
-    }
-    
-
-  public:
-    int GetReserve() const { return m_reserve; }
-    void SetReserve(int reserve) { m_reserve = reserve; }
-  };
-  
-  
-  template <class T> class ManagedPointerArray
-  {
-  private:
-    T** m_data;    // Data Array
-    int m_size;   // Array Size
-    
-  protected:  
-    typedef T StoredType;
-    
-    explicit ManagedPointerArray(int size = 0) : m_data(NULL), m_size(0) { ResizeClear(size); }
-    ManagedPointerArray(const ManagedPointerArray& rhs) : m_data(NULL), m_size(0) { this->operator=(rhs); }
-    
-    ~ManagedPointerArray()
-    {
-      for (int i = 0; i < m_size; i++) delete m_data[i];
-      delete [] m_data;
-    }
-    
-    int GetSize() const { return m_size; }
-    
-    void ResizeClear(const int in_size)
-    {
-      for (int i = 0; i < m_size; i++) delete m_data[i];
-      if (m_data != NULL) delete [] m_data;  // remove old data if exists
-      
-      m_size = in_size;
-      assert(m_size >= 0);  // Invalid size specified for array intialization
-      
-      if (m_size > 0) {
-        m_data = new T*[m_size];   // Allocate block for data
-        assert(m_data != NULL); // Memory allocation error: Out of Memory?
-        for (int i = 0; i < m_size; i++) m_data[i] = new T;
-      }
-      else m_data = NULL;
-    }
-    
-    void Resize(int new_size)
-    {
-      // If we're already at the size we want, don't bother doing anything.
-      if (m_size == new_size) return;
-      
-      // If new size is 0, clean up and go!
-      if (new_size == 0) {
-        for (int i = 0; i < m_size; i++) delete m_data[i];
-        if (m_data != NULL) delete [] m_data;
-        m_data = NULL;
-        m_size = 0;
-        return;
-      }
-      
-      T** new_data = new T*[new_size];
-      assert(new_data != NULL); // Memory Allocation Error: Out of Memory?
-      
-      if (m_size < new_size) {
-        // Fill out the new portion of the array, if needed
-        for (int i = m_size; i < new_size; i++) new_data[i] = new T;
-      } else if (new_size < m_size) {
-        // Clean up old portion of the array, if needed
-        for (int i = new_size; i < m_size; i++) delete m_data[i];
-      }
-      
-      // Copy over old data...
-      for (int i = 0; i < m_size && i < new_size; i++) {
-        new_data[i] = m_data[i];
-      }
-      if (m_data != NULL) delete [] m_data;  // remove old data if exists
-      m_data = new_data;
-      
-      m_size = new_size;
-    }
-    
-    inline T& operator[](const int index) { return *m_data[index]; }
-    inline const T& operator[](const int index) const { return *m_data[index]; }
-    
-    void Swap(int idx1, int idx2)
-    {
-      T* v = m_data[idx1];
-      m_data[idx1] = m_data[idx2];
-      m_data[idx2] = v;
-    }
-  };
-
-  
-  
   // Array
   // --------------------------------------------------------------------------------------------------------------  
-  template <class T, template <class> class StoragePolicy = BasicArray>
+  template <class T, template <class> class StoragePolicy = Basic>
   class Array : public StoragePolicy<T>
   {
     typedef StoragePolicy<T> SP;
@@ -365,8 +129,42 @@ namespace Apto {
     {
       for (int i = 0; i < SP::GetSize(); i++) SP::operator[](i) = value;
     }
+    
+    Iterator<T> Iterator() { return ValueIterator(*this); }
+    ConstIterator<T> Iterator() const { return ConstValueIterator(*this); }
+    
+    
+  protected:
+    class ValueIterator : public Apto::Iterator<T>
+    {
+    private:
+      const Array& m_arr;
+      int m_index;
+      
+      ValueIterator(); // @not_implemented
+      
+    public:
+      ValueIterator(const Array& arr) : m_arr(arr), m_index(0) { ; }
+      
+      T* Get() { return (m_index < m_arr.GetSize()) ? &(m_arr.SP::operator[](m_index)) : NULL; }
+      T* Next() { return (++m_index < m_arr.GetSize()) ? &(m_arr.SP::operator[](m_index)) : NULL; }
+    };
+    
+    class ConstValueIterator : public Apto::ConstIterator<T>
+    {
+    private:
+      const Array& m_arr;
+      int m_index;
+      
+      ConstValueIterator(); // @not_implemented
+      
+    public:
+      ConstValueIterator(const Array& arr) : m_arr(arr), m_index(0) { ; }
+      
+      const T* Get() { return (m_index < m_arr.GetSize()) ? &(m_arr.SP::operator[](m_index)) : NULL; }
+      const T* Next() { return (++m_index < m_arr.GetSize()) ? &(m_arr.SP::operator[](m_index)) : NULL; }
+    };
   };
-  
 };
 
 #endif

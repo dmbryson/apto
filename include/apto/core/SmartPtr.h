@@ -69,7 +69,7 @@ namespace Apto {
     }
     
     template <class U> friend typename HeapStorage<U>::PointerType GetInternalPtr(const HeapStorage<U>&); 
-    template <class U> friend typename HeapStorage<U>::StoredType& GetInternalPtrRef(const HeapStorage<U>&); 
+    template <class U> friend typename HeapStorage<U>::StoredType& GetInternalPtrRef(HeapStorage<U>&); 
     template <class U> friend const typename HeapStorage<U>::StoredType& GetInternalPtrRef(const HeapStorage<U>&);     
     
     void Destroy()
@@ -90,7 +90,7 @@ namespace Apto {
   inline typename HeapStorage<T>::PointerType GetInternalPtr(const HeapStorage<T>& sp) { return sp.m_ptr; }
   
   template <class T>
-  inline typename HeapStorage<T>::StoredType& GetInternalPtrRef(const HeapStorage<T>& sp) { return sp.m_ptr; }
+  inline typename HeapStorage<T>::StoredType& GetInternalPtrRef(HeapStorage<T>& sp) { return sp.m_ptr; }
   
   template <class T>
   inline const typename HeapStorage<T>::StoredType& GetInternalPtrRef(const HeapStorage<T>& sp) { return sp.m_ptr; }
@@ -122,7 +122,7 @@ namespace Apto {
     }
     
     template <class U> friend typename ArrayStorage<U>::PointerType GetInternalPtr(const ArrayStorage<U>&); 
-    template <class U> friend typename ArrayStorage<U>::StoredType& GetInternalPtrRef(const ArrayStorage<U>&); 
+    template <class U> friend typename ArrayStorage<U>::StoredType& GetInternalPtrRef(ArrayStorage<U>&); 
     template <class U> friend const typename ArrayStorage<U>::StoredType& GetInternalPtrRef(const ArrayStorage<U>&);     
     
     void Destroy()
@@ -143,7 +143,7 @@ namespace Apto {
   inline typename ArrayStorage<T>::PointerType GetInternalPtr(const ArrayStorage<T>& sp) { return sp.m_ptr; }
   
   template <class T>
-  inline typename ArrayStorage<T>::StoredType& GetInternalPtrRef(const ArrayStorage<T>& sp) { return sp.m_ptr; }
+  inline typename ArrayStorage<T>::StoredType& GetInternalPtrRef(ArrayStorage<T>& sp) { return sp.m_ptr; }
   
   template <class T>
   inline const typename ArrayStorage<T>::StoredType& GetInternalPtrRef(const ArrayStorage<T>& sp) { return sp.m_ptr; }
@@ -364,11 +364,11 @@ namespace Apto {
     }
     
     // Pointer usage
-    inline PointerType operator->() { SP::operator->(); }
-    inline const PointerType operator->() const { SP::operator->(); }
+    inline PointerType operator->() { return SP::operator->(); }
+    inline const PointerType operator->() const { return SP::operator->(); }
     
-    inline ReferenceType operator*() { SP::operator*(); }
-    inline const ReferenceType operator*() const { SP::operator*(); }
+    inline ReferenceType operator*() { return SP::operator*(); }
+    inline const ReferenceType operator*() const { return SP::operator*(); }
     
     static inline T* GetPointer(const SmartPtr& ptr) { return GetInternalPtr(ptr); }
 

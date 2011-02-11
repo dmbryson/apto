@@ -101,9 +101,10 @@
 		702336AA12FC7309000C7BE5 /* RWLock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RWLock.h; sourceTree = "<group>"; };
 		702336AF12FC8012000C7BE5 /* Atomic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Atomic.h; sourceTree = "<group>"; };
 		702336B712FC9106000C7BE5 /* RefCount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RefCount.h; sourceTree = "<group>"; };
-		702336C112FC9489000C7BE5 /* ArrayMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArrayMap.h; sourceTree = "<group>"; };
 		702336C212FC94AA000C7BE5 /* Pair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pair.h; sourceTree = "<group>"; };
 		7043BEA91304707200EA53D6 /* String.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = String.h; sourceTree = "<group>"; };
+		7043BEE31305925600EA53D6 /* Map.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Map.h; sourceTree = "<group>"; };
+		7043BEE913059E1200EA53D6 /* ArrayStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArrayStorage.h; sourceTree = "<group>"; };
 		706B1E9512FC9BA2006EAB7F /* EntryHandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntryHandle.h; sourceTree = "<group>"; };
 		706B1E9612FC9C2C006EAB7F /* RefCount.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RefCount.cc; sourceTree = "<group>"; };
 		706B1E9812FC9C44006EAB7F /* EntryHandle.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EntryHandle.cc; sourceTree = "<group>"; };
@@ -297,13 +298,14 @@
 			children = (
 				7023369B12FC57BE000C7BE5 /* Array.h */,
 				706B1E9E12FCA5C9006EAB7F /* ArrayUtils.h */,
-				702336C112FC9489000C7BE5 /* ArrayMap.h */,
 				706B1E9D12FCA29C006EAB7F /* ArraySet.h */,
+				7043BEE913059E1200EA53D6 /* ArrayStorage.h */,
 				702336AF12FC8012000C7BE5 /* Atomic.h */,
 				702336A812FC64AC000C7BE5 /* ConditionVariable.h */,
 				706B1E9512FC9BA2006EAB7F /* EntryHandle.h */,
 				7023362112FB5AA1000C7BE5 /* FileSystem.h */,
 				706B1E9A12FC9E97006EAB7F /* Iterator.h */,
+				7043BEE31305925600EA53D6 /* Map.h */,
 				7023369F12FC5FDD000C7BE5 /* Mutex.h */,
 				702336C212FC94AA000C7BE5 /* Pair.h */,
 				702336AA12FC7309000C7BE5 /* RWLock.h */,
@@ -419,7 +421,6 @@
 			isa = PBXProject;
 			buildConfigurationList = 1DEB923508733DC60010E9CD /* Build configuration list for PBXProject "Apto" */;
 			compatibilityVersion = "Xcode 3.1";
-			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
 				English,

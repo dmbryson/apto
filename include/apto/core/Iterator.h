@@ -41,6 +41,16 @@ namespace Apto {
     virtual T* Get() = 0;
     virtual T* Next() = 0;
   };
+
+  template <class T> class ConstIterator
+  {
+  public:
+    ConstIterator() { ; }
+    virtual ~ConstIterator() { ; }
+    
+    virtual const T* Get() = 0;
+    virtual const T* Next() = 0;
+  };
 };
 
 #endif
