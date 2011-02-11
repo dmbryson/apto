@@ -69,11 +69,11 @@ namespace Apto {
   };
   
   struct ThreadSafe {
-    enum { UseThreadSafe = true; };
+    enum { UseThreadSafe = true };
   };
   
   struct SingleThreaded {
-    enum { UseThreadSafe = false; };
+    enum { UseThreadSafe = false };
   };
 };
 

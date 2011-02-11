@@ -30,23 +30,25 @@
 #ifndef AptoCoreFileSystem_h
 #define AptoCoreFileSystem_h
 
+#include "apto/core/String.h"
+
 namespace Apto {
   namespace FileSystem {
 
     const int MAXIMUM_DIRECTORY_LENGTH = 2048;
     
-    bool MkDir(const cString& dirname);
-    cString GetCWD();
-    cString GetAbsolutePath(const cString& path, const cString& working_dir);
-    inline cString PathAppend(const cString& path, const cString& path_add);
+    bool MkDir(const String<>& dirname);
+    String<> GetCWD();
+    String<> GetAbsolutePath(const String<>& path, const String<>& working_dir);
+    inline String<> PathAppend(const String<>& path, const String<>& path_add);
     
   };
 };
 
 
-inline cString Apto::FileSystem::PathAppend(const cString& path, const cString& path_add)
+inline Apto::String<> Apto::FileSystem::PathAppend(const String<>& path, const String<>& path_add)
 {
-  return cString(path) + "/" + path_add;
+  return String<>(path) + "/" + path_add;
 }
 
 

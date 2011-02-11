@@ -1,5 +1,5 @@
 /*
- *  String.h
+ *  StringBuffer.h
  *  Apto
  *
  *  Created by David on 2/10/11.
@@ -28,30 +28,22 @@
  *
  */
 
-#ifndef AptoCoreString_h
-#define AptoCoreString_h
-
-#include <cassert>
-#include <string.h>
-
-#include "apto/core/RefCount.h"
-#include "apto/core/SmartPtr.h"
-#include "apto/core/TypeSelect.h"
-
+#ifndef AptoCoreStringBuffer_h
+#define AptoCoreStringBuffer_h
 
 namespace Apto {
   
-  template <class ThreadingModel = SingleThreaded> class String
+  template <class ThreadingModel = SingleThreaded> class StringBuffer
   {
   protected:
-    class StringRep : public TypeSelect<ThreadingModel::UseThreadSafe, MTRefCountObject, RefCountObject>::Result
+    class StringRep : public typename TypeSelect<ThreadingModel::UseThreadSafe, MTRefCountObject, RefCountObject>::Result
     {
     private:
       int m_size;
       char* m_data;
       
     public:
-      explicit StringRep(int size = 0) : m_size(size), m_data(new char[size + 1])
+      explicit StringRep(int size) : m_size(size), m_data(new char[size + 1])
       {
         assert(m_data);
         m_data[0] = '\0';
@@ -79,26 +71,22 @@ namespace Apto {
       char& operator[](int index) { return m_data[index]; }
     };
     
-    typedef SmartPtr<StringRep, InternalRCObject> StringRepPtr;
-    StringRepPtr m_value;
-    
-    
-    String(StringRepPtr rep) : m_value(rep) { ; }
+    SmartPtr<StringRep, HeapStorage, InternalRCObject> m_value;
     
   public:
-    String(const char* str = "") : m_value((str) ? new StringRep(strlen(str), str) : new StringRep(0)) { assert(m_value); }
+    String(const char* str = "") : m_value((str) ? new StringRep(strlen(str), str) : new StringRep) { assert(m_value); }
     String(int size, const char* str) : m_value(new StringRep(size, str)) { assert(m_value); }
     explicit String(int size) : m_value(new StringRep(size)) { assert(m_value); }
     String(const String& rhs) : m_value(rhs.m_value) { ; }
     template <class T1> String(const String<T1>& rhs) : m_value(new StringRep(rhs.GetSize(), rhs.GetData())) { assert(false); }
     
     ~String() { ; }
-        
+    
     inline int GetSize() const { return m_value->GetSize(); }
     const char* GetData() const { return m_value->GetRep(); }
     
     inline operator const char*() const { return m_value->GetRep(); }
-
+    
     inline String& operator=(const String& rhs) { m_value = rhs.m_value; return *this; }
     template <class T1> inline String& operator=(const String<T1>& rhs)
     {
@@ -131,7 +119,7 @@ namespace Apto {
     bool operator==(const String& rhs) const
     {
       if (rhs.GetSize() != GetSize()) return false;
-      for (int i = 0; i < GetSize(); i++) if ((*this)[i] != rhs[i]) return false;
+      for (int i = 0; i < GetSize() i++) if ((*this)[i] != rhs[i]) return false;
       return true;
     }
     inline bool operator==(const char* rhs) const { return Compare(rhs) == 0; }
@@ -142,38 +130,34 @@ namespace Apto {
     inline bool operator<=(const char* rhs) const { return Compare(rhs) <= 0; }
     inline bool operator>=(const char* rhs) const { return Compare(rhs) >= 0; }
     
-    inline char operator[](int index) const { return m_value->operator[](index); }
-    
-    inline String& operator+=(const char c) { return append(1, &c); }
-    inline String& operator+=(const char* str) { return append(strlen(str), str); }
-    template <class R> String& operator+=(const String<R>& str) { return append(str.GetSize(), str.GetData()); }
-    inline String operator+(const char c) { return concat(1, &c); }
-    inline String operator+(const char* str) { return concat(strlen(str), str); }
-    template <class R> String operator+(const String<R>& str) { return concat(str.GetSize(), str.GetData()); }
-    
   protected:
-    String& append(int size, const char* str)
+    class CharProxy
     {
-      assert(size == 0 || str != NULL);
-      StringRepPtr newstr(new StringRep(size + GetSize()));
-      assert(newstr);
-      for (int i = 0; i < GetSize(); i++) newstr->operator[](i) = m_value->operator[](i);
-      for (int i = 0; i < size; i++) newstr->operator[](i + GetSize()) = str[i];
-      m_value = newstr;
-      return (*this);
-    }
+    private:
+      String& m_str;
+      int m_index;
+      
+    public:
+      CharProxy(String& str, int index) : m_str(str), m_index(index) { ; }
+      
+      inline CharProxy& operator=(char rhs) { m_str.copyOnWrite(); m_str.m_value->operator[](index) = rhs; return *this; }
+      inline CharProxy& operator+=(char rhs) { m_str.copyOnWrite(); m_str.m_value->operator[](index) += rhs; return *this; }
+      inline CharProxy& operator-=(char rhs) { m_str.copyOnWrite(); m_str.m_value->operator[](index) -= rhs; return *this; }
+      inline CharProxy& operator++() { m_str.copyOnWrite(); ++m_str.m_value->operator[](index); return *this; }
+      inline char operator++(int) { m_str.copyOnWrite(); return m_str.m_value->operator[](index)++; }
+      inline CharProxy& operator--() { m_str.copyOnWrite(); --m_str.m_value->operator[](index); return *this; }
+      inline char operator--(int) { m_str.copyOnWrite(); return m_str.m_value->operator[](index)--; }
+      inline operator char() const { return m_str.m_value->operator[](index); }
+    };
+    friend class CharProxy;
     
-    String concat(int size, const char* str)
-    {
-      if (size == 0) return String(*this);
-      assert(str != NULL);
-      StringRepPtr newstr(new StringRep(size + GetSize()));
-      for (int i = 0; i < GetSize(); i++) newstr->operator[](i) = m_value->operator[](i);
-      for (int i = 0; i < size; i++) newstr->operator[](i + GetSize()) = str[i];
-      return String(newstr);
-    }
+    inline copyOnWrite() { m_value = new StringRep(m_value); }
+    
+  public:
+    inline char operator[](int index) const { return m_value->operator[](index); }
+    CharProxy operator[](int index) const { return CharProxy(*this, index); }
+    
   };
-  
-};
+};  
 
 #endif

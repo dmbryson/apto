@@ -61,7 +61,7 @@
 namespace Apto {
   namespace FileSystem {
 
-    bool MkDir(const cString& dirname)
+    bool MkDir(const String<>& dirname)
     {
       FILE* fp = fopen(dirname, "r");
       if (fp == 0) {
@@ -81,9 +81,9 @@ namespace Apto {
     }
 
     
-    cString GetCWD()
+    String<> GetCWD()
     {
-      cString cwd_str;
+      String<> cwd_str;
       
       char* dirbuf = new char[MAXIMUM_DIRECTORY_LENGTH];    
       char* cwd = getcwd(dirbuf, MAXIMUM_DIRECTORY_LENGTH);
@@ -94,10 +94,10 @@ namespace Apto {
     }
 
     
-    cString GetAbsolutePath(const cString& path, const cString& working_dir)
+    String<> GetAbsolutePath(const String<>& path, const String<>& working_dir)
     {
       if (path.GetSize() == 0 || (path[0] != '/' && path[0] != '\\')) {
-        return (cString(working_dir) + "/" + path);
+        return (String<>(working_dir) + "/" + path);
       }
       
       return path;

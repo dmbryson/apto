@@ -34,6 +34,9 @@
 
 #include "apto/core/Atomic.h"
 #include "apto/core/RefTransport.h"
+#include "apto/core/TypeSelect.h"
+
+#include <string>
 
 
 namespace Apto {
@@ -42,15 +45,14 @@ namespace Apto {
   // --------------------------------------------------------------------------------------------------------------
   template <class T> class HeapStorage
   {
-  protected:
+  public:
     typedef T* StoredType;
     typedef T* InitPointerType;
     typedef T* PointerType;
     typedef T& ReferenceType;
     
-    StoredType m_ptr;
-  public:
-    inline HeapStorage() : m_ptr(Defualt()) { ; }
+  protected:
+    inline HeapStorage() : m_ptr(Default()) { ; }
     inline HeapStorage(const HeapStorage&) : m_ptr(NULL) { ; }
     template <class U> inline HeapStorage(const HeapStorage<U>&) : m_ptr(NULL) { ; }
     explicit inline HeapStorage(const StoredType& p) : m_ptr(p) { ; }
@@ -79,29 +81,31 @@ namespace Apto {
     }
     
     static StoredType Default() { return NULL; }
+    
+  private:
+    StoredType m_ptr;
   };
   
   template <class T>
-  inline typename HeapStorage<T>::PointerType GetInternalPtr(const HeapStorage<T>& sp) { return sp.m_ptr }
+  inline typename HeapStorage<T>::PointerType GetInternalPtr(const HeapStorage<T>& sp) { return sp.m_ptr; }
   
   template <class T>
-  inline typename HeapStorage<T>::StoredType& GetInternalPtrRef(const HeapStorage<T>& sp) { return sp.m_ptr }
+  inline typename HeapStorage<T>::StoredType& GetInternalPtrRef(const HeapStorage<T>& sp) { return sp.m_ptr; }
   
   template <class T>
-  inline const typename HeapStorage<T>::StoredType& GetInternalPtrRef(const HeapStorage<T>& sp) { return sp.m_ptr }
+  inline const typename HeapStorage<T>::StoredType& GetInternalPtrRef(const HeapStorage<T>& sp) { return sp.m_ptr; }
   
 
   template <class T> class ArrayStorage
   {
-  protected:
+  public:
     typedef T* StoredType;
     typedef T* InitPointerType;
     typedef T* PointerType;
     typedef T& ReferenceType;
     
-    StoredType m_ptr;
-  public:
-    inline ArrayStorage() : m_ptr(Defualt()) { ; }
+  protected:
+    inline ArrayStorage() : m_ptr(Default()) { ; }
     inline ArrayStorage(const ArrayStorage&) : m_ptr(NULL) { ; }
     template <class U> inline ArrayStorage(const ArrayStorage<U>&) : m_ptr(NULL) { ; }
     explicit inline ArrayStorage(const StoredType& p) : m_ptr(p) { ; }
@@ -130,22 +134,25 @@ namespace Apto {
     }
     
     static StoredType Default() { return NULL; }
+    
+  private:
+    StoredType m_ptr;
   };
   
   template <class T>
-  inline typename ArrayStorage<T>::PointerType GetInternalPtr(const ArrayStorage<T>& sp) { return sp.m_ptr }
+  inline typename ArrayStorage<T>::PointerType GetInternalPtr(const ArrayStorage<T>& sp) { return sp.m_ptr; }
   
   template <class T>
-  inline typename ArrayStorage<T>::StoredType& GetInternalPtrRef(const ArrayStorage<T>& sp) { return sp.m_ptr }
+  inline typename ArrayStorage<T>::StoredType& GetInternalPtrRef(const ArrayStorage<T>& sp) { return sp.m_ptr; }
   
   template <class T>
-  inline const typename ArrayStorage<T>::StoredType& GetInternalPtrRef(const ArrayStorage<T>& sp) { return sp.m_ptr }
+  inline const typename ArrayStorage<T>::StoredType& GetInternalPtrRef(const ArrayStorage<T>& sp) { return sp.m_ptr; }
 
 
   
   // Ownership Policies
   // --------------------------------------------------------------------------------------------------------------
-  template <T> class RefCount
+  template <class T> class RefCount
   {
   private:
     int* m_p_refs;
@@ -185,7 +192,7 @@ namespace Apto {
   };
 
   
-  template <T> class ThreadSafeRefCount
+  template <class T> class ThreadSafeRefCount
   {
   private:
     volatile int* m_p_refs;
@@ -196,7 +203,7 @@ namespace Apto {
       assert(m_p_refs);
       Atomic::Set(m_p_refs, 1);
     }
-    ThreadSafeRefCount(const RefCount& rhs) : m_p_refs(rhs.m_p_refs) { ; }
+    ThreadSafeRefCount(const ThreadSafeRefCount& rhs) : m_p_refs(rhs.m_p_refs) { ; }
     
     T Clone(const T& value)
     {
@@ -225,7 +232,7 @@ namespace Apto {
   };
   
   
-  template <T> class InternalRCObject
+  template <class T> class InternalRCObject
   {
   protected:
     InternalRCObject() { ; }
@@ -249,7 +256,7 @@ namespace Apto {
   };
 
   
-  template <T> class DeepCopy
+  template <class T> class DeepCopy
   {
   protected:
     DeepCopy() { ; }
@@ -265,7 +272,7 @@ namespace Apto {
   };
   
 
-  template <T> class DestructiveCopy
+  template <class T> class DestructiveCopy
   {
   protected:
     DestructiveCopy() { ; }
@@ -273,8 +280,8 @@ namespace Apto {
     
     template <class T1>
     static T Clone(const T1& value) {
-      T rval(val);
-      val = T1();
+      T rval(value);
+      value = T1();
       return rval;
     }
     
@@ -286,7 +293,7 @@ namespace Apto {
   };
   
   
-  template <T> class NoCopy
+  template <class T> class NoCopy
   {
   protected:
     NoCopy() { ; }
@@ -319,7 +326,7 @@ namespace Apto {
     typedef typename SP::PointerType PointerType;
     typedef typename SP::StoredType StoredType;
     typedef typename SP::ReferenceType ReferenceType;
-    typedef TypeSelect<OP::CopyIsDestructive, SmartPtr, const SmartPtr>::Result CopyArgType;
+    typedef typename TypeSelect<OP::CopyIsDestructive, SmartPtr, const SmartPtr>::Result CopyArgType;
     
     SmartPtr() { ; }
     explicit SmartPtr(const StoredType& ptr) : StoragePolicy<T>(ptr) { ; }
@@ -329,7 +336,7 @@ namespace Apto {
     SmartPtr(SmartPtr<T1, OP1, SP1>& rhs) : SP(rhs), OP(rhs) { GetInternalPtrRef(*this) = OP::Clone(GetInternalPtrRef(rhs)); }
     
     // Reference Transport to allow immediate use of SmartPtr return values
-    SmartPointer(RefTransport<SmartPtr> rhs) : SP(rhs), OP(rhs) { ; }
+    SmartPtr(RefTransport<SmartPtr> rhs) : SP(rhs), OP(rhs) { ; }
     inline operator RefTransport<SmartPtr>() { return RefTransport<SmartPtr>(*this); }
     
     SmartPtr& operator=(CopyArgType& rhs)

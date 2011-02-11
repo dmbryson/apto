@@ -46,7 +46,7 @@ namespace Apto {
   protected:  
     typedef T StoredType;
     
-    explicit BasicArray(int size = 0) : m_data(NULL), m_size(0) { resizeClear(size); }
+    explicit BasicArray(int size = 0) : m_data(NULL), m_size(0) { ResizeClear(size); }
     BasicArray(const BasicArray& rhs) : m_data(NULL), m_size(0) { this->operator=(rhs); }
     ~BasicArray() { delete [] m_data; }
     
@@ -98,7 +98,7 @@ namespace Apto {
       m_data[idx1] = m_data[idx2];
       m_data[idx2] = v;
     }
-  }
+  };
   
   
   template <class T> class SmartArray
@@ -109,10 +109,15 @@ namespace Apto {
     int m_active; // Active Size
     int m_reserve;
     
+    // "I am so smart..."
+    static const int SMRT_INCREASE_MINIMUM = 10;
+    static const int SMRT_INCREASE_FACTOR = 2;
+    static const int SMRT_SHRINK_TEST_FACTOR = 4;
+
   protected:    
     typedef T StoredType;
     
-    explicit SmartArray(int size = 0) : m_data(NULL), m_size(0), m_active(0), m_reserve(0) { resizeClear(size); }
+    explicit SmartArray(int size = 0) : m_data(NULL), m_size(0), m_active(0), m_reserve(0) { ResizeClear(size); }
     SmartArray(const SmartArray& rhs) : m_data(NULL), m_size(0), m_active(0), m_reserve(0) { this->operator=(rhs); }
     SmartArray() { delete [] m_data; }
     
@@ -183,7 +188,7 @@ namespace Apto {
   public:
     int GetReserve() const { return m_reserve; }
     void SetReserve(int reserve) { m_reserve = reserve; }
-  }
+  };
   
   
   template <class T> class ManagedPointerArray
@@ -195,7 +200,7 @@ namespace Apto {
   protected:  
     typedef T StoredType;
     
-    explicit ManagedPointerArray(int size = 0) : m_data(NULL), m_size(0) { resizeClear(size); }
+    explicit ManagedPointerArray(int size = 0) : m_data(NULL), m_size(0) { ResizeClear(size); }
     ManagedPointerArray(const ManagedPointerArray& rhs) : m_data(NULL), m_size(0) { this->operator=(rhs); }
     
     ~ManagedPointerArray()
@@ -266,7 +271,7 @@ namespace Apto {
       m_data[idx1] = m_data[idx2];
       m_data[idx2] = v;
     }
-  }
+  };
 
   
   
@@ -288,7 +293,7 @@ namespace Apto {
     ~Array() { ; }
     
     template <typename T1, template <class> class SP1>
-    Array& operator=(const Array& rhs)
+    Array& operator=(const Array<T1, SP1>& rhs)
     {
       if (SP::GetSize() != rhs.GetSize()) SP::Resize(rhs.GetSize());
       for (int i = 0; i < GetSize(); i++) SP::operator[](i) = rhs[i];

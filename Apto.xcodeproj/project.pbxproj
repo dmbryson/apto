@@ -19,6 +19,7 @@
 		7023369E12FC5F51000C7BE5 /* Thread.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7023369D12FC5F51000C7BE5 /* Thread.cc */; };
 		706B1E9712FC9C2C006EAB7F /* RefCount.cc in Sources */ = {isa = PBXBuildFile; fileRef = 706B1E9612FC9C2C006EAB7F /* RefCount.cc */; };
 		706B1E9912FC9C44006EAB7F /* EntryHandle.cc in Sources */ = {isa = PBXBuildFile; fileRef = 706B1E9812FC9C44006EAB7F /* EntryHandle.cc */; };
+		7089301B1304F2F200F8C440 /* FileSystem.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7023362012FB5A77000C7BE5 /* FileSystem.cc */; };
 		8DD76F650486A84900D96B5E /* main.cc in Sources */ = {isa = PBXBuildFile; fileRef = 08FB7796FE84155DC02AAC07 /* main.cc */; settings = {ATTRIBUTES = (); }; };
 /* End PBXBuildFile section */
 
@@ -110,6 +111,7 @@
 		706B1E9B12FC9F2A006EAB7F /* SparseVectorList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SparseVectorList.h; sourceTree = "<group>"; };
 		706B1E9D12FCA29C006EAB7F /* ArraySet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArraySet.h; sourceTree = "<group>"; };
 		706B1E9E12FCA5C9006EAB7F /* ArrayUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArrayUtils.h; sourceTree = "<group>"; };
+		706B43221304D52000470F38 /* StringBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StringBuffer.h; sourceTree = "<group>"; };
 		70E1ECDA1300E2CB00F75FA2 /* SmartPtr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SmartPtr.h; sourceTree = "<group>"; };
 		70E1ECDB1301C85A00F75FA2 /* TypeSelect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TypeSelect.h; sourceTree = "<group>"; };
 		70E1ECDC1301D40500F75FA2 /* RefTransport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RefTransport.h; sourceTree = "<group>"; };
@@ -310,6 +312,7 @@
 				70E1ECDA1300E2CB00F75FA2 /* SmartPtr.h */,
 				706B1E9B12FC9F2A006EAB7F /* SparseVectorList.h */,
 				7043BEA91304707200EA53D6 /* String.h */,
+				706B43221304D52000470F38 /* StringBuffer.h */,
 				7023369C12FC5F33000C7BE5 /* Thread.h */,
 				702336A912FC7203000C7BE5 /* ThreadSpecific.h */,
 				70E1ECDB1301C85A00F75FA2 /* TypeSelect.h */,
@@ -416,6 +419,7 @@
 			isa = PBXProject;
 			buildConfigurationList = 1DEB923508733DC60010E9CD /* Build configuration list for PBXProject "Apto" */;
 			compatibilityVersion = "Xcode 3.1";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
 				English,
@@ -440,6 +444,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7089301B1304F2F200F8C440 /* FileSystem.cc in Sources */,
 				7023366612FC52E0000C7BE5 /* Platform.cc in Sources */,
 				7023369E12FC5F51000C7BE5 /* Thread.cc in Sources */,
 				706B1E9712FC9C2C006EAB7F /* RefCount.cc in Sources */,
