@@ -89,6 +89,13 @@ namespace Apto {
       m_size = new_size;
     }
     
+    Basic& operator=(const Basic& rhs)
+    {
+      if (m_size != rhs.m_size) ResizeClear(rhs.m_size);
+      for (int i = 0; i < rhs.m_size; i++) m_data[i] = rhs.m_data[i];
+      return *this;
+    }
+    
     inline T& operator[](const int index) { return m_data[index]; }
     inline const T& operator[](const int index) const { return m_data[index]; }
     
@@ -173,7 +180,15 @@ namespace Apto {
       
       m_active = new_size;
     }
+
+    Smart& operator=(const Smart& rhs)
+    {
+      if (GetSize() != rhs.GetSize()) ResizeClear(rhs.GetSize());
+      for (int i = 0; i < rhs.GetSize(); i++) m_data[i] = rhs.m_data[i];
+      return *this;
+    }
     
+
     inline T& operator[](const int index) { return m_data[index]; }
     inline const T& operator[](const int index) const { return m_data[index]; }
     
@@ -261,7 +276,14 @@ namespace Apto {
       
       m_size = new_size;
     }
-    
+
+    ManagedPointer& operator=(const ManagedPointer& rhs)
+    {
+      if (m_size != rhs.GetSize()) Resize(rhs.GetSize());
+      for(int i = 0; i < m_size; i++) *m_data[i] = rhs[i];
+      return *this;
+    }
+
     inline T& operator[](const int index) { return *m_data[index]; }
     inline const T& operator[](const int index) const { return *m_data[index]; }
     
