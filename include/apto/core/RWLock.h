@@ -34,7 +34,7 @@
 #include "apto/platform/Platform.h"
 
 
-#if AVIDA_PLATFORM(THREADS) && AVIDA_PLATFORM(UNIX)
+#if APTO_PLATFORM(THREADS) && APTO_PLATFORM(UNIX)
 
 // Use POSIX Threads
 # include <pthread.h>
@@ -61,7 +61,7 @@ namespace Apto {
 };
 
 
-#elif AVIDA_PLATFORM(THREADS) && AVIDA_PLATFORM(WINDOWS)
+#elif APTO_PLATFORM(THREADS) && APTO_PLATFORM(WINDOWS)
 
 // Use Windows Threading
 # include <windows.h>
@@ -125,7 +125,7 @@ namespace Apto {
   public:
     RLockPtr(T* ptr, RWLock* rwlock) : m_ptr(ptr), m_rwlock(rwlock) { m_rwlock->ReadLock(); }
     RLockPtr(const RLockPtr& p) : m_ptr(p.m_ptr), m_rwlock(p.m_rwlock) { m_rwlock->ReadLock(); }
-    ~RLockPtr() { m_rwlock->Unlock(); }
+    ~RLockPtr() { m_rwlock->ReadUnlock(); }
     
     RLockPtr& operator=(const RLockPtr& rhs);
     
@@ -144,7 +144,7 @@ namespace Apto {
   template<class T> RLockPtr<T>& RLockPtr<T>::operator=(const RLockPtr& rhs)
   {
     if (m_ptr != rhs.m_ptr) {
-      m_rwlock->Unlock();
+      m_rwlock->ReadUnlock();
       m_ptr = rhs.m_ptr;
       m_rwlock = rhs.m_rwlock;
       m_rwlock->ReadLock();
