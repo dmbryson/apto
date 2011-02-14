@@ -130,21 +130,21 @@ namespace Apto {
       for (int i = 0; i < SP::GetSize(); i++) SP::operator[](i) = value;
     }
     
-    Iterator<T> Iterator() { return ValueIterator(*this); }
-    ConstIterator<T> Iterator() const { return ConstValueIterator(*this); }
+    Iterator<T>* Iterator() { return new ValueIterator(*this); }
+    ConstIterator<T>* Iterator() const { return new ConstValueIterator(*this); }
     
     
   protected:
     class ValueIterator : public Apto::Iterator<T>
     {
     private:
-      const Array& m_arr;
+      Array& m_arr;
       int m_index;
       
       ValueIterator(); // @not_implemented
       
     public:
-      ValueIterator(const Array& arr) : m_arr(arr), m_index(0) { ; }
+      ValueIterator(Array& arr) : m_arr(arr), m_index(-1) { ; }
       
       T* Get() { return (m_index < m_arr.GetSize()) ? &(m_arr.SP::operator[](m_index)) : NULL; }
       T* Next() { return (++m_index < m_arr.GetSize()) ? &(m_arr.SP::operator[](m_index)) : NULL; }
@@ -159,7 +159,7 @@ namespace Apto {
       ConstValueIterator(); // @not_implemented
       
     public:
-      ConstValueIterator(const Array& arr) : m_arr(arr), m_index(0) { ; }
+      ConstValueIterator(const Array& arr) : m_arr(arr), m_index(-1) { ; }
       
       const T* Get() { return (m_index < m_arr.GetSize()) ? &(m_arr.SP::operator[](m_index)) : NULL; }
       const T* Next() { return (++m_index < m_arr.GetSize()) ? &(m_arr.SP::operator[](m_index)) : NULL; }
