@@ -2,7 +2,7 @@
  *  unittests/core/Array.cc
  *  Apto
  *
- *  Created by David on 2/4/11.
+ *  Created by David on 2/14/11.
  *  Copyright 2011 David Michael Bryson. All rights reserved.
  *  http://programerror.com/software/apto
  *
@@ -36,14 +36,14 @@
 // Array<int, Basic>
 // --------------------------------------------------------------------------------------------------------------  
 
-TEST(BasicArray, Construction) {
+TEST(CoreBasicArray, Construction) {
   Apto::Array<int, Apto::Basic> default_constructor;
   EXPECT_EQ(0, default_constructor.GetSize());
   Apto::Array<int, Apto::Basic> constructor_sz_3(3);
   EXPECT_EQ(3, constructor_sz_3.GetSize());
 }
 
-TEST(BasicArray, Indexing) {
+TEST(CoreBasicArray, Indexing) {
   Apto::Array<int, Apto::Basic> array(5);
   for (int i = 0; i < array.GetSize(); i++) array[i] = i;
   
@@ -58,7 +58,7 @@ TEST(BasicArray, Indexing) {
   EXPECT_EQ(12, array[3]);
 }
 
-TEST(BasicArray, Assignment) {
+TEST(CoreBasicArray, Assignment) {
   Apto::Array<int, Apto::Basic> array1(5);
   for (int i = 0; i < array1.GetSize(); i++) array1[i] = i;
   
@@ -78,7 +78,7 @@ TEST(BasicArray, Assignment) {
   EXPECT_EQ(array2[3], array_copy_constructor[3]);
 }
 
-TEST(BasicArray, Resize) {
+TEST(CoreBasicArray, Resize) {
   Apto::Array<int, Apto::Basic> array1(5);
   for (int i = 0; i < array1.GetSize(); i++) array1[i] = i;
   EXPECT_EQ(5, array1.GetSize());
@@ -99,7 +99,7 @@ TEST(BasicArray, Resize) {
   EXPECT_EQ(3, array1.GetSize());
 }
 
-TEST(BasicArray, PushPop) {
+TEST(CoreBasicArray, PushPop) {
   Apto::Array<int, Apto::Basic> array;
   EXPECT_EQ(0, array.GetSize());
   
@@ -115,7 +115,7 @@ TEST(BasicArray, PushPop) {
   EXPECT_EQ(1, array.GetSize());
 }
 
-TEST(BasicArray, Swap) {
+TEST(CoreBasicArray, Swap) {
   Apto::Array<int, Apto::Basic> array(3);  
   for (int i = 0; i < 3; i++) array[i] = i;
   
@@ -130,7 +130,7 @@ TEST(BasicArray, Swap) {
   EXPECT_EQ(0, array[2]);
 }
 
-TEST(BasicArray, SetAll) {
+TEST(CoreBasicArray, SetAll) {
   Apto::Array<int, Apto::Basic> array(3);
   
   array.SetAll(2);
@@ -140,7 +140,7 @@ TEST(BasicArray, SetAll) {
   for (int i = 0; i < array.GetSize(); i++) EXPECT_EQ(26, array[i]);
 }
 
-TEST(BasicArray, Iterators) {
+TEST(CoreBasicArray, Iterators) {
   Apto::Array<int, Apto::Basic> array(5);  
   for (int i = 0; i < 5; i++) array[i] = i;
   
@@ -166,14 +166,14 @@ TEST(BasicArray, Iterators) {
 // Array<int, Smart>
 // --------------------------------------------------------------------------------------------------------------  
 
-TEST(SmartArray, Construction) {
+TEST(CoreSmartArray, Construction) {
   Apto::Array<int, Apto::Smart> default_constructor;
   EXPECT_EQ(0, default_constructor.GetSize());
   Apto::Array<int, Apto::Smart> constructor_sz_3(3);
   EXPECT_EQ(3, constructor_sz_3.GetSize());
 }
 
-TEST(SmartArray, Indexing) {
+TEST(CoreSmartArray, Indexing) {
   Apto::Array<int, Apto::Smart> array(5);
   for (int i = 0; i < array.GetSize(); i++) array[i] = i;
   
@@ -188,7 +188,7 @@ TEST(SmartArray, Indexing) {
   EXPECT_EQ(12, array[3]);
 }
 
-TEST(SmartArray, Assignment) {
+TEST(CoreSmartArray, Assignment) {
   Apto::Array<int, Apto::Smart> array1(5);
   for (int i = 0; i < array1.GetSize(); i++) array1[i] = i;
   
@@ -208,7 +208,7 @@ TEST(SmartArray, Assignment) {
   EXPECT_EQ(array2[3], array_copy_constructor[3]);
 }
 
-TEST(SmartArray, Resize) {
+TEST(CoreSmartArray, Resize) {
   Apto::Array<int, Apto::Smart> array1(5);
   for (int i = 0; i < array1.GetSize(); i++) array1[i] = i;
   EXPECT_EQ(5, array1.GetSize());
@@ -235,7 +235,7 @@ TEST(SmartArray, Resize) {
   EXPECT_EQ(20, array1.GetCapacity());
 }
 
-TEST(SmartArray, PushPop) {
+TEST(CoreSmartArray, PushPop) {
   Apto::Array<int, Apto::Smart> array;
   EXPECT_EQ(0, array.GetSize());
   
@@ -251,7 +251,7 @@ TEST(SmartArray, PushPop) {
   EXPECT_EQ(1, array.GetSize());
 }
 
-TEST(SmartArray, Swap) {
+TEST(CoreSmartArray, Swap) {
   Apto::Array<int, Apto::Smart> array(3);  
   for (int i = 0; i < 3; i++) array[i] = i;
   
@@ -266,7 +266,7 @@ TEST(SmartArray, Swap) {
   EXPECT_EQ(0, array[2]);
 }
 
-TEST(SmartArray, SetAll) {
+TEST(CoreSmartArray, SetAll) {
   Apto::Array<int, Apto::Smart> array(3);
   
   array.SetAll(2);
@@ -276,7 +276,7 @@ TEST(SmartArray, SetAll) {
   for (int i = 0; i < array.GetSize(); i++) EXPECT_EQ(26, array[i]);
 }
 
-TEST(SmartArray, Iterators) {
+TEST(CoreSmartArray, Iterators) {
   Apto::Array<int, Apto::Smart> array(5);  
   for (int i = 0; i < 5; i++) array[i] = i;
   
@@ -302,14 +302,14 @@ TEST(SmartArray, Iterators) {
 // Array<int, ManagedPointer>
 // --------------------------------------------------------------------------------------------------------------  
 
-TEST(ManagedPointerArray, Construction) {
+TEST(CoreManagedPointerArray, Construction) {
   Apto::Array<int, Apto::ManagedPointer> default_constructor;
   EXPECT_EQ(0, default_constructor.GetSize());
   Apto::Array<int, Apto::ManagedPointer> constructor_sz_3(3);
   EXPECT_EQ(3, constructor_sz_3.GetSize());
 }
 
-TEST(ManagedPointerArray, Indexing) {
+TEST(CoreManagedPointerArray, Indexing) {
   Apto::Array<int, Apto::ManagedPointer> array(5);
   for (int i = 0; i < array.GetSize(); i++) array[i] = i;
   
@@ -324,7 +324,7 @@ TEST(ManagedPointerArray, Indexing) {
   EXPECT_EQ(12, array[3]);
 }
 
-TEST(ManagedPointerArray, Assignment) {
+TEST(CoreManagedPointerArray, Assignment) {
   Apto::Array<int, Apto::ManagedPointer> array1(5);
   for (int i = 0; i < array1.GetSize(); i++) array1[i] = i;
   
@@ -344,7 +344,7 @@ TEST(ManagedPointerArray, Assignment) {
   EXPECT_EQ(array2[3], array_copy_constructor[3]);
 }
 
-TEST(ManagedPointerArray, Resize) {
+TEST(CoreManagedPointerArray, Resize) {
   Apto::Array<int, Apto::ManagedPointer> array1(5);
   for (int i = 0; i < array1.GetSize(); i++) array1[i] = i;
   EXPECT_EQ(5, array1.GetSize());
@@ -365,7 +365,7 @@ TEST(ManagedPointerArray, Resize) {
   EXPECT_EQ(3, array1.GetSize());
 }
 
-TEST(ManagedPointerArray, PushPop) {
+TEST(CoreManagedPointerArray, PushPop) {
   Apto::Array<int, Apto::ManagedPointer> array;
   EXPECT_EQ(0, array.GetSize());
   
@@ -381,7 +381,7 @@ TEST(ManagedPointerArray, PushPop) {
   EXPECT_EQ(1, array.GetSize());
 }
 
-TEST(ManagedPointerArray, Swap) {
+TEST(CoreManagedPointerArray, Swap) {
   Apto::Array<int, Apto::ManagedPointer> array(3);  
   for (int i = 0; i < 3; i++) array[i] = i;
   
@@ -396,7 +396,7 @@ TEST(ManagedPointerArray, Swap) {
   EXPECT_EQ(0, array[2]);
 }
 
-TEST(ManagedPointerArray, SetAll) {
+TEST(CoreManagedPointerArray, SetAll) {
   Apto::Array<int, Apto::ManagedPointer> array(3);
   
   array.SetAll(2);
@@ -406,7 +406,7 @@ TEST(ManagedPointerArray, SetAll) {
   for (int i = 0; i < array.GetSize(); i++) EXPECT_EQ(26, array[i]);
 }
 
-TEST(ManagedPointerArray, Iterators) {
+TEST(CoreManagedPointerArray, Iterators) {
   Apto::Array<int, Apto::ManagedPointer> array(5);  
   for (int i = 0; i < 5; i++) array[i] = i;
   
