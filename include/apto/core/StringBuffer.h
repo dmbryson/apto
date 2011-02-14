@@ -36,7 +36,7 @@ namespace Apto {
   template <class ThreadingModel = SingleThreaded> class StringBuffer
   {
   protected:
-    class StringRep : public typename TypeSelect<ThreadingModel::UseThreadSafe, MTRefCountObject, RefCountObject>::Result
+    class StringRep : public TypeSelect<ThreadingModel::UseThreadSafe, MTRefCountObject, RefCountObject>::Result
     {
     private:
       int m_size;
@@ -74,21 +74,21 @@ namespace Apto {
     SmartPtr<StringRep, HeapStorage, InternalRCObject> m_value;
     
   public:
-    String(const char* str = "") : m_value((str) ? new StringRep(strlen(str), str) : new StringRep) { assert(m_value); }
-    String(int size, const char* str) : m_value(new StringRep(size, str)) { assert(m_value); }
-    explicit String(int size) : m_value(new StringRep(size)) { assert(m_value); }
-    String(const String& rhs) : m_value(rhs.m_value) { ; }
-    template <class T1> String(const String<T1>& rhs) : m_value(new StringRep(rhs.GetSize(), rhs.GetData())) { assert(false); }
+    StringBuffer(const char* str = "") : m_value((str) ? new StringRep(strlen(str), str) : new StringRep) { assert(m_value); }
+    StringBuffer(int size, const char* str) : m_value(new StringRep(size, str)) { assert(m_value); }
+    explicit StringBuffer(int size) : m_value(new StringRep(size)) { assert(m_value); }
+    StringBuffer(const StringBuffer& rhs) : m_value(rhs.m_value) { ; }
+    template <class T1> StringBuffer(const StringBuffer<T1>& rhs) : m_value(new StringRep(rhs.GetSize(), rhs.GetData())) { assert(false); }
     
-    ~String() { ; }
+    StringBuffer() { ; }
     
     inline int GetSize() const { return m_value->GetSize(); }
     const char* GetData() const { return m_value->GetRep(); }
     
     inline operator const char*() const { return m_value->GetRep(); }
     
-    inline String& operator=(const String& rhs) { m_value = rhs.m_value; return *this; }
-    template <class T1> inline String& operator=(const String<T1>& rhs)
+    inline StringBuffer& operator=(const StringBuffer& rhs) { m_value = rhs.m_value; return *this; }
+    template <class T1> inline StringBuffer& operator=(const StringBuffer<T1>& rhs)
     {
       m_value = new StringRep(rhs.GetSize(), rhs.GetData());
       assert(m_value);
@@ -116,10 +116,10 @@ namespace Apto {
       return -1;
     }
     
-    bool operator==(const String& rhs) const
+    bool operator==(const StringBuffer& rhs) const
     {
       if (rhs.GetSize() != GetSize()) return false;
-      for (int i = 0; i < GetSize() i++) if ((*this)[i] != rhs[i]) return false;
+      for (int i = 0; i < GetSize(); i++) if ((*this)[i] != rhs[i]) return false;
       return true;
     }
     inline bool operator==(const char* rhs) const { return Compare(rhs) == 0; }
@@ -134,11 +134,11 @@ namespace Apto {
     class CharProxy
     {
     private:
-      String& m_str;
+      StringBuffer& m_str;
       int m_index;
       
     public:
-      CharProxy(String& str, int index) : m_str(str), m_index(index) { ; }
+      CharProxy(StringBuffer& str, int index) : m_str(str), m_index(index) { ; }
       
       inline CharProxy& operator=(char rhs) { m_str.copyOnWrite(); m_str.m_value->operator[](index) = rhs; return *this; }
       inline CharProxy& operator+=(char rhs) { m_str.copyOnWrite(); m_str.m_value->operator[](index) += rhs; return *this; }
@@ -151,11 +151,11 @@ namespace Apto {
     };
     friend class CharProxy;
     
-    inline copyOnWrite() { m_value = new StringRep(m_value); }
+    inline void copyOnWrite() { m_value = new StringRep(m_value); }
     
   public:
     inline char operator[](int index) const { return m_value->operator[](index); }
-    CharProxy operator[](int index) const { return CharProxy(*this, index); }
+    CharProxy operator[](int index) { return CharProxy(*this, index); }
     
   };
 };  
