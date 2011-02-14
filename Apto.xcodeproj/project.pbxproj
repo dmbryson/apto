@@ -21,6 +21,21 @@
 		706B1E9912FC9C44006EAB7F /* EntryHandle.cc in Sources */ = {isa = PBXBuildFile; fileRef = 706B1E9812FC9C44006EAB7F /* EntryHandle.cc */; };
 		7089301B1304F2F200F8C440 /* FileSystem.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7023362012FB5A77000C7BE5 /* FileSystem.cc */; };
 		70EE0D711309B1C400D6C016 /* Array.cc in Sources */ = {isa = PBXBuildFile; fileRef = 702335F012FB5281000C7BE5 /* Array.cc */; };
+		70EE0D861309DB8400D6C016 /* ArrayUtils.cc in Sources */ = {isa = PBXBuildFile; fileRef = 70EE0D781309DB8300D6C016 /* ArrayUtils.cc */; };
+		70EE0D871309DB8400D6C016 /* ConditionVariable.cc in Sources */ = {isa = PBXBuildFile; fileRef = 70EE0D791309DB8300D6C016 /* ConditionVariable.cc */; };
+		70EE0D881309DB8400D6C016 /* FileSystem.cc in Sources */ = {isa = PBXBuildFile; fileRef = 70EE0D7A1309DB8300D6C016 /* FileSystem.cc */; };
+		70EE0D891309DB8400D6C016 /* List.cc in Sources */ = {isa = PBXBuildFile; fileRef = 70EE0D7B1309DB8300D6C016 /* List.cc */; };
+		70EE0D8A1309DB8400D6C016 /* Map.cc in Sources */ = {isa = PBXBuildFile; fileRef = 70EE0D7C1309DB8300D6C016 /* Map.cc */; };
+		70EE0D8B1309DB8400D6C016 /* Mutex.cc in Sources */ = {isa = PBXBuildFile; fileRef = 70EE0D7D1309DB8300D6C016 /* Mutex.cc */; };
+		70EE0D8C1309DB8400D6C016 /* Pair.cc in Sources */ = {isa = PBXBuildFile; fileRef = 70EE0D7E1309DB8300D6C016 /* Pair.cc */; };
+		70EE0D8D1309DB8400D6C016 /* RWLock.cc in Sources */ = {isa = PBXBuildFile; fileRef = 70EE0D7F1309DB8300D6C016 /* RWLock.cc */; };
+		70EE0D8E1309DB8400D6C016 /* Set.cc in Sources */ = {isa = PBXBuildFile; fileRef = 70EE0D801309DB8300D6C016 /* Set.cc */; };
+		70EE0D8F1309DB8400D6C016 /* SmartPtr.cc in Sources */ = {isa = PBXBuildFile; fileRef = 70EE0D811309DB8300D6C016 /* SmartPtr.cc */; };
+		70EE0D901309DB8400D6C016 /* String.cc in Sources */ = {isa = PBXBuildFile; fileRef = 70EE0D821309DB8300D6C016 /* String.cc */; };
+		70EE0D911309DB8400D6C016 /* StringBuffer.cc in Sources */ = {isa = PBXBuildFile; fileRef = 70EE0D831309DB8300D6C016 /* StringBuffer.cc */; };
+		70EE0D921309DB8400D6C016 /* Thread.cc in Sources */ = {isa = PBXBuildFile; fileRef = 70EE0D841309DB8300D6C016 /* Thread.cc */; };
+		70EE0D931309DB8400D6C016 /* ThreadSpecific.cc in Sources */ = {isa = PBXBuildFile; fileRef = 70EE0D851309DB8300D6C016 /* ThreadSpecific.cc */; };
+		70EE0D961309DD3D00D6C016 /* FloatingPoint.cc in Sources */ = {isa = PBXBuildFile; fileRef = 70EE0D951309DD3D00D6C016 /* FloatingPoint.cc */; };
 		8DD76F650486A84900D96B5E /* main.cc in Sources */ = {isa = PBXBuildFile; fileRef = 08FB7796FE84155DC02AAC07 /* main.cc */; settings = {ATTRIBUTES = (); }; };
 /* End PBXBuildFile section */
 
@@ -118,6 +133,21 @@
 		70EAB1FD1305E866005B0BBF /* Set.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Set.h; sourceTree = "<group>"; };
 		70EE0D6F13099C0A00D6C016 /* List.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = List.h; sourceTree = "<group>"; };
 		70EE0D701309A40400D6C016 /* core.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = core.h; sourceTree = "<group>"; };
+		70EE0D781309DB8300D6C016 /* ArrayUtils.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ArrayUtils.cc; sourceTree = "<group>"; };
+		70EE0D791309DB8300D6C016 /* ConditionVariable.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConditionVariable.cc; sourceTree = "<group>"; };
+		70EE0D7A1309DB8300D6C016 /* FileSystem.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystem.cc; sourceTree = "<group>"; };
+		70EE0D7B1309DB8300D6C016 /* List.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = List.cc; sourceTree = "<group>"; };
+		70EE0D7C1309DB8300D6C016 /* Map.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Map.cc; sourceTree = "<group>"; };
+		70EE0D7D1309DB8300D6C016 /* Mutex.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Mutex.cc; sourceTree = "<group>"; };
+		70EE0D7E1309DB8300D6C016 /* Pair.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Pair.cc; sourceTree = "<group>"; };
+		70EE0D7F1309DB8300D6C016 /* RWLock.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RWLock.cc; sourceTree = "<group>"; };
+		70EE0D801309DB8300D6C016 /* Set.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Set.cc; sourceTree = "<group>"; };
+		70EE0D811309DB8300D6C016 /* SmartPtr.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SmartPtr.cc; sourceTree = "<group>"; };
+		70EE0D821309DB8300D6C016 /* String.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = String.cc; sourceTree = "<group>"; };
+		70EE0D831309DB8300D6C016 /* StringBuffer.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StringBuffer.cc; sourceTree = "<group>"; };
+		70EE0D841309DB8300D6C016 /* Thread.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Thread.cc; sourceTree = "<group>"; };
+		70EE0D851309DB8300D6C016 /* ThreadSpecific.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ThreadSpecific.cc; sourceTree = "<group>"; };
+		70EE0D951309DD3D00D6C016 /* FloatingPoint.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FloatingPoint.cc; sourceTree = "<group>"; };
 		8DD76F6C0486A84900D96B5E /* apto-test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "apto-test"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -183,6 +213,7 @@
 			isa = PBXGroup;
 			children = (
 				702335EF12FB5281000C7BE5 /* core */,
+				70EE0D941309DD3C00D6C016 /* platform */,
 				08FB7796FE84155DC02AAC07 /* main.cc */,
 			);
 			path = unittests;
@@ -281,6 +312,20 @@
 			isa = PBXGroup;
 			children = (
 				702335F012FB5281000C7BE5 /* Array.cc */,
+				70EE0D781309DB8300D6C016 /* ArrayUtils.cc */,
+				70EE0D791309DB8300D6C016 /* ConditionVariable.cc */,
+				70EE0D7A1309DB8300D6C016 /* FileSystem.cc */,
+				70EE0D7B1309DB8300D6C016 /* List.cc */,
+				70EE0D7C1309DB8300D6C016 /* Map.cc */,
+				70EE0D7D1309DB8300D6C016 /* Mutex.cc */,
+				70EE0D7E1309DB8300D6C016 /* Pair.cc */,
+				70EE0D7F1309DB8300D6C016 /* RWLock.cc */,
+				70EE0D801309DB8300D6C016 /* Set.cc */,
+				70EE0D811309DB8300D6C016 /* SmartPtr.cc */,
+				70EE0D821309DB8300D6C016 /* String.cc */,
+				70EE0D831309DB8300D6C016 /* StringBuffer.cc */,
+				70EE0D841309DB8300D6C016 /* Thread.cc */,
+				70EE0D851309DB8300D6C016 /* ThreadSpecific.cc */,
 			);
 			path = core;
 			sourceTree = "<group>";
@@ -341,6 +386,14 @@
 			);
 			name = platform;
 			path = src/platform;
+			sourceTree = "<group>";
+		};
+		70EE0D941309DD3C00D6C016 /* platform */ = {
+			isa = PBXGroup;
+			children = (
+				70EE0D951309DD3D00D6C016 /* FloatingPoint.cc */,
+			);
+			path = platform;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -476,6 +529,21 @@
 			files = (
 				8DD76F650486A84900D96B5E /* main.cc in Sources */,
 				70EE0D711309B1C400D6C016 /* Array.cc in Sources */,
+				70EE0D861309DB8400D6C016 /* ArrayUtils.cc in Sources */,
+				70EE0D871309DB8400D6C016 /* ConditionVariable.cc in Sources */,
+				70EE0D881309DB8400D6C016 /* FileSystem.cc in Sources */,
+				70EE0D891309DB8400D6C016 /* List.cc in Sources */,
+				70EE0D8A1309DB8400D6C016 /* Map.cc in Sources */,
+				70EE0D8B1309DB8400D6C016 /* Mutex.cc in Sources */,
+				70EE0D8C1309DB8400D6C016 /* Pair.cc in Sources */,
+				70EE0D8D1309DB8400D6C016 /* RWLock.cc in Sources */,
+				70EE0D8E1309DB8400D6C016 /* Set.cc in Sources */,
+				70EE0D8F1309DB8400D6C016 /* SmartPtr.cc in Sources */,
+				70EE0D901309DB8400D6C016 /* String.cc in Sources */,
+				70EE0D911309DB8400D6C016 /* StringBuffer.cc in Sources */,
+				70EE0D921309DB8400D6C016 /* Thread.cc in Sources */,
+				70EE0D931309DB8400D6C016 /* ThreadSpecific.cc in Sources */,
+				70EE0D961309DD3D00D6C016 /* FloatingPoint.cc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
