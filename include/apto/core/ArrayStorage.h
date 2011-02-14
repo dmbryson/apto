@@ -128,7 +128,7 @@ namespace Apto {
     Smart(const Smart& rhs) : m_data(NULL), m_size(0), m_active(0), m_reserve(0) { this->operator=(rhs); }
     Smart() { delete [] m_data; }
     
-    int GetSize() const { return m_size; }
+    int GetSize() const { return m_active; }
     
     void ResizeClear(const int in_size)
     {
@@ -162,7 +162,7 @@ namespace Apto {
       int shrink_test = new_size * SMRT_SHRINK_TEST_FACTOR;
       if (new_size > m_size || (shrink_test < m_size && shrink_test >= m_reserve)) {
         int new_array_size = new_size * SMRT_INCREASE_FACTOR;
-        const int new_array_min = new_size + SMRT_INCREASE_MINIMUM;
+        int new_array_min = (new_size + SMRT_INCREASE_MINIMUM) < m_reserve ? m_reserve : (new_size + SMRT_INCREASE_MINIMUM);
         if (new_array_min > new_array_size) new_array_size = new_array_min;
         
         T* new_data = new T[new_array_size];
@@ -203,6 +203,7 @@ namespace Apto {
   public:
     int GetReserve() const { return m_reserve; }
     void SetReserve(int reserve) { m_reserve = reserve; }
+    int GetCapacity() const { return m_size; }
   };
   
   
