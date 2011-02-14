@@ -36,7 +36,7 @@
 
 
 namespace Apto {
-  template<class T, template <class> StoragePolicy = Basic>
+  template<class T, template <class> class StoragePolicy = Basic>
   class Set : public StoragePolicy<T>
   {
   protected:
@@ -44,12 +44,12 @@ namespace Apto {
     
   public:
     Set() { ; }
-    template <class T1, template <class> SP1> Set(const Set<T1, SP1>& rhs) { this->operator=(rhs); }
+    template <class T1, template <class> class SP1> Set(const Set<T1, SP1>& rhs) { this->operator=(rhs); }
     
     inline int GetSize() const { return SP::GetSize(); }
     
     
-    template <class T1, template <class> SP1>
+    template <class T1, template <class> class SP1>
     Set& operator=(const Set<T1, SP1>& rhs)
     {
       SP::Resize(rhs.GetSize());
@@ -99,7 +99,7 @@ namespace Apto {
       const Set& m_set;
       int m_index;
       
-      ValueIerator(); // @not_implemented
+      ValueIterator(); // @not_implemented
       
     public:
       ValueIterator(const Set& set) : m_set(set), m_index(0) { ; }
