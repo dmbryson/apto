@@ -49,8 +49,8 @@ namespace Apto {
     inline V1& Value1() { return m_v1; }
     inline const V1& Value1() const { return m_v1; }
     
-    inline V2& Value2() { return m_value; }
-    inline const V2& Value2() const { return m_value; }
+    inline V2& Value2() { return m_v2; }
+    inline const V2& Value2() const { return m_v2; }
     
     inline void Set(const V1& v1, const V2& v2) { m_v1 = v1; m_v2 = v2; } 
   };
