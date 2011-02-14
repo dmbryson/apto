@@ -37,7 +37,7 @@
 
 
 namespace Apto {
-  template<class KeyType, class ValueType, template <class> StoragePolicy = Basic>
+  template<class KeyType, class ValueType, template <class> class StoragePolicy = Basic>
   class Map : public StoragePolicy<Pair<KeyType, ValueType> >
   {
   protected:
@@ -45,16 +45,17 @@ namespace Apto {
     
   public:
     Map() { ; }
-    template <template <class> SP1> Map(const Map<KeyType, ValueType, SP1>& rhs) { this->operator=(rhs); }
+    template <template <class> class SP1> Map(const Map<KeyType, ValueType, SP1>& rhs) { this->operator=(rhs); }
     
     inline int GetSize() const { return SP::GetSize(); }
     
-    template <template <class> SP1>
+    template <template <class> class SP1>
     Map& operator=(const Map<KeyType, ValueType, SP1>& rhs)
     {
       SP::Resize(rhs.GetSize());
-      Iterator<Pair<KeyType, ValueType> > it = rhs.Iterator();
+      Apto::Iterator<Pair<KeyType, ValueType> >* it = rhs.Iterator();
       for (int i = 0; it->Next(); i++) SP::operator[](i) = *it->Get();
+      delete it;
       return *this;
     }
     
@@ -121,9 +122,9 @@ namespace Apto {
     ValueType& operator[](const KeyType& key) { return ValueFor(key); }
     const ValueType& operator[](const KeyType& key) const { return ValueFor(key); }
     
-    ConstIterator<KeyType> Keys() const { return KeyIterator(*this); }
-    ConstIterator<ValueType> Values() const { return ValueIterator(*this); }
-    ConstIterator<Pair<KeyType, ValueType> Iterator() const { return PairIterator(*this); }
+    ConstIterator<KeyType>* Keys() const { return new KeyIterator(*this); }
+    ConstIterator<ValueType>* Values() const { return new ValueIterator(*this); }
+    ConstIterator<Pair<KeyType, ValueType> >* Iterator() const { return new PairIterator(*this); }
     
     void Remove(const KeyType& key)
     {
@@ -175,7 +176,7 @@ namespace Apto {
       const Map& m_map;
       int m_index;
       
-      ValueIerator(); // @not_implemented
+      ValueIterator(); // @not_implemented
       
     public:
       ValueIterator(const Map& map) : m_map(map), m_index(-1) { ; }
