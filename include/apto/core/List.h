@@ -131,7 +131,7 @@ namespace Apto {
         m_tail_seg->entries[0] = value;
         m_tail_seg->used++;
         if (handle) {
-          *handle = m_tail_seg->handles[0] = new SparseVectorListHandle(m_tail_seg, value);
+          *handle = m_tail_seg->handles[0] = new SparseVectorHandle(m_tail_seg, value);
         } else {
           m_tail_seg->handles[0] = NULL;
         }      
@@ -139,12 +139,12 @@ namespace Apto {
         m_tail_seg->next = new ListSegment(this, value, NULL, m_tail_seg);
         m_segs++;
         m_tail_seg = m_tail_seg->next;
-        if (handle) *handle = m_tail_seg->handles[0] = new SparseVectorListHandle(m_tail_seg, value);
+        if (handle) *handle = m_tail_seg->handles[0] = new SparseVectorHandle(m_tail_seg, value);
       } else {
         m_tail_seg = new ListSegment(this, value, NULL, NULL);
         m_segs++;
         m_head_seg = m_tail_seg;
-        if (handle) *handle = m_tail_seg->handles[0] = new SparseVectorListHandle(m_tail_seg, value);
+        if (handle) *handle = m_tail_seg->handles[0] = new SparseVectorHandle(m_tail_seg, value);
       }
       
       m_size++;
@@ -195,7 +195,7 @@ namespace Apto {
           } else if (cur->next && (cur->used + cur->next->used) <= SEGMENT_SIZE) {
             // Adjust any iterators to remain consistent
             for (int it_idx = 0; it_idx < m_its.GetSize(); it_idx++) {
-              SparseVectorListIterator* it = m_its[it_idx];
+              SparseVectorIterator* it = m_its[it_idx];
               if (it->m_cur == cur) {
                 if (it->m_pos >= entry_idx) it->m_pos--;
                 it->m_pos += cur->next->used;
@@ -209,13 +209,13 @@ namespace Apto {
             
             // Move and update segment handles associated with moved entries
             for (int j = 0; j < entry_idx && j < cur->used; j++) {
-              SparseVectorListHandle* handle = cur->handles[j];
+              SparseVectorHandle* handle = cur->handles[j];
               cur->next->handles[cur->next->used + j] = handle;
               if (handle) handle->m_seg = cur->next;
             }
             if (cur->handles[entry_idx]) cur->handles[entry_idx]->m_seg = NULL;
             for (int j = entry_idx; j < cur->used; j++) {
-              SparseVectorListHandle* handle = cur->handles[j + 1];
+              SparseVectorHandle* handle = cur->handles[j + 1];
               cur->next->handles[cur->next->used + j] = handle;
               if (handle) handle->m_seg = cur->next;
             }
@@ -251,21 +251,21 @@ namespace Apto {
     
     
     
-    class SparseVectorIterator : public Iterator<T>
+    class SparseVectorIterator : public Apto::Iterator<T>
     {
-      friend class SparseVectorList<T>;
+      friend class SparseVector<T>;
     private:
-      SparseVectorList<T>* m_list;
+      SparseVector<T>* m_list;
       ListSegment* m_cur;
       int m_pos;
       
       SparseVectorIterator(); // @not_implemented
-      SparseVectorIterator(const SparseVectorListIterator&); // @not_implemented
-      SparseVectorIterator& operator=(const SparseVectorListIterator&); // @not_implemented
+      SparseVectorIterator(const SparseVectorIterator&); // @not_implemented
+      SparseVectorIterator& operator=(const SparseVectorIterator&); // @not_implemented
       
       
     public:
-      SparseVectorIterator(SparseVectorList<T>* list)
+      SparseVectorIterator(SparseVector<T>* list)
       : m_list(list), m_cur(list->m_head_seg), m_pos((list->m_head_seg) ? list->m_head_seg->used : -1)
       {
         list->m_its.Push(this);
@@ -308,21 +308,21 @@ namespace Apto {
       }
     };
 
-    class SparseVectorConstIterator : public Iterator<T>
+    class SparseVectorConstIterator : public Apto::Iterator<T>
     {
-      friend class SparseVectorList<T>;
+      friend class SparseVector<T>;
     private:
-      SparseVectorList<T>* m_list;
+      SparseVector<T>* m_list;
       ListSegment* m_cur;
       int m_pos;
       
       SparseVectorConstIterator(); // @not_implemented
-      SparseVectorConstIterator(const SparseVectorListConstIterator&); // @not_implemented
-      SparseVectorConstIterator& operator=(const SparseVectorListConstIterator&); // @not_implemented
+      SparseVectorConstIterator(const SparseVectorConstIterator&); // @not_implemented
+      SparseVectorConstIterator& operator=(const SparseVectorConstIterator&); // @not_implemented
       
       
     public:
-      SparseVectorConstIterator(SparseVectorList<T>* list)
+      SparseVectorConstIterator(SparseVector<T>* list)
       : m_list(list), m_cur(list->m_head_seg), m_pos((list->m_head_seg) ? list->m_head_seg->used : -1)
       {
         list->m_its.Push(this);
@@ -398,9 +398,12 @@ namespace Apto {
   template <class T, template <class> class StoragePolicy = SparseVector>
   class List : public StoragePolicy<T>
   {
+  protected:
+    typedef StoragePolicy<T> SP;
+    
   public:
     List() { ; }
-    template <class T1, SP1>
+    template <class T1, template <class> class SP1>
     explicit List(const List<T1, SP1>& rhs)
     {
       
