@@ -148,6 +148,7 @@
 		70EE0D841309DB8300D6C016 /* Thread.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Thread.cc; sourceTree = "<group>"; };
 		70EE0D851309DB8300D6C016 /* ThreadSpecific.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ThreadSpecific.cc; sourceTree = "<group>"; };
 		70EE0D951309DD3D00D6C016 /* FloatingPoint.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FloatingPoint.cc; sourceTree = "<group>"; };
+		70EE0D971309E04B00D6C016 /* platform.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = platform.h; sourceTree = "<group>"; };
 		8DD76F6C0486A84900D96B5E /* apto-test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "apto-test"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -336,6 +337,7 @@
 				7023361D12FB5900000C7BE5 /* core */,
 				7023364012FC4E19000C7BE5 /* platform */,
 				70EE0D701309A40400D6C016 /* core.h */,
+				70EE0D971309E04B00D6C016 /* platform.h */,
 			);
 			name = include;
 			path = include/apto;
