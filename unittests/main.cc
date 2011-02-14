@@ -32,9 +32,6 @@
 
 #include <gtest/gtest.h>
 
-#include "apto/core/Array.h"
-#include "apto/core/ArrayUtils.h"
-
 int main(int argc, char** argv)
 {
   std::cout << "Running Apto Unit Tests" << std::endl;
