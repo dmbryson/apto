@@ -116,6 +116,7 @@
 		70E1ECDC1301D40500F75FA2 /* RefTransport.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = RefTransport.h; sourceTree = "<group>"; };
 		70EAB1FD1305E866005B0BBF /* Set.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Set.h; sourceTree = "<group>"; };
 		70EE0D6F13099C0A00D6C016 /* List.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = List.h; sourceTree = "<group>"; };
+		70EE0D701309A40400D6C016 /* core.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = core.h; sourceTree = "<group>"; };
 		8DD76F6C0486A84900D96B5E /* apto-test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "apto-test"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -288,6 +289,7 @@
 			children = (
 				7023361D12FB5900000C7BE5 /* core */,
 				7023364012FC4E19000C7BE5 /* platform */,
+				70EE0D701309A40400D6C016 /* core.h */,
 			);
 			name = include;
 			path = include/apto;
