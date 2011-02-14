@@ -31,6 +31,14 @@
 #ifndef AptoCoreStringBuffer_h
 #define AptoCoreStringBuffer_h
 
+#include <cassert>
+#include <string.h>
+
+#include "apto/core/RefCount.h"
+#include "apto/core/SmartPtr.h"
+#include "apto/core/TypeSelect.h"
+
+
 namespace Apto {
   
   template <class ThreadingModel = SingleThreaded> class StringBuffer
@@ -95,7 +103,7 @@ namespace Apto {
       return *this;
     }
     
-    inline String& operator=(const char* rhs)
+    inline StringBuffer& operator=(const char* rhs)
     {
       assert(rhs);
       m_value = new StringRep(strlen(rhs), rhs);
@@ -123,7 +131,7 @@ namespace Apto {
       return true;
     }
     inline bool operator==(const char* rhs) const { return Compare(rhs) == 0; }
-    inline bool operator!=(const String& rhs) const { return !operator==(rhs); }
+    inline bool operator!=(const StringBuffer& rhs) const { return !operator==(rhs); }
     inline bool operator!=(const char* rhs) const { return Compare(rhs) != 0; }
     inline bool operator<(const char* rhs) const { return Compare(rhs) < 0; }
     inline bool operator>(const char* rhs) const { return Compare(rhs) > 0; }
