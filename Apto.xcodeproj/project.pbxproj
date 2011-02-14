@@ -20,6 +20,7 @@
 		706B1E9712FC9C2C006EAB7F /* RefCount.cc in Sources */ = {isa = PBXBuildFile; fileRef = 706B1E9612FC9C2C006EAB7F /* RefCount.cc */; };
 		706B1E9912FC9C44006EAB7F /* EntryHandle.cc in Sources */ = {isa = PBXBuildFile; fileRef = 706B1E9812FC9C44006EAB7F /* EntryHandle.cc */; };
 		7089301B1304F2F200F8C440 /* FileSystem.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7023362012FB5A77000C7BE5 /* FileSystem.cc */; };
+		70EE0D711309B1C400D6C016 /* Array.cc in Sources */ = {isa = PBXBuildFile; fileRef = 702335F012FB5281000C7BE5 /* Array.cc */; };
 		8DD76F650486A84900D96B5E /* main.cc in Sources */ = {isa = PBXBuildFile; fileRef = 08FB7796FE84155DC02AAC07 /* main.cc */; settings = {ATTRIBUTES = (); }; };
 /* End PBXBuildFile section */
 
@@ -84,7 +85,7 @@
 		702335EC12FB51EF000C7BE5 /* gtest-type-util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "gtest-type-util.h"; sourceTree = "<group>"; };
 		702335ED12FB51EF000C7BE5 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		702335EE12FB51EF000C7BE5 /* README.apto */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.apto; sourceTree = "<group>"; };
-		702335F012FB5281000C7BE5 /* SmartArray.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SmartArray.cc; sourceTree = "<group>"; };
+		702335F012FB5281000C7BE5 /* Array.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Array.cc; sourceTree = "<group>"; };
 		7023362012FB5A77000C7BE5 /* FileSystem.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystem.cc; sourceTree = "<group>"; };
 		7023362112FB5AA1000C7BE5 /* FileSystem.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = FileSystem.h; sourceTree = "<group>"; };
 		7023364112FC4E19000C7BE5 /* FloatingPoint.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = FloatingPoint.h; sourceTree = "<group>"; };
@@ -279,7 +280,7 @@
 		702335EF12FB5281000C7BE5 /* core */ = {
 			isa = PBXGroup;
 			children = (
-				702335F012FB5281000C7BE5 /* SmartArray.cc */,
+				702335F012FB5281000C7BE5 /* Array.cc */,
 			);
 			path = core;
 			sourceTree = "<group>";
@@ -474,6 +475,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8DD76F650486A84900D96B5E /* main.cc in Sources */,
+				70EE0D711309B1C400D6C016 /* Array.cc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
