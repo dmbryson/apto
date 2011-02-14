@@ -40,6 +40,8 @@
 
 namespace Apto {
   
+  // Storage Policies
+  // --------------------------------------------------------------------------------------------------------------  
 
   template <class T> class SparseVector
   {
@@ -388,10 +390,10 @@ namespace Apto {
       }
     };
   };
+    
   
-
-  
-  
+  // List
+  // --------------------------------------------------------------------------------------------------------------  
   
   template <class T, template <class> class StoragePolicy = SparseVector>
   class List : public StoragePolicy<T>
