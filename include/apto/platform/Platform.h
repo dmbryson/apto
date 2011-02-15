@@ -26,6 +26,8 @@
  *
  *  Authors: David M. Bryson <david@programerror.com>
  *
+ *  Platform detection macro structure inspired by platform detection in Webkit <http://www.webkit.org>
+ *  Initial implementation was in Avida <http://avida.devosoft.org>
  */
 
 #ifndef AptoPlatformPlatform_h
