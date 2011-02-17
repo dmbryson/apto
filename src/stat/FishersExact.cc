@@ -38,7 +38,8 @@
 #include <limits>
 
 
-static struct PastPathLength {
+static struct PastPathLength
+{
   double value;
   int observed;
   
@@ -52,6 +53,27 @@ static struct FExactNode
   Apto::Array<PastPathLength, Apto::Smart> past_entries;  
 };
 
+static class FExact
+{
+private:
+  Apto::Array<double> m_facts; // Log factorials
+  
+  
+public:
+  FExact(const Apto::Stat::ContingencyTable& table);
+  
+private:
+  double logMultinomial(int numerator, const Apto::Array<int>& denominator);
+  void removeFromVector(const Apto::Array<int>& src, int idx_remove, Apto::Array<int>& dest);
+  void reduceZeroInVector(const Apto::Array<int>& src, int value, int idx_start, Apto::Array<int>& dest);
+  
+  double longestPath(const Apto::Array<int>& row_marginals, const Apto::Array<int>& col_marginals, int marginal_total);
+  void shortestPath(const Apto::Array<int>& row_marginals, const Apto::Array<int>& col_marginals, double& shortest_path);
+  bool shortestPathSpecial(const Apto::Array<int>& row_marginals, const Apto::Array<int>& col_marginals, double& val);
+  
+  bool generateNewNode(const Apto::Array<int>& row_marginals, Apto::Array<int>& diff, int& idx_dec, int& idx_inc);
+};
+
 static double cummulativeGamma(double q, double alpha, bool& fault);
 static double logGamma(double x, bool& fault);
 
@@ -59,9 +81,271 @@ double Apto::Stat::FishersExact(const ContingencyTable& table)
 {
   if (table.MarginalTotal() == 0.0) return std::numeric_limits<double>::quiet_NaN();  // All elements are 0
   
+  FExact fe(table);
   
   return 0.0;
 }
+
+FExact::FExact(const Apto::Stat::ContingencyTable& table)
+  : m_facts(table.MarginalTotal())
+{
+  const int marginal_total = table.MarginalTotal();
+  m_facts[0] = 0.0;
+  m_facts[1] = 0.0;
+  m_facts[2] = log(2.0);
+  for (int i = 0; i < marginal_total; i++) {
+    m_facts[i] = m_facts[i - 1] + log(i);
+    if (++i < marginal_total)  m_facts[i] = m_facts[i - 1] + m_facts[2] + m_facts[i / 2] - m_facts[i / 2 - 1];
+  }
+}
+
+
+double FExact::logMultinomial(int numerator, const Apto::Array<int>& denominator)
+{
+  double ret_val = m_facts[numerator];
+  for (int i = 0; i < denominator.GetSize(); i++) ret_val -= m_facts[denominator[i]];
+  return ret_val;
+}
+
+
+void FExact::removeFromVector(const Apto::Array<int>& src, int idx_remove, Apto::Array<int>& dest)
+{
+  dest.Resize(src.GetSize() - 1);
+  for (int i = 0; i < idx_remove; i++) dest[i] = src[i];
+  for (int i = idx_remove + 1; i < src.GetSize(); i++) dest[i - 1] = src[i];
+}
+
+
+void FExact::reduceZeroInVector(const Apto::Array<int>& src, int value, int idx_start, Apto::Array<int>& dest)
+{
+  dest.Resize(src.GetSize());
+  
+  int i = 0;
+  for (; i < idx_start; i++) dest[i] = src[i];
+  
+  for (; i < (src.GetSize() - 1); i++) {
+    if (value >= src[i + 1]) {
+      
+    }
+    dest[i] = src[i + 1];
+  }
+  dest[i] = value;
+  
+  for (++i; i < src.GetSize(); i++) dest[i] = src[i];
+}
+
+
+void FExact::shortestPath(const Apto::Array<int>& row_marginals, const Apto::Array<int>& col_marginals, double& shortest_path)
+{
+  // Take care of easy cases first
+  
+  // 1 x c
+  if (row_marginals.GetSize() == 1) {
+    for (int i = 0; i < col_marginals.GetSize(); i++) shortest_path -= m_facts[col_marginals[i]];
+    return;
+  }
+  
+  // r x 1
+  if (col_marginals.GetSize() == 1) {
+    for (int i = 0; i < row_marginals.GetSize(); i++) shortest_path -= m_facts[row_marginals[i]];
+    return;
+  }
+  
+  // 2x2
+  if (row_marginals.GetSize() == 2 && col_marginals.GetSize() == 2) {
+    if (row_marginals[1] <= col_marginals[1]) {
+      shortest_path -= m_facts[row_marginals[1]] - m_facts[col_marginals[0]] - m_facts[col_marginals[1] - row_marginals[1]];
+    } else {
+      shortest_path -= m_facts[col_marginals[1]] - m_facts[row_marginals[0]] - m_facts[row_marginals[1] - col_marginals[1]];
+    }
+    return;
+  }
+  
+  Apto::Array<Apto::Array<int> > row_stack(row_marginals.GetSize() + col_marginals.GetSize() + 1);
+  Apto::Array<Apto::Array<int> > col_stack(row_marginals.GetSize() + col_marginals.GetSize() + 1);
+  
+  row_stack[0].Resize(row_marginals.GetSize());
+  for (int i = 0; i < row_marginals.GetSize(); i++) row_stack[0][i] = row_marginals[row_marginals.GetSize() - i - 1];
+  col_stack[0].Resize(col_marginals.GetSize());
+  for (int i = 0; i < col_marginals.GetSize(); i++) col_stack[0][i] = col_marginals[col_marginals.GetSize() - i - 1];
+
+  int istk = 0;
+
+  Apto::Array<double> y_stack(row_marginals.GetSize() + col_marginals.GetSize() + 1);
+  y_stack[0] = 0.0;
+  double y = 0.0;
+
+  int l = 0;
+  double amx = 0.0;
+  
+  int m, n, jrow, jcol;
+  
+  do {
+    int row1 = row_stack[istk][0];
+    int col1 = col_stack[istk][0];
+    if (row1 > col1) {
+      if (row_stack[istk].GetSize() >= col_stack[istk].GetSize()) {
+        m = col_stack[istk].GetSize() - 1;
+        n = 2;
+      } else {
+        m = row_stack[istk].GetSize();
+        n = 1;
+      }
+    } else if (row1 < col1) {
+      if (row_stack[istk].GetSize() <= col_stack[istk].GetSize()) {
+        m = row_stack[istk].GetSize() - 1;
+        n = 1;
+      } else {
+        m = col_stack[istk].GetSize();
+        n = 2;
+      }
+    } else {
+      if (row_stack[istk].GetSize() <= col_stack[istk].GetSize()) {
+        m = row_stack[istk].GetSize() - 1;
+        n = 1;
+      } else {
+        m = col_stack[istk].GetSize() - 1;
+        n = 2;
+      }
+      
+      if (n == 1) {
+        jrow = l;
+        jcol = 0;
+      } else {
+        jrow = 0;
+        jcol = l;
+      }
+      
+      int rowt = row_stack[istk][jrow];
+      int colt = col_stack[istk][jcol];
+      int mn = (rowt > colt) ? colt : rowt;
+      y += m_facts[mn];
+      if (rowt == colt) {
+        removeFromVector(row_stack[istk], jrow, row_stack[istk + 1]);
+        removeFromVector(col_stack[istk], jcol, col_stack[istk + 1]); 
+      } else if (rowt > colt) {
+        removeFromVector(col_stack[istk], jcol, col_stack[istk + 1]);
+        reduceZeroInVector(row_stack[istk], rowt - colt, jrow, row_stack[istk + 1]);
+      } else {
+        removeFromVector(row_stack[istk], jrow, row_stack[istk + 1]);
+        reduceZeroInVector(col_stack[istk], colt - rowt, jcol, col_stack[istk + 1]);
+      }
+    }
+    
+    // Around L70 here
+    
+    
+  } while (true);
+  
+  if (y > amx) {
+    amx = y;
+    if (shortest_path - amx <= 0.0) {
+      shortest_path = 0.0;
+      return;
+    }
+  }
+  
+  // L100 here
+}
+
+
+bool FExact::shortestPathSpecial(const Apto::Array<int>& row_marginals, const Apto::Array<int>& col_marginals, double& val)
+{
+  Apto::Array<int> nd(row_marginals.GetSize());
+  Apto::Array<int> ne(col_marginals.GetSize());
+  Apto::Array<int> m(col_marginals.GetSize());
+  
+  nd.SetAll(0);
+  int is = col_marginals[0] / row_marginals.GetSize();
+  ne[0] = is;
+  int ix = col_marginals[0] - row_marginals.GetSize() * is;
+  m[0] = ix;
+  if (ix != 0) nd[ix] = 1;
+  
+  for (int i = 1; i < col_marginals.GetSize(); i++) {
+    ix = col_marginals[i] / row_marginals.GetSize();
+    ne[i] = ix;
+    is = is + ix;
+    ix = col_marginals[i] - row_marginals.GetSize() * ix;
+    m[i] = ix;
+    if (ix != 0) nd[ix]++;
+  }
+  
+  for (int i = row_marginals.GetSize() - 3; i >= 0; i--) nd[i] += nd[i + 1];
+  
+  ix = 0;
+  int nrow1 = row_marginals.GetSize();
+  for (int i = (row_marginals.GetSize() - 1); i > 0; i--) {
+    ix += is + nd[nrow1 - i] - row_marginals[i];
+    if (ix < 0) return false;
+  }
+  
+  val = 0.0;
+  for (int i = 0; i < col_marginals.GetSize(); i++) {
+    ix = ne[i];
+    is = m[i];
+    val += is * m_facts[ix + 1] + (row_marginals.GetSize() - is) * m_facts[ix];
+  }
+  
+  return true;
+}
+
+
+bool FExact::generateNewNode(const Apto::Array<int>& row_marginals, Apto::Array<int>& diff, int& idx_dec, int& idx_inc)
+{
+  if (idx_inc == 0) {
+    while (diff[idx_inc] == row_marginals[idx_inc]) idx_inc++;
+  }
+  
+  // Find node to decrement
+  if (diff[idx_dec] > 0 && idx_dec > idx_inc) {
+    diff[idx_dec]--;
+    while (row_marginals[idx_dec] == 0) idx_dec--;
+    int m = idx_dec;
+    
+    // Find node to increment
+    while (diff[m] >= row_marginals[m]) m--;
+    diff[m]++;
+    
+    if (m == idx_inc && diff[m] == row_marginals[m]) idx_inc = idx_dec;
+  } else {
+    int idx = 0;
+    do {
+      // Check for finish
+      idx = idx_dec + 1;
+      while (idx < row_marginals.GetSize() && diff[idx] <= 0) idx++;
+      if (idx == row_marginals.GetSize()) return false;
+      
+      int marginal_total = 1;
+      for (int i = 0; i <= idx_dec; i++) {
+        marginal_total += diff[i];
+        diff[i] = 0;
+      }
+      idx_dec = idx;
+      do {
+        idx_dec--;
+        int m = (marginal_total < row_marginals[idx_dec]) ? marginal_total : row_marginals[idx_dec];
+        diff[idx_dec] = m;
+        marginal_total -= m;
+      } while (marginal_total > 0 && idx_dec != 0);
+      
+      if (marginal_total > 0) {
+        if (idx != (row_marginals.GetSize() - 1)) {
+          idx_dec = idx;
+          continue;
+        }
+        return false;
+      } else {
+        break;
+      }
+    } while (true);
+    diff[idx]--;
+    for (idx_inc = 0; diff[idx_inc] >= row_marginals[idx_inc]; idx_inc++) if (idx_inc > idx_dec) break;
+  }
+  
+  return true;
+}
+
 
 
 
@@ -93,6 +377,7 @@ double cummulativeGamma(double q, double alpha, bool& fault)
   
   return ret_val;
 }
+
 
 double logGamma(double x, bool& fault)
 {
