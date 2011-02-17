@@ -32,3 +32,18 @@
 #include "apto/core/ArrayUtils.h"
 
 #include "gtest/gtest.h"
+
+#include <iostream>
+
+TEST(ArrayUtils, ISort) {
+  Apto::Array<int> a(5);
+  a[0] = 3;
+  a[1] = 1;
+  a[2] = 5;
+  a[3] = 4;
+  a[4] = 2;
+  
+  Apto::ISort(a);
+  for (int i = 0; i < a.GetSize(); i++) ASSERT_EQ(5 - i, a[i]);
+}
+
