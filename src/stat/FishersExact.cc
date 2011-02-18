@@ -32,6 +32,7 @@
 #include "apto/stat/Functions.h"
 
 #include "apto/core/Array.h"
+#include "apto/core/ArrayUtils.h"
 #include "apto/core/Pair.h"
 
 #include <cmath>
@@ -90,6 +91,8 @@ private:
   
   bool generateNewNode(const Array<int>& row_marginals, Array<int>& diff, int& idx_dec, int& idx_inc);
 };
+
+
 
 
 
@@ -165,15 +168,66 @@ void FExact::reduceZeroInVector(const Array<int>& src, int value, int idx_start,
 
 double FExact::longestPath(const Array<int>& row_marginals, const Array<int>& col_marginals, int marginal_total)
 {
-  int longest_path = 0.0;
-
-  Array<double> alen((row_marginals.GetSize() > col_marginals.GetSize()) ? row_marginals.GetSize() : col_marginals.GetSize());
-  alen.SetAll(0.0);
-  Array<int> ist(400);
-  ist.SetAll(-1);
+  class ValueHashTable
+  {
+  private:
+    Array<Pair<int, double> > m_table;
+    Array<int> m_stack;
+    int m_entry_count;
+    
+  public:
+    inline ValueHashTable(int size = 200) : m_table(size), m_stack(size) { ClearTable(); }
+    
+    int GetEntryCount() const { return m_entry_count; }
+    
+    bool Find(int key, int& idx)
+    {
+      int init = key % m_table.GetSize();
+      idx = init;
+      for (; idx < m_table.GetSize(); idx++) {
+        if (m_table[idx].Value1() < 0) {
+          m_stack[m_entry_count] = idx;
+          m_table[idx].Value1() = key;
+          m_entry_count++;
+          return false;
+        } else if (m_table[idx].Value1() == key) {
+          return true;
+        }
+      }
+      for (idx = 0; idx < init; idx++) {
+        if (m_table[idx].Value1() < 0) {
+          m_stack[m_entry_count] = idx;
+          m_table[idx].Value1() = key;
+          m_entry_count++;
+          return false;
+        } else if (m_table[idx].Value1() == key) {
+          return true;
+        }
+      }
+      assert(false);
+      return false;
+    }
+    
+    inline double& operator[](int idx) { return m_table[idx].Value2(); }
+    
+    Pair<int, double> Pop()
+    {
+      Pair<int, double> tmp = m_table[m_stack[--m_entry_count]];
+      m_table[m_stack[m_entry_count]].Value1() = -1;
+      return tmp;
+    }
+    
+    inline void ClearTable()
+    {
+      m_entry_count = 0;
+      for (int i = 0; i < m_table.GetSize(); i++) m_table[i].Value1() = -1;
+    }
+  };
+  
   
   // 1 x c
   if (row_marginals.GetSize() <= 1) {
+    int longest_path = 0.0;
     if (row_marginals.GetSize() > 0) {
       for (int i = 0; i < col_marginals.GetSize(); i++) longest_path -= m_facts[col_marginals[0]];
     }
@@ -182,6 +236,7 @@ double FExact::longestPath(const Array<int>& row_marginals, const Array<int>& co
   
   // r x 1
   if (col_marginals.GetSize() <= 1) {
+    int longest_path = 0.0;
     if (col_marginals.GetSize() > 0) {
       for (int i = 0; i < row_marginals.GetSize(); i++) longest_path -= m_facts[row_marginals[i]];
     }
@@ -192,8 +247,7 @@ double FExact::longestPath(const Array<int>& row_marginals, const Array<int>& co
   if (row_marginals.GetSize() == 2 && col_marginals.GetSize() == 2) {
     int n11 = (row_marginals[0] + 1) * (col_marginals[0] + 1) / (marginal_total + 2);
     int n12 = row_marginals[0] - n11;
-    longest_path = -m_facts[n11] - m_facts[n12] - m_facts[col_marginals[0] - n11] - m_facts[col_marginals[1] - n12];
-    return longest_path;
+    return -m_facts[n11] - m_facts[n12] - m_facts[col_marginals[0] - n11] - m_facts[col_marginals[1] - n12];
   }
   
   double val = 0.0;
@@ -206,11 +260,165 @@ double FExact::longestPath(const Array<int>& row_marginals, const Array<int>& co
   }
   
   if (min) {
-    longest_path = -val;
-    return longest_path;
+    return -val;
+  }
+  
+
+  int ntot = marginal_total;
+  Array<int> lrow;
+  Array<int> lcol;
+  
+  if (row_marginals.GetSize() >= col_marginals.GetSize()) {
+    lrow = row_marginals;
+    lcol = col_marginals;
+  } else {
+    lrow = col_marginals;
+    lcol = row_marginals;
+  }
+  
+  Array<int> nt(lcol.GetSize());
+  nt[0] = ntot - lcol[0];
+  for (int i = 1; i < lcol.GetSize(); i++) nt[i] = nt[i - 1] - lcol[i];
+  
+
+  Array<double> alen(lrow.GetSize());
+  alen.SetAll(0.0);
+  
+  ValueHashTable vht[2];
+  int active_vht = 0;
+  
+  double vmn = 1.0e100;
+  int nc1s = lcol.GetSize() - 2;
+  int irl = 0;
+  int kyy = lcol[nc1s] + 1;
+  
+  Array<int> lb(lrow.GetSize());
+  Array<int> nu(lrow.GetSize());
+  Array<int> nr(lrow.GetSize());
+  
+  
+  while (true) {
+    bool continue_main = false;
+    
+    // Setup to generate new node
+    int lev = 0;
+    int nr1 = lrow.GetSize() - 1;
+    int nrt = lrow[irl];
+    int nct = lcol[0];
+    lb[0] = (int)((((double)nrt + 1.0) * (nct + 1)) / (double)(ntot + nr1 * nc1s + 1)) - 1;
+    nu[0] = (int)((((double)nrt + nc1s) * (nct + nr1)) / (double)(ntot + nr1 + nc1s)) - lb[0] + 1;
+    nr[0] = nrt - lb[0];
+    
+    while (true) {
+      do {
+        nu[lev]--;
+        if (nu[lev] == 0) {
+          if (lev == 1) {
+            do {
+              if (vht[(active_vht) ? 0 : 1].GetEntryCount()) {
+                Pair<int, double> entry = vht[(active_vht) ? 0 : 1].Pop();
+                val = entry.Value2();
+                int key = entry.Value1();
+                
+                // Compute Marginals
+                for (int i = lcol.GetSize() - 1; i > 0; i++) {
+                  lcol[i] = key % kyy;
+                  key = key / kyy;
+                }
+                lcol[0] = key;
+                
+                // Set up nt array
+                nt[0] = ntot - lcol[0];
+                for (int i = 1; i < lcol.GetSize(); i++) nt[i] = nt[i - 1] - lcol[i];
+               
+                min = false;
+                if (lrow[lrow.GetSize() - 1] <= lrow[irl] + lcol.GetSize()) {
+                  min = shortestPathSpecial(lrow, lcol, val);
+                }
+                if (!min && lcol[lcol.GetSize() - 1] <= lcol[0] + lrow.GetSize()) {
+                  min = shortestPathSpecial(lrow, lcol, val);
+                }
+                
+                if (min) {
+                  if (val < vmn) vmn = val;
+                  continue;
+                }
+                continue_main = true;
+              } else if (lrow.GetSize() > 2 && vht[active_vht].GetEntryCount()) {
+                // Go to next level
+                ntot = ntot - lrow[irl];
+                irl++;
+                lrow.Resize(lrow.GetSize() - 1);
+                continue;
+              }
+              break;
+            } while (true);
+            if (!continue_main) return -vmn;
+          }
+          if (continue_main) break;
+          lev--;
+          continue;
+        }
+        break;
+      } while (true);
+      if (continue_main) break;
+      
+      lb[lev]++;
+      nr[lev]--;
+      
+      for (alen[lev] = alen[lev - 1] + m_facts[lb[lev]]; lev < nc1s; alen[lev] = alen[lev - 1] + m_facts[lb[lev]]) {
+        int nn1 = nt[lev];
+        int nrt = nr[lev];
+        lev++;
+        int nc1 = lcol.GetSize() - lev;
+        int nct = lcol[lev];
+        lb[lev] = (double)((nrt + 1) * (nct + 1)) / (double)(nn1 + nr1 * nc1 + 1);
+        nu[lev] = (double)((nrt + nc1) * (nct + nr1)) / (double)(nn1 + nr1 + nc1) - lb[lev] + 1;
+        nr[lev] = nrt - lb[lev];
+      }
+      alen[lcol.GetSize() - 1] = alen[lev] + m_facts[nr[lev]];
+      lb[lcol.GetSize() - 1] = nr[lev];
+      
+      int v = val + alen[lcol.GetSize() - 1];
+      if (lrow.GetSize() == 2) {
+        for (int i = 0; i < lcol.GetSize(); i++) v += m_facts[lcol[i] - lb[i]];
+        if (v < vmn) vmn = v;
+      } else if (lrow.GetSize() == 3 && lcol.GetSize() == 2) {
+        int nn1 = ntot - lrow[irl] + 2;
+        int ic1 = lcol[0] - lb[0];
+        int ic2 = lcol[1] - lb[1];
+        int n11 = (lrow[irl + 1] + 1) * (ic1 + 1) / nn1;
+        int n12 = lrow[irl + 1] - nn1;
+        v += m_facts[n11] + m_facts[n12] + m_facts[ic1 - nn1] + m_facts[ic2 - n12];
+        if (v < vmn) vmn = v;
+      } else {
+        Array<int> it(lcol.GetSize());
+        for (int i = 0; i < lcol.GetSize(); i++) it[i] = lcol[i] - lb[i];
+        
+        if (lcol.GetSize() == 2) {
+          if (it[0] > it[1]) it.Swap(0, 1);
+        } else {
+          QSort(it);
+        }
+        
+        // Compute hash value
+        int key = it[0] * kyy + it[1];
+        for (int i = 2; i < lcol.GetSize(); i++) key = it[i] + key * kyy;
+        
+        // Put onto stack (or update stack entry as necessary)
+        int t_idx;
+        if (vht[active_vht].Find(key, t_idx)) {
+          if (v < vht[active_vht][t_idx]) vht[active_vht][t_idx] = v;
+        } else {
+          vht[active_vht][t_idx] = v;
+        }
+      }
+    }
   }
   
   
+  
+  return 0.0;
 }
 
 
@@ -352,13 +560,13 @@ void FExact::shortestPath(const Array<int>& row_marginals, const Array<int>& col
           }
           if (continue_outer) break;
         }
-        if (continue_outer) continue;
+        if (!continue_outer) break;
         
         shortest_path -= amx;
         if (shortest_path - amx <= 0.0) shortest_path = 0.0;
         return;
       }
-    } while (false);
+    } while (true);
     
     l_stack[istk] = l;
     m_stack[istk] = m;
