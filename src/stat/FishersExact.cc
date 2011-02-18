@@ -74,6 +74,8 @@ static class FExact
 {
 private:
   Array<double> m_facts; // Log factorials
+  Array<int> m_row_marginals;
+  Array<int> m_col_marginals;
   
 public:
   FExact(const Stat::ContingencyTable& table);
@@ -115,6 +117,17 @@ double Stat::FishersExact(const ContingencyTable& table)
 FExact::FExact(const Stat::ContingencyTable& table)
   : m_facts(table.MarginalTotal())
 {
+  if (table.NumRows() > table.NumCols()) {
+    m_row_marginals = table.ColMarginals();
+    m_col_marginals = table.RowMarginals();
+  } else {
+    m_row_marginals = table.RowMarginals();
+    m_col_marginals = table.ColMarginals();
+  }
+  
+  QSort(m_row_marginals);
+  QSort(m_col_marginals);
+  
   const int marginal_total = table.MarginalTotal();
   m_facts[0] = 0.0;
   m_facts[1] = 0.0;
