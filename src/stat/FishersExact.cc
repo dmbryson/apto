@@ -165,6 +165,50 @@ void FExact::reduceZeroInVector(const Array<int>& src, int value, int idx_start,
 
 double FExact::longestPath(const Array<int>& row_marginals, const Array<int>& col_marginals, int marginal_total)
 {
+  int longest_path = 0.0;
+
+  Array<double> alen((row_marginals.GetSize() > col_marginals.GetSize()) ? row_marginals.GetSize() : col_marginals.GetSize());
+  alen.SetAll(0.0);
+  Array<int> ist(400);
+  ist.SetAll(-1);
+  
+  // 1 x c
+  if (row_marginals.GetSize() <= 1) {
+    if (row_marginals.GetSize() > 0) {
+      for (int i = 0; i < col_marginals.GetSize(); i++) longest_path -= m_facts[col_marginals[0]];
+    }
+    return longest_path;
+  }
+  
+  // r x 1
+  if (col_marginals.GetSize() <= 1) {
+    if (col_marginals.GetSize() > 0) {
+      for (int i = 0; i < row_marginals.GetSize(); i++) longest_path -= m_facts[row_marginals[i]];
+    }
+    return longest_path;
+  }
+  
+  // 2 x 2
+  if (row_marginals.GetSize() == 2 && col_marginals.GetSize() == 2) {
+    int n11 = (row_marginals[0] + 1) * (col_marginals[0] + 1) / (marginal_total + 2);
+    int n12 = row_marginals[0] - n11;
+    longest_path = -m_facts[n11] - m_facts[n12] - m_facts[col_marginals[0] - n11] - m_facts[col_marginals[1] - n12];
+    return longest_path;
+  }
+  
+  double val = 0.0;
+  bool min = false;
+  if (row_marginals[row_marginals.GetSize() - 1] <= row_marginals[0] + col_marginals.GetSize()) {
+    min = shortestPathSpecial(row_marginals, col_marginals, val);
+  }
+  if (!min && col_marginals[col_marginals.GetSize() - 1] <= col_marginals[0] + row_marginals.GetSize()) {
+    min = shortestPathSpecial(row_marginals, col_marginals, val);
+  }
+  
+  if (min) {
+    longest_path = -val;
+    return longest_path;
+  }
   
   
 }
