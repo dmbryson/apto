@@ -38,6 +38,8 @@
 #include <cmath>
 #include <limits>
 
+#include <iostream>
+
 
 using namespace Apto;
 
@@ -73,9 +75,62 @@ static struct FExactNode
 static class FExact
 {
 private:
+  static const int TOLERANCE = 3.4525e-7;
+  
+  struct PathExtremes {
+    int key;
+    double longest_path;
+    double shortest_path;
+  };
+  
+  class PathExtremesHashTable
+  {
+  private:
+    Array<PathExtremes> m_table;
+    
+  public:
+    inline PathExtremesHashTable(int size = 3300) : m_table(size) { ClearTable(); }
+    
+    bool Find(int key, int& idx)
+    {
+      int init = key % m_table.GetSize();
+      idx = init;
+      for (; idx < m_table.GetSize(); idx++) {
+        if (m_table[idx].key < 0) {
+          m_table[idx].key = key;
+          return false;
+        } else if (m_table[idx].key == key) {
+          return true;
+        }
+      }
+      for (idx = 0; idx < init; idx++) {
+        if (m_table[idx].key < 0) {
+          m_table[idx].key = key;
+          return false;
+        } else if (m_table[idx].key == key) {
+          return true;
+        }
+      }
+      assert(false);
+      return false;
+    }
+    
+    inline PathExtremes& operator[](int idx) { return m_table[idx]; }
+    
+    inline void ClearTable()
+    {
+      for (int i = 0; i < m_table.GetSize(); i++) m_table[i].key = -1;
+    }
+  };
+  
+  
   Array<double> m_facts; // Log factorials
   Array<int> m_row_marginals;
   Array<int> m_col_marginals;
+  Array<int> m_key_multipliers;
+  PathExtremesHashTable m_path_extremes;
+  double m_observed_path;
+  double m_den_observed_path;
   
 public:
   FExact(const Stat::ContingencyTable& table);
@@ -128,6 +183,13 @@ FExact::FExact(const Stat::ContingencyTable& table)
   QSort(m_row_marginals);
   QSort(m_col_marginals);
   
+  m_key_multipliers.Resize(m_row_marginals.GetSize());
+  m_key_multipliers[0] = 1;
+  for (int i = 1; i < m_row_marginals.GetSize(); i++)
+    m_key_multipliers[i] = m_key_multipliers[i - 1] * (m_row_marginals[i - 1] + 1);
+  
+  assert((m_row_marginals[m_row_marginals.GetSize() - 2] + 1) <= (std::numeric_limits<int>::max() / m_key_multipliers[m_row_marginals.GetSize() - 2]));
+  
   const int marginal_total = table.MarginalTotal();
   m_facts[0] = 0.0;
   m_facts[1] = 0.0;
@@ -136,11 +198,33 @@ FExact::FExact(const Stat::ContingencyTable& table)
     m_facts[i] = m_facts[i - 1] + log(i);
     if (++i < marginal_total)  m_facts[i] = m_facts[i - 1] + m_facts[2] + m_facts[i / 2] - m_facts[i / 2 - 1];
   }
+  
+  double m_observed_path = TOLERANCE;
+  for (int j = 0; j < m_col_marginals.GetSize(); j++) {
+    double dd = 0.0;
+    for (int i = 0; i < m_row_marginals.GetSize(); i++) {
+      if (m_row_marginals.GetSize() < m_col_marginals.GetSize()) {
+        dd += m_facts[table[i][j]];
+      } else {
+        dd += m_facts[table[j][i]];
+      }
+    }
+    m_observed_path += m_facts[m_col_marginals[j]] - dd;
+  }
+  
+  m_den_observed_path = logMultinomial(marginal_total, m_row_marginals);
+  
+  std::cout << "Prt = " << exp(m_observed_path - m_den_observed_path) << std::endl;
 }
 
-double FExact::Calculate() {
+double FExact::Calculate()
+{
+  double pvalue = 0.0;
   
-  return 0.0;
+  
+  
+  
+  return pvalue;
 }
 
 
