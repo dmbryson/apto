@@ -17,6 +17,7 @@
 		7023367712FC53AC000C7BE5 /* libapto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7023364912FC50C1000C7BE5 /* libapto.a */; };
 		7023367812FC53AE000C7BE5 /* libgtest.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7023366B12FC5320000C7BE5 /* libgtest.a */; };
 		7023369E12FC5F51000C7BE5 /* Thread.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7023369D12FC5F51000C7BE5 /* Thread.cc */; };
+		704031F61314259100F2F055 /* Functions.cc in Sources */ = {isa = PBXBuildFile; fileRef = 704031F51314259100F2F055 /* Functions.cc */; };
 		706B1E9712FC9C2C006EAB7F /* RefCount.cc in Sources */ = {isa = PBXBuildFile; fileRef = 706B1E9612FC9C2C006EAB7F /* RefCount.cc */; };
 		706B1E9912FC9C44006EAB7F /* EntryHandle.cc in Sources */ = {isa = PBXBuildFile; fileRef = 706B1E9812FC9C44006EAB7F /* EntryHandle.cc */; };
 		7089301B1304F2F200F8C440 /* FileSystem.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7023362012FB5A77000C7BE5 /* FileSystem.cc */; };
@@ -121,6 +122,7 @@
 		702336AF12FC8012000C7BE5 /* Atomic.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = Atomic.h; sourceTree = "<group>"; };
 		702336B712FC9106000C7BE5 /* RefCount.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = RefCount.h; sourceTree = "<group>"; };
 		702336C212FC94AA000C7BE5 /* Pair.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = Pair.h; sourceTree = "<group>"; };
+		704031F51314259100F2F055 /* Functions.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Functions.cc; sourceTree = "<group>"; };
 		7043BEA91304707200EA53D6 /* String.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = String.h; sourceTree = "<group>"; };
 		7043BEE31305925600EA53D6 /* Map.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = Map.h; sourceTree = "<group>"; };
 		7043BEE913059E1200EA53D6 /* ArrayStorage.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = ArrayStorage.h; sourceTree = "<group>"; };
@@ -433,6 +435,7 @@
 		70EE0DB5130B17B100D6C016 /* stat */ = {
 			isa = PBXGroup;
 			children = (
+				704031F51314259100F2F055 /* Functions.cc */,
 				70EE0DB6130B17B100D6C016 /* ContingencyTable.cc */,
 			);
 			path = stat;
@@ -589,6 +592,7 @@
 				70EE0D931309DB8400D6C016 /* ThreadSpecific.cc in Sources */,
 				70EE0D961309DD3D00D6C016 /* FloatingPoint.cc in Sources */,
 				70EE0DB7130B17B100D6C016 /* ContingencyTable.cc in Sources */,
+				704031F61314259100F2F055 /* Functions.cc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
