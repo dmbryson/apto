@@ -34,6 +34,8 @@
 #include "apto/core/Array.h"
 #include "apto/core/ArrayUtils.h"
 #include "apto/core/Pair.h"
+#include "apto/core/RefCount.h"
+#include "apto/core/SmartPtr.h"
 
 #include <cmath>
 #include <limits>
@@ -54,23 +56,6 @@ static double logGamma(double x, bool& fault);
 
 // Internal Class/Struct Definitions
 // -------------------------------------------------------------------------------------------------------------- 
-
-static struct PastPathLength
-{
-  double value;
-  int observed;
-  
-  PastPathLength(double in_value) : value(in_value), observed(1) { ; }
-};
-
-
-static struct FExactNode
-{
-  double shortest_path;
-  double longest_path;
-  Array<PastPathLength, Smart> past_entries;  
-};
-
 
 static class FExact
 {
@@ -122,7 +107,77 @@ private:
       for (int i = 0; i < m_table.GetSize(); i++) m_table[i].key = -1;
     }
   };
+
+  struct PastPathLength
+  {
+    double value;
+    int observed;
+    
+    PastPathLength(double in_value) : value(in_value), observed(1) { ; }
+  };
   
+  
+  class FExactNode : public RefCountObject
+  {
+  public:
+    int key;
+    Array<PastPathLength, Smart> past_entries;
+    
+    FExactNode(int in_key) : key(in_key) { ; }
+  };
+  
+  
+  class NodeHashTable
+  {
+  public:
+    typedef SmartPtr<FExactNode, InternalRCObject> NodePtr;
+  private:
+    Array<NodePtr> m_table;
+    int m_last;
+    
+  public:
+    inline NodeHashTable(int size = 3300) : m_table(size), m_last(-1) { ; }
+    
+    bool Find(int key, int& idx)
+    {
+      int init = key % m_table.GetSize();
+      idx = init;
+      for (; idx < m_table.GetSize(); idx++) {
+        if (!m_table[idx]) {
+          m_table[idx] = NodePtr(new FExactNode(key));
+          return false;
+        } else if (m_table[idx]->key == key) {
+          return true;
+        }
+      }
+      for (idx = 0; idx < init; idx++) {
+        if (!m_table[idx]) {
+          m_table[idx] = NodePtr(new FExactNode(key));
+          return false;
+        } else if (m_table[idx]->key == key) {
+          return true;
+        }
+      }
+      assert(false);
+      return false;
+    }
+    
+    inline FExactNode& operator[](int idx) { return *m_table[idx]; }
+    
+    NodePtr Pop(int key)
+    {
+      for (++m_last; m_last < m_table.GetSize(); m_last++) {
+        if (m_table[m_last]) {
+          NodePtr tmp = m_table[m_last];
+          m_table[m_last] = NodePtr(NULL);
+          return tmp;
+        }
+      }
+      m_last = -1;
+      return NodePtr(NULL);
+    }
+  };
+
   
   Array<double> m_facts; // Log factorials
   Array<int> m_row_marginals;
