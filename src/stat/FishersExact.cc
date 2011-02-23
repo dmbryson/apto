@@ -26,6 +26,15 @@
  *
  *  Authors: David M. Bryson <david@programerror.com>
  *
+ *  Fishers Exact Test for r x c Contingency Tables
+ *  Based on:
+ *    "A Network Algorithm for Performing Fisher's Exact Test in r x c Contingency Tables" by Mehta and Patel
+ *      Journal of the American Statistical Association, June 1983, Volume 87, Number 382, Pages 427-434
+ *    "Algorithm 643: FEXACT: A FORTRAN Subroutine for Fisher's Exact Test on Unordered r x c Contingency Tables"
+ *      by Mehta and Patel, ACM Transactions on Mathematical Software, June 1986, Volume 12, No. 2, Pages 154-161
+ *    "A Remark on Algorithm 643: FEXACT: A FORTRAN Subroutine for Fisher's Exact Test on Unordered r x c Contingency Tables"
+ *      by Clarkson, Fan, and Joe, ACM Transactions on Mathematical Software, Dec. 1993, Volume 19, No. 4, Pages 484-488
+ *
  */
 
 #include "apto/stat/ContingencyTable.h"
@@ -60,7 +69,7 @@ static double logGamma(double x, bool& fault);
 static class FExact
 {
 private:
-  const double TOLERANCE;
+  const double m_tolerance;
   
   struct PathExtremes {
     int key;
@@ -190,7 +199,7 @@ private:
   double m_den_observed_path;
   
 public:
-  FExact(const Stat::ContingencyTable& table);
+  FExact(const Stat::ContingencyTable& table, double tolerance);
   
   double Calculate();
   
@@ -220,7 +229,8 @@ double Stat::FishersExact(const ContingencyTable& table)
 {
   if (table.MarginalTotal() == 0.0) return std::numeric_limits<double>::quiet_NaN();  // All elements are 0
   
-  FExact fe(table);
+  const double TOLERANCE = 3.4525e-7;  // Tolerance, as used in Algorithm 643
+  FExact fe(table, TOLERANCE);
   return fe.Calculate();
 }
 
@@ -229,8 +239,8 @@ double Stat::FishersExact(const ContingencyTable& table)
 // FExact Methods
 // -------------------------------------------------------------------------------------------------------------- 
 
-FExact::FExact(const Stat::ContingencyTable& table)
-  : TOLERANCE(3.4525e-7), m_facts(table.MarginalTotal() + 1)
+FExact::FExact(const Stat::ContingencyTable& table, double tolerance)
+  : m_tolerance(tolerance), m_facts(table.MarginalTotal() + 1)
 {
   if (table.NumRows() > table.NumCols()) {
     m_row_marginals = table.ColMarginals();
@@ -268,7 +278,7 @@ FExact::FExact(const Stat::ContingencyTable& table)
     }
   }
   
-  m_observed_path = TOLERANCE;
+  m_observed_path = m_tolerance;
   for (int j = 0; j < m_col_marginals.GetSize(); j++) {
     double dd = 0.0;
     for (int i = 0; i < m_row_marginals.GetSize(); i++) {
@@ -426,11 +436,11 @@ double FExact::Calculate()
           if (nht[cur_nht].Find(kval, nht_idx)) {
             // Existing Node was found
             
-            // Search for past path within TOLERANCE and add observed frequency to it
+            // Search for past path within m_tolerance and add observed frequency to it
             Array<PastPathLength, Smart>& past_entries = nht[cur_nht][nht_idx].past_entries;
             bool found = false;
-            double test1 = new_path - TOLERANCE;
-            double test2 = new_path + TOLERANCE;
+            double test1 = new_path - m_tolerance;
+            double test2 = new_path + m_tolerance;
           
             for (int j = 0; j < past_entries.GetSize(); j++) {
               double test_path = past_entries[j].value;
@@ -440,7 +450,7 @@ double FExact::Calculate()
                 break;
               }
             }
-            // If no path within TOLERANCE is found, add new past path length to the node
+            // If no path within m_tolerance is found, add new past path length to the node
             if (!found)
               past_entries.Push(PastPathLength(new_path, path_freq));
           } else {
@@ -729,7 +739,7 @@ double FExact::longestPath(const Array<int>& row_marginals, const Array<int>& co
     int nr1 = lrow.GetSize() - 1;
     int nrt = lrow[irl];
     int nct = lcol[0];
-    lb[0] = (int)((((double)nrt + 1.0) * (nct + 1)) / (double)(ntot + nr1 * nc1s + 1) - TOLERANCE) - 1;
+    lb[0] = (int)((((double)nrt + 1.0) * (nct + 1)) / (double)(ntot + nr1 * nc1s + 1) - m_tolerance) - 1;
     nu[0] = (int)((((double)nrt + nc1s) * (nct + nr1)) / (double)(ntot + nr1 + nc1s)) - lb[0] + 1;
     nr[0] = nrt - lb[0];
     
@@ -796,7 +806,7 @@ double FExact::longestPath(const Array<int>& row_marginals, const Array<int>& co
         lev++;
         int nc1 = lcol.GetSize() - lev;
         int nct = lcol[lev];
-        lb[lev] = (double)((nrt + 1) * (nct + 1)) / (double)(nn1 + nr1 * nc1 + 1) - TOLERANCE;
+        lb[lev] = (double)((nrt + 1) * (nct + 1)) / (double)(nn1 + nr1 * nc1 + 1) - m_tolerance;
         nu[lev] = (double)((nrt + nc1) * (nct + nr1)) / (double)(nn1 + nr1 + nc1) - lb[lev] + 1;
         nr[lev] = nrt - lb[lev];
       }
@@ -974,7 +984,7 @@ void FExact::shortestPath(const Array<int>& row_marginals, const Array<int>& col
 
         if (y > amx) {
           amx = y;
-          if (shortest_path - amx <= TOLERANCE) {
+          if (shortest_path - amx <= m_tolerance) {
             shortest_path = 0.0;
             return;
           }
@@ -1003,7 +1013,7 @@ void FExact::shortestPath(const Array<int>& row_marginals, const Array<int>& col
         if (continue_outer) continue;
         
         shortest_path -= amx;
-        if (shortest_path - amx <= TOLERANCE) shortest_path = 0.0;
+        if (shortest_path - amx <= m_tolerance) shortest_path = 0.0;
         return;
       } else {
         break;
