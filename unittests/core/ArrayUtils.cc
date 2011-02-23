@@ -44,6 +44,6 @@ TEST(ArrayUtils, ISort) {
   a[4] = 2;
   
   Apto::ISort(a);
-  for (int i = 0; i < a.GetSize(); i++) ASSERT_EQ(5 - i, a[i]);
+  for (int i = 0; i < a.GetSize(); i++) ASSERT_EQ(i + 1, a[i]);
 }
 

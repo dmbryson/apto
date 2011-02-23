@@ -241,7 +241,14 @@ FExact::FExact(const Stat::ContingencyTable& table)
   
   QSort(m_row_marginals);
   QSort(m_col_marginals);
-  
+
+  std::cout << "irow = " << m_row_marginals[0];
+  for (int i = 1; i < m_row_marginals.GetSize(); i++) std::cout << ", " << m_row_marginals[i];
+  std::cout << std::endl;
+  std::cout << "icol = " << m_col_marginals[0];
+  for (int i = 1; i < m_col_marginals.GetSize(); i++) std::cout << ", " << m_col_marginals[i];
+  std::cout << std::endl;
+
   m_key_multipliers.Resize(m_row_marginals.GetSize());
   m_key_multipliers[0] = 1;
   for (int i = 1; i < m_row_marginals.GetSize(); i++)
@@ -336,17 +343,15 @@ double FExact::Calculate()
       int nrow2;
       if (k > 2) {
         if (irn.GetSize() == 2) {
-          if (irn[0] > irn[1]) {
-            irn.Swap(0, 1);
-          }
+          if (irn[0] > irn[1]) irn.Swap(0, 1);
         } else {
-          for (int i = 1; i < irn.GetSize(); i++) {
-            for (int j = i - 1; irn[j + 1] < irn[j] && j >= 0; j--) {
-              irn.Swap(j + 1, j);
-            }
-          }
+          QSort(irn);
         }
         
+        std::cout << "irn = " << irn[0];
+        for (int i = 1; i < irn.GetSize(); i++) std::cout << ", " << irn[i];
+        std::cout << std::endl;
+
         // Adjust for zero start
         int i = 0;
         for (; i < irn.GetSize(); i++) if (irn[i] != 0) break;
@@ -487,9 +492,9 @@ bool FExact::generateNewDaughter(int kmax, const Array<int>& row_marginals, Arra
   }
   
   // Find node to decrement
-  if (diff[idx_dec] > 0 && idx_dec > idx_inc) {
+  if (diff[idx_dec] >= 0 && idx_dec > idx_inc) {
     diff[idx_dec]--;
-    while (row_marginals[idx_dec] == 0) idx_dec--;
+    while (row_marginals[--idx_dec] == 0);
     int m = idx_dec;
     
     // Find node to increment
@@ -997,6 +1002,10 @@ bool FExact::shortestPathSpecial(const Array<int>& row_marginals, const Array<in
   Array<int> ne(col_marginals.GetSize());
   Array<int> m(col_marginals.GetSize());
   
+  std::cout << "row = " << row_marginals[0];
+  for (int i = 1; i < row_marginals.GetSize(); i++) std::cout << ", " << row_marginals[i];
+  std::cout << std::endl;
+
   nd.SetAll(0);
   int is = col_marginals[0] / row_marginals.GetSize();
   ne[0] = is;
@@ -1007,13 +1016,17 @@ bool FExact::shortestPathSpecial(const Array<int>& row_marginals, const Array<in
   for (int i = 1; i < col_marginals.GetSize(); i++) {
     ix = col_marginals[i] / row_marginals.GetSize();
     ne[i] = ix;
-    is = is + ix;
+    is += ix;
     ix = col_marginals[i] - row_marginals.GetSize() * ix;
     m[i] = ix;
-    if (ix != 0) nd[ix]++;
+    if (ix != 0) nd[ix - 1]++;
   }
   
   for (int i = row_marginals.GetSize() - 3; i >= 0; i--) nd[i] += nd[i + 1];
+  
+  std::cout << "nd = " << nd[0];
+  for (int i = 1; i < nd.GetSize(); i++) std::cout << ", " << nd[i];
+  std::cout << std::endl;
   
   ix = 0;
   int nrow1 = row_marginals.GetSize() - 1;

@@ -53,17 +53,17 @@ namespace Apto {
     int r = end;
     
     while (l != r - 1) {
-      if (array[l] > pivot)
+      if (array[l] < pivot)
         l++;
       else
         array.Swap(l, r--);
     }
     
-    if (array[l] > pivot && array[r] > pivot) {
+    if (array[l] < pivot && array[r] < pivot) {
       l = r + 1;
-    } else if (array[l] > pivot && array[r] <= pivot) {
+    } else if (array[l] < pivot && array[r] >= pivot) {
       l++; r--;
-    } else if (array[l] <= pivot && array[r] > pivot) {
+    } else if (array[l] >= pivot && array[r] < pivot) {
       array.Swap(l++, r--);
     } else {
       r = l - 1;
@@ -85,7 +85,7 @@ namespace Apto {
       // insert into array starting from the end of our sub-array
       value = array[i];
       j = i - 1;
-      while (j >= begin && array[j] < value) {
+      while (j >= begin && array[j] > value) {
         array[j + 1] = array[j];
         j--;
       }
