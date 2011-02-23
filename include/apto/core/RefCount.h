@@ -41,8 +41,8 @@ namespace Apto {
     int m_ref_count;
     
   public:
-    RefCountObject() : m_ref_count(0) { ; }
-    RefCountObject(const RefCountObject&) : m_ref_count(0) { ; }
+    RefCountObject() : m_ref_count(1) { ; }
+    RefCountObject(const RefCountObject&) : m_ref_count(1) { ; }
     virtual ~RefCountObject() = 0;
     
     RefCountObject& operator=(const RefCountObject&) { return *this; }
@@ -58,8 +58,8 @@ namespace Apto {
     volatile int m_ref_count;
     
   public:
-    MTRefCountObject() { Atomic::Set(&m_ref_count, 0); }
-    MTRefCountObject(const RefCountObject&) { Atomic::Set(&m_ref_count, 0); }
+    MTRefCountObject() { Atomic::Set(&m_ref_count, 1); }
+    MTRefCountObject(const RefCountObject&) { Atomic::Set(&m_ref_count, 1); }
     virtual ~MTRefCountObject() = 0;
     
     MTRefCountObject& operator=(const MTRefCountObject&) { return *this; }

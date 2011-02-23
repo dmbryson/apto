@@ -125,6 +125,7 @@ private:
     Array<PastPathLength, Smart> past_entries;
     
     FExactNode(int in_key) : key(in_key) { ; }
+    virtual ~FExactNode() { ; }
   };
   typedef SmartPtr<FExactNode, InternalRCObject> NodePtr;
   
@@ -386,7 +387,7 @@ double FExact::Calculate()
         }
         
         obs2 = m_observed_path - m_facts[m_col_marginals[kb + 1]] - m_facts[m_col_marginals[kb + 2]] - ddf;
-        for (int i = 3; i < (k - 1); i++) obs2 -= m_facts[m_col_marginals[kb + i]];
+        for (int i = 3; i <= (k - 1); i++) obs2 -= m_facts[m_col_marginals[kb + i]];
         
         if (m_path_extremes[path_idx].longest_path > 0.0) {
           
@@ -394,11 +395,15 @@ double FExact::Calculate()
           std::cout << "longest_path = " << m_path_extremes[path_idx].longest_path << std::endl;
           
           double dspt = m_observed_path - obs2 - ddf;
+//          std::cout << "obs = " << m_observed_path << std::endl;
+//          std::cout << "obs2 = " << obs2 << std::endl;
+//          std::cout << "ddf = " << ddf << std::endl;
+//          std::cout << "dspt = " << dspt << std::endl;
           m_path_extremes[path_idx].shortest_path = dspt;
           shortestPath(sub_rows, sub_cols, m_path_extremes[path_idx].shortest_path);
-          std::cout << "shortest_path = " << m_path_extremes[path_idx].shortest_path << std::endl;
           m_path_extremes[path_idx].shortest_path -= dspt;
           if (m_path_extremes[path_idx].shortest_path > 0.0) m_path_extremes[path_idx].shortest_path = 0.0;
+          std::cout << "shortest_path = " << m_path_extremes[path_idx].shortest_path << std::endl;
         }
         obs3 = obs2 - m_path_extremes[path_idx].longest_path;
         obs2 = obs2 - m_path_extremes[path_idx].shortest_path;
@@ -478,7 +483,7 @@ inline bool FExact::generateFirstDaughter(const Array<int>& row_marginals, int n
     row_diff[kd] = ntot;
     if (row_diff[kmax] == 0) kmax--;
     n -= ntot;
-  } while (n > 0 && kd >= 0);
+  } while (n > 0 && kd > 0);
   
   if (n != 0) return false;
   
@@ -572,7 +577,7 @@ void FExact::reduceZeroInVector(const Array<int>& src, int value, int idx_start,
   
   for (; i < (src.GetSize() - 1); i++) {
     if (value >= src[i + 1]) {
-      
+      break;
     }
     dest[i] = src[i + 1];
   }
@@ -888,6 +893,13 @@ void FExact::shortestPath(const Array<int>& row_marginals, const Array<int>& col
   int m, n, jrow, jcol;
   
   do {
+//    std::cout << "row_stack[" << istk << "] = " << row_stack[istk][0];
+//    for (int i = 1; i < row_stack[istk].GetSize(); i++) std::cout << ", " << row_stack[istk][i];
+//    std::cout << std::endl;
+//    std::cout << "col_stack[" << istk << "] = " << col_stack[istk][0];
+//    for (int i = 1; i < col_stack[istk].GetSize(); i++) std::cout << ", " << col_stack[istk][i];
+//    std::cout << std::endl;
+    
     int row1 = row_stack[istk][0];
     int col1 = col_stack[istk][0];
     if (row1 > col1) {
@@ -929,6 +941,7 @@ void FExact::shortestPath(const Array<int>& row_marginals, const Array<int>& col
       int colt = col_stack[istk][jcol];
       int mn = (rowt > colt) ? colt : rowt;
       y += m_facts[mn];
+//      std::cout << "y = " << y << std::endl;
       if (rowt == colt) {
         removeFromVector(row_stack[istk], jrow, row_stack[istk + 1]);
         removeFromVector(col_stack[istk], jcol, col_stack[istk + 1]); 
@@ -947,6 +960,8 @@ void FExact::shortestPath(const Array<int>& row_marginals, const Array<int>& col
         if (col_stack[istk + 1].GetSize() == 1) {
           for (int i = 0; i < row_stack[istk + 1].GetSize(); i++) y += m_facts[row_stack[istk + 1][i]];
         }
+        
+//        std::cout << "amx = " << amx << std::endl;
 
         if (y > amx) {
           amx = y;
@@ -958,7 +973,8 @@ void FExact::shortestPath(const Array<int>& row_marginals, const Array<int>& col
         
         bool continue_outer = false;
         for (--istk; istk != 0; istk--) {
-          for (; l <= m_stack[istk]; l++) {
+          l = l_stack[istk] + 1;
+          for (; l < m_stack[istk]; l++) {
             n = n_stack[istk];
             y = y_stack[istk];
             if (n == 1) {
@@ -1002,9 +1018,9 @@ bool FExact::shortestPathSpecial(const Array<int>& row_marginals, const Array<in
   Array<int> ne(col_marginals.GetSize());
   Array<int> m(col_marginals.GetSize());
   
-  std::cout << "row = " << row_marginals[0];
-  for (int i = 1; i < row_marginals.GetSize(); i++) std::cout << ", " << row_marginals[i];
-  std::cout << std::endl;
+//  std::cout << "row = " << row_marginals[0];
+//  for (int i = 1; i < row_marginals.GetSize(); i++) std::cout << ", " << row_marginals[i];
+//  std::cout << std::endl;
 
   nd.SetAll(0);
   int is = col_marginals[0] / row_marginals.GetSize();
@@ -1024,9 +1040,9 @@ bool FExact::shortestPathSpecial(const Array<int>& row_marginals, const Array<in
   
   for (int i = row_marginals.GetSize() - 3; i >= 0; i--) nd[i] += nd[i + 1];
   
-  std::cout << "nd = " << nd[0];
-  for (int i = 1; i < nd.GetSize(); i++) std::cout << ", " << nd[i];
-  std::cout << std::endl;
+//  std::cout << "nd = " << nd[0];
+//  for (int i = 1; i < nd.GetSize(); i++) std::cout << ", " << nd[i];
+//  std::cout << std::endl;
   
   ix = 0;
   int nrow1 = row_marginals.GetSize() - 1;
