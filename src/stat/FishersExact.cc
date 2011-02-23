@@ -263,10 +263,13 @@ FExact::FExact(const Stat::ContingencyTable& table)
   if (marginal_total > 1) {
     m_facts[2] = log(2.0);
     for (int i = 3; i < marginal_total; i++) {
-      m_facts[i] = m_facts[i - 1] + log(i);
+      m_facts[i] = m_facts[i - 1] + log((double)i);
       if (++i <= marginal_total)  m_facts[i] = m_facts[i - 1] + m_facts[2] + m_facts[i / 2] - m_facts[i / 2 - 1];
     }
   }
+  std::cout << "facts = " << m_facts[0];
+  for (int i = 1; i < m_facts.GetSize(); i++) std::cout << ", " << m_facts[i];
+  std::cout << std::endl;
   
   m_observed_path = TOLERANCE;
   for (int j = 0; j < m_col_marginals.GetSize(); j++) {
@@ -392,6 +395,7 @@ double FExact::Calculate()
         if (m_path_extremes[path_idx].longest_path > 0.0) {
           
           m_path_extremes[path_idx].longest_path = longestPath(sub_rows, sub_cols, ntot);
+          if (m_path_extremes[path_idx].longest_path > 0.0) m_path_extremes[path_idx].longest_path = 0.0;
           std::cout << "longest_path = " << m_path_extremes[path_idx].longest_path << std::endl;
           
           double dspt = m_observed_path - obs2 - ddf;
@@ -418,6 +422,7 @@ double FExact::Calculate()
         if (past_path <= obs3) {
           // Path shorter than longest path, add to the pvalue and continue
           pvalue += (double)(path_freq) * exp(past_path + drn);
+          std::cout << "pvalue = " << pvalue << std::endl;
         } else if (past_path < obs2) {
           int nht_idx = -1;
           if (nht[cur_nht].Find(kval, nht_idx)) {
@@ -645,22 +650,17 @@ double FExact::longestPath(const Array<int>& row_marginals, const Array<int>& co
     }
   };
   
-  
   // 1 x c
   if (row_marginals.GetSize() <= 1) {
-    int longest_path = 0.0;
-    if (row_marginals.GetSize() > 0) {
-      for (int i = 0; i < col_marginals.GetSize(); i++) longest_path -= m_facts[col_marginals[0]];
-    }
+    double longest_path = 0.0;
+    for (int i = 0; i < col_marginals.GetSize(); i++) longest_path -= m_facts[col_marginals[i]];
     return longest_path;
   }
   
   // r x 1
   if (col_marginals.GetSize() <= 1) {
-    int longest_path = 0.0;
-    if (col_marginals.GetSize() > 0) {
-      for (int i = 0; i < row_marginals.GetSize(); i++) longest_path -= m_facts[row_marginals[i]];
-    }
+    double longest_path = 0.0;
+    for (int i = 0; i < row_marginals.GetSize(); i++) longest_path -= m_facts[row_marginals[i]];
     return longest_path;
   }
   
