@@ -60,7 +60,7 @@ static double logGamma(double x, bool& fault);
 static class FExact
 {
 private:
-  static const int TOLERANCE = 3.4525e-7;
+  const double TOLERANCE;
   
   struct PathExtremes {
     int key;
@@ -230,7 +230,7 @@ double Stat::FishersExact(const ContingencyTable& table)
 // -------------------------------------------------------------------------------------------------------------- 
 
 FExact::FExact(const Stat::ContingencyTable& table)
-  : m_facts(table.MarginalTotal() + 1)
+  : TOLERANCE(3.4525e-7), m_facts(table.MarginalTotal() + 1)
 {
   if (table.NumRows() > table.NumCols()) {
     m_row_marginals = table.ColMarginals();
@@ -267,9 +267,6 @@ FExact::FExact(const Stat::ContingencyTable& table)
       if (++i <= marginal_total)  m_facts[i] = m_facts[i - 1] + m_facts[2] + m_facts[i / 2] - m_facts[i / 2 - 1];
     }
   }
-  std::cout << "facts = " << m_facts[0];
-  for (int i = 1; i < m_facts.GetSize(); i++) std::cout << ", " << m_facts[i];
-  std::cout << std::endl;
   
   m_observed_path = TOLERANCE;
   for (int j = 0; j < m_col_marginals.GetSize(); j++) {
@@ -352,10 +349,6 @@ double FExact::Calculate()
           QSort(irn);
         }
         
-        std::cout << "irn = " << irn[0];
-        for (int i = 1; i < irn.GetSize(); i++) std::cout << ", " << irn[i];
-        std::cout << std::endl;
-
         // Adjust for zero start
         int i = 0;
         for (; i < irn.GetSize(); i++) if (irn[i] != 0) break;
@@ -365,6 +358,10 @@ double FExact::Calculate()
         nrb = 0;
         nrow2 = irn.GetSize();
       }
+      
+      std::cout << "irn = " << irn[0];
+      for (int i = 1; i < irn.GetSize(); i++) std::cout << ", " << irn[i];
+      std::cout << std::endl;
       
       // Build adjusted row array
       Array<int> sub_rows(nrow2);
@@ -422,27 +419,33 @@ double FExact::Calculate()
         if (past_path <= obs3) {
           // Path shorter than longest path, add to the pvalue and continue
           pvalue += (double)(path_freq) * exp(past_path + drn);
-          std::cout << "pvalue = " << pvalue << std::endl;
+          std::cout << "node = " << cur_node->key << "  freq = " << path_freq << "  past_path = " << past_path << "  drn = " << drn << "  pvalue = " << pvalue << std::endl;
         } else if (past_path < obs2) {
           int nht_idx = -1;
+          double new_path = past_path + ddf;
           if (nht[cur_nht].Find(kval, nht_idx)) {
             // Existing Node was found
             
             // Search for past path within TOLERANCE and add observed frequency to it
+            Array<PastPathLength, Smart>& past_entries = nht[cur_nht][nht_idx].past_entries;
             bool found = false;
-            for (int j = 0; j < nht[cur_nht][nht_idx].past_entries.GetSize(); j++) {
-              double test_path = nht[cur_nht][nht_idx].past_entries[j].value;
-              if ((past_path + ddf) >= (test_path - TOLERANCE) && (past_path + ddf) <= (test_path + TOLERANCE)) {
+            double test1 = new_path - TOLERANCE;
+            double test2 = new_path + TOLERANCE;
+          
+            for (int j = 0; j < past_entries.GetSize(); j++) {
+              double test_path = past_entries[j].value;
+              if (test_path >= test1 && test_path <= test2) {
                 found = true;
-                nht[cur_nht][nht_idx].past_entries[j].observed += path_freq;
+                past_entries[j].observed += path_freq;
                 break;
               }
             }
             // If no path within TOLERANCE is found, add new past path length to the node
-            if (!found) nht[cur_nht][nht_idx].past_entries.Push(PastPathLength(past_path + ddf, path_freq));
+            if (!found)
+              past_entries.Push(PastPathLength(new_path, path_freq));
           } else {
             // New Node added, insert this observed path
-            nht[cur_nht][nht_idx].past_entries.Push(PastPathLength(past_path + ddf, path_freq));
+            nht[cur_nht][nht_idx].past_entries.Push(PastPathLength(new_path, path_freq));
           }
         }
       }
@@ -726,7 +729,7 @@ double FExact::longestPath(const Array<int>& row_marginals, const Array<int>& co
     int nr1 = lrow.GetSize() - 1;
     int nrt = lrow[irl];
     int nct = lcol[0];
-    lb[0] = (int)((((double)nrt + 1.0) * (nct + 1)) / (double)(ntot + nr1 * nc1s + 1)) - 1;
+    lb[0] = (int)((((double)nrt + 1.0) * (nct + 1)) / (double)(ntot + nr1 * nc1s + 1) - TOLERANCE) - 1;
     nu[0] = (int)((((double)nrt + nc1s) * (nct + nr1)) / (double)(ntot + nr1 + nc1s)) - lb[0] + 1;
     nr[0] = nrt - lb[0];
     
@@ -793,7 +796,7 @@ double FExact::longestPath(const Array<int>& row_marginals, const Array<int>& co
         lev++;
         int nc1 = lcol.GetSize() - lev;
         int nct = lcol[lev];
-        lb[lev] = (double)((nrt + 1) * (nct + 1)) / (double)(nn1 + nr1 * nc1 + 1);
+        lb[lev] = (double)((nrt + 1) * (nct + 1)) / (double)(nn1 + nr1 * nc1 + 1) - TOLERANCE;
         nu[lev] = (double)((nrt + nc1) * (nct + nr1)) / (double)(nn1 + nr1 + nc1) - lb[lev] + 1;
         nr[lev] = nrt - lb[lev];
       }
@@ -845,7 +848,13 @@ double FExact::longestPath(const Array<int>& row_marginals, const Array<int>& co
 
 void FExact::shortestPath(const Array<int>& row_marginals, const Array<int>& col_marginals, double& shortest_path)
 {
-  // Take care of easy cases first
+//  // Take care of easy cases first
+//  std::cout << "row_marginals = " << row_marginals[0];
+//  for (int i = 1; i < row_marginals.GetSize(); i++) std::cout << ", " << row_marginals[i];
+//  std::cout << std::endl;
+//  std::cout << "col_marginals = " << col_marginals[0];
+//  for (int i = 1; i < col_marginals.GetSize(); i++) std::cout << ", " << col_marginals[i];
+//  std::cout << std::endl;
   
   // 1 x c
   if (row_marginals.GetSize() == 1) {
@@ -862,9 +871,9 @@ void FExact::shortestPath(const Array<int>& row_marginals, const Array<int>& col
   // 2 x 2
   if (row_marginals.GetSize() == 2 && col_marginals.GetSize() == 2) {
     if (row_marginals[1] <= col_marginals[1]) {
-      shortest_path -= m_facts[row_marginals[1]] - m_facts[col_marginals[0]] - m_facts[col_marginals[1] - row_marginals[1]];
+      shortest_path += -m_facts[row_marginals[1]] - m_facts[col_marginals[0]] - m_facts[col_marginals[1] - row_marginals[1]];
     } else {
-      shortest_path -= m_facts[col_marginals[1]] - m_facts[row_marginals[0]] - m_facts[row_marginals[1] - col_marginals[1]];
+      shortest_path += -m_facts[col_marginals[1]] - m_facts[row_marginals[0]] - m_facts[row_marginals[1] - col_marginals[1]];
     }
     return;
   }
