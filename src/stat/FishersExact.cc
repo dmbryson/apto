@@ -369,9 +369,9 @@ double FExact::Calculate()
         nrow2 = irn.GetSize();
       }
       
-//      std::cout << "irn = " << irn[0];
-//      for (int i = 1; i < irn.GetSize(); i++) std::cout << ", " << irn[i];
-//      std::cout << std::endl;
+      std::cout << "irn = " << irn[0];
+      for (int i = 1; i < irn.GetSize(); i++) std::cout << ", " << irn[i];
+      std::cout << std::endl;
       
       // Build adjusted row array
       Array<int> sub_rows(nrow2);
@@ -402,7 +402,7 @@ double FExact::Calculate()
           
           m_path_extremes[path_idx].longest_path = longestPath(sub_rows, sub_cols, ntot);
           if (m_path_extremes[path_idx].longest_path > 0.0) m_path_extremes[path_idx].longest_path = 0.0;
-//          printf("longest_path = %f\n", m_path_extremes[path_idx].longest_path);
+          printf("longest_path = %f\n", m_path_extremes[path_idx].longest_path);
           
           double dspt = m_observed_path - obs2 - ddf;
 //          std::cout << "obs = " << m_observed_path << std::endl;
@@ -413,7 +413,7 @@ double FExact::Calculate()
           shortestPath(sub_rows, sub_cols, m_path_extremes[path_idx].shortest_path);
           m_path_extremes[path_idx].shortest_path -= dspt;
           if (m_path_extremes[path_idx].shortest_path > 0.0) m_path_extremes[path_idx].shortest_path = 0.0;
-//          printf("shortest_path = %f\n", m_path_extremes[path_idx].shortest_path);
+          printf("shortest_path = %f\n", m_path_extremes[path_idx].shortest_path);
         }
         obs3 = obs2 - m_path_extremes[path_idx].longest_path;
         obs2 = obs2 - m_path_extremes[path_idx].shortest_path;
@@ -428,7 +428,7 @@ double FExact::Calculate()
         if (past_path <= obs3) {
           // Path shorter than longest path, add to the pvalue and continue
           pvalue += (double)(path_freq) * exp(past_path + drn);
-//          printf("freq = %d  past_path = %f  drn = %f  pvalue = %f\n", path_freq, past_path, drn, pvalue);
+          printf("freq = %d  past_path = %f  drn = %f  pvalue = %f\n", path_freq, past_path, drn, pvalue);
         } else if (past_path < obs2) {
           int nht_idx = -1;
           double new_path = past_path + ddf;
@@ -453,7 +453,7 @@ double FExact::Calculate()
             if (!found)
               past_entries.Push(PastPathLength(new_path, path_freq));
           } else {
-//            printf("push_kval = %d\n", kval);
+            printf("push_kval = %d\n", kval);
             // New Node added, insert this observed path
             nht[cur_nht][nht_idx].past_entries.Push(PastPathLength(new_path, path_freq));
           }
@@ -478,14 +478,14 @@ double FExact::Calculate()
     } while (!cur_node);
     
     // Unpack node row marginals from key
-//    printf("kval = %d\n", cur_node->key);
+    printf("kval = %d\n", cur_node->key);
     int kval = cur_node->key;
     for (int i = m_row_marginals.GetSize() - 1; i > 0; i--) {
       m_row_marginals[i] = kval / m_key_multipliers[i];
       kval -= m_row_marginals[i] * m_key_multipliers[i];
     }
     m_row_marginals[0] = kval;
-//    printf("k = %d\n", k);
+    printf("k = %d\n", k);
   }
   
   return pvalue;
@@ -712,21 +712,28 @@ double FExact::longestPath(const Array<int>& row_marginals, const Array<int>& co
     lcol = row_marginals;
   }
   
+  std::cout << "lrow = " << lrow[0];
+  for (int i = 1; i < lrow.GetSize(); i++) std::cout << ", " << lrow[i];
+  std::cout << std::endl;
+  std::cout << "lcol = " << lcol[0];
+  for (int i = 1; i < lcol.GetSize(); i++) std::cout << ", " << lcol[i];
+  std::cout << std::endl;
+
+  
   Array<int> nt(lcol.GetSize());
   nt[0] = ntot - lcol[0];
   for (int i = 1; i < lcol.GetSize(); i++) nt[i] = nt[i - 1] - lcol[i];
   
 
-  Array<double> alen(lrow.GetSize());
+  Array<double> alen(col_marginals.GetSize() + 1);
   alen.SetAll(0.0);
   
   ValueHashTable vht[2];
   int active_vht = 0;
   
-  double vmn = 1.0e100;
+  double vmn = 1.0e10;
   int nc1s = lcol.GetSize() - 2;
-  int irl = 0;
-  int kyy = lcol[nc1s] + 1;
+  int kyy = lcol[lcol.GetSize() - 1] + 1;
   
   Array<int> lb(lrow.GetSize());
   Array<int> nu(lrow.GetSize());
@@ -739,12 +746,13 @@ double FExact::longestPath(const Array<int>& row_marginals, const Array<int>& co
     // Setup to generate new node
     int lev = 0;
     int nr1 = lrow.GetSize() - 1;
-    int nrt = lrow[irl];
+    int nrt = lrow[0];
     int nct = lcol[0];
     lb[0] = (int)((((double)nrt + 1.0) * (nct + 1)) / (double)(ntot + nr1 * nc1s + 1) - m_tolerance) - 1;
     nu[0] = (int)((((double)nrt + nc1s) * (nct + nr1)) / (double)(ntot + nr1 + nc1s)) - lb[0] + 1;
     nr[0] = nrt - lb[0];
     
+    printf("lb[0] = %d  nu[0] = %d  nr[0] = %d\n", lb[0], nu[0], nr[0]);
     while (true) {
       do {
         nu[lev]--;
@@ -755,9 +763,10 @@ double FExact::longestPath(const Array<int>& row_marginals, const Array<int>& co
                 Pair<int, double> entry = vht[(active_vht) ? 0 : 1].Pop();
                 val = entry.Value2();
                 int key = entry.Value1();
+                printf("key = %d\n", key);
                 
                 // Compute Marginals
-                for (int i = lcol.GetSize() - 1; i > 0; i++) {
+                for (int i = lcol.GetSize() - 1; i > 0; i--) {
                   lcol[i] = key % kyy;
                   key = key / kyy;
                 }
@@ -768,7 +777,7 @@ double FExact::longestPath(const Array<int>& row_marginals, const Array<int>& co
                 for (int i = 1; i < lcol.GetSize(); i++) nt[i] = nt[i - 1] - lcol[i];
                
                 min = false;
-                if (lrow[lrow.GetSize() - 1] <= lrow[irl] + lcol.GetSize()) {
+                if (lrow[lrow.GetSize() - 1] <= lrow[0] + lcol.GetSize()) {
                   min = shortestPathSpecial(lrow, lcol, val);
                 }
                 if (!min && lcol[lcol.GetSize() - 1] <= lcol[0] + lrow.GetSize()) {
@@ -776,20 +785,24 @@ double FExact::longestPath(const Array<int>& row_marginals, const Array<int>& co
                 }
                 
                 if (min) {
-                  if (val < vmn) vmn = val;
+                  if (val < vmn)
+                    vmn = val;
                   continue;
                 }
                 continue_main = true;
               } else if (lrow.GetSize() > 2 && vht[active_vht].GetEntryCount()) {
                 // Go to next level
-                ntot = ntot - lrow[irl];
-                irl++;
-                lrow.Resize(lrow.GetSize() - 1);
+                ntot = ntot - lrow[0];
+                Array<int> tmp(lrow);
+                lrow.ResizeClear(lrow.GetSize() - 1);
+                for (int i = 0; i < lrow.GetSize(); i++) lrow[i] = tmp[i + 1];
+                active_vht = (active_vht) ? 0 : 1;
                 continue;
               }
               break;
             } while (true);
-            if (!continue_main) return -vmn;
+            if (!continue_main)
+              return -vmn;
           }
           if (continue_main) break;
           lev--;
@@ -802,31 +815,34 @@ double FExact::longestPath(const Array<int>& row_marginals, const Array<int>& co
       lb[lev]++;
       nr[lev]--;
       
-      for (alen[lev] = alen[lev - 1] + m_facts[lb[lev]]; lev < nc1s; alen[lev] = alen[lev - 1] + m_facts[lb[lev]]) {
+      for (alen[lev + 1] = alen[lev] + m_facts[lb[lev]]; lev < nc1s; alen[lev + 1] = alen[lev] + m_facts[lb[lev]]) {
         int nn1 = nt[lev];
         int nrt = nr[lev];
         lev++;
-        int nc1 = lcol.GetSize() - lev;
+        int nc1 = lcol.GetSize() - lev - 1;
         int nct = lcol[lev];
         lb[lev] = (double)((nrt + 1) * (nct + 1)) / (double)(nn1 + nr1 * nc1 + 1) - m_tolerance;
         nu[lev] = (double)((nrt + nc1) * (nct + nr1)) / (double)(nn1 + nr1 + nc1) - lb[lev] + 1;
         nr[lev] = nrt - lb[lev];
       }
-      alen[lcol.GetSize() - 1] = alen[lev] + m_facts[nr[lev]];
+      alen[lcol.GetSize()] = alen[lev + 1] + m_facts[nr[lev]];
       lb[lcol.GetSize() - 1] = nr[lev];
-      
-      int v = val + alen[lcol.GetSize() - 1];
+            
+      double v = val + alen[lcol.GetSize()];
+      printf("v = %f\n", v);
       if (lrow.GetSize() == 2) {
         for (int i = 0; i < lcol.GetSize(); i++) v += m_facts[lcol[i] - lb[i]];
-        if (v < vmn) vmn = v;
+        if (v < vmn)
+          vmn = v;
       } else if (lrow.GetSize() == 3 && lcol.GetSize() == 2) {
-        int nn1 = ntot - lrow[irl] + 2;
+        int nn1 = ntot - lrow[0] + 2;
         int ic1 = lcol[0] - lb[0];
         int ic2 = lcol[1] - lb[1];
-        int n11 = (lrow[irl + 1] + 1) * (ic1 + 1) / nn1;
-        int n12 = lrow[irl + 1] - nn1;
+        int n11 = (lrow[1] + 1) * (ic1 + 1) / nn1;
+        int n12 = lrow[1] - nn1;
         v += m_facts[n11] + m_facts[n12] + m_facts[ic1 - nn1] + m_facts[ic2 - n12];
-        if (v < vmn) vmn = v;
+        if (v < vmn)
+          vmn = v;
       } else {
         Array<int> it(lcol.GetSize());
         for (int i = 0; i < lcol.GetSize(); i++) it[i] = lcol[i] - lb[i];
@@ -1035,40 +1051,54 @@ void FExact::shortestPath(const Array<int>& row_marginals, const Array<int>& col
 
 bool FExact::shortestPathSpecial(const Array<int>& row_marginals, const Array<int>& col_marginals, double& val)
 {
-  Array<int> nd(row_marginals.GetSize());
+  Array<int> nd(row_marginals.GetSize() - 1);
   Array<int> ne(col_marginals.GetSize());
   Array<int> m(col_marginals.GetSize());
   
-//  std::cout << "row = " << row_marginals[0];
-//  for (int i = 1; i < row_marginals.GetSize(); i++) std::cout << ", " << row_marginals[i];
-//  std::cout << std::endl;
+  std::cout << "row = " << row_marginals[0];
+  for (int i = 1; i < row_marginals.GetSize(); i++) std::cout << ", " << row_marginals[i];
+  std::cout << std::endl;
+  std::cout << "col = " << col_marginals[0];
+  for (int i = 1; i < col_marginals.GetSize(); i++) std::cout << ", " << col_marginals[i];
+  std::cout << std::endl;
 
   nd.SetAll(0);
   int is = col_marginals[0] / row_marginals.GetSize();
   ne[0] = is;
   int ix = col_marginals[0] - row_marginals.GetSize() * is;
   m[0] = ix;
+  printf("ix = %d\n", ix);
   if (ix != 0) nd[ix - 1] = 1;
-  
+
+  std::cout << "m = " << m[0];
+  for (int i = 1; i < m.GetSize(); i++) std::cout << ", " << m[i];
+  std::cout << std::endl;
+  std::cout << "nd = " << nd[0];
+  for (int i = 1; i < nd.GetSize(); i++) std::cout << ", " << nd[i];
+  std::cout << std::endl;
+ 
   for (int i = 1; i < col_marginals.GetSize(); i++) {
     ix = col_marginals[i] / row_marginals.GetSize();
+    printf("pix = %d\n", ix);
     ne[i] = ix;
     is += ix;
     ix = col_marginals[i] - row_marginals.GetSize() * ix;
     m[i] = ix;
+    printf("ix = %d\n", ix);
     if (ix != 0) nd[ix - 1]++;
   }
   
-  for (int i = row_marginals.GetSize() - 3; i >= 0; i--) nd[i] += nd[i + 1];
+  for (int i = nd.GetSize() - 2; i >= 0; i--) nd[i] += nd[i + 1];
   
-//  std::cout << "nd = " << nd[0];
-//  for (int i = 1; i < nd.GetSize(); i++) std::cout << ", " << nd[i];
-//  std::cout << std::endl;
+  std::cout << "nd = " << nd[0];
+  for (int i = 1; i < nd.GetSize(); i++) std::cout << ", " << nd[i];
+  std::cout << std::endl;
   
   ix = 0;
   int nrow1 = row_marginals.GetSize() - 1;
   for (int i = (row_marginals.GetSize() - 1); i > 0; i--) {
     ix += is + nd[nrow1 - i] - row_marginals[i];
+    printf("ix = %d\n", ix);
     if (ix < 0) return false;
   }
   
