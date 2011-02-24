@@ -50,7 +50,7 @@
 #include <limits>
 
 #include <iostream>
-
+#include <stdio.h>
 
 using namespace Apto;
 
@@ -272,7 +272,7 @@ FExact::FExact(const Stat::ContingencyTable& table, double tolerance)
   m_facts[1] = 0.0;
   if (marginal_total > 1) {
     m_facts[2] = log(2.0);
-    for (int i = 3; i < marginal_total; i++) {
+    for (int i = 3; i <= marginal_total; i++) {
       m_facts[i] = m_facts[i - 1] + log((double)i);
       if (++i <= marginal_total)  m_facts[i] = m_facts[i - 1] + m_facts[2] + m_facts[i / 2] - m_facts[i / 2 - 1];
     }
@@ -382,7 +382,6 @@ double FExact::Calculate()
       double ddf = logMultinomial(m_col_marginals[kb], row_diff);
       double drn = logMultinomial(ntot, sub_rows) - m_den_observed_path + ddf;
       
-
       int kval = 0;
       int path_idx = -1;
       double obs2, obs3;
@@ -403,7 +402,7 @@ double FExact::Calculate()
           
           m_path_extremes[path_idx].longest_path = longestPath(sub_rows, sub_cols, ntot);
           if (m_path_extremes[path_idx].longest_path > 0.0) m_path_extremes[path_idx].longest_path = 0.0;
-          std::cout << "longest_path = " << m_path_extremes[path_idx].longest_path << std::endl;
+          printf("longest_path = %f\n", m_path_extremes[path_idx].longest_path);
           
           double dspt = m_observed_path - obs2 - ddf;
 //          std::cout << "obs = " << m_observed_path << std::endl;
@@ -414,7 +413,7 @@ double FExact::Calculate()
           shortestPath(sub_rows, sub_cols, m_path_extremes[path_idx].shortest_path);
           m_path_extremes[path_idx].shortest_path -= dspt;
           if (m_path_extremes[path_idx].shortest_path > 0.0) m_path_extremes[path_idx].shortest_path = 0.0;
-          std::cout << "shortest_path = " << m_path_extremes[path_idx].shortest_path << std::endl;
+          printf("shortest_path = %f\n", m_path_extremes[path_idx].shortest_path);
         }
         obs3 = obs2 - m_path_extremes[path_idx].longest_path;
         obs2 = obs2 - m_path_extremes[path_idx].shortest_path;
@@ -429,7 +428,7 @@ double FExact::Calculate()
         if (past_path <= obs3) {
           // Path shorter than longest path, add to the pvalue and continue
           pvalue += (double)(path_freq) * exp(past_path + drn);
-          std::cout << "node = " << cur_node->key << "  freq = " << path_freq << "  past_path = " << past_path << "  drn = " << drn << "  pvalue = " << pvalue << std::endl;
+          printf("freq = %d  past_path = %f  drn = %f  pvalue = %f\n", path_freq, past_path, drn, pvalue);
         } else if (past_path < obs2) {
           int nht_idx = -1;
           double new_path = past_path + ddf;
@@ -991,7 +990,7 @@ void FExact::shortestPath(const Array<int>& row_marginals, const Array<int>& col
         }
         
         bool continue_outer = false;
-        for (--istk; istk != 0; istk--) {
+        for (--istk; istk >= 0; istk--) {
           l = l_stack[istk] + 1;
           for (; l < m_stack[istk]; l++) {
             n = n_stack[istk];
