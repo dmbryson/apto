@@ -37,11 +37,12 @@
 
 
 TEST(Functions, FishersExact) {
+  double pvalue = 0.0;
   Apto::Stat::ContingencyTable t1(2,2);
   t1[0][0] = 2; t1[0][1] = 2;
   t1[1][0] = 4; t1[1][1] = 0;
   
-  double pvalue = Apto::Stat::FishersExact(t1);
+  pvalue = Apto::Stat::FishersExact(t1);
   EXPECT_LT(0.428571428, pvalue);
   EXPECT_GT(0.428571429, pvalue);
   
@@ -75,6 +76,50 @@ TEST(Functions, FishersExact) {
   pvalue = Apto::Stat::FishersExact(t4);
   EXPECT_LT(.0453742835, pvalue);
   EXPECT_GT(.0453742836, pvalue);
+  
+  
+  Apto::Stat::ContingencyTable t5(3,9);
+  t5[0][0] = 1; t5[0][1] = 1; t5[0][2] = 1; t5[0][3] = 0; t5[0][4] = 0; t5[0][5] = 0; t5[0][6] = 1; t5[0][7] = 2; t5[0][8] = 4;  
+  t5[1][0] = 4; t5[1][1] = 4; t5[1][2] = 4; t5[1][3] = 5; t5[1][4] = 5; t5[1][5] = 5; t5[1][6] = 6; t5[1][7] = 5; t5[1][8] = 0;
+  t5[2][0] = 1; t5[2][1] = 1; t5[2][2] = 1; t5[2][3] = 0; t5[2][4] = 0; t5[2][5] = 0; t5[2][6] = 1; t5[2][7] = 2; t5[2][8] = 4;
+
+  pvalue = Apto::Stat::FishersExact(t5);
+  EXPECT_LT(.0353520689, pvalue);
+  EXPECT_GT(.0353520690, pvalue);
+  
+
+  Apto::Stat::ContingencyTable t6(5,6);
+  t6[0][0] = 1; t6[0][1] = 2; t6[0][2] = 2; t6[0][3] = 1; t6[0][4] = 1; t6[0][5] = 0;
+  t6[1][0] = 2; t6[1][1] = 0; t6[1][2] = 0; t6[1][3] = 2; t6[1][4] = 3; t6[1][5] = 0;
+  t6[2][0] = 0; t6[2][1] = 1; t6[2][2] = 1; t6[2][3] = 1; t6[2][4] = 2; t6[2][5] = 7;
+  t6[3][0] = 1; t6[3][1] = 1; t6[3][2] = 2; t6[3][3] = 0; t6[3][4] = 0; t6[3][5] = 0;
+  t6[4][0] = 0; t6[4][1] = 1; t6[4][2] = 1; t6[4][3] = 1; t6[4][4] = 1; t6[4][5] = 0;
+  
+  pvalue = Apto::Stat::FishersExact(t6);
+  EXPECT_LT(.0258388679, pvalue);
+  EXPECT_GT(.0258388680, pvalue);
+  
+
+  Apto::Stat::ContingencyTable t7(5,7);
+  t7[0][0] = 1; t7[0][1] = 2; t7[0][2] = 2; t7[0][3] = 1; t7[0][4] = 1; t7[0][5] = 0; t7[0][6] = 1;
+  t7[1][0] = 2; t7[1][1] = 0; t7[1][2] = 0; t7[1][3] = 2; t7[1][4] = 3; t7[1][5] = 0; t7[1][6] = 0;
+  t7[2][0] = 0; t7[2][1] = 1; t7[2][2] = 1; t7[2][3] = 1; t7[2][4] = 2; t7[2][5] = 7; t7[2][6] = 3;
+  t7[3][0] = 1; t7[3][1] = 1; t7[3][2] = 2; t7[3][3] = 0; t7[3][4] = 0; t7[3][5] = 0; t7[3][6] = 1;
+  t7[4][0] = 0; t7[4][1] = 1; t7[4][2] = 1; t7[4][3] = 1; t7[4][4] = 1; t7[4][5] = 0; t7[4][6] = 0;
+  
+  pvalue = Apto::Stat::FishersExact(t7);
+  EXPECT_LT(.0392896436, pvalue);
+  EXPECT_GT(.0392896437, pvalue);
+
+  
+  Apto::Stat::ContingencyTable t8(3,3);
+  t8[0][0] = 2; t8[0][1] = 4; t8[0][2] = 6;
+  t8[1][0] = 7; t8[1][1] = 6; t8[1][2] = 1;
+  t8[2][0] = 5; t8[2][1] = 0; t8[2][2] = 0;
+  
+  pvalue = Apto::Stat::FishersExact(t8);
+  EXPECT_LT(.00760907288, pvalue);
+  EXPECT_GT(.00760907290, pvalue);
   
   std::cout << "pre = " << pvalue << std::endl;
 }
