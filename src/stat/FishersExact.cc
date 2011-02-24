@@ -83,7 +83,7 @@ private:
     Array<PathExtremes> m_table;
     
   public:
-    inline PathExtremesHashTable(int size = 3300) : m_table(size) { ClearTable(); }
+    inline PathExtremesHashTable(int size = 3275) : m_table(size) { ClearTable(); }
     
     bool Find(int key, int& idx)
     {
@@ -147,7 +147,7 @@ private:
     int m_last;
     
   public:
-    inline NodeHashTable(int size = 3300) : m_table(size), m_last(-1) { ; }
+    inline NodeHashTable(int size = 3275) : m_table(size), m_last(-1) { ; }
     
     bool Find(int key, int& idx)
     {
@@ -253,12 +253,12 @@ FExact::FExact(const Stat::ContingencyTable& table, double tolerance)
   QSort(m_row_marginals);
   QSort(m_col_marginals);
 
-  std::cout << "irow = " << m_row_marginals[0];
-  for (int i = 1; i < m_row_marginals.GetSize(); i++) std::cout << ", " << m_row_marginals[i];
-  std::cout << std::endl;
-  std::cout << "icol = " << m_col_marginals[0];
-  for (int i = 1; i < m_col_marginals.GetSize(); i++) std::cout << ", " << m_col_marginals[i];
-  std::cout << std::endl;
+//  std::cout << "irow = " << m_row_marginals[0];
+//  for (int i = 1; i < m_row_marginals.GetSize(); i++) std::cout << ", " << m_row_marginals[i];
+//  std::cout << std::endl;
+//  std::cout << "icol = " << m_col_marginals[0];
+//  for (int i = 1; i < m_col_marginals.GetSize(); i++) std::cout << ", " << m_col_marginals[i];
+//  std::cout << std::endl;
 
   m_key_multipliers.Resize(m_row_marginals.GetSize());
   m_key_multipliers[0] = 1;
@@ -369,9 +369,9 @@ double FExact::Calculate()
         nrow2 = irn.GetSize();
       }
       
-      std::cout << "irn = " << irn[0];
-      for (int i = 1; i < irn.GetSize(); i++) std::cout << ", " << irn[i];
-      std::cout << std::endl;
+//      std::cout << "irn = " << irn[0];
+//      for (int i = 1; i < irn.GetSize(); i++) std::cout << ", " << irn[i];
+//      std::cout << std::endl;
       
       // Build adjusted row array
       Array<int> sub_rows(nrow2);
@@ -402,7 +402,7 @@ double FExact::Calculate()
           
           m_path_extremes[path_idx].longest_path = longestPath(sub_rows, sub_cols, ntot);
           if (m_path_extremes[path_idx].longest_path > 0.0) m_path_extremes[path_idx].longest_path = 0.0;
-          printf("longest_path = %f\n", m_path_extremes[path_idx].longest_path);
+//          printf("longest_path = %f\n", m_path_extremes[path_idx].longest_path);
           
           double dspt = m_observed_path - obs2 - ddf;
 //          std::cout << "obs = " << m_observed_path << std::endl;
@@ -413,7 +413,7 @@ double FExact::Calculate()
           shortestPath(sub_rows, sub_cols, m_path_extremes[path_idx].shortest_path);
           m_path_extremes[path_idx].shortest_path -= dspt;
           if (m_path_extremes[path_idx].shortest_path > 0.0) m_path_extremes[path_idx].shortest_path = 0.0;
-          printf("shortest_path = %f\n", m_path_extremes[path_idx].shortest_path);
+//          printf("shortest_path = %f\n", m_path_extremes[path_idx].shortest_path);
         }
         obs3 = obs2 - m_path_extremes[path_idx].longest_path;
         obs2 = obs2 - m_path_extremes[path_idx].shortest_path;
@@ -428,7 +428,7 @@ double FExact::Calculate()
         if (past_path <= obs3) {
           // Path shorter than longest path, add to the pvalue and continue
           pvalue += (double)(path_freq) * exp(past_path + drn);
-          printf("freq = %d  past_path = %f  drn = %f  pvalue = %f\n", path_freq, past_path, drn, pvalue);
+//          printf("freq = %d  past_path = %f  drn = %f  pvalue = %f\n", path_freq, past_path, drn, pvalue);
         } else if (past_path < obs2) {
           int nht_idx = -1;
           double new_path = past_path + ddf;
@@ -453,6 +453,7 @@ double FExact::Calculate()
             if (!found)
               past_entries.Push(PastPathLength(new_path, path_freq));
           } else {
+//            printf("push_kval = %d\n", kval);
             // New Node added, insert this observed path
             nht[cur_nht][nht_idx].past_entries.Push(PastPathLength(new_path, path_freq));
           }
@@ -477,12 +478,14 @@ double FExact::Calculate()
     } while (!cur_node);
     
     // Unpack node row marginals from key
+//    printf("kval = %d\n", cur_node->key);
     int kval = cur_node->key;
     for (int i = m_row_marginals.GetSize() - 1; i > 0; i--) {
       m_row_marginals[i] = kval / m_key_multipliers[i];
       kval -= m_row_marginals[i] * m_key_multipliers[i];
     }
     m_row_marginals[0] = kval;
+//    printf("k = %d\n", k);
   }
   
   return pvalue;
@@ -552,7 +555,7 @@ bool FExact::generateNewDaughter(int kmax, const Array<int>& row_marginals, Arra
       } while (marginal_total > 0 && idx_dec != 0);
       
       if (marginal_total > 0) {
-        if (idx != (kmax - 1)) {
+        if (idx != (kmax)) {
           idx_dec = idx;
           continue;
         }

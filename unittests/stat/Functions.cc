@@ -68,11 +68,9 @@ TEST(Functions, FishersExact) {
   t29[1][7] = 1;
   t29[1][8] = 1;
   
-//  pvalue = Apto::Stat::FishersExact(t29);
-//  EXPECT_LT(.0679646227, pvalue);
-//  EXPECT_GT(.0679646228, pvalue);
-  
-  std::cout << std::endl << std::endl;
+  pvalue = Apto::Stat::FishersExact(t29);
+  EXPECT_LT(.0679646227, pvalue);
+  EXPECT_GT(.0679646228, pvalue);
   
   Apto::Stat::ContingencyTable t45(4,5);
   t45[0][0] = 2;
@@ -100,5 +98,8 @@ TEST(Functions, FishersExact) {
   t45[3][4] = 0;
 
   pvalue = Apto::Stat::FishersExact(t45);
+  EXPECT_LT(.0911177720, pvalue);
+  EXPECT_GT(.0911177721, pvalue);
+
   std::cout << "pre = " << pvalue << std::endl;
 }
