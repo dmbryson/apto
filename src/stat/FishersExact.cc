@@ -506,7 +506,7 @@ bool FExact::generateNewDaughter(int kmax, const Array<int>& row_marginals, Arra
   }
   
   // Find node to decrement
-  if (diff[idx_dec] >= 0 && idx_dec > idx_inc) {
+  if (diff[idx_dec] > 0 && idx_dec > idx_inc) {
     diff[idx_dec]--;
     while (row_marginals[--idx_dec] == 0);
     int m = idx_dec;
