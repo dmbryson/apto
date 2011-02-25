@@ -121,9 +121,11 @@ private:
   {
     double value;
     int observed;
+    int next_left;
+    int next_right;
     
-    PastPathLength(double in_value = 0.0) : value(in_value), observed(1) { ; }
-    PastPathLength(double in_value, int in_freq) : value(in_value), observed(in_freq) { ; }
+    PastPathLength(double in_value = 0.0) : value(in_value), observed(1), next_left(-1), next_right(-1) { ; }
+    PastPathLength(double in_value, int in_freq) : value(in_value), observed(in_freq), next_left(-1), next_right(-1) { ; }
   };
   
   
@@ -204,18 +206,18 @@ public:
   double Calculate();
   
 private:
-  inline bool generateFirstDaughter(const Array<int>& row_marginals, int n, Array<int>& row_diff, int& kmax, int& kd);
-  bool generateNewDaughter(int kmax, const Array<int>& row_marginals, Array<int>& diff, int& idx_dec, int& idx_inc);
+  inline bool generateFirstDaughter(const Array<int>& row_marginals, int n, Array<int, Smart>& row_diff, int& kmax, int& kd);
+  bool generateNewDaughter(int kmax, const Array<int>& row_marginals, Array<int, Smart>& row_diff, int& idx_dec, int& idx_inc);
 
-  double logMultinomial(int numerator, const Array<int>& denominator);
+  inline double logMultinomial(int numerator, const Array<int, Smart>& denominator);
   void removeFromVector(const Array<int>& src, int idx_remove, Array<int>& dest);
   void reduceZeroInVector(const Array<int>& src, int value, int idx_start, Array<int>& dest);
   
-  double longestPath(const Array<int>& row_marginals, const Array<int>& col_marginals, int marginal_total);
-  void shortestPath(const Array<int>& row_marginals, const Array<int>& col_marginals, double& shortest_path);
-  bool shortestPathSpecial(const Array<int>& row_marginals, const Array<int>& col_marginals, double& val);
+  double longestPath(const Array<int, Smart>& row_marginals, const Array<int, Smart>& col_marginals, int marginal_total);
+  void shortestPath(const Array<int, Smart>& row_marginals, const Array<int, Smart>& col_marginals, double& shortest_path);
+  bool shortestPathSpecial(const Array<int, Smart>& row_marginals, const Array<int, Smart>& col_marginals, double& val);
   
-  
+  inline void recordPath(double path_length, int path_freq, Array<PastPathLength, Smart>& past_entries);
 };
 
 
@@ -295,32 +297,27 @@ double FExact::Calculate()
   double pvalue = 0.0;
   
   NodeHashTable nht[2];
-  int cur_nht = 0;
-  int past_nht = 1;
   
   int k = m_col_marginals.GetSize();
   NodePtr cur_node(new FExactNode(0));
   cur_node->past_entries.Push(PastPathLength(0));
   
+  Array<int, Smart> row_diff(m_row_marginals.GetSize());
+  Array<int> irn(m_row_marginals.GetSize());
+  Array<int, Smart> sub_rows;
+  Array<int, Smart> sub_cols;
+
   while (true) {
     int kb = m_col_marginals.GetSize() - k;
     int ks = -1;
     int kmax;
     int kd;
     
-    Array<int> row_diff(m_row_marginals.GetSize());
     if (!generateFirstDaughter(m_row_marginals, m_col_marginals[kb], row_diff, kmax, kd)) {
       do {
-        cur_node = nht[past_nht].Pop();
+        cur_node = nht[(k + 1) & 0x1].Pop();
         if (!cur_node) {
           k--;
-          if (cur_nht) {
-            cur_nht = 0;
-            past_nht = 1;
-          } else {
-            cur_nht = 1;
-            past_nht = 0;
-          }
           m_path_extremes.ClearTable();
           if (k < 2) return pvalue;
         }
@@ -340,7 +337,6 @@ double FExact::Calculate()
     for (int i = kb + 1; i < m_col_marginals.GetSize(); i++) ntot += m_col_marginals[i];
     
     do {
-      Array<int> irn(m_row_marginals.GetSize());
       for (int i = 0; i < m_row_marginals.GetSize(); i++) irn[i] = m_row_marginals[i] - row_diff[i];
       
       int nrb;
@@ -362,14 +358,10 @@ double FExact::Calculate()
         nrow2 = irn.GetSize();
       }
       
-//      printf("irn = %d", irn[0]);
-//      for (int i = 1; i < irn.GetSize(); i++) printf(", %d", irn[i]);
-//      printf("\n");
-      
       // Build adjusted row array
-      Array<int> sub_rows(nrow2);
+      sub_rows.Resize(nrow2);
       for (int i = nrb; i < irn.GetSize(); i++) sub_rows[i - nrb] = irn[i];
-      Array<int> sub_cols(k - 1);
+      sub_cols.Resize(k - 1);
       for (int i = kb + 1; i < m_col_marginals.GetSize(); i++) sub_cols[i - kb - 1] = m_col_marginals[i];
       
       double ddf = logMultinomial(m_col_marginals[kb], row_diff);
@@ -395,14 +387,12 @@ double FExact::Calculate()
           
           m_path_extremes[path_idx].longest_path = longestPath(sub_rows, sub_cols, ntot);
           if (m_path_extremes[path_idx].longest_path > 0.0) m_path_extremes[path_idx].longest_path = 0.0;
-//          printf("longest_path = %f\n", m_path_extremes[path_idx].longest_path);
           
           double dspt = m_observed_path - obs2 - ddf;
           m_path_extremes[path_idx].shortest_path = dspt;
           shortestPath(sub_rows, sub_cols, m_path_extremes[path_idx].shortest_path);
           m_path_extremes[path_idx].shortest_path -= dspt;
           if (m_path_extremes[path_idx].shortest_path > 0.0) m_path_extremes[path_idx].shortest_path = 0.0;
-//          printf("shortest_path = %f\n", m_path_extremes[path_idx].shortest_path);
         }
         obs3 = obs2 - m_path_extremes[path_idx].longest_path;
         obs2 = obs2 - m_path_extremes[path_idx].shortest_path;
@@ -417,70 +407,42 @@ double FExact::Calculate()
         if (past_path <= obs3) {
           // Path shorter than longest path, add to the pvalue and continue
           pvalue += (double)(path_freq) * exp(past_path + drn);
-//          printf("freq = %d  past_path = %f  drn = %f  pvalue = %f\n", path_freq, past_path, drn, pvalue);
         } else if (past_path < obs2) {
-          int nht_idx = -1;
+          int nht_idx;
           double new_path = past_path + ddf;
-          if (nht[cur_nht].Find(kval, nht_idx)) {
-            // Existing Node was found
-            
-            // Search for past path within m_tolerance and add observed frequency to it
-            Array<PastPathLength, Smart>& past_entries = nht[cur_nht][nht_idx].past_entries;
-            bool found = false;
-            double test1 = new_path - m_tolerance;
-            double test2 = new_path + m_tolerance;
-          
-            for (int j = 0; j < past_entries.GetSize(); j++) {
-              double test_path = past_entries[j].value;
-              if (test_path >= test1 && test_path <= test2) {
-                found = true;
-                past_entries[j].observed += path_freq;
-                break;
-              }
-            }
-            // If no path within m_tolerance is found, add new past path length to the node
-            if (!found)
-              past_entries.Push(PastPathLength(new_path, path_freq));
+          if (nht[k & 0x1].Find(kval, nht_idx)) {
+            // Existing Node was found            
+            recordPath(new_path, path_freq, nht[k & 0x1][nht_idx].past_entries);
           } else {
-//            printf("push_kval = %d\n", kval);
             // New Node added, insert this observed path
-            nht[cur_nht][nht_idx].past_entries.Push(PastPathLength(new_path, path_freq));
+            nht[k & 0x1][nht_idx].past_entries.Push(PastPathLength(new_path, path_freq));
           }
         }
       }
     } while (generateNewDaughter(kmax, m_row_marginals, row_diff, kd, ks));
     
     do {
-      cur_node = nht[past_nht].Pop();
+      cur_node = nht[(k + 1) & 0x1].Pop();
       if (!cur_node) {
         k--;
-        if (cur_nht) {
-          cur_nht = 0;
-          past_nht = 1;
-        } else {
-          cur_nht = 1;
-          past_nht = 0;
-        }
         m_path_extremes.ClearTable();
         if (k < 2) return pvalue;
       }
     } while (!cur_node);
     
     // Unpack node row marginals from key
-//    printf("kval = %d\n", cur_node->key);
     int kval = cur_node->key;
     for (int i = m_row_marginals.GetSize() - 1; i > 0; i--) {
       m_row_marginals[i] = kval / m_key_multipliers[i];
       kval -= m_row_marginals[i] * m_key_multipliers[i];
     }
     m_row_marginals[0] = kval;
-//    printf("k = %d\n", k);
   }
   
   return pvalue;
 }
 
-inline bool FExact::generateFirstDaughter(const Array<int>& row_marginals, int n, Array<int>& row_diff, int& kmax, int& kd)
+inline bool FExact::generateFirstDaughter(const Array<int>& row_marginals, int n, Array<int, Smart>& row_diff, int& kmax, int& kd)
 {
   row_diff.SetAll(0);
   
@@ -499,31 +461,31 @@ inline bool FExact::generateFirstDaughter(const Array<int>& row_marginals, int n
   return true;
 }
 
-bool FExact::generateNewDaughter(int kmax, const Array<int>& row_marginals, Array<int>& diff, int& idx_dec, int& idx_inc)
+bool FExact::generateNewDaughter(int kmax, const Array<int>& row_marginals, Array<int, Smart>& row_diff, int& idx_dec, int& idx_inc)
 {
   if (idx_inc == -1) {
-    while (diff[++idx_inc] == row_marginals[idx_inc]);
+    while (row_diff[++idx_inc] == row_marginals[idx_inc]);
   }
   
   // Find node to decrement
-  if (diff[idx_dec] > 0 && idx_dec > idx_inc) {
-    diff[idx_dec]--;
+  if (row_diff[idx_dec] > 0 && idx_dec > idx_inc) {
+    row_diff[idx_dec]--;
     while (row_marginals[--idx_dec] == 0);
     int m = idx_dec;
     
     // Find node to increment
-    while (diff[m] >= row_marginals[m]) m--;
-    diff[m]++;
+    while (row_diff[m] >= row_marginals[m]) m--;
+    row_diff[m]++;
     
-    if (m == idx_inc && diff[m] == row_marginals[m]) idx_inc = idx_dec;
+    if (m == idx_inc && row_diff[m] == row_marginals[m]) idx_inc = idx_dec;
   } else {
     int idx = 0;
     do {
       // Check for finish
       idx = idx_dec + 1;
       bool found = false;
-      for (; idx < diff.GetSize(); idx++) {
-        if (diff[idx] > 0) {
+      for (; idx < row_diff.GetSize(); idx++) {
+        if (row_diff[idx] > 0) {
           found = true;
           break;
         }
@@ -532,14 +494,14 @@ bool FExact::generateNewDaughter(int kmax, const Array<int>& row_marginals, Arra
       
       int marginal_total = 1;
       for (int i = 0; i <= idx_dec; i++) {
-        marginal_total += diff[i];
-        diff[i] = 0;
+        marginal_total += row_diff[i];
+        row_diff[i] = 0;
       }
       idx_dec = idx;
       do {
         idx_dec--;
         int m = (marginal_total < row_marginals[idx_dec]) ? marginal_total : row_marginals[idx_dec];
-        diff[idx_dec] = m;
+        row_diff[idx_dec] = m;
         marginal_total -= m;
       } while (marginal_total > 0 && idx_dec != 0);
       
@@ -553,15 +515,54 @@ bool FExact::generateNewDaughter(int kmax, const Array<int>& row_marginals, Arra
         break;
       }
     } while (true);
-    diff[idx]--;
-    for (idx_inc = 0; diff[idx_inc] >= row_marginals[idx_inc]; idx_inc++) if (idx_inc > idx_dec) break;
+    row_diff[idx]--;
+    for (idx_inc = 0; row_diff[idx_inc] >= row_marginals[idx_inc]; idx_inc++) if (idx_inc > idx_dec) break;
   }
   
   return true;
 }
 
+inline void FExact::recordPath(double path_length, int path_freq, Array<PastPathLength, Smart>& past_entries)
+{
+  // Search for past path within m_tolerance and add observed frequency to it
+  double test1 = path_length - m_tolerance;
+  double test2 = path_length + m_tolerance;
+  
+  int j = 0;
+  int old_j = 0;
+  while (true) {
+    double test_path = past_entries[j].value;
+    if (test_path < test1) {
+      old_j = j;
+      j = past_entries[j].next_left;
+      if (j >= 0) continue;
+    } else if (test_path > test2) {
+      old_j = j;
+      j = past_entries[j].next_right;
+      if (j >= 0) continue;
+    } else {
+      past_entries[j].observed += path_freq;
+      return;
+    }
+    break;
+  }
+  
+  // If no path within m_tolerance is found, add new past path length to the node
+  int new_idx = past_entries.GetSize();
+  past_entries.Push(PastPathLength(path_length, path_freq)); 
+  
+  double test_path = past_entries[old_j].value;
+  if (test_path < test1) {
+    past_entries[old_j].next_left = new_idx;
+  } else if (test_path > test2) {
+    past_entries[old_j].next_right = new_idx;
+  } else {
+    assert(false);
+  }  
+}
 
-double FExact::logMultinomial(int numerator, const Array<int>& denominator)
+
+inline double FExact::logMultinomial(int numerator, const Array<int, Smart>& denominator)
 {
   double ret_val = m_facts[numerator];
   for (int i = 0; i < denominator.GetSize(); i++) ret_val -= m_facts[denominator[i]];
@@ -596,7 +597,7 @@ void FExact::reduceZeroInVector(const Array<int>& src, int value, int idx_start,
 }
 
 
-double FExact::longestPath(const Array<int>& row_marginals, const Array<int>& col_marginals, int marginal_total)
+double FExact::longestPath(const Array<int, Smart>& row_marginals, const Array<int, Smart>& col_marginals, int marginal_total)
 {
   class ValueHashTable
   {
@@ -690,8 +691,8 @@ double FExact::longestPath(const Array<int>& row_marginals, const Array<int>& co
   
 
   int ntot = marginal_total;
-  Array<int> lrow;
-  Array<int> lcol;
+  Array<int, Smart> lrow;
+  Array<int, Smart> lcol;
   
   if (row_marginals.GetSize() >= col_marginals.GetSize()) {
     lrow = row_marginals;
@@ -853,7 +854,7 @@ double FExact::longestPath(const Array<int>& row_marginals, const Array<int>& co
 }
 
 
-void FExact::shortestPath(const Array<int>& row_marginals, const Array<int>& col_marginals, double& shortest_path)
+void FExact::shortestPath(const Array<int, Smart>& row_marginals, const Array<int, Smart>& col_marginals, double& shortest_path)
 {
   // Take care of easy cases first
   
@@ -1012,7 +1013,7 @@ void FExact::shortestPath(const Array<int>& row_marginals, const Array<int>& col
 }
 
 
-bool FExact::shortestPathSpecial(const Array<int>& row_marginals, const Array<int>& col_marginals, double& val)
+bool FExact::shortestPathSpecial(const Array<int, Smart>& row_marginals, const Array<int, Smart>& col_marginals, double& val)
 {
   Array<int> nd(row_marginals.GetSize() - 1);
   Array<int> ne(col_marginals.GetSize());
