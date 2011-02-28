@@ -49,10 +49,10 @@ namespace Apto {
   public:
     typedef T ValueType;
     
-    explicit Array(int size = 0) : SP(size) { ; }
+    inline explicit Array(int size = 0) : SP(size) { ; }
     
     template <typename T1, template <class> class SP1>
-    inline Array(const Array<T1, SP1>& rhs) : SP(rhs.GetSize()) { this->operator=(rhs); }
+    inline explicit Array(const Array<T1, SP1>& rhs) : SP(rhs.GetSize()) { this->operator=(rhs); }
     
     ~Array() { ; }
     

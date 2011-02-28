@@ -193,8 +193,8 @@ private:
 
   
   Array<double> m_facts; // Log factorials
-  Array<int> m_row_marginals;
-  Array<int> m_col_marginals;
+  Array<int, Smart> m_row_marginals;
+  Array<int, Smart> m_col_marginals;
   Array<int> m_key_multipliers;
   PathExtremesHashTable m_path_extremes;
   double m_observed_path;
@@ -206,8 +206,8 @@ public:
   double Calculate();
   
 private:
-  inline bool generateFirstDaughter(const Array<int>& row_marginals, int n, Array<int, Smart>& row_diff, int& kmax, int& kd);
-  bool generateNewDaughter(int kmax, const Array<int>& row_marginals, Array<int, Smart>& row_diff, int& idx_dec, int& idx_inc);
+  inline bool generateFirstDaughter(const Array<int, Smart>& row_marginals, int n, Array<int, Smart>& row_diff, int& kmax, int& kd);
+  bool generateNewDaughter(int kmax, const Array<int, Smart>& row_marginals, Array<int, Smart>& row_diff, int& idx_dec, int& idx_inc);
 
   inline double logMultinomial(int numerator, const Array<int, Smart>& denominator);
   void removeFromVector(const Array<int>& src, int idx_remove, Array<int>& dest);
@@ -277,7 +277,7 @@ FExact::FExact(const Stat::ContingencyTable& table, double tolerance)
   for (int j = 0; j < m_col_marginals.GetSize(); j++) {
     double dd = 0.0;
     for (int i = 0; i < m_row_marginals.GetSize(); i++) {
-      if (m_row_marginals.GetSize() < m_col_marginals.GetSize()) {
+      if (m_row_marginals.GetSize() == table.NumRows()) {
         dd += m_facts[table[i][j]];
       } else {
         dd += m_facts[table[j][i]];
@@ -288,8 +288,8 @@ FExact::FExact(const Stat::ContingencyTable& table, double tolerance)
   
   m_den_observed_path = logMultinomial(marginal_total, m_row_marginals);
   
-//  double prt = exp(m_observed_path - m_den_observed_path);
-//  std::cout << "prt = " << prt << std::endl;
+  double prt = exp(m_observed_path - m_den_observed_path);
+  std::cout << "prt = " << prt << std::endl;
 }
 
 double FExact::Calculate()
@@ -442,7 +442,7 @@ double FExact::Calculate()
   return pvalue;
 }
 
-inline bool FExact::generateFirstDaughter(const Array<int>& row_marginals, int n, Array<int, Smart>& row_diff, int& kmax, int& kd)
+inline bool FExact::generateFirstDaughter(const Array<int, Smart>& row_marginals, int n, Array<int, Smart>& row_diff, int& kmax, int& kd)
 {
   row_diff.SetAll(0);
   
@@ -461,7 +461,7 @@ inline bool FExact::generateFirstDaughter(const Array<int>& row_marginals, int n
   return true;
 }
 
-bool FExact::generateNewDaughter(int kmax, const Array<int>& row_marginals, Array<int, Smart>& row_diff, int& idx_dec, int& idx_inc)
+bool FExact::generateNewDaughter(int kmax, const Array<int, Smart>& row_marginals, Array<int, Smart>& row_diff, int& idx_dec, int& idx_inc)
 {
   if (idx_inc == -1) {
     while (row_diff[++idx_inc] == row_marginals[idx_inc]);
