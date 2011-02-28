@@ -66,6 +66,45 @@ static double logGamma(double x, bool& fault);
 // Internal Class/Struct Definitions
 // -------------------------------------------------------------------------------------------------------------- 
 
+template <class T> class ManualBuffer
+{
+private:
+  T* m_data;    // Data Array
+  int m_size;   // Array Size
+  
+protected:  
+  typedef T StoredType;
+  
+  explicit ManualBuffer(int size = 0) : m_data(NULL), m_size(0) { ; }
+  ManualBuffer(const ManualBuffer& rhs) : m_data(NULL), m_size(0) { this->operator=(rhs); }
+  ManualBuffer() { ; }
+  
+  int GetSize() const { return m_size; }
+  void ResizeClear(const int in_size) { m_size = in_size; }
+  void Resize(int new_size) { m_size = new_size; }
+  
+  ManualBuffer& operator=(const ManualBuffer& rhs)
+  {
+    m_size = rhs.m_size;
+    for (int i = 0; i < rhs.m_size; i++) m_data[i] = rhs.m_data[i];
+    return *this;
+  }
+  
+  inline T& operator[](const int index) { return m_data[index]; }
+  inline const T& operator[](const int index) const { return m_data[index]; }
+  
+  void Swap(int idx1, int idx2)
+  {
+    T v = m_data[idx1];
+    m_data[idx1] = m_data[idx2];
+    m_data[idx2] = v;
+  }
+public:
+  void SetBuffer(T* data) { m_data = data; }
+};
+
+
+
 static class FExact
 {
 private:
@@ -210,8 +249,8 @@ private:
   bool generateNewDaughter(int kmax, const Array<int, Smart>& row_marginals, Array<int, Smart>& row_diff, int& idx_dec, int& idx_inc);
 
   inline double logMultinomial(int numerator, const Array<int, Smart>& denominator);
-  void removeFromVector(const Array<int>& src, int idx_remove, Array<int>& dest);
-  void reduceZeroInVector(const Array<int>& src, int value, int idx_start, Array<int>& dest);
+  void removeFromVector(const Array<int, ManualBuffer>& src, int idx_remove, Array<int, ManualBuffer>& dest);
+  void reduceZeroInVector(const Array<int, ManualBuffer>& src, int value, int idx_start, Array<int, ManualBuffer>& dest);
   
   double longestPath(const Array<int, Smart>& row_marginals, const Array<int, Smart>& col_marginals, int marginal_total);
   void shortestPath(const Array<int, Smart>& row_marginals, const Array<int, Smart>& col_marginals, double& shortest_path);
@@ -219,8 +258,6 @@ private:
   
   inline void recordPath(double path_length, int path_freq, Array<PastPathLength, Smart>& past_entries);
 };
-
-
 
 
 
@@ -570,7 +607,7 @@ inline double FExact::logMultinomial(int numerator, const Array<int, Smart>& den
 }
 
 
-void FExact::removeFromVector(const Array<int>& src, int idx_remove, Array<int>& dest)
+void FExact::removeFromVector(const Array<int, ManualBuffer>& src, int idx_remove, Array<int, ManualBuffer>& dest)
 {
   dest.Resize(src.GetSize() - 1);
   for (int i = 0; i < idx_remove; i++) dest[i] = src[i];
@@ -578,7 +615,7 @@ void FExact::removeFromVector(const Array<int>& src, int idx_remove, Array<int>&
 }
 
 
-void FExact::reduceZeroInVector(const Array<int>& src, int value, int idx_start, Array<int>& dest)
+void FExact::reduceZeroInVector(const Array<int, ManualBuffer>& src, int value, int idx_start, Array<int, ManualBuffer>& dest)
 {
   dest.Resize(src.GetSize());
   
@@ -881,8 +918,17 @@ void FExact::shortestPath(const Array<int, Smart>& row_marginals, const Array<in
   }
   
   // General Case
-  Array<Array<int> > row_stack(row_marginals.GetSize() + col_marginals.GetSize() + 1);
-  Array<Array<int> > col_stack(row_marginals.GetSize() + col_marginals.GetSize() + 1);
+  
+  
+  
+  SmartPtr<int, NoCopy, ArrayStorage> row_data(new int[(row_marginals.GetSize() + col_marginals.GetSize() + 1) * row_marginals.GetSize()]);
+  SmartPtr<int, NoCopy, ArrayStorage> col_data(new int[(row_marginals.GetSize() + col_marginals.GetSize() + 1) * col_marginals.GetSize()]);
+  Array<Array<int, ManualBuffer> > row_stack(row_marginals.GetSize() + col_marginals.GetSize() + 1);
+  Array<Array<int, ManualBuffer> > col_stack(row_marginals.GetSize() + col_marginals.GetSize() + 1);
+  for (int i = 0; i < row_stack.GetSize(); i++) {
+    row_stack[i].SetBuffer(GetInternalPtr(row_data) + (i * row_marginals.GetSize()));
+    col_stack[i].SetBuffer(GetInternalPtr(col_data) + (i * col_marginals.GetSize()));
+  }
   
   row_stack[0].Resize(row_marginals.GetSize());
   for (int i = 0; i < row_marginals.GetSize(); i++) row_stack[0][i] = row_marginals[row_marginals.GetSize() - i - 1];
