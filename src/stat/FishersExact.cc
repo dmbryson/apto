@@ -114,6 +114,7 @@ private:
     int key;
     double longest_path;
     double shortest_path;
+    PathExtremes() : key(-1) { ; }
   };
   
   class PathExtremesHashTable
@@ -144,7 +145,7 @@ private:
           return true;
         }
       }
-      assert(false);
+      Rehash(key, idx);
       return false;
     }
     
@@ -153,6 +154,20 @@ private:
     inline void ClearTable()
     {
       for (int i = 0; i < m_table.GetSize(); i++) m_table[i].key = -1;
+    }
+    
+  private:
+    void Rehash(int key, int& idx)
+    {
+      Array<PathExtremes> old_table(m_table);
+      m_table.ResizeClear(old_table.GetSize() * 2);
+      for (int i = 0; i < old_table.GetSize(); i++) {
+        int t_idx;
+        Find(old_table[i].key, t_idx);
+        m_table[t_idx].longest_path = old_table[i].longest_path;
+        m_table[t_idx].shortest_path = old_table[i].shortest_path;
+      }
+      Find(key, idx);
     }
   };
 
@@ -210,7 +225,7 @@ private:
           return true;
         }
       }
-      assert(false);
+      Rehash(key, idx);
       return false;
     }
     
@@ -227,6 +242,18 @@ private:
       }
       m_last = -1;
       return NodePtr(NULL);
+    }
+  private:
+    void Rehash(int key, int& idx)
+    {
+      Array<NodePtr> old_table(m_table);
+      m_table.ResizeClear(old_table.GetSize() * 2);
+      for (int i = 0; i < old_table.GetSize(); i++) {
+        int t_idx;
+        Find(old_table[i]->key, t_idx);
+        m_table[t_idx] = old_table[i];
+      }
+      Find(key, idx);
     }
   };
 
@@ -639,56 +666,73 @@ double FExact::longestPath(const Array<int, Smart>& row_marginals, const Array<i
   class ValueHashTable
   {
   private:
-    Array<Pair<int, double> > m_table;
+    Array<Pair<int, double> >* m_table;
     Array<int> m_stack;
     int m_entry_count;
     
   public:
-    inline ValueHashTable(int size = 200) : m_table(size), m_stack(size) { ClearTable(); }
+    inline ValueHashTable(int size = 200) : m_table(new Array<Pair<int, double> >(size)), m_stack(size) { ClearTable(); }
+    inline ~ValueHashTable() { delete m_table; }
     
     int GetEntryCount() const { return m_entry_count; }
     
     bool Find(int key, int& idx)
     {
-      int init = key % m_table.GetSize();
+      int init = key % m_table->GetSize();
       idx = init;
-      for (; idx < m_table.GetSize(); idx++) {
-        if (m_table[idx].Value1() < 0) {
+      for (; idx < m_table->GetSize(); idx++) {
+        if ((*m_table)[idx].Value1() < 0) {
           m_stack[m_entry_count] = idx;
-          m_table[idx].Value1() = key;
+          (*m_table)[idx].Value1() = key;
           m_entry_count++;
           return false;
-        } else if (m_table[idx].Value1() == key) {
+        } else if ((*m_table)[idx].Value1() == key) {
           return true;
         }
       }
       for (idx = 0; idx < init; idx++) {
-        if (m_table[idx].Value1() < 0) {
+        if ((*m_table)[idx].Value1() < 0) {
           m_stack[m_entry_count] = idx;
-          m_table[idx].Value1() = key;
+          (*m_table)[idx].Value1() = key;
           m_entry_count++;
           return false;
-        } else if (m_table[idx].Value1() == key) {
+        } else if ((*m_table)[idx].Value1() == key) {
           return true;
         }
       }
-      assert(false);
+      Rehash(key, idx);
       return false;
     }
     
-    inline double& operator[](int idx) { return m_table[idx].Value2(); }
+    inline double& operator[](int idx) { return (*m_table)[idx].Value2(); }
     
     Pair<int, double> Pop()
     {
-      Pair<int, double> tmp = m_table[m_stack[--m_entry_count]];
-      m_table[m_stack[m_entry_count]].Value1() = -1;
+      Pair<int, double> tmp = (*m_table)[m_stack[--m_entry_count]];
+      (*m_table)[m_stack[m_entry_count]].Value1() = -1;
       return tmp;
     }
     
     inline void ClearTable()
     {
       m_entry_count = 0;
-      for (int i = 0; i < m_table.GetSize(); i++) m_table[i].Value1() = -1;
+      for (int i = 0; i < m_table->GetSize(); i++) (*m_table)[i].Value1() = -1;
+    }
+    
+  private:
+    void Rehash(int key, int& idx)
+    {
+      Array<Pair<int, double> >* old_table = m_table;
+      m_table = new Array<Pair<int, double> >(old_table->GetSize() * 2);
+      for (int i = 0; i < m_table->GetSize(); i++) (*m_table)[i].Value1() = -1;
+      m_stack.Resize(old_table->GetSize() * 2);
+      for (int i = 0; i < old_table->GetSize(); i++) {
+        int t_idx;
+        Find((*old_table)[i].Value1(), t_idx);
+        (*m_table)[t_idx].Value2() = (*old_table)[i].Value2();
+      }
+      Find(key, idx);
+      delete old_table;
     }
   };
   
