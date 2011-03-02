@@ -39,11 +39,10 @@ namespace Apto {
   // -------------------------------------------------------------------------------------------------------------- 
   template <class T> class Basic
   {
-  private:
+  protected:
     T* m_data;    // Data Array
     int m_size;   // Array Size
     
-  protected:  
     typedef T StoredType;
     
     explicit Basic(int size = 0) : m_data(NULL), m_size(0) { ResizeClear(size); }
@@ -110,7 +109,7 @@ namespace Apto {
   
   template <class T> class Smart
   {
-  private:
+  protected:
     T* m_data;    // Data Array
     int m_size;   // Array Size
     int m_active; // Active Size
@@ -121,7 +120,6 @@ namespace Apto {
     static const int SMRT_INCREASE_FACTOR = 2;
     static const int SMRT_SHRINK_TEST_FACTOR = 4;
     
-  protected:    
     typedef T StoredType;
     
     explicit Smart(int size = 0) : m_data(NULL), m_size(0), m_active(0), m_reserve(0) { ResizeClear(size); }
@@ -209,11 +207,10 @@ namespace Apto {
   
   template <class T> class ManagedPointer
   {
-  private:
+  protected:
     T** m_data;    // Data Array
     int m_size;   // Array Size
     
-  protected:  
     typedef T StoredType;
     
     explicit ManagedPointer(int size = 0) : m_data(NULL), m_size(0) { ResizeClear(size); }
