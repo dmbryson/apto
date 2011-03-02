@@ -104,6 +104,50 @@ public:
 };
 
 
+template <class T> class EnhancedSmart : public Smart<T>
+{
+public:
+  EnhancedSmart(int size = 0) : Smart<T>(size) { ; }
+  EnhancedSmart(const EnhancedSmart& rhs) : Smart<T>(rhs) { ; }
+  
+  class Slice
+  {
+    friend class EnhancedSmart;
+  private:
+    const T* m_data;
+    const int m_size;
+    
+    Slice(const T* data, const int size) : m_data(data), m_size(size) { ; }
+    
+  public:
+    inline int GetSize() const { return m_size; }
+    
+    inline const T& operator[](const int index) const
+    {
+      assert(index >= 0);       // Lower Bounds Error
+      assert(index < m_size); // Upper Bounds Error
+      return m_data[index];
+    }
+  };
+  
+  inline Slice GetSlice(int start, int end) const
+  {
+    assert(start >= 0);
+    assert(end < Smart<T>::m_active);
+    
+    return Slice(Smart<T>::m_data + start, end - start + 1);
+  }
+  
+  EnhancedSmart& operator=(const EnhancedSmart::Slice& rhs)
+  {
+    if (Smart<T>::m_active != rhs.GetSize()) Smart<T>::ResizeClear(rhs.GetSize());
+    for (int i = 0; i < rhs.GetSize(); i++) Smart<T>::m_data[i] = rhs.m_data[i];
+    return *this; 
+  }
+};
+
+typedef Array<int, EnhancedSmart> MarginalArray;
+
 
 static class FExact
 {
@@ -259,8 +303,8 @@ private:
 
   
   Array<double> m_facts; // Log factorials
-  Array<int, Smart> m_row_marginals;
-  Array<int, Smart> m_col_marginals;
+  MarginalArray m_row_marginals;
+  MarginalArray m_col_marginals;
   Array<int> m_key_multipliers;
   PathExtremesHashTable m_path_extremes;
   double m_observed_path;
@@ -272,16 +316,17 @@ public:
   double Calculate();
   
 private:
-  inline bool generateFirstDaughter(const Array<int, Smart>& row_marginals, int n, Array<int, Smart>& row_diff, int& kmax, int& kd);
-  bool generateNewDaughter(int kmax, const Array<int, Smart>& row_marginals, Array<int, Smart>& row_diff, int& idx_dec, int& idx_inc);
+  inline bool generateFirstDaughter(const MarginalArray& row_marginals, int n, MarginalArray& row_diff, int& kmax, int& kd);
+  bool generateNewDaughter(int kmax, const MarginalArray& row_marginals, MarginalArray& row_diff, int& idx_dec, int& idx_inc);
 
-  inline double logMultinomial(int numerator, const Array<int, Smart>& denominator);
+  inline double logMultinomial(int numerator, const MarginalArray& denominator);
+  inline double logMultinomial(int numerator, const MarginalArray::Slice& denominator);
   void removeFromVector(const Array<int, ManualBuffer>& src, int idx_remove, Array<int, ManualBuffer>& dest);
   void reduceZeroInVector(const Array<int, ManualBuffer>& src, int value, int idx_start, Array<int, ManualBuffer>& dest);
   
-  double longestPath(const Array<int, Smart>& row_marginals, const Array<int, Smart>& col_marginals, int marginal_total);
-  void shortestPath(const Array<int, Smart>& row_marginals, const Array<int, Smart>& col_marginals, double& shortest_path);
-  bool shortestPathSpecial(const Array<int, Smart>& row_marginals, const Array<int, Smart>& col_marginals, double& val);
+  double longestPath(const MarginalArray::Slice& row_marginals, const MarginalArray::Slice& col_marginals, int marginal_total);
+  void shortestPath(const MarginalArray::Slice& row_marginals, const MarginalArray::Slice& col_marginals, double& shortest_path);
+  bool shortestPathSpecial(const MarginalArray::Slice& row_marginals, const MarginalArray::Slice& col_marginals, double& val);
   
   inline void recordPath(double path_length, int path_freq, Array<PastPathLength, Smart>& past_entries);
 };
@@ -366,10 +411,10 @@ double FExact::Calculate()
   NodePtr cur_node(new FExactNode(0));
   cur_node->past_entries.Push(PastPathLength(0));
   
-  Array<int, Smart> row_diff(m_row_marginals.GetSize());
-  Array<int> irn(m_row_marginals.GetSize());
-  Array<int, Smart> sub_rows;
-  Array<int, Smart> sub_cols;
+  MarginalArray row_diff(m_row_marginals.GetSize());
+  MarginalArray irn(m_row_marginals.GetSize());
+//  MarginalArray sub_rows;
+//  MarginalArray sub_cols;
 
   while (true) {
     int kb = m_col_marginals.GetSize() - k;
@@ -423,10 +468,8 @@ double FExact::Calculate()
       }
       
       // Build adjusted row array
-      sub_rows.Resize(nrow2);
-      for (int i = nrb; i < irn.GetSize(); i++) sub_rows[i - nrb] = irn[i];
-      sub_cols.Resize(k - 1);
-      for (int i = kb + 1; i < m_col_marginals.GetSize(); i++) sub_cols[i - kb - 1] = m_col_marginals[i];
+      MarginalArray::Slice sub_rows = irn.GetSlice(nrb, irn.GetSize() - 1);
+      MarginalArray::Slice sub_cols = m_col_marginals.GetSlice(kb + 1, m_col_marginals.GetSize() - 1);
       
       double ddf = logMultinomial(m_col_marginals[kb], row_diff);
       double drn = logMultinomial(ntot, sub_rows) - m_den_observed_path + ddf;
@@ -506,7 +549,7 @@ double FExact::Calculate()
   return pvalue;
 }
 
-inline bool FExact::generateFirstDaughter(const Array<int, Smart>& row_marginals, int n, Array<int, Smart>& row_diff, int& kmax, int& kd)
+inline bool FExact::generateFirstDaughter(const MarginalArray& row_marginals, int n, MarginalArray& row_diff, int& kmax, int& kd)
 {
   row_diff.SetAll(0);
   
@@ -525,7 +568,7 @@ inline bool FExact::generateFirstDaughter(const Array<int, Smart>& row_marginals
   return true;
 }
 
-bool FExact::generateNewDaughter(int kmax, const Array<int, Smart>& row_marginals, Array<int, Smart>& row_diff, int& idx_dec, int& idx_inc)
+bool FExact::generateNewDaughter(int kmax, const MarginalArray& row_marginals, MarginalArray& row_diff, int& idx_dec, int& idx_inc)
 {
   if (idx_inc == -1) {
     while (row_diff[++idx_inc] == row_marginals[idx_inc]);
@@ -626,7 +669,14 @@ inline void FExact::recordPath(double path_length, int path_freq, Array<PastPath
 }
 
 
-inline double FExact::logMultinomial(int numerator, const Array<int, Smart>& denominator)
+inline double FExact::logMultinomial(int numerator, const MarginalArray& denominator)
+{
+  double ret_val = m_facts[numerator];
+  for (int i = 0; i < denominator.GetSize(); i++) ret_val -= m_facts[denominator[i]];
+  return ret_val;
+}
+
+inline double FExact::logMultinomial(int numerator, const MarginalArray::Slice& denominator)
 {
   double ret_val = m_facts[numerator];
   for (int i = 0; i < denominator.GetSize(); i++) ret_val -= m_facts[denominator[i]];
@@ -661,7 +711,7 @@ void FExact::reduceZeroInVector(const Array<int, ManualBuffer>& src, int value, 
 }
 
 
-double FExact::longestPath(const Array<int, Smart>& row_marginals, const Array<int, Smart>& col_marginals, int marginal_total)
+double FExact::longestPath(const MarginalArray::Slice& row_marginals, const MarginalArray::Slice& col_marginals, int marginal_total)
 {
   class ValueHashTable
   {
@@ -772,15 +822,15 @@ double FExact::longestPath(const Array<int, Smart>& row_marginals, const Array<i
   
 
   int ntot = marginal_total;
-  Array<int, Smart> lrow;
-  Array<int, Smart> lcol;
+  MarginalArray lrow;
+  MarginalArray lcol;
   
   if (row_marginals.GetSize() >= col_marginals.GetSize()) {
-    lrow = row_marginals;
-    lcol = col_marginals;
+    lrow.EnhancedSmart::operator=(row_marginals);
+    lcol.EnhancedSmart::operator=(col_marginals);
   } else {
-    lrow = col_marginals;
-    lcol = row_marginals;
+    lrow.EnhancedSmart::operator=(col_marginals);
+    lcol.EnhancedSmart::operator=(row_marginals);
   }
   
   Array<int> nt(lcol.GetSize());
@@ -839,10 +889,10 @@ double FExact::longestPath(const Array<int, Smart>& row_marginals, const Array<i
                
                 min = false;
                 if (lrow[lrow.GetSize() - 1] <= lrow[0] + lcol.GetSize()) {
-                  min = shortestPathSpecial(lrow, lcol, val);
+                  min = shortestPathSpecial(lrow.GetSlice(0, lrow.GetSize() - 1), lcol.GetSlice(0, lcol.GetSize() - 1), val);
                 }
                 if (!min && lcol[lcol.GetSize() - 1] <= lcol[0] + lrow.GetSize()) {
-                  min = shortestPathSpecial(lrow, lcol, val);
+                  min = shortestPathSpecial(lrow.GetSlice(0, lrow.GetSize() - 1), lcol.GetSlice(0, lcol.GetSize() - 1), val);
                 }
                 
                 if (min) {
@@ -935,7 +985,7 @@ double FExact::longestPath(const Array<int, Smart>& row_marginals, const Array<i
 }
 
 
-void FExact::shortestPath(const Array<int, Smart>& row_marginals, const Array<int, Smart>& col_marginals, double& shortest_path)
+void FExact::shortestPath(const MarginalArray::Slice& row_marginals, const MarginalArray::Slice& col_marginals, double& shortest_path)
 {
   // Take care of easy cases first
   
@@ -964,9 +1014,10 @@ void FExact::shortestPath(const Array<int, Smart>& row_marginals, const Array<in
   // General Case
   
   
-  
-  SmartPtr<int, NoCopy, ArrayStorage> row_data(new int[(row_marginals.GetSize() + col_marginals.GetSize() + 1) * row_marginals.GetSize()]);
-  SmartPtr<int, NoCopy, ArrayStorage> col_data(new int[(row_marginals.GetSize() + col_marginals.GetSize() + 1) * col_marginals.GetSize()]);
+  const int ROW_BUFFER_SIZE = (row_marginals.GetSize() + col_marginals.GetSize() + 1) * row_marginals.GetSize();
+  const int COL_BUFFER_SIZE = (row_marginals.GetSize() + col_marginals.GetSize() + 1) * col_marginals.GetSize();
+  SmartPtr<int, NoCopy, ArrayStorage> row_data(new int[ROW_BUFFER_SIZE]);
+  SmartPtr<int, NoCopy, ArrayStorage> col_data(new int[COL_BUFFER_SIZE]);
   Array<Array<int, ManualBuffer> > row_stack(row_marginals.GetSize() + col_marginals.GetSize() + 1);
   Array<Array<int, ManualBuffer> > col_stack(row_marginals.GetSize() + col_marginals.GetSize() + 1);
   for (int i = 0; i < row_stack.GetSize(); i++) {
@@ -1103,7 +1154,7 @@ void FExact::shortestPath(const Array<int, Smart>& row_marginals, const Array<in
 }
 
 
-bool FExact::shortestPathSpecial(const Array<int, Smart>& row_marginals, const Array<int, Smart>& col_marginals, double& val)
+bool FExact::shortestPathSpecial(const MarginalArray::Slice& row_marginals, const MarginalArray::Slice& col_marginals, double& val)
 {
   Array<int> nd(row_marginals.GetSize() - 1);
   Array<int> ne(col_marginals.GetSize());
