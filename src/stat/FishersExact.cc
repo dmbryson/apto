@@ -42,9 +42,12 @@
 
 #include "apto/core/Array.h"
 #include "apto/core/ArrayUtils.h"
+#include "apto/core/ConditionVariable.h"
+#include "apto/core/Mutex.h"
 #include "apto/core/Pair.h"
 #include "apto/core/RefCount.h"
 #include "apto/core/SmartPtr.h"
+#include "apto/core/Thread.h"
 
 #include <cmath>
 #include <limits>
@@ -215,6 +218,85 @@ private:
     }
   };
 
+  
+  struct PendingPathExtremes {
+    int key;
+    bool inprogress;
+    MarginalArray rows;
+    MarginalArray cols;
+    double obs2;
+    double ddf;
+    int ntot;
+    PendingPathExtremes() : key(-1), inprogress(false) { ; }
+  };
+  
+  class PendingPathExtremesTable
+  {
+  private:
+    Array<PendingPathExtremes> m_table;
+    int m_size;
+    
+  public:
+    inline PendingPathExtremesTable(int size = 3275) : m_table(size), m_size(0) { ; }
+    
+    int GetSize() { return m_size; }
+    
+    bool Find(int key, int& idx)
+    {
+      int init = key % m_table.GetSize();
+      idx = init;
+      for (; idx < m_table.GetSize(); idx++) {
+        if (m_table[idx].key < 0) {
+          m_size++;
+          m_table[idx].key = key;
+          return false;
+        } else if (m_table[idx].key == key) {
+          return true;
+        }
+      }
+      for (idx = 0; idx < init; idx++) {
+        if (m_table[idx].key < 0) {
+          m_size++;
+          m_table[idx].key = key;
+          return false;
+        } else if (m_table[idx].key == key) {
+          return true;
+        }
+      }
+      Rehash(key, idx);
+      return false;
+    }
+    
+    int Pop()
+    {
+      assert(m_size > 0);
+      for (int i = 0; i < m_table.GetSize(); i++) if (m_table[i].key >= 0 && !m_table[i].inprogress) {
+        m_table[i].inprogress = true;
+        return i;
+      }
+      return -1;
+    }
+    void Remove(int idx) { m_table[idx].key = -1; m_table[idx].inprogress = false; m_size--; }
+    
+    inline PendingPathExtremes& operator[](int idx) { return m_table[idx]; }
+    
+  private:
+    void Rehash(int key, int& idx)
+    {
+      Array<PendingPathExtremes> old_table(m_table);
+      m_table.ResizeClear(old_table.GetSize() * 2);
+      for (int i = 0; i < old_table.GetSize(); i++) {
+        int t_idx;
+        Find(old_table[i].key, t_idx);
+        m_table[t_idx].rows = old_table[i].rows;
+        m_table[t_idx].cols = old_table[i].cols;
+      }
+      Find(key, idx);
+    }
+  };
+
+  
+  
   struct PastPathLength
   {
     double value;
@@ -306,29 +388,64 @@ private:
   MarginalArray m_row_marginals;
   MarginalArray m_col_marginals;
   Array<int> m_key_multipliers;
-  PathExtremesHashTable m_path_extremes;
   double m_observed_path;
   double m_den_observed_path;
+  double m_pvalue;
+  
+  PathExtremesHashTable m_path_extremes;
+  
+  Mutex m_path_extremes_mutex;
+  ConditionVariable m_path_extremes_cond;
+  ConditionVariable m_path_extremes_cond_complete;
+  PendingPathExtremesTable m_pending_path_extremes;
+  Array<PathExtremes, Smart> m_completed_path_extremes;
+  bool m_pending_paths_term;
+  
+  struct PendingPathNode {
+    NodePtr node;
+    double obs2;
+    double drn;
+    double ddf;
+    int kval;
+    
+    PendingPathNode() : node(NULL) { ; }
+  };
+  Array<PendingPathNode, Smart> m_pending_path_nodes;
+  
+  class PathExtremesCalc : public Thread
+  {
+  private:
+    FExact* m_fexact;
+    
+  public:
+    PathExtremesCalc(FExact* fexact) : m_fexact(fexact) { ; }
+    
+  protected:
+    void Run();
+  };
+  Array<PathExtremesCalc*> m_path_calcs;
   
 public:
   FExact(const Stat::ContingencyTable& table, double tolerance);
   
   double Calculate();
+  double ThreadedCalculate();
   
 private:
   inline bool generateFirstDaughter(const MarginalArray& row_marginals, int n, MarginalArray& row_diff, int& kmax, int& kd);
   bool generateNewDaughter(int kmax, const MarginalArray& row_marginals, MarginalArray& row_diff, int& idx_dec, int& idx_inc);
+  void handlePastPaths(NodePtr& cur_node, double obs2, double obs3, double ddf, double drn, double kval, NodeHashTable& nht);
 
   inline double logMultinomial(int numerator, const MarginalArray& denominator);
   inline double logMultinomial(int numerator, const MarginalArray::Slice& denominator);
-  void removeFromVector(const Array<int, ManualBuffer>& src, int idx_remove, Array<int, ManualBuffer>& dest);
-  void reduceZeroInVector(const Array<int, ManualBuffer>& src, int value, int idx_start, Array<int, ManualBuffer>& dest);
+  inline void removeFromVector(const Array<int, ManualBuffer>& src, int idx_remove, Array<int, ManualBuffer>& dest);
+  inline void reduceZeroInVector(const Array<int, ManualBuffer>& src, int value, int idx_start, Array<int, ManualBuffer>& dest);
   
   double longestPath(const MarginalArray::Slice& row_marginals, const MarginalArray::Slice& col_marginals, int marginal_total);
   void shortestPath(const MarginalArray::Slice& row_marginals, const MarginalArray::Slice& col_marginals, double& shortest_path);
   bool shortestPathSpecial(const MarginalArray::Slice& row_marginals, const MarginalArray::Slice& col_marginals, double& val);
   
-  inline void recordPath(double path_length, int path_freq, Array<PastPathLength, Smart>& past_entries);
+  void recordPath(double path_length, int path_freq, Array<PastPathLength, Smart>& past_entries);
 };
 
 
@@ -342,7 +459,7 @@ double Stat::FishersExact(const ContingencyTable& table)
   
   const double TOLERANCE = 3.4525e-7;  // Tolerance, as used in Algorithm 643
   FExact fe(table, TOLERANCE);
-  return fe.Calculate();
+  return fe.ThreadedCalculate();
 }
 
 
@@ -351,7 +468,9 @@ double Stat::FishersExact(const ContingencyTable& table)
 // -------------------------------------------------------------------------------------------------------------- 
 
 FExact::FExact(const Stat::ContingencyTable& table, double tolerance)
-  : m_tolerance(tolerance), m_facts(table.MarginalTotal() + 1)
+  : m_tolerance(tolerance)
+  , m_facts(table.MarginalTotal() + 1)
+  , m_pvalue(0.0)
 {
   if (table.NumRows() > table.NumCols()) {
     m_row_marginals = table.ColMarginals();
@@ -403,8 +522,6 @@ FExact::FExact(const Stat::ContingencyTable& table, double tolerance)
 
 double FExact::Calculate()
 {
-  double pvalue = 0.0;
-  
   NodeHashTable nht[2];
   
   int k = m_col_marginals.GetSize();
@@ -413,8 +530,8 @@ double FExact::Calculate()
   
   MarginalArray row_diff(m_row_marginals.GetSize());
   MarginalArray irn(m_row_marginals.GetSize());
-//  MarginalArray sub_rows;
-//  MarginalArray sub_cols;
+  
+  printf("k = %d\n", k);
 
   while (true) {
     int kb = m_col_marginals.GetSize() - k;
@@ -427,8 +544,9 @@ double FExact::Calculate()
         cur_node = nht[(k + 1) & 0x1].Pop();
         if (!cur_node) {
           k--;
+          printf("k = %d\n", k);
           m_path_extremes.ClearTable();
-          if (k < 2) return pvalue;
+          if (k < 2) return m_pvalue;
         }
       } while (!cur_node);
       
@@ -508,32 +626,16 @@ double FExact::Calculate()
         obs3 = obs2;
       }
       
-      for (int i = 0; i < cur_node->past_entries.GetSize(); i++) {
-        double past_path = cur_node->past_entries[i].value;
-        int path_freq = cur_node->past_entries[i].observed;
-        if (past_path <= obs3) {
-          // Path shorter than longest path, add to the pvalue and continue
-          pvalue += (double)(path_freq) * exp(past_path + drn);
-        } else if (past_path < obs2) {
-          int nht_idx;
-          double new_path = past_path + ddf;
-          if (nht[k & 0x1].Find(kval, nht_idx)) {
-            // Existing Node was found            
-            recordPath(new_path, path_freq, nht[k & 0x1][nht_idx].past_entries);
-          } else {
-            // New Node added, insert this observed path
-            nht[k & 0x1][nht_idx].past_entries.Push(PastPathLength(new_path, path_freq));
-          }
-        }
-      }
+      handlePastPaths(cur_node, obs2, obs3, ddf, drn, kval, nht[k & 0x1]);
     } while (generateNewDaughter(kmax, m_row_marginals, row_diff, kd, ks));
     
     do {
       cur_node = nht[(k + 1) & 0x1].Pop();
       if (!cur_node) {
         k--;
+        printf("k = %d\n", k);
         m_path_extremes.ClearTable();
-        if (k < 2) return pvalue;
+        if (k < 2) return m_pvalue;
       }
     } while (!cur_node);
     
@@ -546,7 +648,230 @@ double FExact::Calculate()
     m_row_marginals[0] = kval;
   }
   
-  return pvalue;
+  return m_pvalue;
+}
+
+double FExact::ThreadedCalculate()
+{
+  NodeHashTable nht[2];
+  
+  m_path_calcs.Resize(8);
+  for (int i = 0; i < m_path_calcs.GetSize(); i++) {
+    m_path_calcs[i] = new PathExtremesCalc(this);
+    m_path_calcs[i]->Start();
+  }
+  
+  int k = m_col_marginals.GetSize();
+  NodePtr cur_node(new FExactNode(0));
+  cur_node->past_entries.Push(PastPathLength(0));
+  
+  MarginalArray row_diff(m_row_marginals.GetSize());
+  MarginalArray irn(m_row_marginals.GetSize());
+  
+  printf("k = %d\n", k);
+  
+  while (true) {
+    int kb = m_col_marginals.GetSize() - k;
+    int ks = -1;
+    int kmax;
+    int kd;
+    
+    if (!generateFirstDaughter(m_row_marginals, m_col_marginals[kb], row_diff, kmax, kd)) {
+      if (m_pending_path_nodes.GetSize()) {
+        m_path_extremes_mutex.Lock();
+        while (m_pending_path_extremes.GetSize()) {
+          m_path_extremes_cond_complete.Wait(m_path_extremes_mutex);
+        }
+        for (int i = 0; i < m_completed_path_extremes.GetSize(); i++) {
+          PathExtremes& path = m_completed_path_extremes[i];
+          int path_idx;
+          m_path_extremes.Find(path.key, path_idx);
+          m_path_extremes[path_idx].longest_path = path.longest_path;
+          m_path_extremes[path_idx].shortest_path = path.shortest_path;
+        }
+        m_completed_path_extremes.Resize(0);
+        m_path_extremes_mutex.Unlock();
+        
+        for (int i = 0; i < m_pending_path_nodes.GetSize(); i++) {
+          PendingPathNode& p = m_pending_path_nodes[i];
+          int path_idx;
+          m_path_extremes.Find(p.kval, path_idx);
+          double obs2 = p.obs2;
+          double obs3 = obs2 - m_path_extremes[path_idx].longest_path;
+          obs2 = obs2 - m_path_extremes[path_idx].shortest_path;
+          handlePastPaths(p.node, obs2, obs3, p.ddf, p.drn, p.kval, nht[k & 0x1]);
+          p.node = NodePtr(NULL);
+        }
+        m_pending_path_nodes.Resize(0);
+      }
+
+      do {
+        cur_node = nht[(k + 1) & 0x1].Pop();
+        if (!cur_node) {
+          k--;
+          printf("k = %d\n", k);
+          m_path_extremes.ClearTable();
+          if (k < 2) return m_pvalue;
+        }
+      } while (!cur_node);
+      
+      // Unpack node row marginals from key
+      int kval = cur_node->key;
+      for (int i = m_row_marginals.GetSize() - 1; i > 0; i--) {
+        m_row_marginals[i] = kval / m_key_multipliers[i];
+        kval -= m_row_marginals[i] * m_key_multipliers[i];
+      }
+      m_row_marginals[0] = kval;
+      continue;
+    }
+    
+    int ntot = 0;
+    for (int i = kb + 1; i < m_col_marginals.GetSize(); i++) ntot += m_col_marginals[i];
+    
+    do {
+      for (int i = 0; i < m_row_marginals.GetSize(); i++) irn[i] = m_row_marginals[i] - row_diff[i];
+      
+      int nrb;
+      int nrow2;
+      if (k > 2) {
+        if (irn.GetSize() == 2) {
+          if (irn[0] > irn[1]) irn.Swap(0, 1);
+        } else {
+          QSort(irn);
+        }
+        
+        // Adjust for zero start
+        int i = 0;
+        for (; i < irn.GetSize(); i++) if (irn[i] != 0) break;
+        nrb = i;
+        nrow2 = irn.GetSize() - i;
+      } else {
+        nrb = 0;
+        nrow2 = irn.GetSize();
+      }
+      
+      // Build adjusted row array
+      MarginalArray::Slice sub_rows = irn.GetSlice(nrb, irn.GetSize() - 1);
+      MarginalArray::Slice sub_cols = m_col_marginals.GetSlice(kb + 1, m_col_marginals.GetSize() - 1);
+      
+      double ddf = logMultinomial(m_col_marginals[kb], row_diff);
+      double drn = logMultinomial(ntot, sub_rows) - m_den_observed_path + ddf;
+      
+      int kval = 0;
+      int path_idx = -1;
+      double obs2, obs3;
+      
+      if (k > 2) {
+        // compute hash table key for current table
+        kval = irn[0] + irn[1] * m_key_multipliers[1];
+        for (int i = 2; i < irn.GetSize(); i++) kval += irn[i] * m_key_multipliers[i];
+        
+        obs2 = m_observed_path - m_facts[m_col_marginals[kb + 1]] - m_facts[m_col_marginals[kb + 2]] - ddf;
+        for (int i = 3; i <= (k - 1); i++) obs2 -= m_facts[m_col_marginals[kb + i]];
+
+        
+        if (!m_path_extremes.Find(kval, path_idx)) {
+          int found = -1;
+          m_path_extremes_mutex.Lock();
+          // handle completed
+          for (int i = 0; i < m_completed_path_extremes.GetSize(); i++) {
+            PathExtremes& path = m_completed_path_extremes[i];
+            m_path_extremes.Find(path.key, path_idx);
+            m_path_extremes[path_idx].longest_path = path.longest_path;
+            m_path_extremes[path_idx].shortest_path = path.shortest_path;
+            if (path.key == kval) found = path_idx;
+          }
+          m_completed_path_extremes.Resize(0);
+          
+//          if (found < 0) {
+            // check pending
+            if (!m_pending_path_extremes.Find(kval, path_idx)) {
+              m_pending_path_extremes[path_idx].rows.ResizeClear(sub_rows.GetSize());
+              for (int i = 0; i < sub_rows.GetSize(); i++) m_pending_path_extremes[path_idx].rows[i] = sub_rows[i];
+              m_pending_path_extremes[path_idx].cols.ResizeClear(sub_cols.GetSize());
+              for (int i = 0; i < sub_cols.GetSize(); i++) m_pending_path_extremes[path_idx].cols[i] = sub_cols[i];
+              m_pending_path_extremes[path_idx].ntot = ntot;
+              m_pending_path_extremes[path_idx].obs2 = obs2;
+              m_pending_path_extremes[path_idx].ddf = ddf;
+            }
+            m_path_extremes_mutex.Unlock();
+            m_path_extremes_cond.Signal();
+        }
+            m_pending_path_nodes.Resize(m_pending_path_nodes.GetSize() + 1);
+            m_pending_path_nodes[m_pending_path_nodes.GetSize() - 1].node = cur_node;
+            m_pending_path_nodes[m_pending_path_nodes.GetSize() - 1].obs2 = obs2;
+            m_pending_path_nodes[m_pending_path_nodes.GetSize() - 1].drn = drn;
+            m_pending_path_nodes[m_pending_path_nodes.GetSize() - 1].ddf = ddf;
+            m_pending_path_nodes[m_pending_path_nodes.GetSize() - 1].kval = kval;            
+//          } else {
+//            // Found in completed
+//            m_path_extremes_mutex.Unlock();
+//            obs3 = obs2 - m_path_extremes[found].longest_path;
+//            obs2 = obs2 - m_path_extremes[found].shortest_path;
+//            handlePastPaths(cur_node, obs2, obs3, ddf, drn, kval, nht[k & 0x1]);            
+//          }
+//          
+//        } else {
+//          obs3 = obs2 - m_path_extremes[path_idx].longest_path;
+//          obs2 = obs2 - m_path_extremes[path_idx].shortest_path;
+//          handlePastPaths(cur_node, obs2, obs3, ddf, drn, kval, nht[k & 0x1]);
+//        }
+      } else {
+        obs2 = m_observed_path - drn - m_den_observed_path;
+        obs3 = obs2;
+        handlePastPaths(cur_node, obs2, obs3, ddf, drn, kval, nht[k & 0x1]);
+      }
+      
+    } while (generateNewDaughter(kmax, m_row_marginals, row_diff, kd, ks));
+    
+    if (m_pending_path_nodes.GetSize()) {
+      m_path_extremes_mutex.Lock();
+      while (m_pending_path_extremes.GetSize()) {
+        m_path_extremes_cond_complete.Wait(m_path_extremes_mutex);
+      }
+      for (int i = 0; i < m_completed_path_extremes.GetSize(); i++) {
+        PathExtremes& path = m_completed_path_extremes[i];
+        int path_idx;
+        m_path_extremes.Find(path.key, path_idx);
+        m_path_extremes[path_idx].longest_path = path.longest_path;
+        m_path_extremes[path_idx].shortest_path = path.shortest_path;
+      }
+      m_completed_path_extremes.Resize(0);
+      m_path_extremes_mutex.Unlock();
+
+      for (int i = 0; i < m_pending_path_nodes.GetSize(); i++) {
+        PendingPathNode& p = m_pending_path_nodes[i];
+        int path_idx;
+        m_path_extremes.Find(p.kval, path_idx);
+        double obs2 = p.obs2;
+        double obs3 = obs2 - m_path_extremes[path_idx].longest_path;
+        obs2 = obs2 - m_path_extremes[path_idx].shortest_path;
+        handlePastPaths(p.node, obs2, obs3, p.ddf, p.drn, p.kval, nht[k & 0x1]);
+        p.node = NodePtr(NULL);
+      }
+      m_pending_path_nodes.Resize(0);
+    }
+    
+    do {
+      cur_node = nht[(k + 1) & 0x1].Pop();
+      if (!cur_node) {
+        k--;
+        printf("k = %d\n", k);
+        m_path_extremes.ClearTable();
+        if (k < 2) return m_pvalue;
+      }
+    } while (!cur_node);
+    
+    // Unpack node row marginals from key
+    int kval = cur_node->key;
+    for (int i = m_row_marginals.GetSize() - 1; i > 0; i--) {
+      m_row_marginals[i] = kval / m_key_multipliers[i];
+      kval -= m_row_marginals[i] * m_key_multipliers[i];
+    }
+    m_row_marginals[0] = kval;
+  }
+  
+  return m_pvalue;
 }
 
 inline bool FExact::generateFirstDaughter(const MarginalArray& row_marginals, int n, MarginalArray& row_diff, int& kmax, int& kd)
@@ -629,7 +954,30 @@ bool FExact::generateNewDaughter(int kmax, const MarginalArray& row_marginals, M
   return true;
 }
 
-inline void FExact::recordPath(double path_length, int path_freq, Array<PastPathLength, Smart>& past_entries)
+void FExact::handlePastPaths(NodePtr& cur_node, double obs2, double obs3, double ddf, double drn, double kval,
+                             NodeHashTable& nht)
+{
+  for (int i = 0; i < cur_node->past_entries.GetSize(); i++) {
+    double past_path = cur_node->past_entries[i].value;
+    int path_freq = cur_node->past_entries[i].observed;
+    if (past_path <= obs3) {
+      // Path shorter than longest path, add to the pvalue and continue
+      m_pvalue += (double)(path_freq) * exp(past_path + drn);
+    } else if (past_path < obs2) {
+      int nht_idx;
+      double new_path = past_path + ddf;
+      if (nht.Find(kval, nht_idx)) {
+        // Existing Node was found            
+        recordPath(new_path, path_freq, nht[nht_idx].past_entries);
+      } else {
+        // New Node added, insert this observed path
+        nht[nht_idx].past_entries.Push(PastPathLength(new_path, path_freq));
+      }
+    }
+  }
+}
+
+void FExact::recordPath(double path_length, int path_freq, Array<PastPathLength, Smart>& past_entries)
 {
   // Search for past path within m_tolerance and add observed frequency to it
   double test1 = path_length - m_tolerance;
@@ -684,7 +1032,7 @@ inline double FExact::logMultinomial(int numerator, const MarginalArray::Slice& 
 }
 
 
-void FExact::removeFromVector(const Array<int, ManualBuffer>& src, int idx_remove, Array<int, ManualBuffer>& dest)
+inline void FExact::removeFromVector(const Array<int, ManualBuffer>& src, int idx_remove, Array<int, ManualBuffer>& dest)
 {
   dest.Resize(src.GetSize() - 1);
   for (int i = 0; i < idx_remove; i++) dest[i] = src[i];
@@ -692,7 +1040,7 @@ void FExact::removeFromVector(const Array<int, ManualBuffer>& src, int idx_remov
 }
 
 
-void FExact::reduceZeroInVector(const Array<int, ManualBuffer>& src, int value, int idx_start, Array<int, ManualBuffer>& dest)
+inline void FExact::reduceZeroInVector(const Array<int, ManualBuffer>& src, int value, int idx_start, Array<int, ManualBuffer>& dest)
 {
   dest.Resize(src.GetSize());
   
@@ -1196,6 +1544,40 @@ bool FExact::shortestPathSpecial(const MarginalArray::Slice& row_marginals, cons
 }
 
 
+void FExact::PathExtremesCalc::Run()
+{
+  while (true) {
+    m_fexact->m_path_extremes_mutex.Lock();
+    while (m_fexact->m_pending_path_extremes.GetSize() == 0) {
+      m_fexact->m_path_extremes_cond.Wait(m_fexact->m_path_extremes_mutex);
+    }
+    int path_idx = m_fexact->m_pending_path_extremes.Pop();
+    m_fexact->m_path_extremes_mutex.Unlock();
+    if (path_idx < 0) continue;
+    
+    PendingPathExtremes& p = m_fexact->m_pending_path_extremes[path_idx];
+    
+    
+    double longest_path = m_fexact->longestPath(p.rows.GetSlice(0, p.rows.GetSize() - 1), p.cols.GetSlice(0, p.cols.GetSize() - 1), p.ntot);
+    if (longest_path > 0.0) longest_path = 0.0;
+    
+    double dspt = m_fexact->m_observed_path - p.obs2 - p.ddf;
+    double shortest_path = dspt;
+    m_fexact->shortestPath(p.rows.GetSlice(0, p.rows.GetSize() - 1), p.cols.GetSlice(0, p.cols.GetSize() - 1), shortest_path);
+    shortest_path -= dspt;
+    if (shortest_path > 0.0) shortest_path = 0.0;
+
+    m_fexact->m_path_extremes_mutex.Lock();
+    m_fexact->m_completed_path_extremes.Resize(m_fexact->m_completed_path_extremes.GetSize() + 1);
+    m_fexact->m_completed_path_extremes[m_fexact->m_completed_path_extremes.GetSize() - 1].key = p.key;
+    m_fexact->m_completed_path_extremes[m_fexact->m_completed_path_extremes.GetSize() - 1].longest_path = longest_path;
+    m_fexact->m_completed_path_extremes[m_fexact->m_completed_path_extremes.GetSize() - 1].shortest_path = shortest_path;
+    m_fexact->m_pending_path_extremes.Remove(path_idx);
+    m_fexact->m_path_extremes_mutex.Unlock();
+    m_fexact->m_path_extremes_cond_complete.Signal();
+  }
+  
+}
 
 
 // Internal Function Definitions
