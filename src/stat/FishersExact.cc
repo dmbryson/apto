@@ -58,6 +58,17 @@
 using namespace Apto;
 
 
+// Exported Function Declarations
+// -------------------------------------------------------------------------------------------------------------- 
+
+namespace Apto {
+  namespace Stat {
+    double FishersExact(const ContingencyTable& table);
+  };
+};
+
+
+
 // Internal Function Declarations
 // -------------------------------------------------------------------------------------------------------------- 
 
@@ -154,8 +165,150 @@ typedef Array<int, EnhancedSmart> MarginalArray;
 
 static class FExact
 {
+public:
+  // FExact Public Methods
+  // ------------------------------------------------------------------------------------------------------------ 
+  
+  FExact(const Stat::ContingencyTable& table, double tolerance);
+  
+  double Calculate();
+  double ThreadedCalculate();
+  
+
 private:
-  const double m_tolerance;
+  // FExact Internal Type Declarations
+  // ------------------------------------------------------------------------------------------------------------ 
+  
+  // Main Node
+  class FExactNode;
+  struct PastPathLength;
+  class NodeHashTable;
+  typedef SmartPtr<FExactNode, InternalRCObject> NodePtr;
+
+  
+  // Path Extremes
+  struct PathExtremes;
+  class PathExtremesHashTable;
+  struct PendingPathExtremes;
+  class PendingPathExtremesTable;
+  struct PendingPathNode;
+  class PathExtremesCalc;
+
+  
+private:
+  // FExact Internal Methods
+  // ------------------------------------------------------------------------------------------------------------ 
+  
+  inline double logMultinomial(int numerator, const MarginalArray& denominator);
+  inline double logMultinomial(int numerator, const MarginalArray::Slice& denominator);
+  
+  // Core Algorithm
+  inline bool generateFirstDaughter(const MarginalArray& row_marginals, int n, MarginalArray& row_diff, int& kmax, int& kd);
+  bool generateNewDaughter(int kmax, const MarginalArray& row_marginals, MarginalArray& row_diff, int& idx_dec, int& idx_inc);
+  void handlePastPaths(NodePtr& cur_node, double obs2, double obs3, double ddf, double drn, double kval, NodeHashTable& nht);
+  void recordPath(double path_length, int path_freq, Array<PastPathLength, Smart>& past_entries);
+  
+  
+  // Longest Path
+  double longestPath(const MarginalArray::Slice& row_marginals, const MarginalArray::Slice& col_marginals, int marginal_total);
+  bool longestPathSpecial(const MarginalArray::Slice& row_marginals, const MarginalArray::Slice& col_marginals, double& val);
+  
+  
+  // Shortest Path
+  void shortestPath(const MarginalArray::Slice& row_marginals, const MarginalArray::Slice& col_marginals, double& shortest_path);
+  inline void removeFromVector(const Array<int, ManualBuffer>& src, int idx_remove, Array<int, ManualBuffer>& dest);
+  inline void reduceZeroInVector(const Array<int, ManualBuffer>& src, int value, int idx_start, Array<int, ManualBuffer>& dest);
+
+
+private:
+  // FExact Internal Type Definitions
+  // ------------------------------------------------------------------------------------------------------------ 
+
+  struct PastPathLength
+  {
+    double value;
+    int observed;
+    int next_left;
+    int next_right;
+    
+    PastPathLength(double in_value = 0.0) : value(in_value), observed(1), next_left(-1), next_right(-1) { ; }
+    PastPathLength(double in_value, int in_freq) : value(in_value), observed(in_freq), next_left(-1), next_right(-1) { ; }
+  };
+  
+  class FExactNode : public RefCountObject
+  {
+  public:
+    int key;
+    Array<PastPathLength, Smart> past_entries;
+    
+    FExactNode(int in_key) : key(in_key) { ; }
+    virtual ~FExactNode() { ; }
+  };
+  
+  class NodeHashTable
+  {
+  public:
+    typedef SmartPtr<FExactNode, InternalRCObject> NodePtr;
+  private:
+    Array<NodePtr> m_table;
+    int m_last;
+    
+  public:
+    inline NodeHashTable(int size = 3275) : m_table(size), m_last(-1) { ; }
+    
+    bool Find(int key, int& idx)
+    {
+      int init = key % m_table.GetSize();
+      idx = init;
+      for (; idx < m_table.GetSize(); idx++) {
+        if (!m_table[idx]) {
+          m_table[idx] = NodePtr(new FExactNode(key));
+          return false;
+        } else if (m_table[idx]->key == key) {
+          return true;
+        }
+      }
+      for (idx = 0; idx < init; idx++) {
+        if (!m_table[idx]) {
+          m_table[idx] = NodePtr(new FExactNode(key));
+          return false;
+        } else if (m_table[idx]->key == key) {
+          return true;
+        }
+      }
+      Rehash(key, idx);
+      return false;
+    }
+    
+    inline FExactNode& operator[](int idx) { return *m_table[idx]; }
+    
+    NodePtr Pop()
+    {
+      for (++m_last; m_last < m_table.GetSize(); m_last++) {
+        if (m_table[m_last]) {
+          NodePtr tmp = m_table[m_last];
+          m_table[m_last] = NodePtr(NULL);
+          return tmp;
+        }
+      }
+      m_last = -1;
+      return NodePtr(NULL);
+    }
+  private:
+    void Rehash(int key, int& idx)
+    {
+      Array<NodePtr> old_table(m_table);
+      m_table.ResizeClear(old_table.GetSize() * 2);
+      for (int i = 0; i < old_table.GetSize(); i++) {
+        int t_idx;
+        Find(old_table[i]->key, t_idx);
+        m_table[t_idx] = old_table[i];
+      }
+      Find(key, idx);
+    }
+  };
+
+  
   
   struct PathExtremes {
     int key;
@@ -217,7 +370,7 @@ private:
       Find(key, idx);
     }
   };
-
+  
   
   struct PendingPathExtremes {
     int key;
@@ -294,112 +447,7 @@ private:
       Find(key, idx);
     }
   };
-
   
-  
-  struct PastPathLength
-  {
-    double value;
-    int observed;
-    int next_left;
-    int next_right;
-    
-    PastPathLength(double in_value = 0.0) : value(in_value), observed(1), next_left(-1), next_right(-1) { ; }
-    PastPathLength(double in_value, int in_freq) : value(in_value), observed(in_freq), next_left(-1), next_right(-1) { ; }
-  };
-  
-  
-  class FExactNode : public RefCountObject
-  {
-  public:
-    int key;
-    Array<PastPathLength, Smart> past_entries;
-    
-    FExactNode(int in_key) : key(in_key) { ; }
-    virtual ~FExactNode() { ; }
-  };
-  typedef SmartPtr<FExactNode, InternalRCObject> NodePtr;
-  
-  class NodeHashTable
-  {
-  public:
-    typedef SmartPtr<FExactNode, InternalRCObject> NodePtr;
-  private:
-    Array<NodePtr> m_table;
-    int m_last;
-    
-  public:
-    inline NodeHashTable(int size = 3275) : m_table(size), m_last(-1) { ; }
-    
-    bool Find(int key, int& idx)
-    {
-      int init = key % m_table.GetSize();
-      idx = init;
-      for (; idx < m_table.GetSize(); idx++) {
-        if (!m_table[idx]) {
-          m_table[idx] = NodePtr(new FExactNode(key));
-          return false;
-        } else if (m_table[idx]->key == key) {
-          return true;
-        }
-      }
-      for (idx = 0; idx < init; idx++) {
-        if (!m_table[idx]) {
-          m_table[idx] = NodePtr(new FExactNode(key));
-          return false;
-        } else if (m_table[idx]->key == key) {
-          return true;
-        }
-      }
-      Rehash(key, idx);
-      return false;
-    }
-    
-    inline FExactNode& operator[](int idx) { return *m_table[idx]; }
-    
-    NodePtr Pop()
-    {
-      for (++m_last; m_last < m_table.GetSize(); m_last++) {
-        if (m_table[m_last]) {
-          NodePtr tmp = m_table[m_last];
-          m_table[m_last] = NodePtr(NULL);
-          return tmp;
-        }
-      }
-      m_last = -1;
-      return NodePtr(NULL);
-    }
-  private:
-    void Rehash(int key, int& idx)
-    {
-      Array<NodePtr> old_table(m_table);
-      m_table.ResizeClear(old_table.GetSize() * 2);
-      for (int i = 0; i < old_table.GetSize(); i++) {
-        int t_idx;
-        Find(old_table[i]->key, t_idx);
-        m_table[t_idx] = old_table[i];
-      }
-      Find(key, idx);
-    }
-  };
-
-  
-  Array<double> m_facts; // Log factorials
-  MarginalArray m_row_marginals;
-  MarginalArray m_col_marginals;
-  Array<int> m_key_multipliers;
-  double m_observed_path;
-  double m_den_observed_path;
-  double m_pvalue;
-  
-  PathExtremesHashTable m_path_extremes;
-  
-  Mutex m_path_extremes_mutex;
-  ConditionVariable m_path_extremes_cond;
-  ConditionVariable m_path_extremes_cond_complete;
-  PendingPathExtremesTable m_pending_path_extremes;
-  Array<PathExtremes, Smart> m_completed_path_extremes;
-  bool m_pending_paths_term;
   
   struct PendingPathNode {
     NodePtr node;
@@ -410,8 +458,8 @@ private:
     
     PendingPathNode() : node(NULL) { ; }
   };
-  Array<PendingPathNode, Smart> m_pending_path_nodes;
   
+    
   class PathExtremesCalc : public Thread
   {
   private:
@@ -423,37 +471,55 @@ private:
   protected:
     void Run();
   };
-  Array<PathExtremesCalc*> m_path_calcs;
   
-public:
-  FExact(const Stat::ContingencyTable& table, double tolerance);
-  
-  double Calculate();
-  double ThreadedCalculate();
   
 private:
-  inline bool generateFirstDaughter(const MarginalArray& row_marginals, int n, MarginalArray& row_diff, int& kmax, int& kd);
-  bool generateNewDaughter(int kmax, const MarginalArray& row_marginals, MarginalArray& row_diff, int& idx_dec, int& idx_inc);
-  void handlePastPaths(NodePtr& cur_node, double obs2, double obs3, double ddf, double drn, double kval, NodeHashTable& nht);
+  // FExact Class Variable Declarations
+  // ------------------------------------------------------------------------------------------------------------ 
+  
+  // Constants
+  const double m_tolerance;
+  
+  
+  // Pre-calculated Values
+  MarginalArray m_row_marginals;
+  MarginalArray m_col_marginals;
+  Array<double> m_facts; // Log factorials
+  Array<int> m_key_multipliers;
+  double m_observed_path;
+  double m_den_observed_path;
 
-  inline double logMultinomial(int numerator, const MarginalArray& denominator);
-  inline double logMultinomial(int numerator, const MarginalArray::Slice& denominator);
-  inline void removeFromVector(const Array<int, ManualBuffer>& src, int idx_remove, Array<int, ManualBuffer>& dest);
-  inline void reduceZeroInVector(const Array<int, ManualBuffer>& src, int value, int idx_start, Array<int, ManualBuffer>& dest);
   
-  double longestPath(const MarginalArray::Slice& row_marginals, const MarginalArray::Slice& col_marginals, int marginal_total);
-  void shortestPath(const MarginalArray::Slice& row_marginals, const MarginalArray::Slice& col_marginals, double& shortest_path);
-  bool shortestPathSpecial(const MarginalArray::Slice& row_marginals, const MarginalArray::Slice& col_marginals, double& val);
+  // Main Calculated Value
+  double m_pvalue;
   
-  void recordPath(double path_length, int path_freq, Array<PastPathLength, Smart>& past_entries);
+  
+  // Core Algorithm Support
+  PathExtremesHashTable m_path_extremes;
+  
+  
+  // Threaded Core Algorithm Support
+  
+  
+  
+  // Path Extremes Threading Support
+  Mutex m_path_extremes_mutex;
+  ConditionVariable m_path_extremes_cond;
+  ConditionVariable m_path_extremes_cond_complete;
+  PendingPathExtremesTable m_pending_path_extremes;
+  Array<PathExtremes, Smart> m_completed_path_extremes;
+  bool m_pending_paths_term;
+
+  Array<PendingPathNode, Smart> m_pending_path_nodes;
+  Array<PathExtremesCalc*> m_path_calcs;
 };
 
 
 
-// Exported Methods
+// Exported Function Definitions
 // -------------------------------------------------------------------------------------------------------------- 
 
-double Stat::FishersExact(const ContingencyTable& table)
+double Apto::Stat::FishersExact(const ContingencyTable& table)
 {
   if (table.MarginalTotal() == 0.0) return std::numeric_limits<double>::quiet_NaN();  // All elements are 0
   
@@ -464,7 +530,7 @@ double Stat::FishersExact(const ContingencyTable& table)
 
 
 
-// FExact Methods
+// FExact Constructor and Support Methods
 // -------------------------------------------------------------------------------------------------------------- 
 
 FExact::FExact(const Stat::ContingencyTable& table, double tolerance)
@@ -472,6 +538,7 @@ FExact::FExact(const Stat::ContingencyTable& table, double tolerance)
   , m_facts(table.MarginalTotal() + 1)
   , m_pvalue(0.0)
 {
+  // Store table marginals for use in calculation
   if (table.NumRows() > table.NumCols()) {
     m_row_marginals = table.ColMarginals();
     m_col_marginals = table.RowMarginals();
@@ -480,16 +547,25 @@ FExact::FExact(const Stat::ContingencyTable& table, double tolerance)
     m_col_marginals = table.ColMarginals();
   }
   
+  
+  // Sort row and column marginals
   QSort(m_row_marginals);
   QSort(m_col_marginals);
 
+  
+  // Set up key multipliers
   m_key_multipliers.Resize(m_row_marginals.GetSize());
   m_key_multipliers[0] = 1;
   for (int i = 1; i < m_row_marginals.GetSize(); i++)
     m_key_multipliers[i] = m_key_multipliers[i - 1] * (m_row_marginals[i - 1] + 1);
   
-  assert((m_row_marginals[m_row_marginals.GetSize() - 2] + 1) <= (std::numeric_limits<int>::max() / m_key_multipliers[m_row_marginals.GetSize() - 2]));
+
+  // Ensure that the maximum key will fit within an integer
+  assert((m_row_marginals[m_row_marginals.GetSize() - 2] + 1) <=
+         (std::numeric_limits<int>::max() / m_key_multipliers[m_row_marginals.GetSize() - 2]));
   
+
+  // Pre-calculate log factorials
   const int marginal_total = table.MarginalTotal();
   m_facts[0] = 0.0;
   m_facts[1] = 0.0;
@@ -501,6 +577,8 @@ FExact::FExact(const Stat::ContingencyTable& table, double tolerance)
     }
   }
   
+  
+  // Calculate Observed Path Numerator
   m_observed_path = m_tolerance;
   for (int j = 0; j < m_col_marginals.GetSize(); j++) {
     double dd = 0.0;
@@ -514,11 +592,35 @@ FExact::FExact(const Stat::ContingencyTable& table, double tolerance)
     m_observed_path += m_facts[m_col_marginals[j]] - dd;
   }
   
+  // Calculate Observed Path Denominator
   m_den_observed_path = logMultinomial(marginal_total, m_row_marginals);
+
+  
   
   double prt = exp(m_observed_path - m_den_observed_path);
   std::cout << "prt = " << prt << std::endl;
 }
+
+
+inline double FExact::logMultinomial(int numerator, const MarginalArray& denominator)
+{
+  double ret_val = m_facts[numerator];
+  for (int i = 0; i < denominator.GetSize(); i++) ret_val -= m_facts[denominator[i]];
+  return ret_val;
+}
+
+
+inline double FExact::logMultinomial(int numerator, const MarginalArray::Slice& denominator)
+{
+  double ret_val = m_facts[numerator];
+  for (int i = 0; i < denominator.GetSize(); i++) ret_val -= m_facts[denominator[i]];
+  return ret_val;
+}
+
+
+
+// FExact Core Algorithm Calculate Method
+// -------------------------------------------------------------------------------------------------------------- 
 
 double FExact::Calculate()
 {
@@ -650,6 +752,11 @@ double FExact::Calculate()
   
   return m_pvalue;
 }
+
+
+
+// FExact Threaded Core Algorithm Calculate Method
+// -------------------------------------------------------------------------------------------------------------- 
 
 double FExact::ThreadedCalculate()
 {
@@ -863,6 +970,49 @@ double FExact::ThreadedCalculate()
   return m_pvalue;
 }
 
+
+// Path Extremes Threading Methods
+// -------------------------------------------------------------------------------------------------------------- 
+
+void FExact::PathExtremesCalc::Run()
+{
+  while (true) {
+    m_fexact->m_path_extremes_mutex.Lock();
+    while (m_fexact->m_pending_path_extremes.GetSize() == 0) {
+      m_fexact->m_path_extremes_cond.Wait(m_fexact->m_path_extremes_mutex);
+    }
+    int path_idx = m_fexact->m_pending_path_extremes.Pop();
+    m_fexact->m_path_extremes_mutex.Unlock();
+    if (path_idx < 0) continue;
+    
+    PendingPathExtremes& p = m_fexact->m_pending_path_extremes[path_idx];
+    
+    
+    double longest_path = m_fexact->longestPath(p.rows.GetSlice(0, p.rows.GetSize() - 1), p.cols.GetSlice(0, p.cols.GetSize() - 1), p.ntot);
+    if (longest_path > 0.0) longest_path = 0.0;
+    
+    double dspt = m_fexact->m_observed_path - p.obs2 - p.ddf;
+    double shortest_path = dspt;
+    m_fexact->shortestPath(p.rows.GetSlice(0, p.rows.GetSize() - 1), p.cols.GetSlice(0, p.cols.GetSize() - 1), shortest_path);
+    shortest_path -= dspt;
+    if (shortest_path > 0.0) shortest_path = 0.0;
+    
+    m_fexact->m_path_extremes_mutex.Lock();
+    m_fexact->m_completed_path_extremes.Resize(m_fexact->m_completed_path_extremes.GetSize() + 1);
+    m_fexact->m_completed_path_extremes[m_fexact->m_completed_path_extremes.GetSize() - 1].key = p.key;
+    m_fexact->m_completed_path_extremes[m_fexact->m_completed_path_extremes.GetSize() - 1].longest_path = longest_path;
+    m_fexact->m_completed_path_extremes[m_fexact->m_completed_path_extremes.GetSize() - 1].shortest_path = shortest_path;
+    m_fexact->m_pending_path_extremes.Remove(path_idx);
+    m_fexact->m_path_extremes_mutex.Unlock();
+    m_fexact->m_path_extremes_cond_complete.Signal();
+  }
+}
+
+
+
+// FExact Core Algorithm Support Methods
+// -------------------------------------------------------------------------------------------------------------- 
+
 inline bool FExact::generateFirstDaughter(const MarginalArray& row_marginals, int n, MarginalArray& row_diff, int& kmax, int& kd)
 {
   row_diff.SetAll(0);
@@ -881,6 +1031,7 @@ inline bool FExact::generateFirstDaughter(const MarginalArray& row_marginals, in
   
   return true;
 }
+
 
 bool FExact::generateNewDaughter(int kmax, const MarginalArray& row_marginals, MarginalArray& row_diff, int& idx_dec, int& idx_inc)
 {
@@ -943,6 +1094,7 @@ bool FExact::generateNewDaughter(int kmax, const MarginalArray& row_marginals, M
   return true;
 }
 
+
 void FExact::handlePastPaths(NodePtr& cur_node, double obs2, double obs3, double ddf, double drn, double kval,
                              NodeHashTable& nht)
 {
@@ -965,6 +1117,7 @@ void FExact::handlePastPaths(NodePtr& cur_node, double obs2, double obs3, double
     }
   }
 }
+
 
 void FExact::recordPath(double path_length, int path_freq, Array<PastPathLength, Smart>& past_entries)
 {
@@ -1006,47 +1159,9 @@ void FExact::recordPath(double path_length, int path_freq, Array<PastPathLength,
 }
 
 
-inline double FExact::logMultinomial(int numerator, const MarginalArray& denominator)
-{
-  double ret_val = m_facts[numerator];
-  for (int i = 0; i < denominator.GetSize(); i++) ret_val -= m_facts[denominator[i]];
-  return ret_val;
-}
 
-inline double FExact::logMultinomial(int numerator, const MarginalArray::Slice& denominator)
-{
-  double ret_val = m_facts[numerator];
-  for (int i = 0; i < denominator.GetSize(); i++) ret_val -= m_facts[denominator[i]];
-  return ret_val;
-}
-
-
-inline void FExact::removeFromVector(const Array<int, ManualBuffer>& src, int idx_remove, Array<int, ManualBuffer>& dest)
-{
-  dest.Resize(src.GetSize() - 1);
-  for (int i = 0; i < idx_remove; i++) dest[i] = src[i];
-  for (int i = idx_remove + 1; i < src.GetSize(); i++) dest[i - 1] = src[i];
-}
-
-
-inline void FExact::reduceZeroInVector(const Array<int, ManualBuffer>& src, int value, int idx_start, Array<int, ManualBuffer>& dest)
-{
-  dest.Resize(src.GetSize());
-  
-  int i = 0;
-  for (; i < idx_start; i++) dest[i] = src[i];
-  
-  for (; i < (src.GetSize() - 1); i++) {
-    if (value >= src[i + 1]) {
-      break;
-    }
-    dest[i] = src[i + 1];
-  }
-  dest[i] = value;
-  
-  for (++i; i < src.GetSize(); i++) dest[i] = src[i];
-}
-
+// FExact Longest Path Methods
+// -------------------------------------------------------------------------------------------------------------- 
 
 double FExact::longestPath(const MarginalArray::Slice& row_marginals, const MarginalArray::Slice& col_marginals, int marginal_total)
 {
@@ -1147,10 +1262,10 @@ double FExact::longestPath(const MarginalArray::Slice& row_marginals, const Marg
   double val = 0.0;
   bool min = false;
   if (row_marginals[row_marginals.GetSize() - 1] <= row_marginals[0] + col_marginals.GetSize()) {
-    min = shortestPathSpecial(row_marginals, col_marginals, val);
+    min = longestPathSpecial(row_marginals, col_marginals, val);
   }
   if (!min && col_marginals[col_marginals.GetSize() - 1] <= col_marginals[0] + row_marginals.GetSize()) {
-    min = shortestPathSpecial(col_marginals, row_marginals, val);
+    min = longestPathSpecial(col_marginals, row_marginals, val);
   }
   
   if (min) {
@@ -1226,10 +1341,10 @@ double FExact::longestPath(const MarginalArray::Slice& row_marginals, const Marg
                
                 min = false;
                 if (lrow[lrow.GetSize() - 1] <= lrow[0] + lcol.GetSize()) {
-                  min = shortestPathSpecial(lrow.GetSlice(0, lrow.GetSize() - 1), lcol.GetSlice(0, lcol.GetSize() - 1), val);
+                  min = longestPathSpecial(lrow.GetSlice(0, lrow.GetSize() - 1), lcol.GetSlice(0, lcol.GetSize() - 1), val);
                 }
                 if (!min && lcol[lcol.GetSize() - 1] <= lcol[0] + lrow.GetSize()) {
-                  min = shortestPathSpecial(lrow.GetSlice(0, lrow.GetSize() - 1), lcol.GetSlice(0, lcol.GetSize() - 1), val);
+                  min = longestPathSpecial(lrow.GetSlice(0, lrow.GetSize() - 1), lcol.GetSlice(0, lcol.GetSize() - 1), val);
                 }
                 
                 if (min) {
@@ -1319,6 +1434,80 @@ double FExact::longestPath(const MarginalArray::Slice& row_marginals, const Marg
   
   
   return 0.0;
+}
+
+
+bool FExact::longestPathSpecial(const MarginalArray::Slice& row_marginals, const MarginalArray::Slice& col_marginals, double& val)
+{
+  Array<int> nd(row_marginals.GetSize() - 1);
+  Array<int> ne(col_marginals.GetSize());
+  Array<int> m(col_marginals.GetSize());
+  
+  nd.SetAll(0);
+  int is = col_marginals[0] / row_marginals.GetSize();
+  ne[0] = is;
+  int ix = col_marginals[0] - row_marginals.GetSize() * is;
+  m[0] = ix;
+  if (ix != 0) nd[ix - 1] = 1;
+  
+  for (int i = 1; i < col_marginals.GetSize(); i++) {
+    ix = col_marginals[i] / row_marginals.GetSize();
+    ne[i] = ix;
+    is += ix;
+    ix = col_marginals[i] - row_marginals.GetSize() * ix;
+    m[i] = ix;
+    if (ix != 0) nd[ix - 1]++;
+  }
+  
+  for (int i = nd.GetSize() - 2; i >= 0; i--) nd[i] += nd[i + 1];
+  
+  ix = 0;
+  int nrow1 = row_marginals.GetSize() - 1;
+  for (int i = (row_marginals.GetSize() - 1); i > 0; i--) {
+    ix += is + nd[nrow1 - i] - row_marginals[i];
+    if (ix < 0) return false;
+  }
+  
+  val = 0.0;
+  for (int i = 0; i < col_marginals.GetSize(); i++) {
+    ix = ne[i];
+    is = m[i];
+    val += is * m_facts[ix + 1] + (row_marginals.GetSize() - is) * m_facts[ix];
+  }
+  
+  return true;
+}
+
+
+
+
+// FExact Shortest Path Methods
+// -------------------------------------------------------------------------------------------------------------- 
+
+inline void FExact::removeFromVector(const Array<int, ManualBuffer>& src, int idx_remove, Array<int, ManualBuffer>& dest)
+{
+  dest.Resize(src.GetSize() - 1);
+  for (int i = 0; i < idx_remove; i++) dest[i] = src[i];
+  for (int i = idx_remove + 1; i < src.GetSize(); i++) dest[i - 1] = src[i];
+}
+
+
+inline void FExact::reduceZeroInVector(const Array<int, ManualBuffer>& src, int value, int idx_start, Array<int, ManualBuffer>& dest)
+{
+  dest.Resize(src.GetSize());
+  
+  int i = 0;
+  for (; i < idx_start; i++) dest[i] = src[i];
+  
+  for (; i < (src.GetSize() - 1); i++) {
+    if (value >= src[i + 1]) {
+      break;
+    }
+    dest[i] = src[i + 1];
+  }
+  dest[i] = value;
+  
+  for (++i; i < src.GetSize(); i++) dest[i] = src[i];
 }
 
 
@@ -1490,83 +1679,6 @@ void FExact::shortestPath(const MarginalArray::Slice& row_marginals, const Margi
   
 }
 
-
-bool FExact::shortestPathSpecial(const MarginalArray::Slice& row_marginals, const MarginalArray::Slice& col_marginals, double& val)
-{
-  Array<int> nd(row_marginals.GetSize() - 1);
-  Array<int> ne(col_marginals.GetSize());
-  Array<int> m(col_marginals.GetSize());
-  
-  nd.SetAll(0);
-  int is = col_marginals[0] / row_marginals.GetSize();
-  ne[0] = is;
-  int ix = col_marginals[0] - row_marginals.GetSize() * is;
-  m[0] = ix;
-  if (ix != 0) nd[ix - 1] = 1;
-
-  for (int i = 1; i < col_marginals.GetSize(); i++) {
-    ix = col_marginals[i] / row_marginals.GetSize();
-    ne[i] = ix;
-    is += ix;
-    ix = col_marginals[i] - row_marginals.GetSize() * ix;
-    m[i] = ix;
-    if (ix != 0) nd[ix - 1]++;
-  }
-  
-  for (int i = nd.GetSize() - 2; i >= 0; i--) nd[i] += nd[i + 1];
-  
-  ix = 0;
-  int nrow1 = row_marginals.GetSize() - 1;
-  for (int i = (row_marginals.GetSize() - 1); i > 0; i--) {
-    ix += is + nd[nrow1 - i] - row_marginals[i];
-    if (ix < 0) return false;
-  }
-  
-  val = 0.0;
-  for (int i = 0; i < col_marginals.GetSize(); i++) {
-    ix = ne[i];
-    is = m[i];
-    val += is * m_facts[ix + 1] + (row_marginals.GetSize() - is) * m_facts[ix];
-  }
-  
-  return true;
-}
-
-
-void FExact::PathExtremesCalc::Run()
-{
-  while (true) {
-    m_fexact->m_path_extremes_mutex.Lock();
-    while (m_fexact->m_pending_path_extremes.GetSize() == 0) {
-      m_fexact->m_path_extremes_cond.Wait(m_fexact->m_path_extremes_mutex);
-    }
-    int path_idx = m_fexact->m_pending_path_extremes.Pop();
-    m_fexact->m_path_extremes_mutex.Unlock();
-    if (path_idx < 0) continue;
-    
-    PendingPathExtremes& p = m_fexact->m_pending_path_extremes[path_idx];
-    
-    
-    double longest_path = m_fexact->longestPath(p.rows.GetSlice(0, p.rows.GetSize() - 1), p.cols.GetSlice(0, p.cols.GetSize() - 1), p.ntot);
-    if (longest_path > 0.0) longest_path = 0.0;
-    
-    double dspt = m_fexact->m_observed_path - p.obs2 - p.ddf;
-    double shortest_path = dspt;
-    m_fexact->shortestPath(p.rows.GetSlice(0, p.rows.GetSize() - 1), p.cols.GetSlice(0, p.cols.GetSize() - 1), shortest_path);
-    shortest_path -= dspt;
-    if (shortest_path > 0.0) shortest_path = 0.0;
-
-    m_fexact->m_path_extremes_mutex.Lock();
-    m_fexact->m_completed_path_extremes.Resize(m_fexact->m_completed_path_extremes.GetSize() + 1);
-    m_fexact->m_completed_path_extremes[m_fexact->m_completed_path_extremes.GetSize() - 1].key = p.key;
-    m_fexact->m_completed_path_extremes[m_fexact->m_completed_path_extremes.GetSize() - 1].longest_path = longest_path;
-    m_fexact->m_completed_path_extremes[m_fexact->m_completed_path_extremes.GetSize() - 1].shortest_path = shortest_path;
-    m_fexact->m_pending_path_extremes.Remove(path_idx);
-    m_fexact->m_path_extremes_mutex.Unlock();
-    m_fexact->m_path_extremes_cond_complete.Signal();
-  }
-  
-}
 
 
 // Internal Function Definitions
