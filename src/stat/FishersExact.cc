@@ -807,12 +807,46 @@ double FExact::ThreadedCalculate()
 
   handleNode(k, cur_node);
   
+  Array<PathExtremes, Smart> temp_completed;
   for (; k >= 1; k--) {
     printf("k = %d\n", k);
     if (m_pending_path_nodes[k].GetSize()) {
       m_path_extremes_mutex.Lock();
       while (m_pending_path_extremes[k].GetSize()) {
         m_path_extremes_cond_complete.Wait(m_path_extremes_mutex);
+        if (m_completed_path_extremes[k].GetSize()) {
+          temp_completed = m_completed_path_extremes[k];
+          m_completed_path_extremes[k].Resize(0);
+          m_path_extremes_mutex.Unlock();
+          for (int i = 0; i < temp_completed.GetSize(); i++) {
+            PathExtremes& path = temp_completed[i];
+            int path_idx;
+            m_path_extremes[k].Find(path.key, path_idx);
+            m_path_extremes[k][path_idx].longest_path = path.longest_path;
+            m_path_extremes[k][path_idx].shortest_path = path.shortest_path;
+            
+            for (int i = 0; i < m_pending_path_nodes[k].GetSize(); i++) {
+              PendingPathNode& p = m_pending_path_nodes[k][i];
+              if (p.kval != path.key) continue;
+              if (p.handled) break;
+              double obs2, obs3;
+              if (p.k1) {
+                obs2 = p.obs2;
+                obs3 = p.obs2;
+              } else {
+                int path_idx;
+                m_path_extremes[k].Find(p.kval, path_idx);
+                obs3 = p.obs2 - m_path_extremes[k][path_idx].longest_path;
+                obs2 = p.obs2 - m_path_extremes[k][path_idx].shortest_path;
+              }
+              cur_node = handlePastPaths(p.node, obs2, obs3, p.ddf, p.drn, p.kval, m_nht[k  - 1]);
+              p.node = NodePtr(NULL);
+              if (cur_node) handleNode(k - 1, cur_node);
+              p.handled = true;
+            }
+          }
+          m_path_extremes_mutex.Lock();
+        }
       }
       for (int i = 0; i < m_completed_path_extremes[k].GetSize(); i++) {
         PathExtremes& path = m_completed_path_extremes[k][i];
@@ -826,6 +860,7 @@ double FExact::ThreadedCalculate()
 
       for (int i = 0; i < m_pending_path_nodes[k].GetSize(); i++) {
         PendingPathNode& p = m_pending_path_nodes[k][i];
+        if (p.handled) continue;
         double obs2, obs3;
         if (p.k1) {
           obs2 = p.obs2;
