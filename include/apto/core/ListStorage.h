@@ -31,6 +31,9 @@
 #ifndef ListStorage_h
 #define ListStorage_h
 
+#include "apto/core/Array.h"
+#include "apto/platform/Platform.h"
+
 #include <cassert>
 
 
@@ -39,14 +42,310 @@ namespace Apto {
   // Storage Policies
   // --------------------------------------------------------------------------------------------------------------  
   
-  template <class T> class SparseVector
+  template <class T> class DL
+  {
+    
+    
+  };
+  
+  
+  template <class T> class BufferedDL
   {
   public:
     class EntryHandle;
     class Iterator;
     class ConstIterator;
     
+  private:
+    static const int BUFFER_SIZE = 64;
+
+    typedef union {
+      unsigned int index;
+      struct {
+#if APTO_PLATFORM(LITTLE_ENDIAN)
+        unsigned int offset:6;
+        unsigned int num:26;
+#else
+        unsigned int num:26;
+        unsigned int offset:6;
+#endif
+      } buffer;
+    } ListIndex;
     
+    class Node
+    {
+    public:
+      T data;
+      EntryHandle* handle;
+      Node* next;
+      Node* prev;
+    };
+    
+    class Buffer
+    {
+    private:
+      Node* m_nodes;
+      
+    public:
+      Buffer() : m_nodes(new Node[BUFFER_SIZE]) { ; }
+      ~Buffer() { delete [] m_nodes; }
+      
+      Node& operator[](int idx) { return m_nodes[idx]; }
+      const Node& operator[](int idx) const { return m_nodes[idx]; }
+    };
+    
+    
+    Array<Buffer, ManagedPointer> m_bufs;
+    ListIndex m_next;
+    Node m_root;
+    int m_size;
+    
+  protected:
+    BufferedDL() : m_size(0) { Clear(); }
+    ~BufferedDL()
+    {
+      // Clear handles
+      ListIndex i;
+      for (i.index = 0; i.index < m_size; i.index++) {
+        if (m_bufs[i.buffer.num][i.buffer.offset].handle) {
+          m_bufs[i.buffer.num][i.buffer.offset].handle->m_node = NULL;
+        }
+      }
+    }
+    
+    BufferedDL& operator=(const BufferedDL& rhs)
+    {
+      Clear();
+      ConstIterator it = rhs.Begin();
+      while (it.Next()) PushRear(*it.Get());
+      return *this;
+    }
+    
+
+    inline int GetSize() const { return m_size; }
+    
+    inline void Clear()
+    {
+      // Clear handles
+      ListIndex i;
+      for (i.index = 0; i.index < m_size; i.index++) {
+        if (m_bufs[i.buffer.num][i.buffer.offset].handle) {
+          m_bufs[i.buffer.num][i.buffer.offset].handle->m_node = NULL;
+        }
+      }
+      
+      m_bufs.Resize(1);
+      m_next.index = 0;
+      m_root.next = &m_root;
+      m_root.prev = &m_root;
+      m_size = 0;
+    }
+    
+    inline T& GetFirst() { return m_root.next->data; }
+    inline const T& GetFirst() const { return m_root.next->data; }
+    inline T& GetLast() { return m_root.prev->data; }
+    inline const T& GetLast()  const { return m_root.prev->data; }
+
+    inline T Pop() { return removeNode(m_root.next); }
+    inline T PopRear() { return removeNode(m_root.prev); }
+    inline T PopPos(int pos)
+    {
+      if (pos >= m_size) return NULL;
+      Node* test_node = m_root.next;
+      for (int i = 0; i < pos; i++) test_node = test_node->next;
+      return removeNode(test_node);
+    }
+    
+    
+    void Push(const T& val, EntryHandle** handle = NULL)
+    {
+      if (handle) delete *handle;
+      Node& node = m_bufs[m_next.buffer.num][m_next.buffer.offset];
+      node.data = val;
+      if (handle) {
+        node.handle = new EntryHandle(this, &m_bufs[m_next.buffer.num][m_next.buffer.offset]);
+        *handle = node.handle;
+      } else {
+        node.handle = NULL;
+      }
+      node.next = m_root.next;
+      node.prev = &m_root;
+      m_root.next->prev = &node;
+      m_root.next = &node;
+      incSize();
+    }
+    
+    void PushRear(const T& val, EntryHandle** handle = NULL)
+    {
+      if (handle) delete *handle;
+      Node& node = m_bufs[m_next.buffer.num][m_next.buffer.offset];
+      node.data = val;
+      if (handle) {
+        node.handle = new EntryHandle(this, &m_bufs[m_next.buffer.num][m_next.buffer.offset]);
+        *handle = node.handle;
+      } else {
+        node.handle = NULL;
+      }
+      node.next = &m_root;
+      node.prev = m_root.prev;
+      m_root.prev->next = &node;
+      m_root.prev = &node;
+      incSize();
+    }
+    
+    T Remove(const T& value)
+    {
+      ListIndex i;
+      for (i.index = 0; i.index < m_size; i.index++) {
+        if (m_bufs[i.buffer.num][i.buffer.offset].data == value) {
+          removeNode(&m_bufs[i.buffer.num][i.buffer.offset]);
+          return true;
+        }
+      }
+      return false;
+    }
+    
+    Iterator Begin() { return Iterator(this); }
+    ConstIterator Begin() const { return ConstIterator(this); }
+    
+    
+  private:
+    T removeNode(Node* out_node)
+    {
+      // Make sure we're not trying to delete the root node!
+      assert(out_node != &m_root);
+      
+      // Save the data and patch up the linked list.
+      T out_data = out_node->data;
+      if (out_node->handle) out_node->handle->m_node = NULL;
+      out_node->prev->next = out_node->next;
+      out_node->next->prev = out_node->prev;
+      
+      m_next.index--;
+      Node* next_node = &m_bufs[m_next.buffer.num][m_next.buffer.offset];
+      if (next_node != out_node) {
+        *out_node = *next_node;
+        out_node->next->prev = out_node;
+        out_node->prev->next = out_node;
+        if (out_node->handle) out_node->handle->m_node = out_node;
+      }
+      m_size--;
+      
+      if (m_bufs.GetSize() > (m_next.buffer.num + 1) && m_next.buffer.offset < (BUFFER_SIZE - 3))
+        m_bufs.Resize(m_bufs.GetSize() - 1);
+      
+      return out_data;
+    }
+    
+    
+    inline void incSize()
+    {
+      m_next.index++;
+      if (m_bufs.GetSize() <= m_next.buffer.num) m_bufs.Resize(m_bufs.GetSize() + 1);
+      m_size++;
+    }
+    
+  public:
+    class Iterator
+    {
+      friend class BufferedDL<T>;
+    private:
+      BufferedDL<T>* m_list;
+      Node* m_cur;
+      
+      Iterator(); // @not_implemented
+      
+      Iterator(BufferedDL<T>* list) : m_list(list), m_cur(&list->m_root) { ; }
+      
+    public:
+      inline T* Get() {
+        if (m_cur && m_cur != &m_list->m_root) return &m_cur->data;
+        return NULL;
+      }
+      
+      inline T* Next() {
+        if (m_cur) {
+          m_cur = m_cur->next;
+          if (m_cur == &m_list->m_root) {
+            m_cur = NULL;
+            return NULL;
+          } else {
+            return &m_cur->data;
+          }
+        }
+        return NULL;
+      }
+    };
+    
+    class ConstIterator
+    {
+      friend class BufferedDL<T>;
+    private:
+      const BufferedDL<T>* m_list;
+      const Node* m_cur;
+      
+      ConstIterator(); // @not_implemented
+      
+      ConstIterator(const BufferedDL<T>* list) : m_list(list), m_cur(&list->m_root) { ; }
+      
+    public:
+      inline const T* Get() {
+        if (m_cur && m_cur != &m_list->m_root) return &m_cur->data;
+        return NULL;
+      }
+      
+      inline const T* Next() {
+        if (m_cur) {
+          m_cur = m_cur->next;
+          if (m_cur == &m_list->m_root) {
+            m_cur = NULL;
+            return NULL;
+          } else {
+            return &m_cur->data;
+          }
+        }
+        return NULL;
+      }
+    };
+    
+    
+    class EntryHandle
+    {
+      friend class BufferedDL<T>;
+    private:
+      BufferedDL<T>* m_list;
+      Node* m_node;
+      
+      EntryHandle(); // @not_implemented
+      EntryHandle(const EntryHandle&); // @not_implemented
+      EntryHandle& operator=(const EntryHandle&); // @not_implemented
+      
+      EntryHandle(BufferedDL<T>* list, Node* node) : m_list(list), m_node(node) { ; }
+      ~EntryHandle()
+      {
+        if (m_node) m_node->handle = NULL;
+      }
+      
+    public:
+      bool IsValid() const { return (m_node); }
+      void Remove()
+      {
+        if (!m_node) return;
+        m_list->removeNode(m_node);
+        m_node = NULL;
+      }
+    };
+
+  };
+  
+  
+  template <class T> class SparseVector
+  {
+  public:
+    class EntryHandle;
+    class Iterator;
+    class ConstIterator;
+        
   private:
     static const int SEGMENT_SIZE = 16;
     
@@ -79,11 +378,14 @@ namespace Apto {
     
     ~SparseVector()
     {
-      ListSegment* next = m_head_seg;
-      while (next) {
-        ListSegment* cur = next;
-        next = cur->next;
+      ListSegment* cur = m_head_seg;
+      while (cur) {
+        // Clear handles
+        for (int i = 0; i < cur->used; i++) if (cur->handles[i]) cur->handles[i]->m_seg = NULL;
+        
+        ListSegment* next = cur->next;
         delete cur;
+        cur = next;
       }
     }
     
@@ -357,6 +659,17 @@ namespace Apto {
       EntryHandle& operator=(const EntryHandle&); // @not_implemented
       
       EntryHandle(ListSegment* seg, const T& entry) : m_seg(seg), m_entry(entry) { ; }
+      ~EntryHandle()
+      {
+        if (m_seg) {
+          for (int i = 0; i < m_seg->used; i++) {
+            if (m_seg->handles[i] == this) {
+              m_seg->handles[i] = NULL;
+              break;
+            }
+          }
+        }
+      }
       
     public:
       bool IsValid() const { return (m_seg); }
@@ -368,6 +681,7 @@ namespace Apto {
       }
     };
   };
+  
 };
 
 #endif
