@@ -32,3 +32,87 @@
 #include "apto/core/Thread.h"
 
 #include "gtest/gtest.h"
+
+TEST(ConditionVariable, Signal) {
+  class TestCV : public Apto::Thread
+  {
+  public:
+    Apto::Mutex mutex;
+    Apto::ConditionVariable cond;
+    bool done;
+    bool completed;
+    
+    TestCV() : done(false), completed(false) { ; }
+    
+  protected:
+    void Run() {
+      mutex.Lock();
+      while (!done) {
+        cond.Wait(mutex);
+      }
+      completed = true;
+      mutex.Unlock();
+    }
+  };
+  
+  TestCV tester;
+  tester.Start();
+  tester.mutex.Lock();
+  tester.done = true;
+  tester.mutex.Unlock();
+  tester.cond.Signal();
+  tester.Join();
+  EXPECT_TRUE(tester.completed);
+}
+
+TEST(ConditionVariable, Broadcast) {
+  struct GroupCV {
+    Apto::Mutex mutex;
+    Apto::ConditionVariable cond;
+    bool done;
+    bool completed[2];
+    
+    GroupCV() : done(false) { completed[0] = false; completed[1] = false; }
+  } group_cv;
+  
+  class TestCV : public Apto::Thread
+  {
+  private:
+    int m_id;
+    GroupCV& m_group_cv;
+
+  public:
+    TestCV(int id, GroupCV& group_cv) : m_id(id), m_group_cv(group_cv) { ; }
+    
+  protected:
+    void Run() {
+      m_group_cv.mutex.Lock();
+      while (!m_group_cv.done) {
+        m_group_cv.cond.Wait(m_group_cv.mutex);
+      }
+      m_group_cv.completed[m_id] = true;
+      m_group_cv.mutex.Unlock();
+    }
+  };
+  
+  TestCV* testers[2];
+  testers[0] = new TestCV(0, group_cv);
+  testers[1] = new TestCV(1, group_cv);
+  
+  testers[0]->Start();
+  testers[1]->Start();
+  
+  group_cv.mutex.Lock();
+  group_cv.done = true;
+  group_cv.mutex.Unlock();
+  group_cv.cond.Broadcast();
+  
+  testers[0]->Join();
+  testers[1]->Join();
+  
+  EXPECT_TRUE(group_cv.completed[0]);
+  EXPECT_TRUE(group_cv.completed[1]);
+  
+  delete testers[0];
+  delete testers[1];
+}
