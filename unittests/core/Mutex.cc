@@ -29,6 +29,12 @@
  */
 
 #include "apto/core/Mutex.h"
-#include "apto/core/Thread.h"
 
 #include "gtest/gtest.h"
+
+TEST(Mutex, LockUnlock) {
+  Apto::Mutex mutex;
+  
+  mutex.Lock();
+  mutex.Unlock();
+}
