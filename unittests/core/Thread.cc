@@ -31,3 +31,24 @@
 #include "apto/core/Thread.h"
 
 #include "gtest/gtest.h"
+
+TEST(Thread, Start) {
+  class TestThread : public Apto::Thread
+  {
+  public:
+    bool done;
+    
+    TestThread() : done(false) { ; }
+    
+  protected:
+    void Run() {
+      done = true;
+    }
+  };
+  
+  TestThread tester;
+  EXPECT_FALSE(tester.done);
+  tester.Start();
+  tester.Join();
+  EXPECT_TRUE(tester.done);
+}
