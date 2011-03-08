@@ -618,9 +618,9 @@ FExact::FExact(const Stat::ContingencyTable& table, double tolerance)
   m_den_observed_path = logMultinomial(marginal_total, m_row_marginals);
 
   
-  
-  double prt = exp(m_observed_path - m_den_observed_path);
-  std::cout << "prt = " << prt << std::endl;
+//  
+//  double prt = exp(m_observed_path - m_den_observed_path);
+//  std::cout << "prt = " << prt << std::endl;
 }
 
 
@@ -656,7 +656,7 @@ double FExact::Calculate()
   MarginalArray row_diff(m_row_marginals.GetSize());
   MarginalArray irn(m_row_marginals.GetSize());
   
-  printf("k = %d\n", k);
+//  printf("k = %d\n", k);
 
   while (true) {
     int kb = m_col_marginals.GetSize() - k;
@@ -669,7 +669,7 @@ double FExact::Calculate()
         cur_node = nht[(k + 1) & 0x1].Pop();
         if (!cur_node) {
           k--;
-          printf("k = %d\n", k);
+//          printf("k = %d\n", k);
           path_extremes.ClearTable();
           if (k < 2) return m_pvalue;
         }
@@ -755,7 +755,7 @@ double FExact::Calculate()
       cur_node = nht[(k + 1) & 0x1].Pop();
       if (!cur_node) {
         k--;
-        printf("k = %d\n", k);
+//        printf("k = %d\n", k);
         path_extremes.ClearTable();
         if (k < 2) return m_pvalue;
       }
@@ -809,7 +809,7 @@ double FExact::ThreadedCalculate()
   
   Array<PathExtremes, Smart> temp_completed;
   for (; k >= 1; k--) {
-    printf("k = %d\n", k);
+//    printf("k = %d\n", k);
     if (m_pending_path_nodes[k].GetSize()) {
       m_path_extremes_mutex.Lock();
       while (m_pending_path_extremes[k].GetSize()) {
@@ -1425,7 +1425,6 @@ double FExact::longestPath(const MarginalArray::Slice& row_marginals, const Marg
         int n11 = (lrow[1] + 1) * (ic1 + 1) / nn1;
         int n12 = lrow[1] - n11;
         v += m_facts[n11] + m_facts[n12] + m_facts[ic1 - n11] + m_facts[ic2 - n12];
-//        printf("v = %f\n", v);
         if (v < vmn)
           vmn = v;
       } else {
