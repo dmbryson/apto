@@ -144,22 +144,20 @@ TEST(CoreBasicArray, Iterators) {
   Apto::Array<int, Apto::Basic> array(5);  
   for (int i = 0; i < 5; i++) array[i] = i;
   
-  Apto::Iterator<int>* it = array.Iterator();
+  Apto::Array<int, Apto::Basic>::Iterator it = array.Begin();
   int i = 0;
-  while (*it->Next()) {
-    EXPECT_EQ(i, *it->Get());
+  while (it.Next()) {
+    EXPECT_EQ(i, *it.Get());
     i++;
   }
-  delete it;
   
   const Apto::Array<int, Apto::Basic>& const_array = array;
-  Apto::ConstIterator<int>* cit = const_array.Iterator();
+  Apto::Array<int, Apto::Basic>::ConstIterator cit = const_array.Begin();
   i = 0;
-  while (*cit->Next()) {
-    EXPECT_EQ(i, *cit->Get());
+  while (cit.Next()) {
+    EXPECT_EQ(i, *cit.Get());
     i++;
   }
-  delete cit;
 }
 
 
@@ -280,22 +278,20 @@ TEST(CoreSmartArray, Iterators) {
   Apto::Array<int, Apto::Smart> array(5);  
   for (int i = 0; i < 5; i++) array[i] = i;
   
-  Apto::Iterator<int>* it = array.Iterator();
+  Apto::Array<int, Apto::Smart>::Iterator it = array.Begin();
   int i = 0;
-  while (*it->Next()) {
-    EXPECT_EQ(i, *it->Get());
+  while (it.Next()) {
+    EXPECT_EQ(i, *it.Get());
     i++;
   }
-  delete it;
   
   const Apto::Array<int, Apto::Smart>& const_array = array;
-  Apto::ConstIterator<int>* cit = const_array.Iterator();
+  Apto::Array<int, Apto::Smart>::ConstIterator cit = const_array.Begin();
   i = 0;
-  while (*cit->Next()) {
-    EXPECT_EQ(i, *cit->Get());
+  while (cit.Next()) {
+    EXPECT_EQ(i, *cit.Get());
     i++;
   }
-  delete cit;
 }
 
 
@@ -410,22 +406,20 @@ TEST(CoreManagedPointerArray, Iterators) {
   Apto::Array<int, Apto::ManagedPointer> array(5);  
   for (int i = 0; i < 5; i++) array[i] = i;
   
-  Apto::Iterator<int>* it = array.Iterator();
+  Apto::Array<int, Apto::ManagedPointer>::Iterator it = array.Begin();
   int i = 0;
-  while (*it->Next()) {
-    EXPECT_EQ(i, *it->Get());
+  while (it.Next()) {
+    EXPECT_EQ(i, *it.Get());
     i++;
   }
-  delete it;
   
   const Apto::Array<int, Apto::ManagedPointer>& const_array = array;
-  Apto::ConstIterator<int>* cit = const_array.Iterator();
+  Apto::Array<int, Apto::ManagedPointer>::ConstIterator cit = const_array.Begin();
   i = 0;
-  while (*cit->Next()) {
-    EXPECT_EQ(i, *cit->Get());
+  while (cit.Next()) {
+    EXPECT_EQ(i, *cit.Get());
     i++;
   }
-  delete cit;
 }
 
 

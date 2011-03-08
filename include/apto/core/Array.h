@@ -32,7 +32,6 @@
 #define AptoCoreArray_h
 
 #include "apto/core/ArrayStorage.h"
-#include "apto/core/Iterator.h"
 
 #include <cassert>
 
@@ -48,7 +47,10 @@ namespace Apto {
     
   public:
     typedef T ValueType;
+    class Iterator;
+    class ConstIterator;    
     
+  public:
     inline explicit Array(int size = 0) : SP(size) { ; }
     
     template <typename T1, template <class> class SP1>
@@ -130,37 +132,38 @@ namespace Apto {
       for (int i = 0; i < SP::GetSize(); i++) SP::operator[](i) = value;
     }
     
-    Iterator<T>* Iterator() { return new ValueIterator(*this); }
-    ConstIterator<T>* Iterator() const { return new ConstValueIterator(*this); }
+    Iterator Begin() { return Iterator(*this); }
+    ConstIterator Begin() const { return ConstIterator(*this); }
     
     
-  protected:
-    class ValueIterator : public Apto::Iterator<T>
+  public:
+    class Iterator
     {
+      friend class Array;
+      
     private:
       Array& m_arr;
       int m_index;
       
-      ValueIterator(); // @not_implemented
+      Iterator(); // @not_implemented
+      Iterator(Array& arr) : m_arr(arr), m_index(-1) { ; }
       
-    public:
-      ValueIterator(Array& arr) : m_arr(arr), m_index(-1) { ; }
-      
+    public:      
       T* Get() { return (m_index < m_arr.GetSize()) ? &(m_arr.SP::operator[](m_index)) : NULL; }
       T* Next() { return (++m_index < m_arr.GetSize()) ? &(m_arr.SP::operator[](m_index)) : NULL; }
     };
     
-    class ConstValueIterator : public Apto::ConstIterator<T>
+    class ConstIterator
     {
+      friend class Array;
     private:
       const Array& m_arr;
       int m_index;
       
-      ConstValueIterator(); // @not_implemented
-      
+      ConstIterator(); // @not_implemented
+      ConstIterator(const Array& arr) : m_arr(arr), m_index(-1) { ; }
+            
     public:
-      ConstValueIterator(const Array& arr) : m_arr(arr), m_index(-1) { ; }
-      
       const T* Get() { return (m_index < m_arr.GetSize()) ? &(m_arr.SP::operator[](m_index)) : NULL; }
       const T* Next() { return (++m_index < m_arr.GetSize()) ? &(m_arr.SP::operator[](m_index)) : NULL; }
     };
