@@ -28,7 +28,90 @@
  *
  */
 
+#include "apto/core/List.h"
+#include "apto/core/Mutex.h"
 #include "apto/core/RWLock.h"
 #include "apto/core/Thread.h"
 
+#include <unistd.h>
+
 #include "gtest/gtest.h"
+
+TEST(RWLock, Usage) {
+  
+  struct TestInfo {
+    Apto::RWLock rwlock;
+    Apto::Mutex mutex;
+    Apto::List<int> seq;
+  } tinfo;
+
+  class TestReadThread : public Apto::Thread
+  {
+  private:
+    TestInfo& m_tinfo;
+    
+  public:
+    TestReadThread(TestInfo& tinfo) : m_tinfo(tinfo) { ; }
+    
+  protected:
+    void Run() {
+      m_tinfo.rwlock.ReadLock();
+      m_tinfo.mutex.Lock();
+      m_tinfo.seq.PushRear(1);
+      m_tinfo.mutex.Unlock();
+      
+      sleep(1);
+      m_tinfo.rwlock.ReadUnlock();
+    }
+  };
+  
+  class TestWriteThread : public Apto::Thread
+  {
+  private:
+    TestInfo& m_tinfo;
+    
+  public:
+    TestWriteThread(TestInfo& tinfo) : m_tinfo(tinfo) { ; }
+    
+  protected:
+    void Run() {
+      m_tinfo.rwlock.WriteLock();
+      m_tinfo.mutex.Lock();
+      m_tinfo.seq.PushRear(2);
+      m_tinfo.mutex.Unlock();
+      m_tinfo.rwlock.WriteUnlock();
+    }
+  };
+  
+  
+  
+  TestReadThread tr(tinfo);
+  TestWriteThread tw(tinfo);
+  
+  tinfo.rwlock.ReadLock();
+  tinfo.mutex.Lock();
+  tinfo.seq.PushRear(0);
+  tinfo.mutex.Unlock();
+  tinfo.rwlock.ReadLock();
+  tinfo.mutex.Lock();
+  tinfo.seq.PushRear(0);
+  tinfo.mutex.Unlock();
+  
+  tr.Start();
+  tinfo.rwlock.ReadUnlock();
+  
+  tw.Start();
+  sleep(1);
+  tinfo.rwlock.ReadUnlock();
+  
+  tr.Join();
+  tw.Join();  
+  
+  tinfo.mutex.Lock();
+  EXPECT_EQ(0, tinfo.seq.Pop());
+  EXPECT_EQ(0, tinfo.seq.Pop());
+  EXPECT_EQ(1, tinfo.seq.Pop());
+  EXPECT_EQ(2, tinfo.seq.Pop());
+  
+  tinfo.mutex.Unlock();
+}
