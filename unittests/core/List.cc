@@ -31,3 +31,120 @@
 #include "apto/core/List.h"
 
 #include "gtest/gtest.h"
+
+TEST(CoreSparseVectorList, Construction) {
+  Apto::List<int, Apto::SparseVector> default_constructor;
+  EXPECT_EQ(0, default_constructor.GetSize());
+}
+
+TEST(CoreSparseVectorList, PushPop) {
+  Apto::List<int, Apto::SparseVector> list;
+  EXPECT_EQ(0, list.GetSize());
+  
+  for (int i = 0; i < 3; i++) list.Push(i);
+  EXPECT_EQ(3, list.GetSize());
+  EXPECT_EQ(2, list.GetFirst());
+  
+  EXPECT_EQ(2, list.Pop());
+  EXPECT_EQ(2, list.GetSize());
+  EXPECT_EQ(1, list.Pop());
+  list.Push(8);
+  EXPECT_EQ(8, list.Pop());
+  EXPECT_EQ(1, list.GetSize());
+  
+  list.PushRear(12);
+  EXPECT_EQ(0, list.Pop());
+  EXPECT_EQ(12, list.Pop());
+  EXPECT_EQ(0, list.GetSize());
+  
+  for (int i = 0; i < 3; i++) list.PushRear(i);
+  EXPECT_EQ(3, list.GetSize());
+  EXPECT_EQ(2, list.GetLast());
+  EXPECT_EQ(2, list.PopRear());
+  
+  list.Clear();
+  EXPECT_EQ(0, list.GetSize());
+}
+
+
+TEST(CoreSparseVectorList, Assignment) {
+  Apto::List<int, Apto::SparseVector> list1;
+  for (int i = 0; i < 5; i++) list1.PushRear(i);
+  
+  Apto::List<int, Apto::SparseVector> list2;
+  for (int i = 0; i < 6; i++) list2.PushRear(5 + i);
+  
+  EXPECT_NE(list1.GetSize(), list2.GetSize());
+  EXPECT_NE(list1.GetFirst(), list2.GetFirst());
+  
+  list1 = list2;
+  
+  EXPECT_EQ(list1.GetSize(), list2.GetSize());
+  EXPECT_EQ(list1.GetFirst(), list2.GetFirst());
+  
+  Apto::List<int, Apto::SparseVector> list_copy_constructor(list2);
+  EXPECT_EQ(list2.GetSize(), list_copy_constructor.GetSize());
+  EXPECT_EQ(list2.GetFirst(), list_copy_constructor.GetFirst());
+}
+
+
+TEST(CoreSparseVectorList, Remove) {
+  Apto::List<int, Apto::SparseVector> list;
+  Apto::List<int, Apto::SparseVector>::EntryHandle* handle = NULL;
+  
+  list.Push(5);
+  list.Push(10, &handle);
+  list.Push(15);
+  EXPECT_TRUE(handle != NULL);
+  if (handle) EXPECT_TRUE(handle->IsValid());
+  list.Remove(10);
+  if (handle) EXPECT_FALSE(handle->IsValid());
+  EXPECT_EQ(15, list.Pop());
+  EXPECT_EQ(5, list.Pop());
+  EXPECT_EQ(0, list.GetSize());
+  
+  list.Push(5);
+  list.Push(10, &handle);
+  list.Push(15);
+  EXPECT_TRUE(handle != NULL);
+  if (handle) EXPECT_TRUE(handle->IsValid());
+  handle->Remove();
+  if (handle) EXPECT_FALSE(handle->IsValid());
+  EXPECT_EQ(15, list.Pop());
+  EXPECT_EQ(5, list.Pop());
+  EXPECT_EQ(0, list.GetSize());
+  
+  delete handle;
+}
+
+
+TEST(CoreSparseVectorList, Contains) {
+  Apto::List<int, Apto::SparseVector> list;
+  list.Push(5);
+  list.Push(10);
+  list.Push(15);
+  EXPECT_TRUE(list.Contains(10));
+  EXPECT_FALSE(list.Contains(20));
+}
+
+
+TEST(CoreSparseVectorList, Iterators) {
+  Apto::List<int, Apto::SparseVector> list;
+  for (int i = 0; i < 5; i++) list.PushRear(i);
+  
+  Apto::List<int, Apto::SparseVector>::Iterator it = list.Begin();
+  int i = 0;
+  while (it.Next()) {
+    EXPECT_EQ(i, *it.Get());
+    i++;
+  }
+  
+  const Apto::List<int, Apto::SparseVector>& const_list = list;
+  Apto::List<int, Apto::SparseVector>::ConstIterator cit = const_list.Begin();
+  i = 0;
+  while (cit.Next()) {
+    EXPECT_EQ(i, *cit.Get());
+    i++;
+  }
+}
+

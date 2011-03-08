@@ -133,14 +133,13 @@
 		702336AF12FC8012000C7BE5 /* Atomic.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = Atomic.h; sourceTree = "<group>"; };
 		702336B712FC9106000C7BE5 /* RefCount.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = RefCount.h; sourceTree = "<group>"; };
 		702336C212FC94AA000C7BE5 /* Pair.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = Pair.h; sourceTree = "<group>"; };
+		7030DB0C1326844100B6DADA /* ListStorage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ListStorage.h; sourceTree = "<group>"; };
 		704031F51314259100F2F055 /* Functions.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Functions.cc; sourceTree = "<group>"; };
 		7043BEA91304707200EA53D6 /* String.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = String.h; sourceTree = "<group>"; };
 		7043BEE31305925600EA53D6 /* Map.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = Map.h; sourceTree = "<group>"; };
 		7043BEE913059E1200EA53D6 /* ArrayStorage.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = ArrayStorage.h; sourceTree = "<group>"; };
-		706B1E9512FC9BA2006EAB7F /* EntryHandle.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = EntryHandle.h; sourceTree = "<group>"; };
 		706B1E9612FC9C2C006EAB7F /* RefCount.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RefCount.cc; sourceTree = "<group>"; };
 		706B1E9812FC9C44006EAB7F /* EntryHandle.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EntryHandle.cc; sourceTree = "<group>"; };
-		706B1E9A12FC9E97006EAB7F /* Iterator.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = Iterator.h; sourceTree = "<group>"; };
 		706B1E9E12FCA5C9006EAB7F /* ArrayUtils.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = ArrayUtils.h; sourceTree = "<group>"; };
 		706B43221304D52000470F38 /* StringBuffer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = StringBuffer.h; sourceTree = "<group>"; };
 		709B2F82131C3A650081E874 /* main.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cc; sourceTree = "<group>"; };
@@ -389,10 +388,9 @@
 				7043BEE913059E1200EA53D6 /* ArrayStorage.h */,
 				702336AF12FC8012000C7BE5 /* Atomic.h */,
 				702336A812FC64AC000C7BE5 /* ConditionVariable.h */,
-				706B1E9512FC9BA2006EAB7F /* EntryHandle.h */,
 				7023362112FB5AA1000C7BE5 /* FileSystem.h */,
-				706B1E9A12FC9E97006EAB7F /* Iterator.h */,
 				70EE0D6F13099C0A00D6C016 /* List.h */,
+				7030DB0C1326844100B6DADA /* ListStorage.h */,
 				7043BEE31305925600EA53D6 /* Map.h */,
 				7023369F12FC5FDD000C7BE5 /* Mutex.h */,
 				702336C212FC94AA000C7BE5 /* Pair.h */,
@@ -828,6 +826,7 @@
 				709B2F8F131C3B480081E874 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
