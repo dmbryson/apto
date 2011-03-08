@@ -96,9 +96,13 @@ namespace Apto {
     
     String GetAbsolutePath(const String& path, const String& working_dir)
     {
-      if (path.GetSize() == 0 || (path[0] != '/' && path[0] != '\\')) {
-        return (String(working_dir) + "/" + path);
-      }
+      if (path.GetSize() == 0) return working_dir;
+
+#if APTO_PLATFORM(WINDOWS)
+      if (!(path.IsLetter(0) && path[1] == ':' && path[2] =='\\')) return PathAppend(working_dir, path);
+#else
+      if (path[0] != '/' && path[0] != '\\') return PathAppend(working_dir, path);
+#endif
       
       return path;
     }

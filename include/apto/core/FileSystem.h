@@ -31,6 +31,7 @@
 #define AptoCoreFileSystem_h
 
 #include "apto/core/String.h"
+#include "apto/platform/Platform.h"
 
 namespace Apto {
   namespace FileSystem {
@@ -48,7 +49,11 @@ namespace Apto {
 
 inline Apto::String Apto::FileSystem::PathAppend(const String& path, const String& path_add)
 {
+#if APTO_PLATFORM(WINDOWS)
+  return String(path) + "\\" + path_add;  
+#else
   return String(path) + "/" + path_add;
+#endif
 }
 
 
