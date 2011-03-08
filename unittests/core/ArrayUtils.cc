@@ -47,3 +47,31 @@ TEST(ArrayUtils, ISort) {
   for (int i = 0; i < a.GetSize(); i++) ASSERT_EQ(i + 1, a[i]);
 }
 
+
+TEST(ArrayUtils, QSort) {
+  Apto::Array<int> a(20);
+  a[ 0] = 3;
+  a[ 1] = 1;
+  a[ 2] = 5;
+  a[ 3] = 4;
+  a[ 4] = 13;
+  a[ 5] = 8;
+  a[ 6] = 12;
+  a[ 7] = 19;
+  a[ 8] = 20;
+  a[ 9] = 18;
+  a[10] = 10;
+  a[11] = 2;
+  a[12] = 16;
+  a[13] = 6;
+  a[14] = 11;
+  a[15] = 7;
+  a[16] = 17;
+  a[17] = 14;
+  a[18] = 9;
+  a[19] = 15;
+  
+  
+  Apto::QSort(a);
+  for (int i = 0; i < a.GetSize(); i++) ASSERT_EQ(i + 1, a[i]);
+}
