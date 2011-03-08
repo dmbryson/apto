@@ -28,6 +28,65 @@
  *
  */
 
+#include "apto/core/ConditionVariable.h"
+#include "apto/core/Thread.h"
 #include "apto/core/ThreadSpecific.h"
 
 #include "gtest/gtest.h"
+
+
+TEST(ThreadSpecific, Usage) {
+  class TestCV : public Apto::Thread
+  {
+  public:
+    Apto::Mutex mutex;
+    Apto::ConditionVariable cond;
+    Apto::ThreadSpecific<int> value;
+    bool done;
+    
+    TestCV() : done(false) { ; }
+    
+  protected:
+    void Run() {
+      mutex.Lock();
+      
+      // Build thread specific value
+      int* local_value = value.Get();
+      if (!local_value) {
+        local_value = new int;
+        value.Set(local_value);
+      }
+      *local_value = 12;
+      
+      while (!done) {
+        cond.Wait(mutex);
+      }
+      
+      // Destroy thread specific value
+      local_value = value.Get();
+      value.Set(NULL);
+      
+      mutex.Unlock();
+    }
+  };
+  
+  TestCV tester;
+  
+  int* local_value = tester.value.Get();
+  if (!local_value) {
+    local_value = new int;
+    tester.value.Set(local_value);
+  }
+  *local_value = 6;
+
+  
+  tester.Start();
+  tester.mutex.Lock();
+  tester.done = true;
+  tester.mutex.Unlock();
+  tester.cond.Signal();
+  tester.Join();
+  
+  local_value = tester.value.Get();
+  EXPECT_EQ(6, *local_value);
+}
