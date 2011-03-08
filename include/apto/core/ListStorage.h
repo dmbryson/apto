@@ -44,7 +44,243 @@ namespace Apto {
   
   template <class T> class DL
   {
+  public:
+    class EntryHandle;
+    class Iterator;
+    class ConstIterator;
     
+  private:
+    class Node
+    {
+    public:
+      T data;
+      EntryHandle* handle;
+      Node* next;
+      Node* prev;
+    };
+    
+    Node m_root;
+    int m_size;
+    
+  protected:
+    DL() : m_size(0)
+    {
+      m_root.next = &m_root;
+      m_root.prev = &m_root;
+    }
+    
+    ~DL()
+    {
+      // Clear handles and delete nodes
+      Node* cur = &m_root;
+      while (cur->next != &m_root) {
+        Node* next = cur->next;
+        if (cur != &m_root) delete cur;
+        if (next->handle) next->handle->m_node = NULL;
+        cur = next;
+      }
+    }
+    
+    DL& operator=(const DL& rhs)
+    {
+      Clear();
+      ConstIterator it = rhs.Begin();
+      while (it.Next()) PushRear(*it.Get());
+      return *this;
+    }
+    
+    
+    inline int GetSize() const { return m_size; }
+    
+    inline void Clear()
+    {
+      // Clear handles and delete nodes
+      Node* cur = &m_root;
+      while (cur->next != &m_root) {
+        Node* next = cur->next;
+        if (cur != &m_root) delete cur;
+        if (next->handle) next->handle->m_node = NULL;
+        cur = next;
+      }
+      
+      m_root.next = &m_root;
+      m_root.prev = &m_root;
+      m_size = 0;
+    }
+    
+    inline T& GetFirst() { return m_root.next->data; }
+    inline const T& GetFirst() const { return m_root.next->data; }
+    inline T& GetLast() { return m_root.prev->data; }
+    inline const T& GetLast()  const { return m_root.prev->data; }
+    
+    inline T Pop() { return removeNode(m_root.next); }
+    inline T PopRear() { return removeNode(m_root.prev); }
+    inline T PopPos(int pos)
+    {
+      if (pos >= m_size) return NULL;
+      Node* test_node = m_root.next;
+      for (int i = 0; i < pos; i++) test_node = test_node->next;
+      return removeNode(test_node);
+    }
+    
+    
+    void Push(const T& val, EntryHandle** handle = NULL)
+    {
+      if (handle) delete *handle;
+      Node* node = new Node;
+      node->data = val;
+      if (handle) {
+        *handle = node->handle = new EntryHandle(this, node);
+      } else {
+        node->handle = NULL;
+      }
+      node->next = m_root.next;
+      node->prev = &m_root;
+      m_root.next->prev = node;
+      m_root.next = node;
+      m_size++;
+    }
+    
+    void PushRear(const T& val, EntryHandle** handle = NULL)
+    {
+      if (handle) delete *handle;
+      Node* node = new Node;
+      node->data = val;
+      if (handle) {
+        *handle = node->handle = new EntryHandle(this, node);
+      } else {
+        node->handle = NULL;
+      }
+      node->next = &m_root;
+      node->prev = m_root.prev;
+      m_root.prev->next = node;
+      m_root.prev = node;
+      m_size++;
+    }
+    
+    T Remove(const T& value)
+    {
+      for (Node* cur = &m_root; cur->next != &m_root; cur = cur->next) {
+        if (cur->data == value) {
+          removeNode(cur);
+          return true;
+        }
+      }
+      return false;
+    }
+    
+    Iterator Begin() { return Iterator(this); }
+    ConstIterator Begin() const { return ConstIterator(this); }
+    
+    
+  private:
+    T removeNode(Node* out_node)
+    {
+      // Make sure we're not trying to delete the root node!
+      assert(out_node != &m_root);
+      
+      // Save the data and patch up the linked list.
+      T out_data = out_node->data;
+      if (out_node->handle) out_node->handle->m_node = NULL;
+      out_node->prev->next = out_node->next;
+      out_node->next->prev = out_node->prev;      
+      delete out_node;
+      
+      m_size--;
+      
+      return out_data;
+    }    
+    
+  public:
+    class Iterator
+    {
+      friend class DL<T>;
+    private:
+      DL<T>* m_list;
+      Node* m_cur;
+      
+      Iterator(); // @not_implemented
+      
+      Iterator(DL<T>* list) : m_list(list), m_cur(&list->m_root) { ; }
+      
+    public:
+      inline T* Get() {
+        if (m_cur && m_cur != &m_list->m_root) return &m_cur->data;
+        return NULL;
+      }
+      
+      inline T* Next() {
+        if (m_cur) {
+          m_cur = m_cur->next;
+          if (m_cur == &m_list->m_root) {
+            m_cur = NULL;
+            return NULL;
+          } else {
+            return &m_cur->data;
+          }
+        }
+        return NULL;
+      }
+    };
+    
+    class ConstIterator
+    {
+      friend class DL<T>;
+    private:
+      const DL<T>* m_list;
+      const Node* m_cur;
+      
+      ConstIterator(); // @not_implemented
+      
+      ConstIterator(const DL<T>* list) : m_list(list), m_cur(&list->m_root) { ; }
+      
+    public:
+      inline const T* Get() {
+        if (m_cur && m_cur != &m_list->m_root) return &m_cur->data;
+        return NULL;
+      }
+      
+      inline const T* Next() {
+        if (m_cur) {
+          m_cur = m_cur->next;
+          if (m_cur == &m_list->m_root) {
+            m_cur = NULL;
+            return NULL;
+          } else {
+            return &m_cur->data;
+          }
+        }
+        return NULL;
+      }
+    };
+    
+    
+    class EntryHandle
+    {
+      friend class DL<T>;
+    private:
+      DL<T>* m_list;
+      Node* m_node;
+      
+      EntryHandle(); // @not_implemented
+      EntryHandle(const EntryHandle&); // @not_implemented
+      EntryHandle& operator=(const EntryHandle&); // @not_implemented
+      
+      EntryHandle(DL<T>* list, Node* node) : m_list(list), m_node(node) { ; }
+      ~EntryHandle()
+      {
+        if (m_node) m_node->handle = NULL;
+      }
+      
+    public:
+      bool IsValid() const { return (m_node); }
+      void Remove()
+      {
+        if (!m_node) return;
+        m_list->removeNode(m_node);
+        m_node = NULL;
+      }
+    };
     
   };
   

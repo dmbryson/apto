@@ -41,7 +41,7 @@ namespace Apto {
   // List
   // --------------------------------------------------------------------------------------------------------------  
   
-  template <class T, template <class> class StoragePolicy = SparseVector>
+  template <class T, template <class> class StoragePolicy = DL>
   class List : public StoragePolicy<T>
   {
   protected:
