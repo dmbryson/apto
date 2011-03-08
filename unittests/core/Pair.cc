@@ -31,3 +31,46 @@
 #include "apto/core/Pair.h"
 
 #include "gtest/gtest.h"
+
+
+TEST(Pair, Construction) {
+  Apto::Pair<int, int> p1; 
+  
+  Apto::Pair<int, int> p2(3);
+  EXPECT_EQ(3, p2.Value1());
+  
+  Apto::Pair<int, int> p3(4, 5);
+  EXPECT_EQ(4, p3.Value1());
+  EXPECT_EQ(5, p3.Value2());
+  
+  Apto::Pair<int, int> p4(p3);
+  EXPECT_EQ(4, p4.Value1());
+  EXPECT_EQ(5, p4.Value2());
+}
+
+TEST(Pair, Assignment) {
+  Apto::Pair<int, int> p1(4, 5);
+  EXPECT_EQ(4, p1.Value1());
+  EXPECT_EQ(5, p1.Value2());
+  
+
+  Apto::Pair<int, int> p2;
+  p2 = p1;
+  EXPECT_EQ(4, p2.Value1());
+  EXPECT_EQ(5, p2.Value2());  
+}
+
+TEST(Pair, Set) {
+  Apto::Pair<int, int> p1(4, 5);
+  EXPECT_EQ(4, p1.Value1());
+  EXPECT_EQ(5, p1.Value2());
+  
+  p1.Set(8, 10);
+  EXPECT_EQ(8, p1.Value1());
+  EXPECT_EQ(10, p1.Value2());
+  
+  p1.Value1() = 18;
+  p1.Value2() = 20;
+  EXPECT_EQ(18, p1.Value1());
+  EXPECT_EQ(20, p1.Value2());
+}
