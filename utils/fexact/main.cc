@@ -37,6 +37,9 @@
 
 int main(int argc, char** argv)
 {
+  (void) argc;
+  (void) argv;
+  
   double pvalue = 0.0;
 //  Apto::Stat::ContingencyTable t1(2,2);
 //  t1[0][0] = 2; t1[0][1] = 2;
