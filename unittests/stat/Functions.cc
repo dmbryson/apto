@@ -36,7 +36,7 @@
 #include <iostream>
 
 
-TEST(Functions, FishersExact) {
+TEST(StatFunctions, FishersExact) {
   double pvalue = 0.0;
   Apto::Stat::ContingencyTable t1(2,2);
   t1[0][0] = 2; t1[0][1] = 2;

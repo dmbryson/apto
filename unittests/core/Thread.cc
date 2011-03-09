@@ -32,7 +32,7 @@
 
 #include "gtest/gtest.h"
 
-TEST(Thread, Start) {
+TEST(CoreThread, Start) {
   class TestThread : public Apto::Thread
   {
   public:

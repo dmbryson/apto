@@ -35,7 +35,7 @@
 #include "gtest/gtest.h"
 
 
-TEST(ThreadSpecific, Usage) {
+TEST(CoreThreadSpecific, Usage) {
   class TestCV : public Apto::Thread
   {
   public:

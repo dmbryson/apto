@@ -33,7 +33,7 @@
 #include "gtest/gtest.h"
 
 #include <iostream>
-TEST(FileSystem, GetAbsolutePath) {
+TEST(CoreFileSystem, GetAbsolutePath) {
 #if APTO_PLATFORM(WINDOWS)
   Apto::String workdir("c:\tmp");
   Apto::String path1("foo");
@@ -49,7 +49,7 @@ TEST(FileSystem, GetAbsolutePath) {
   EXPECT_TRUE(Apto::FileSystem::GetAbsolutePath(path2, workdir) == path2);
 }
 
-TEST(FileSystem, PathAppend) {
+TEST(CoreFileSystem, PathAppend) {
 #if APTO_PLATFORM(WINDOWS)
   EXPECT_TRUE(Apto::FileSystem::PathAppend("foo", "bar") == "foo\bar");
 #else

@@ -32,7 +32,7 @@
 
 #include "gtest/gtest.h"
 
-TEST(Mutex, LockUnlock) {
+TEST(CoreMutex, LockUnlock) {
   Apto::Mutex mutex;
   
   mutex.Lock();

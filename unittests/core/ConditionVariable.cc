@@ -33,7 +33,7 @@
 
 #include "gtest/gtest.h"
 
-TEST(ConditionVariable, Signal) {
+TEST(CoreConditionVariable, Signal) {
   class TestCV : public Apto::Thread
   {
   public:
@@ -65,7 +65,7 @@ TEST(ConditionVariable, Signal) {
   EXPECT_TRUE(tester.completed);
 }
 
-TEST(ConditionVariable, Broadcast) {
+TEST(CoreConditionVariable, Broadcast) {
   struct GroupCV {
     Apto::Mutex mutex;
     Apto::ConditionVariable cond;

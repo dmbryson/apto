@@ -159,7 +159,7 @@ typedef Apto::SmartPtr<RCBaseClass, Apto::InternalRCObject, Apto::HeapStorage> R
 // Test Cases
 // --------------------------------------------------------------------------------------------------------------
 
-TEST(SmartPtr, ConstConversion) {
+TEST(CoreSmartPtr, ConstConversion) {
   Base_RefCount_ptr p1;
   ConstBase_RefCount_ptr p2(p1);
   
@@ -170,7 +170,7 @@ TEST(SmartPtr, ConstConversion) {
 }
 
 
-TEST(SmartPtr, OwnershipConversion) {
+TEST(CoreSmartPtr, OwnershipConversion) {
   Base_RefCount_ptr p1;
   Base_ThreadSafeRefCount_ptr p2;
   Base_InternalRCObject_ptr p3;
@@ -280,7 +280,7 @@ TEST(SmartPtr, OwnershipConversion) {
 }
 
 
-TEST(SmartPtr, Inheritance) {
+TEST(CoreSmartPtr, Inheritance) {
   Base_RefCount_ptr p1;
   PublicSub_RefCount_ptr p2(new PublicSubClass());
   PrivateSub_RefCount_ptr p3(new PrivateSubClass());
@@ -305,7 +305,7 @@ TEST(SmartPtr, Inheritance) {
 //  PrivateSub_RefCount_ptr p9(p2);
 }
 
-TEST(SmartPtr, RefCountSwap) {
+TEST(CoreSmartPtr, RefCountSwap) {
   Base_RefCount_ptr p1(new BaseClass);
   Base_RefCount_ptr p2(new BaseClass);
   
@@ -367,7 +367,7 @@ TEST(SmartPtr, RefCountSwap) {
 }
 
 
-TEST(SmartPtr, RefCountNullPointer) {
+TEST(CoreSmartPtr, RefCountNullPointer) {
   BaseClass* pNull = NULL;
   const int constructor_count = BaseClass::GetConstructorCount();
   const int destructor_count = BaseClass::GetDestructorCount();
@@ -432,7 +432,7 @@ TEST(SmartPtr, RefCountNullPointer) {
 }
 
 
-TEST(SmartPtr, InternalRCObject) {
+TEST(CoreSmartPtr, InternalRCObject) {
   const int constructor_count = RCBaseClass::GetConstructorCount();
   const int destructor_count = RCBaseClass::GetDestructorCount();
   EXPECT_TRUE(RCBaseClass::AllDestroyed());
@@ -463,7 +463,7 @@ TEST(SmartPtr, InternalRCObject) {
 }
 
 
-TEST(SmartPtr, ForwardReference) {
+TEST(CoreSmartPtr, ForwardReference) {
   // These should generate an error message about attempting to call the destructor for an undefined type
 //  Thingy_RefCount_ptr p1;
 //  Thingy_RefCount_ptr p2(p1);

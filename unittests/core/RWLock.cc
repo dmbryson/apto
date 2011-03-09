@@ -37,7 +37,7 @@
 
 #include "gtest/gtest.h"
 
-TEST(RWLock, Usage) {
+TEST(CoreRWLock, Usage) {
   
   struct TestInfo {
     Apto::RWLock rwlock;

@@ -35,7 +35,7 @@
 
 #include <iostream>
 
-TEST(ArrayUtils, ISort) {
+TEST(CoreArrayUtils, ISort) {
   Apto::Array<int> a(5);
   a[0] = 3;
   a[1] = 1;
@@ -48,7 +48,7 @@ TEST(ArrayUtils, ISort) {
 }
 
 
-TEST(ArrayUtils, QSort) {
+TEST(CoreArrayUtils, QSort) {
   Apto::Array<int> a(20);
   a[ 0] = 3;
   a[ 1] = 1;

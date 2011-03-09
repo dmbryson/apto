@@ -33,7 +33,7 @@
 #include "gtest/gtest.h"
 
 
-TEST(Pair, Construction) {
+TEST(CorePair, Construction) {
   Apto::Pair<int, int> p1; 
   
   Apto::Pair<int, int> p2(3);
@@ -48,7 +48,7 @@ TEST(Pair, Construction) {
   EXPECT_EQ(5, p4.Value2());
 }
 
-TEST(Pair, Assignment) {
+TEST(CorePair, Assignment) {
   Apto::Pair<int, int> p1(4, 5);
   EXPECT_EQ(4, p1.Value1());
   EXPECT_EQ(5, p1.Value2());
@@ -60,7 +60,7 @@ TEST(Pair, Assignment) {
   EXPECT_EQ(5, p2.Value2());  
 }
 
-TEST(Pair, Set) {
+TEST(CorePair, Set) {
   Apto::Pair<int, int> p1(4, 5);
   EXPECT_EQ(4, p1.Value1());
   EXPECT_EQ(5, p1.Value2());
