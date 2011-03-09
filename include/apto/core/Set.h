@@ -32,7 +32,6 @@
 #define AptoCoreSet_h
 
 #include "apto/core/ArrayStorage.h"
-#include "apto/core/Iterator.h"
 
 
 namespace Apto {
