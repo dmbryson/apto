@@ -28,8 +28,8 @@
  *
  */
 
-#ifndef ListStorage_h
-#define ListStorage_h
+#ifndef AptoCoreListStorage_h
+#define AptoCoreListStorage_h
 
 #include "apto/core/Array.h"
 #include "apto/platform/Platform.h"
