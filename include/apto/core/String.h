@@ -123,7 +123,7 @@ namespace Apto {
       int i;
       for (i = 0; i < GetSize() && str[i] != '\0' && (*this)[i] == str[i]; i++);
       
-      if (i == GetSize() && str[i] != '\0') return 0;
+      if (i == GetSize() && str[i] == '\0') return 0;
       if (i < GetSize() && str[i] < (*this)[i]) return 1;
       return -1;
     }
