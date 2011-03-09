@@ -34,8 +34,10 @@
 
 #include "apto/core/Atomic.h"
 #include "apto/core/RefTransport.h"
+#include "apto/core/StaticCheck.h"
 #include "apto/core/TypeSelect.h"
 
+#include <cassert>
 #include <string>
 
 
@@ -165,6 +167,9 @@ namespace Apto {
     }
     RefCount(const RefCount& rhs) : m_p_refs(rhs.m_p_refs) { ; }
     
+    template <class T1>
+    RefCount(const RefCount<T1>& rhs) : m_p_refs(reinterpret_cast<const RefCount&>(rhs).m_p_refs) { ; }
+    
     T Clone(const T& value)
     {
       ++*m_p_refs;
@@ -205,6 +210,9 @@ namespace Apto {
     }
     ThreadSafeRefCount(const ThreadSafeRefCount& rhs) : m_p_refs(rhs.m_p_refs) { ; }
     
+    template <class T1>
+    ThreadSafeRefCount(const ThreadSafeRefCount<T1>& rhs) : m_p_refs(rhs.m_p_refs) { ; }
+    
     T Clone(const T& value)
     {
       Atomic::Inc(m_p_refs);
@@ -236,7 +244,10 @@ namespace Apto {
   {
   protected:
     InternalRCObject() { ; }
-    InternalRCObject(const InternalRCObject& rhs) { ; }
+    InternalRCObject(const InternalRCObject& rhs) { (void)rhs; }
+    
+    template <class T1>
+    InternalRCObject(const InternalRCObject<T1>& rhs) { (void)rhs; }
     
     static T Clone(const T& value)
     {
@@ -250,7 +261,7 @@ namespace Apto {
       return false;
     }
     
-    static void Swap(InternalRCObject& rhs) { ; }
+    static void Swap(InternalRCObject& rhs) { (void)rhs; }
     
     enum { CopyIsDestructive = false };
   };
@@ -260,13 +271,16 @@ namespace Apto {
   {
   protected:
     DeepCopy() { ; }
-    DeepCopy(const DeepCopy& rhs) { ; }
+    DeepCopy(const DeepCopy& rhs) { (void)rhs; }
+    
+    template <class T1>
+    DeepCopy(const DeepCopy<T1>& rhs) { (void)rhs; }
     
     static T Clone(const T& value) { return value->Clone(); }
     
-    static bool Release(const T& value) { return true; }
+    static bool Release(const T& value) { (void)value; return true; }
     
-    static void Swap(DeepCopy& rhs) { ; }
+    static void Swap(DeepCopy& rhs) { (void)rhs; }
     
     enum { CopyIsDestructive = false };
   };
@@ -276,18 +290,21 @@ namespace Apto {
   {
   protected:
     DestructiveCopy() { ; }
-    DestructiveCopy(const DestructiveCopy& rhs) { ; }
+    DestructiveCopy(const DestructiveCopy& rhs) { (void)rhs; }
     
     template <class T1>
-    static T Clone(const T1& value) {
+    DestructiveCopy(const DestructiveCopy<T1>& rhs) { (void)rhs; }
+    
+    template <class T1>
+    static T Clone(T1& value) {
       T rval(value);
       value = T1();
       return rval;
     }
     
-    static bool Release(const T& value) { return true; }
+    static bool Release(const T& value) { (void)value; return true; }
     
-    static void Swap(DestructiveCopy& rhs) { ; }
+    static void Swap(DestructiveCopy& rhs) { (void)rhs; }
     
     enum { CopyIsDestructive = true };
   };
@@ -297,13 +314,18 @@ namespace Apto {
   {
   protected:
     NoCopy() { ; }
-    NoCopy(const NoCopy& rhs) { ; }
+    NoCopy(const NoCopy& rhs) { (void)rhs; }
     
-    static T Clone(const T& value) { ; }
+    static T Clone(const T& value)
+    {
+      (void)value;
+      static const bool DependedFalse = (sizeof(T*) == 0);  // False value dependent upon template parameter
+      APTO_STATIC_CHECK(DependedFalse, NoCopy_Policy_Disallows_Value_Copying);
+    }
     
-    static bool Release(const T& value) { return true; }
+    static bool Release(const T& value) { (void)value; return true; }
     
-    static void Swap(NoCopy& rhs) { ; }
+    static void Swap(NoCopy& rhs) { (void)rhs; }
     
     enum { CopyIsDestructive = false };
   };
