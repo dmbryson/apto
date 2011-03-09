@@ -45,6 +45,7 @@
 #include "apto/core/RefTransport.h"
 #include "apto/core/Set.h"
 #include "apto/core/SmartPtr.h"
+#include "apto/core/StaticCheck.h"
 #include "apto/core/String.h"
 #include "apto/core/StringBuffer.h"
 #include "apto/core/Thread.h"
