@@ -140,6 +140,7 @@
 		706B1E9612FC9C2C006EAB7F /* RefCount.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RefCount.cc; sourceTree = "<group>"; };
 		706B1E9E12FCA5C9006EAB7F /* ArrayUtils.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = ArrayUtils.h; sourceTree = "<group>"; };
 		706B43221304D52000470F38 /* StringBuffer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = StringBuffer.h; sourceTree = "<group>"; };
+		707A254F1327E51900B8CC50 /* StaticCheck.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StaticCheck.h; sourceTree = "<group>"; };
 		709B2F82131C3A650081E874 /* main.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cc; sourceTree = "<group>"; };
 		709B2F87131C3B470081E874 /* fexact */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = fexact; sourceTree = BUILT_PRODUCTS_DIR; };
 		70E1ECDA1300E2CB00F75FA2 /* SmartPtr.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = SmartPtr.h; sourceTree = "<group>"; };
@@ -396,6 +397,7 @@
 				70E1ECDC1301D40500F75FA2 /* RefTransport.h */,
 				70EAB1FD1305E866005B0BBF /* Set.h */,
 				70E1ECDA1300E2CB00F75FA2 /* SmartPtr.h */,
+				707A254F1327E51900B8CC50 /* StaticCheck.h */,
 				7043BEA91304707200EA53D6 /* String.h */,
 				706B43221304D52000470F38 /* StringBuffer.h */,
 				7023369C12FC5F33000C7BE5 /* Thread.h */,
