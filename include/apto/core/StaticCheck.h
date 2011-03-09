@@ -1,5 +1,5 @@
 /*
- *  SmartPtr.h
+ *  StaticCheck.h
  *  Apto
  *
  *  Created by David on 3/9/11.
