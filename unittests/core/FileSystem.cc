@@ -31,3 +31,28 @@
 #include "apto/core/FileSystem.h"
 
 #include "gtest/gtest.h"
+
+#include <iostream>
+TEST(FileSystem, GetAbsolutePath) {
+#if APTO_PLATFORM(WINDOWS)
+  Apto::String workdir("c:\tmp");
+  Apto::String path1("foo");
+  Apto::String path2("c:\bar");
+#else
+  Apto::String workdir("/tmp");
+  Apto::String path1("foo");
+  Apto::String path2("/bar");
+#endif
+  
+  
+  EXPECT_TRUE(Apto::FileSystem::GetAbsolutePath(path1, workdir) == Apto::FileSystem::PathAppend(workdir, path1));
+  EXPECT_TRUE(Apto::FileSystem::GetAbsolutePath(path2, workdir) == path2);
+}
+
+TEST(FileSystem, PathAppend) {
+#if APTO_PLATFORM(WINDOWS)
+  EXPECT_TRUE(Apto::FileSystem::PathAppend("foo", "bar") == "foo\bar");
+#else
+  EXPECT_TRUE(Apto::FileSystem::PathAppend("foo", "bar") == "foo/bar");
+#endif
+}
