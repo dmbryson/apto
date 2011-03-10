@@ -66,6 +66,36 @@ namespace Apto {
       return *this;
     }
     
+    template <typename T1, template <class> class SP1>
+    Array& operator+=(const Array<T1, SP1>& rhs)
+    {
+      int old_size = SP::GetSize();
+      int rhs_size = rhs.GetSize();
+      SP::Resize(old_size + rhs_size);
+      for (int i = 0; i < rhs_size; i++) SP::operator[](i + old_size) = rhs[i];
+      return *this;
+    }
+
+    template <typename T1, template <class> class SP1>
+    Array operator+(const Array<T1, SP1>& rhs)
+    {
+      Array new_arr(SP::GetSize() + rhs.GetSize());
+      for (int i = 0; i < SP::GetSize(); i++) new_arr[i] = SP::operator[](i);
+      for (int i = 0; i < rhs.GetSize(); i++) new_arr[SP::GetSize() + i] = rhs[i];
+      return new_arr;
+    }
+    
+    template <typename T1, template <class> class SP1>
+    bool operator==(const Array<T1, SP1>& rhs)
+    {
+      if (SP::GetSize() != rhs.GetSize()) return false;
+      for (int i = 0; i < SP::GetSize(); i++) if (SP::operator[](i) != rhs[i]) return false;
+      return true;
+    }
+    
+    template <typename T1, template <class> class SP1>
+    bool operator!=(const Array<T1, SP1>& rhs) { return !operator==(rhs); }
+
     inline int GetSize() const { return SP::GetSize(); }
     
     inline void ResizeClear(const int in_size)

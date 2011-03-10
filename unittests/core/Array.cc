@@ -161,6 +161,55 @@ TEST(CoreBasicArray, Iterators) {
 }
 
 
+TEST(CoreBasicArray, Comparison) {
+  Apto::Array<int, Apto::Basic> array1(3);
+  for (int i = 0; i < array1.GetSize(); i++) array1[i] = i;
+  
+  Apto::Array<int, Apto::Basic> array2(array1);
+  array2[1] = 5;
+  
+  EXPECT_TRUE(array1 == array1);
+  EXPECT_TRUE(array2 == array2);
+  EXPECT_TRUE(array1 != array2);
+  EXPECT_FALSE(array1 == array2);
+  EXPECT_FALSE(array1 != array1);
+  EXPECT_FALSE(array2 != array2);
+}
+
+
+TEST(CoreBasicArray, Concatenation) {
+  Apto::Array<int, Apto::Basic> array1(3);
+  for (int i = 0; i < array1.GetSize(); i++) array1[i] = i;
+  
+  Apto::Array<int, Apto::Basic> array2(1);
+  array2[0] = 5;
+  
+  array2 += array2;
+  EXPECT_EQ(2, array2.GetSize());
+  EXPECT_EQ(5, array2[0]);
+  EXPECT_EQ(5, array2[1]);
+  
+  array1 += array2;
+  
+  EXPECT_EQ(0, array1[0]);
+  EXPECT_EQ(1, array1[1]);
+  EXPECT_EQ(2, array1[2]);
+  EXPECT_EQ(5, array1[3]);
+  EXPECT_EQ(5, array1[4]);
+  
+  Apto::Array<int, Apto::Basic> array3 = array2 + array2;
+  EXPECT_EQ(4, array3.GetSize());
+  EXPECT_EQ(5, array3[0]);
+  EXPECT_EQ(5, array3[1]);
+  EXPECT_EQ(5, array3[2]);
+  EXPECT_EQ(5, array3[3]);  
+  
+  array2 = array2 + array2;
+  EXPECT_TRUE(array2 == array3);
+}
+
+
+
 // Array<int, Smart>
 // --------------------------------------------------------------------------------------------------------------  
 
@@ -295,6 +344,54 @@ TEST(CoreSmartArray, Iterators) {
 }
 
 
+TEST(CoreSmartArray, Comparison) {
+  Apto::Array<int, Apto::Smart> array1(3);
+  for (int i = 0; i < array1.GetSize(); i++) array1[i] = i;
+  
+  Apto::Array<int, Apto::Smart> array2(array1);
+  array2[1] = 5;
+  
+  EXPECT_TRUE(array1 == array1);
+  EXPECT_TRUE(array2 == array2);
+  EXPECT_TRUE(array1 != array2);
+  EXPECT_FALSE(array1 == array2);
+  EXPECT_FALSE(array1 != array1);
+  EXPECT_FALSE(array2 != array2);
+}
+
+
+TEST(CoreSmartArray, Concatenation) {
+  Apto::Array<int, Apto::Smart> array1(3);
+  for (int i = 0; i < array1.GetSize(); i++) array1[i] = i;
+  
+  Apto::Array<int, Apto::Smart> array2(1);
+  array2[0] = 5;
+  
+  array2 += array2;
+  EXPECT_EQ(2, array2.GetSize());
+  EXPECT_EQ(5, array2[0]);
+  EXPECT_EQ(5, array2[1]);
+  
+  array1 += array2;
+  
+  EXPECT_EQ(0, array1[0]);
+  EXPECT_EQ(1, array1[1]);
+  EXPECT_EQ(2, array1[2]);
+  EXPECT_EQ(5, array1[3]);
+  EXPECT_EQ(5, array1[4]);
+  
+  Apto::Array<int, Apto::Smart> array3 = array2 + array2;
+  EXPECT_EQ(4, array3.GetSize());
+  EXPECT_EQ(5, array3[0]);
+  EXPECT_EQ(5, array3[1]);
+  EXPECT_EQ(5, array3[2]);
+  EXPECT_EQ(5, array3[3]);  
+  
+  array2 = array2 + array2;
+  EXPECT_TRUE(array2 == array3);
+}
+
+
 // Array<int, ManagedPointer>
 // --------------------------------------------------------------------------------------------------------------  
 
@@ -420,6 +517,54 @@ TEST(CoreManagedPointerArray, Iterators) {
     EXPECT_EQ(i, *cit.Get());
     i++;
   }
+}
+
+
+TEST(CoreManagedPointerArray, Comparison) {
+  Apto::Array<int, Apto::ManagedPointer> array1(3);
+  for (int i = 0; i < array1.GetSize(); i++) array1[i] = i;
+  
+  Apto::Array<int, Apto::ManagedPointer> array2(array1);
+  array2[1] = 5;
+  
+  EXPECT_TRUE(array1 == array1);
+  EXPECT_TRUE(array2 == array2);
+  EXPECT_TRUE(array1 != array2);
+  EXPECT_FALSE(array1 == array2);
+  EXPECT_FALSE(array1 != array1);
+  EXPECT_FALSE(array2 != array2);
+}
+
+
+TEST(CoreManagedPointerArray, Concatenation) {
+  Apto::Array<int, Apto::ManagedPointer> array1(3);
+  for (int i = 0; i < array1.GetSize(); i++) array1[i] = i;
+  
+  Apto::Array<int, Apto::ManagedPointer> array2(1);
+  array2[0] = 5;
+  
+  array2 += array2;
+  EXPECT_EQ(2, array2.GetSize());
+  EXPECT_EQ(5, array2[0]);
+  EXPECT_EQ(5, array2[1]);
+  
+  array1 += array2;
+  
+  EXPECT_EQ(0, array1[0]);
+  EXPECT_EQ(1, array1[1]);
+  EXPECT_EQ(2, array1[2]);
+  EXPECT_EQ(5, array1[3]);
+  EXPECT_EQ(5, array1[4]);
+  
+  Apto::Array<int, Apto::ManagedPointer> array3 = array2 + array2;
+  EXPECT_EQ(4, array3.GetSize());
+  EXPECT_EQ(5, array3[0]);
+  EXPECT_EQ(5, array3[1]);
+  EXPECT_EQ(5, array3[2]);
+  EXPECT_EQ(5, array3[3]);  
+  
+  array2 = array2 + array2;
+  EXPECT_TRUE(array2 == array3);
 }
 
 
