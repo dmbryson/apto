@@ -83,6 +83,7 @@ namespace Apto {
     
     DL& operator=(const DL& rhs)
     {
+      if (this == &rhs) return *this;
       Clear();
       ConstIterator it = rhs.Begin();
       while (it.Next()) PushRear(*it.Get());
@@ -351,6 +352,7 @@ namespace Apto {
     
     BufferedDL& operator=(const BufferedDL& rhs)
     {
+      if (this == &rhs) return *this;
       Clear();
       ConstIterator it = rhs.Begin();
       while (it.Next()) PushRear(*it.Get());
@@ -627,6 +629,7 @@ namespace Apto {
     
     SparseVector& operator=(const SparseVector& rhs)
     {
+      if (this == &rhs) return *this;
       // TODO - SparseVector assignment operator is quick-and-dirty - should more efficiently copy over elements
       Clear();
       ConstIterator it = rhs.Begin();

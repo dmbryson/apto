@@ -83,10 +83,13 @@ TEST(CoreDLList, Assignment) {
   EXPECT_NE(list1.GetFirst(), list2.GetFirst());
   
   list1 = list2;
-  
   EXPECT_EQ(list1.GetSize(), list2.GetSize());
   EXPECT_EQ(list1.GetFirst(), list2.GetFirst());
-  
+
+  list1 = list1;
+  EXPECT_EQ(list1.GetSize(), list2.GetSize());
+  EXPECT_EQ(list1.GetFirst(), list2.GetFirst());
+
   Apto::List<int, Apto::DL> list_copy_constructor(list2);
   EXPECT_EQ(list2.GetSize(), list_copy_constructor.GetSize());
   EXPECT_EQ(list2.GetFirst(), list_copy_constructor.GetFirst());
@@ -253,10 +256,13 @@ TEST(CoreBufferedDLList, Assignment) {
   EXPECT_NE(list1.GetFirst(), list2.GetFirst());
   
   list1 = list2;
-  
   EXPECT_EQ(list1.GetSize(), list2.GetSize());
   EXPECT_EQ(list1.GetFirst(), list2.GetFirst());
   
+  list1 = list1;
+  EXPECT_EQ(list1.GetSize(), list2.GetSize());
+  EXPECT_EQ(list1.GetFirst(), list2.GetFirst());
+
   Apto::List<int, Apto::BufferedDL> list_copy_constructor(list2);
   EXPECT_EQ(list2.GetSize(), list_copy_constructor.GetSize());
   EXPECT_EQ(list2.GetFirst(), list_copy_constructor.GetFirst());
@@ -423,7 +429,10 @@ TEST(CoreSparseVectorList, Assignment) {
   EXPECT_NE(list1.GetFirst(), list2.GetFirst());
   
   list1 = list2;
+  EXPECT_EQ(list1.GetSize(), list2.GetSize());
+  EXPECT_EQ(list1.GetFirst(), list2.GetFirst());
   
+  list1 = list1;
   EXPECT_EQ(list1.GetSize(), list2.GetSize());
   EXPECT_EQ(list1.GetFirst(), list2.GetFirst());
   
