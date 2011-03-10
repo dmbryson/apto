@@ -31,182 +31,152 @@
 #ifndef AptoCoreMap_h
 #define AptoCoreMap_h
 
-#include "apto/core/ArrayStorage.h"
+#include "apto/core/Array.h"
+#include "apto/core/MapStorage.h"
 #include "apto/core/Pair.h"
 
 
 namespace Apto {
-  template<class KeyType, class ValueType, template <class> class StoragePolicy = Basic>
-  class Map : public StoragePolicy<Pair<KeyType, ValueType> >
+  
+  // Map - Hashing Functions
+  // --------------------------------------------------------------------------------------------------------------
+  
+  // HASH_TYPE = basic object
+  // Casts the pointer to an int, shift right last two bit positions, mod by
+  // the size of the hash table and hope for the best.  The shift is to account
+  // for typical 4-byte alignment of pointer values.  Depending on architecture
+  // this may not be true and could result in suboptimal hashing at higher
+  // order alignments.
+  template <class T, int HashFactor> class HashKey
+  {
+    static int Hash(const T& key)
+    {
+      // Cast/Dereference of key as an int* tells the compiler that we really want
+      // to truncate the value to an integer, even if a pointer is larger.
+      return abs((*((int*)&key) >> 2) % HashFactor);         
+    }
+  };
+  
+  // HASH_TYPE = int
+  // Simply mod the into by the size of the hash table and hope for the best
+  template<int HashFactor> class HashKey<int, HashFactor>
+  {
+    static int Hash(const int key)
+    {
+      return abs(key % HashFactor);
+    }
+  };
+
+  // HASH_TYPE = double
+  // Simply mod the into by the size of the hash table and hope for the best
+  template<int HashFactor> class HashKey<double, HashFactor>
+  {
+    static int Hash(const double key)
+    {
+      return abs((int)key % HashFactor);
+    }
+  };
+  
+  
+  // Map
+  // --------------------------------------------------------------------------------------------------------------
+  
+  template<class K, class V, template <class, class, int> class StoragePolicy = HashBTree, int HashFactor = 42,
+           template <class, int> class HashFunctor = HashKey>
+  class Map : public StoragePolicy<K, V, HashFactor>
   {
   protected:
-    typedef StoragePolicy<Pair<KeyType, ValueType> > SP;
+    typedef StoragePolicy<K, V, HashFactor> SP;
+    typedef HashFunctor<K, HashFactor> HF;
     
   public:
+    typedef K KeyType;
+    typedef V ValueType;
+    typedef typename StoragePolicy<KeyType, ValueType, HashFactor>::Iterator Iterator;
+    typedef typename StoragePolicy<KeyType, ValueType, HashFactor>::ConstIterator ConstIterator;
+    typedef typename StoragePolicy<KeyType, ValueType, HashFactor>::KeyIterator KeyIterator;
+    typedef typename StoragePolicy<KeyType, ValueType, HashFactor>::ValueIterator ValueIterator;
+
+  public:
     Map() { ; }
-    template <template <class> class SP1> Map(const Map<KeyType, ValueType, SP1>& rhs) { this->operator=(rhs); }
+    Map(const Map& rhs) { this->operator=(rhs); }
+    
+    template <class K1, class V1, template <class, class, int> class SP1, int F, template <class, int> class H>
+    explicit Map(const Map<K1, V1, SP1, F, H>& rhs) { this->operator=(rhs); }
     
     inline int GetSize() const { return SP::GetSize(); }
     
-    template <template <class> class SP1>
-    Map& operator=(const Map<KeyType, ValueType, SP1>& rhs)
+    template <class K1, class V1, template <class, class, int> class SP1, int F, template <class, int> class H>
+    Map& operator=(const Map<K1, V1, SP1, F, H>& rhs)
     {
-      SP::Resize(rhs.GetSize());
-      Apto::Iterator<Pair<KeyType, ValueType> >* it = rhs.Iterator();
-      for (int i = 0; it->Next(); i++) SP::operator[](i) = *it->Get();
-      delete it;
+      if (this == &rhs) return *this;
+      
+      Clear();
+      typename Map<K, V, SP1, F, H>::ConstIterator it = rhs.Begin();
+      while (it.Next()) Get(*it.Key()) = *it.Value();
       return *this;
     }
     
-    
-    void Set(const KeyType& key, const ValueType& value)
+    template <class K1, class V1, template <class, class, int> class SP1, int F, template <class, int> class H>
+    bool operator==(const Map<K1, V1, SP1, F, H>& rhs)
     {
-      for (int i = 0; i < GetSize(); i++) {
-        if (SP::operator[](i).Value1() == key) {
-          SP::operator[](i).Value2() = value;
-          return;
-        }
+      if (SP::GetSize() != rhs.GetSize()) return false;
+      
+      // Get and sort local keys
+      KeyIterator kit1 = Keys();
+      Array<KeyType> keys1(SP::GetSize());
+      for (int i = 0; kit1.Next(); i++) keys1[i] = *kit1.Get();
+      QSort(keys1);
+      
+      // Get and sort rhs keys
+      typename Map<K1, V1, SP1, F, H>::KeyIterator kit2 = rhs.Keys();
+      Array<K1> keys2(rhs.GetSize());
+      for (int i = 0; kit2.Next(); i++) keys2[i] = *kit2.Get();
+      
+      for (int i = 0; i < keys1.GetSize(); i++) {
+        if (keys1[i] != keys2[i] || Get(keys1[i]) != rhs.Get(keys2[i])) return false;
       }
-      SP::Resize(GetSize() + 1);
-      SP::operator[](GetSize()) = Pair<KeyType, ValueType>(key, value);
+      
+      return true;
     }
     
-    bool Get(const KeyType& key, ValueType& out_value) const
-    {
-      for (int i = 0; i < GetSize(); i++) {
-        if (SP::operator[](i).Value1() == key) {
-          out_value = SP::operator[](i).Value2();
-          return true;
-        }
+    inline void Clear() { SP::Clear(); }
+    
+    inline bool Has(const KeyType& key) const { return (SP::Find(key, HF::Hash(key))); }
+    
+    inline ValueType& Get(const KeyType& key) { return SP::Get(key, HashFunctor<KeyType, HashFactor>::Hash(key)); }
+    inline ValueType& operator[](const KeyType& key) { return Get(key); }
+            
+    
+    inline bool Get(const KeyType& key, ValueType& out_value) const { 
+      const ValueType* entry_value = SP::Find(key, HF::Hash(key));
+      if (entry_value) {
+        out_value = *entry_value;
+        return true;
       }
       return false;
     }
     
-    const ValueType& GetWithDefault(const KeyType& key, const ValueType& default_value)
+    ValueType& GetWithDefault(const KeyType& key, const ValueType& default_value)
     {
-      for (int i = 0; i < GetSize(); i++) {
-        if (SP::operator[](i).Value1() == key) {
-          return SP::operator[](i).Value2();
-        }
-      }
-      SP::Resize(GetSize() + 1);
-      SP::operator[](GetSize()) = Pair<KeyType, ValueType>(key, default_value);
-      return SP::operator[](GetSize() - 1).Value2();
+      ValueType* entry_value = SP::Find(key, HF::Hash(key));
+      if (entry_value) return *entry_value;
+      ValueType& new_value = Get(key);
+      new_value = default_value;
+      return new_value;
     }
     
-    ValueType& ValueFor(const KeyType& key)
-    {
-      for (int i = 0; i < GetSize(); i++) {
-        if (SP::operator[](i).Value1() == key) {
-          return SP::operator[](i).Value2();
-        }
-      }
-      SP::Resize(GetSize() + 1);
-      SP::operator[](GetSize()) = Pair<KeyType, ValueType>(key);
-      return SP::operator[](GetSize() - 1).Value2();
-    }
+    inline void Set(const KeyType& key, const ValueType& value) { Get(key) = value; }
     
-    const ValueType& ValueFor(const KeyType& key) const
-    {
-      for (int i = 0; i < GetSize(); i++) {
-        if (SP::operator[](i).Value1() == key) {
-          return SP::operator[](i).Value2();
-        }
-      }
-      SP::Resize(GetSize() + 1);
-      SP::operator[](GetSize()) = Pair<KeyType, ValueType>(key);
-      return SP::operator[](GetSize() - 1).Value2();
-    }
     
-    ValueType& operator[](const KeyType& key) { return ValueFor(key); }
-    const ValueType& operator[](const KeyType& key) const { return ValueFor(key); }
+    inline bool Remove(const KeyType& key) { return SP::Remove(key, HashFunctor<KeyType, HashFactor>::Hash(key)); }
     
-    ConstIterator<KeyType>* Keys() const { return new KeyIterator(*this); }
-    ConstIterator<ValueType>* Values() const { return new ValueIterator(*this); }
-    ConstIterator<Pair<KeyType, ValueType> >* Iterator() const { return new PairIterator(*this); }
     
-    void Remove(const KeyType& key)
-    {
-      for (int i = 0; i < GetSize(); i++) {
-        if (SP::operator[](i).Value1() == key) {
-          int lastkv = GetSize() - 1;
-          if (i != lastkv) SP::operator[](i) = SP::operator[](lastkv);
-          SP::Resize(lastkv);
-        }
-      }
-    }
+    Iterator Begin() { return SP::Begin(); }
+    ConstIterator Begin() const { return SP::Begin(); }
     
-    bool Remove(const KeyType& key, ValueType& out_value)
-    {
-      for (int i = 0; i < GetSize(); i++) {
-        if (SP::operator[](i).Value1() == key) {
-          int lastkv = GetSize() - 1;
-          out_value = SP::operator[](i).Value2();
-          if (i != lastkv) SP::operator[](i) = SP::operator[](lastkv);
-          SP::Resize(lastkv);
-          return true;
-        }
-      }
-      return false;
-    }
-    
-  protected:
-    class KeyIterator : public Apto::ConstIterator<KeyType>
-    {
-    private:
-      const Map& m_map;
-      int m_index;
-      
-      KeyIterator(); // @not_implemented
-      
-    public:
-      KeyIterator(const Map& map) : m_map(map), m_index(-1) { ; }
-      
-      const KeyType* Get()
-      {
-        return (m_index > 0 && m_index < m_map.GetSize()) ? &(m_map.SP::operator[](m_index).Value1()) : NULL;
-      }
-      const KeyType* Next() { return (++m_index < m_map.GetSize()) ? &(m_map.SP::operator[](m_index).Value1()) : NULL; }
-    };
-    
-    class ValueIterator : public Apto::ConstIterator<ValueType>
-    {
-    private:
-      const Map& m_map;
-      int m_index;
-      
-      ValueIterator(); // @not_implemented
-      
-    public:
-      ValueIterator(const Map& map) : m_map(map), m_index(-1) { ; }
-      
-      const ValueType* Get()
-      {
-        return (m_index > 0 && m_index < m_map.GetSize()) ? &(m_map.SP::operator[](m_index).Value2()) : NULL;
-      }
-      const ValueType* Next() { return (++m_index < m_map.GetSize()) ? &(m_map.SP::operator[](m_index).Value2()) : NULL; }
-    };
-    
-    class PairIterator : public Apto::ConstIterator<Pair<KeyType, ValueType> >
-    {
-    private:
-      const Map& m_map;
-      int m_index;
-      
-      PairIterator(); // @not_implemented
-      
-    public:
-      PairIterator(const Map& map) : m_map(map), m_index(-1) { ; }
-      
-      const Pair<KeyType, ValueType>* Get()
-      {
-        return (m_index > 0 && m_index < m_map.GetSize()) ? &(m_map.SP::operator[](m_index)) : NULL;
-      }
-      const Pair<KeyType, ValueType>* Next()
-      {
-        return (++m_index < m_map.GetSize()) ? &(m_map.SP::operator[](m_index)) : NULL;
-      }
-    };
+    KeyIterator Keys() const { return SP::Keys(); }
+    ValueIterator Values() const { return SP::Values(); }
   };
 };
 

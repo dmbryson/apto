@@ -28,6 +28,12 @@
  *
  */
 
-//#include "apto/core/Map.h"
+#include "apto/core/Map.h"
 
 #include "gtest/gtest.h"
+
+
+TEST(CoreHashBTreeMap, Construction) {
+  Apto::Map<int, int, Apto::HashBTree> map;
+  EXPECT_EQ(0, map.GetSize());
+}

@@ -174,6 +174,24 @@ namespace Apto {
     }
   };
   
+  
+  // HASH_TYPE = BasicString<ThreadingModel>
+  // We hash a string simply by adding up the individual character values in
+  // that string and modding by the hash size.  For most applications this
+  // will work fine (and reasonably fast!) but some patterns will cause all
+  // strings to go into the same cell.  For example, "ABC"=="CBA"=="BBB".
+  template <class T, int HashFactor> class HashKey;
+  template <class ThreadingModel, int HashFactor> class HashKey<BasicString<ThreadingModel>, HashFactor>
+  {
+    int Hash(const BasicString<ThreadingModel>& key)
+    {
+      unsigned int out_hash = 0;
+      for (int i = 0; i < key.GetSize(); i++)
+        out_hash += (unsigned int) key[i];
+      return out_hash % HashFactor;
+    }
+  };
+
   typedef BasicString<> String;
 };
 

@@ -133,6 +133,7 @@
 		702336B712FC9106000C7BE5 /* RefCount.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = RefCount.h; sourceTree = "<group>"; };
 		702336C212FC94AA000C7BE5 /* Pair.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = Pair.h; sourceTree = "<group>"; };
 		7030DB0C1326844100B6DADA /* ListStorage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ListStorage.h; sourceTree = "<group>"; };
+		7030DB3A13292FF300B6DADA /* MapStorage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MapStorage.h; sourceTree = "<group>"; };
 		704031F51314259100F2F055 /* Functions.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Functions.cc; sourceTree = "<group>"; };
 		7043BEA91304707200EA53D6 /* String.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = String.h; sourceTree = "<group>"; };
 		7043BEE31305925600EA53D6 /* Map.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = Map.h; sourceTree = "<group>"; };
@@ -390,6 +391,7 @@
 				70EE0D6F13099C0A00D6C016 /* List.h */,
 				7030DB0C1326844100B6DADA /* ListStorage.h */,
 				7043BEE31305925600EA53D6 /* Map.h */,
+				7030DB3A13292FF300B6DADA /* MapStorage.h */,
 				7023369F12FC5FDD000C7BE5 /* Mutex.h */,
 				702336C212FC94AA000C7BE5 /* Pair.h */,
 				702336AA12FC7309000C7BE5 /* RWLock.h */,
