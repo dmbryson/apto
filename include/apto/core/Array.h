@@ -77,7 +77,7 @@ namespace Apto {
     }
 
     template <typename T1, template <class> class SP1>
-    Array operator+(const Array<T1, SP1>& rhs)
+    Array operator+(const Array<T1, SP1>& rhs) const
     {
       Array new_arr(SP::GetSize() + rhs.GetSize());
       for (int i = 0; i < SP::GetSize(); i++) new_arr[i] = SP::operator[](i);
