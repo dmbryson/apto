@@ -75,6 +75,40 @@ namespace Apto {
       while (it.Next()) PushRear(*it.Get());
     }
     
+    template <class T1, template <class> class SP1>
+    inline List& operator+=(const List<T1, SP1>& rhs)
+    {
+      int rhs_size = rhs.GetSize();
+      typename List<T1, SP1>::ConstIterator it = rhs.Begin();
+      for (it.Next(); rhs_size > 0; it.Next(), rhs_size--) PushRear(*it.Get());
+      return *this;
+    }
+    
+
+    template <class T1, template <class> class SP1>
+    inline List operator+(const List<T1, SP1>& rhs) const
+    {
+      List new_list;
+      ConstIterator it1 = Begin();
+      while (it1.Next()) new_list.PushRear(*it1.Get());
+      typename List<T1, SP1>::ConstIterator it2 = rhs.Begin();
+      while (it2.Next()) new_list.PushRear(*it2.Get());
+      return new_list;
+    }
+    
+    template <class T1, template <class> class SP1>
+    inline bool operator==(const List<T1, SP1>& rhs)
+    {
+      if (SP::GetSize() != rhs.GetSize()) return false;
+      Iterator it1 = Begin();
+      typename List<T1, SP1>::ConstIterator it2 = rhs.Begin();
+      while (it1.Next() && it2.Next()) if (*it1.Get() != *it2.Get()) return false;
+      return true;
+    }
+
+    template <class T1, template <class> class SP1>
+    inline bool operator!=(const List<T1, SP1>& rhs) { return !operator==(rhs); }
+    
     
     inline int GetSize() const { return SP::GetSize(); }
     

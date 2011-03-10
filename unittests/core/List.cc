@@ -154,6 +154,54 @@ TEST(CoreDLList, Iterators) {
 }
 
 
+TEST(CoreDLList, Comparison) {
+  Apto::List<int, Apto::DL> list1;
+  for (int i = 0; i < 3; i++) list1.PushRear(i);
+  
+  Apto::List<int, Apto::DL> list2(list1);
+  list2.GetLast() = 5;
+  
+  EXPECT_TRUE(list1 == list1);
+  EXPECT_TRUE(list2 == list2);
+  EXPECT_TRUE(list1 != list2);
+  EXPECT_FALSE(list1 == list2);
+  EXPECT_FALSE(list1 != list1);
+  EXPECT_FALSE(list2 != list2);
+}
+
+
+TEST(CoreDLList, Concatenation) {
+  Apto::List<int, Apto::DL> list1;
+  for (int i = 0; i < 3; i++) list1.PushRear(i);
+  
+  
+  Apto::List<int, Apto::DL> list2;
+  list2.PushRear(5);
+  
+  list2 += list2;
+  EXPECT_EQ(2, list2.GetSize());
+  EXPECT_EQ(5, list2.GetFirst());
+  EXPECT_EQ(5, list2.GetLast());
+  
+  list1 += list2;
+  
+  EXPECT_EQ(0, list1.Pop());
+  EXPECT_EQ(1, list1.Pop());
+  EXPECT_EQ(2, list1.Pop());
+  EXPECT_EQ(5, list1.Pop());
+  EXPECT_EQ(5, list1.Pop());
+  
+  list2.PushRear(6);
+  Apto::List<int, Apto::DL> list3 = list2 + list2;
+  EXPECT_EQ(6, list3.GetSize());
+  EXPECT_EQ(5, list3.GetFirst());
+  EXPECT_EQ(6, list3.GetLast());
+  
+  list2 = list2 + list2;
+  EXPECT_TRUE(list2 == list3);
+}
+
+
 
 // List<int, BufferedDL>
 // --------------------------------------------------------------------------------------------------------------  
@@ -273,6 +321,54 @@ TEST(CoreBufferedDLList, Iterators) {
     EXPECT_EQ(i, *cit.Get());
     i++;
   }
+}
+
+
+TEST(CoreBufferedDLList, Comparison) {
+  Apto::List<int, Apto::BufferedDL> list1;
+  for (int i = 0; i < 3; i++) list1.PushRear(i);
+  
+  Apto::List<int, Apto::BufferedDL> list2(list1);
+  list2.GetLast() = 5;
+  
+  EXPECT_TRUE(list1 == list1);
+  EXPECT_TRUE(list2 == list2);
+  EXPECT_TRUE(list1 != list2);
+  EXPECT_FALSE(list1 == list2);
+  EXPECT_FALSE(list1 != list1);
+  EXPECT_FALSE(list2 != list2);
+}
+
+
+TEST(CoreBufferedDLList, Concatenation) {
+  Apto::List<int, Apto::BufferedDL> list1;
+  for (int i = 0; i < 3; i++) list1.PushRear(i);
+  
+  
+  Apto::List<int, Apto::BufferedDL> list2;
+  list2.PushRear(5);
+  
+  list2 += list2;
+  EXPECT_EQ(2, list2.GetSize());
+  EXPECT_EQ(5, list2.GetFirst());
+  EXPECT_EQ(5, list2.GetLast());
+  
+  list1 += list2;
+  
+  EXPECT_EQ(0, list1.Pop());
+  EXPECT_EQ(1, list1.Pop());
+  EXPECT_EQ(2, list1.Pop());
+  EXPECT_EQ(5, list1.Pop());
+  EXPECT_EQ(5, list1.Pop());
+  
+  list2.PushRear(6);
+  Apto::List<int, Apto::BufferedDL> list3 = list2 + list2;
+  EXPECT_EQ(6, list3.GetSize());
+  EXPECT_EQ(5, list3.GetFirst());
+  EXPECT_EQ(6, list3.GetLast());
+  
+  list2 = list2 + list2;
+  EXPECT_TRUE(list2 == list3);
 }
 
 
@@ -397,3 +493,50 @@ TEST(CoreSparseVectorList, Iterators) {
   }
 }
 
+
+TEST(CoreSparseVectorList, Comparison) {
+  Apto::List<int, Apto::SparseVector> list1;
+  for (int i = 0; i < 3; i++) list1.PushRear(i);
+  
+  Apto::List<int, Apto::SparseVector> list2(list1);
+  list2.GetLast() = 5;
+  
+  EXPECT_TRUE(list1 == list1);
+  EXPECT_TRUE(list2 == list2);
+  EXPECT_TRUE(list1 != list2);
+  EXPECT_FALSE(list1 == list2);
+  EXPECT_FALSE(list1 != list1);
+  EXPECT_FALSE(list2 != list2);
+}
+
+
+TEST(CoreSparseVectorList, Concatenation) {
+  Apto::List<int, Apto::SparseVector> list1;
+  for (int i = 0; i < 3; i++) list1.PushRear(i);
+  
+  
+  Apto::List<int, Apto::SparseVector> list2;
+  list2.PushRear(5);
+  
+  list2 += list2;
+  EXPECT_EQ(2, list2.GetSize());
+  EXPECT_EQ(5, list2.GetFirst());
+  EXPECT_EQ(5, list2.GetLast());
+  
+  list1 += list2;
+  
+  EXPECT_EQ(0, list1.Pop());
+  EXPECT_EQ(1, list1.Pop());
+  EXPECT_EQ(2, list1.Pop());
+  EXPECT_EQ(5, list1.Pop());
+  EXPECT_EQ(5, list1.Pop());
+  
+  list2.PushRear(6);
+  Apto::List<int, Apto::SparseVector> list3 = list2 + list2;
+  EXPECT_EQ(6, list3.GetSize());
+  EXPECT_EQ(5, list3.GetFirst());
+  EXPECT_EQ(6, list3.GetLast());
+  
+  list2 = list2 + list2;
+  EXPECT_TRUE(list2 == list3);
+}
