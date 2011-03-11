@@ -32,6 +32,7 @@
 #define AptoCoreMapStorage_h
 
 #include "apto/core/Array.h"
+#include "apto/core/Pair.h"
 
 
 namespace Apto {
@@ -265,7 +266,7 @@ namespace Apto {
             }
           }
           m_table[hash].Resize(last_idx);
-          
+          m_size--;
           return true;
         }
         break;
@@ -289,14 +290,32 @@ namespace Apto {
       friend class HashBTree<K, V, HashFactor>;
     private:
       HashBTree<K, V, HashFactor>* m_map;
+      int m_table_idx;
+      int m_entry_idx;
+      Pair<K, V*> m_pair;
       
       Iterator(); // @not_implemented
 
-      Iterator(HashBTree<K, V, HashFactor>* map) : m_map(map) { ; }
+      Iterator(HashBTree<K, V, HashFactor>* map) : m_map(map), m_table_idx(-1) { ; }
       
     public:
-      
-      
+      const Pair<K, V*>* Next()
+      {
+        if (m_table_idx == HashFactor) return NULL;
+        if (m_table_idx == -1 || ++m_entry_idx >= m_map->m_table[m_table_idx].GetSize()) {
+          while (++m_table_idx < HashFactor && m_map->m_table[m_table_idx].GetSize() == 0);
+          if (m_table_idx == HashFactor) return NULL;
+          m_entry_idx = 0;
+        }
+        m_pair.Value1() = m_map->m_table[m_table_idx][m_entry_idx].key;
+        m_pair.Value2() = &m_map->m_table[m_table_idx][m_entry_idx].value;
+        return &m_pair;
+      }
+      const Pair<K, V*>* Get()
+      {
+        if (m_table_idx < HashFactor && m_entry_idx < m_map->m_table[m_table_idx].GetSize()) return &m_pair;
+        return NULL;
+      }
     };
     
     
@@ -305,14 +324,32 @@ namespace Apto {
       friend class HashBTree<K, V, HashFactor>;
     private:
       const HashBTree<K, V, HashFactor>* m_map;
+      int m_table_idx;
+      int m_entry_idx;
+      Pair<K, V*> m_pair;
       
       ConstIterator(); // @not_implemented
       
-      ConstIterator(const HashBTree<K, V, HashFactor>* map) : m_map(map) { ; }
+      ConstIterator(const HashBTree<K, V, HashFactor>* map) : m_map(map), m_table_idx(-1) { ; }
       
     public:
-      
-      
+      const Pair<K, const V*>* Next()
+      {
+        if (m_table_idx == HashFactor) return NULL;
+        if (m_table_idx == -1 || ++m_entry_idx >= m_map->m_table[m_table_idx].GetSize()) {
+          while (++m_table_idx < HashFactor && m_map->m_table[m_table_idx].GetSize() == 0);
+          if (m_table_idx == HashFactor) return NULL;
+          m_entry_idx = 0;
+        }
+        m_pair.Value1() = m_map->m_table[m_table_idx][m_entry_idx].key;
+        m_pair.Value2() = &m_map->m_table[m_table_idx][m_entry_idx].value;
+        return &m_pair;
+      }
+      const Pair<K, const V*>* Get()
+      {
+        if (m_table_idx < HashFactor && m_entry_idx < m_map->m_table[m_table_idx].GetSize()) return &m_pair;
+        return NULL;
+      }
     };
     
     
@@ -321,14 +358,30 @@ namespace Apto {
       friend class HashBTree<K, V, HashFactor>;
     private:
       const HashBTree<K, V, HashFactor>* m_map;
+      int m_table_idx;
+      int m_entry_idx;
       
       KeyIterator(); // @not_implemented
       
-      KeyIterator(const HashBTree<K, V, HashFactor>* map) : m_map(map) { ; }
+      KeyIterator(const HashBTree<K, V, HashFactor>* map) : m_map(map), m_table_idx(-1) { ; }
       
     public:
-      
-      
+      const K* Next()
+      {
+        if (m_table_idx == HashFactor) return NULL;
+        if (m_table_idx == -1 || ++m_entry_idx >= m_map->m_table[m_table_idx].GetSize()) {
+          while (++m_table_idx < HashFactor && m_map->m_table[m_table_idx].GetSize() == 0);
+          if (m_table_idx == HashFactor) return NULL;
+          m_entry_idx = 0;
+        }
+        return &m_map->m_table[m_table_idx][m_entry_idx].key;
+      }
+      const K* Get()
+      {
+        if (m_table_idx < HashFactor && m_entry_idx < m_map->m_table[m_table_idx].GetSize())
+          return &m_map->m_table[m_table_idx][m_entry_idx].key;
+        return NULL;
+      }
     };
     
     
@@ -337,14 +390,30 @@ namespace Apto {
       friend class HashBTree<K, V, HashFactor>;
     private:
       const HashBTree<K, V, HashFactor>* m_map;
+      int m_table_idx;
+      int m_entry_idx;
       
       ValueIterator(); // @not_implemented
       
-      ValueIterator(const HashBTree<K, V, HashFactor>* map) : m_map(map) { ; }
+      ValueIterator(const HashBTree<K, V, HashFactor>* map) : m_map(map), m_table_idx(-1) { ; }
       
     public:
-      
-      
+      const V* Next()
+      {
+        if (m_table_idx == HashFactor) return NULL;
+        if (m_table_idx == -1 || ++m_entry_idx >= m_map->m_table[m_table_idx].GetSize()) {
+          while (++m_table_idx < HashFactor && m_map->m_table[m_table_idx].GetSize() == 0);
+          if (m_table_idx == HashFactor) return NULL;
+          m_entry_idx = 0;
+        }
+        return &m_map->m_table[m_table_idx][m_entry_idx].value;
+      }
+      const V* Get()
+      {
+        if (m_table_idx < HashFactor && m_entry_idx < m_map->m_table[m_table_idx].GetSize())
+          return &m_map->m_table[m_table_idx][m_entry_idx].value;
+        return NULL;
+      }
     };
   };
   

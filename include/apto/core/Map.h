@@ -32,6 +32,7 @@
 #define AptoCoreMap_h
 
 #include "apto/core/Array.h"
+#include "apto/core/ArrayUtils.h"
 #include "apto/core/MapStorage.h"
 #include "apto/core/Pair.h"
 
@@ -49,6 +50,7 @@ namespace Apto {
   // order alignments.
   template <class T, int HashFactor> class HashKey
   {
+  public:
     static int Hash(const T& key)
     {
       // Cast/Dereference of key as an int* tells the compiler that we really want
@@ -61,6 +63,7 @@ namespace Apto {
   // Simply mod the into by the size of the hash table and hope for the best
   template<int HashFactor> class HashKey<int, HashFactor>
   {
+  public:
     static int Hash(const int key)
     {
       return abs(key % HashFactor);
@@ -71,6 +74,7 @@ namespace Apto {
   // Simply mod the into by the size of the hash table and hope for the best
   template<int HashFactor> class HashKey<double, HashFactor>
   {
+  public:
     static int Hash(const double key)
     {
       return abs((int)key % HashFactor);
@@ -134,12 +138,16 @@ namespace Apto {
       for (int i = 0; kit2.Next(); i++) keys2[i] = *kit2.Get();
       
       for (int i = 0; i < keys1.GetSize(); i++) {
-        if (keys1[i] != keys2[i] || Get(keys1[i]) != rhs.Get(keys2[i])) return false;
+        ValueType v;
+        if (keys1[i] != keys2[i] || !rhs.Get(keys2[i], v) || Get(keys1[i]) != v) return false;
       }
       
       return true;
     }
-    
+
+    template <class K1, class V1, template <class, class, int> class SP1, int F, template <class, int> class H>
+    inline bool operator!=(const Map<K1, V1, SP1, F, H>& rhs) { return !operator==(rhs); }
+
     inline void Clear() { SP::Clear(); }
     
     inline bool Has(const KeyType& key) const { return (SP::Find(key, HF::Hash(key))); }

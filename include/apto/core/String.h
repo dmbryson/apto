@@ -183,6 +183,7 @@ namespace Apto {
   template <class T, int HashFactor> class HashKey;
   template <class ThreadingModel, int HashFactor> class HashKey<BasicString<ThreadingModel>, HashFactor>
   {
+  public:
     int Hash(const BasicString<ThreadingModel>& key)
     {
       unsigned int out_hash = 0;
