@@ -94,7 +94,7 @@ namespace Apto {
       
       for (int i = 0; i < keys1.GetSize(); i++) {
         ValueType v;
-        if (keys1[i] != keys2[i] || !rhs.Get(keys2[i], v) || SP::Get(keys1[i]) != v) return false;
+        if (keys1[i] != keys2[i] || !rhs.Get(keys2[i], v) || *SP::Find(keys1[i]) != v) return false;
       }
       
       return true;
