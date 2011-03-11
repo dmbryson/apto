@@ -36,13 +36,13 @@
 
 
 TEST(CoreHashBTreeMap, Construction) {
-  Apto::Map<int, int, Apto::HashBTree> map;
+  Apto::Map<int, int, Apto::DefaultHashBTree> map;
   EXPECT_EQ(0, map.GetSize());
 }
 
 
 TEST(CoreHashBTreeMap, Indexing) {
-  Apto::Map<int, int, Apto::HashBTree> map;
+  Apto::Map<int, int, Apto::DefaultHashBTree> map;
   map[1] = 1;
   map.Set(2, 2);
   map.Get(3) = 3;
@@ -77,25 +77,26 @@ TEST(CoreHashBTreeMap, Indexing) {
 
 
 TEST(CoreHashBTreeMap, Assignment) {
-  Apto::Map<int, int, Apto::HashBTree> map1;
+  Apto::Map<int, int, Apto::DefaultHashBTree> map1;
   for (int i = 0; i < 4; i++) map1[i] = i;
   for (int i = 0; i < 4; i++) EXPECT_EQ(i, map1[i]);
   
-  Apto::Map<int, int, Apto::HashBTree> map2;
+  Apto::Map<int, int, Apto::DefaultHashBTree> map2;
   for (int i = 0; i < 4; i++) map2[i] = i + 2;
   for (int i = 0; i < 4; i++) EXPECT_EQ(i + 2, map2[i]);
   
   map2 = map1;
   for (int i = 0; i < 4; i++) EXPECT_EQ(i, map2[i]);
   
-  Apto::Map<int, int, Apto::HashBTree> map3(map1);
+  Apto::Map<int, int, Apto::DefaultHashBTree> map3(map1);
   for (int i = 0; i < 4; i++) EXPECT_EQ(i, map3[i]);
 }
 
+template <class K, class V> class HashBTreeSize1 : public Apto::HashBTree<K, V, 1> { ; };
 
 TEST(CoreHashBTreeMap, Removal) {
   // Set HashFactor to 1 to really test the tree removal
-  Apto::Map<int, int, Apto::HashBTree, 1> map;
+  Apto::Map<int, int, HashBTreeSize1> map;
   EXPECT_FALSE(map.Remove(8));
   EXPECT_EQ(0, map.GetSize());
   
@@ -149,12 +150,12 @@ TEST(CoreHashBTreeMap, Removal) {
 
 
 TEST(CoreHashBTreeMap, Comparison) {
-  Apto::Map<int, int, Apto::HashBTree> map1;
+  Apto::Map<int, int, Apto::DefaultHashBTree> map1;
   for (int i = 0; i < 4; i++) map1[i] = i;
   EXPECT_TRUE(map1 == map1);
   EXPECT_FALSE(map1 != map1);
   
-  Apto::Map<int, int, Apto::HashBTree> map2;
+  Apto::Map<int, int, Apto::DefaultHashBTree> map2;
   for (int i = 0; i < 4; i++) map2[i] = i + 2;
   EXPECT_TRUE(map2 == map2);
   EXPECT_FALSE(map2 != map2);
@@ -170,7 +171,7 @@ TEST(CoreHashBTreeMap, Comparison) {
   EXPECT_FALSE(map2 != map1);
   EXPECT_TRUE(map2 == map1);
   
-  Apto::Map<int, int, Apto::HashBTree> map3(map1);
+  Apto::Map<int, int, Apto::DefaultHashBTree> map3(map1);
   EXPECT_FALSE(map1 != map3);
   EXPECT_TRUE(map1 == map3);
   EXPECT_FALSE(map3 != map1);
@@ -185,12 +186,12 @@ TEST(CoreHashBTreeMap, Comparison) {
 
 
 TEST(CoreHashBTreeMap, Iteration) {
-  Apto::Map<int, int, Apto::HashBTree> map1;
+  Apto::Map<int, int, Apto::DefaultHashBTree> map1;
   for (int i = 0; i < 4; i++) map1[i] = i;
 
   Apto::Array<int> key_array(map1.GetSize());
   Apto::Array<int> value_array(map1.GetSize());
-  Apto::Map<int, int, Apto::HashBTree>::Iterator it = map1.Begin();
+  Apto::Map<int, int, Apto::DefaultHashBTree>::Iterator it = map1.Begin();
   for (int i = 0; it.Next(); i++) {
     key_array[i] = it.Get()->Value1();
     value_array[i] = *it.Get()->Value2();
@@ -206,13 +207,13 @@ TEST(CoreHashBTreeMap, Iteration) {
   EXPECT_EQ(map1.GetSize() - 1, map1[map1.GetSize() - 1]);
   
   key_array.Resize(map1.GetSize());
-  Apto::Map<int, int, Apto::HashBTree>::KeyIterator kit = map1.Keys();
+  Apto::Map<int, int, Apto::DefaultHashBTree>::KeyIterator kit = map1.Keys();
   for (int i = 0; kit.Next(); i++) key_array[i] = *kit.Get();
   QSort(key_array);
   for (int i = 0; i < map1.GetSize(); i++) EXPECT_EQ(i, key_array[i]);
   
   value_array.Resize(map1.GetSize());
-  Apto::Map<int, int, Apto::HashBTree>::ValueIterator vit = map1.Values();
+  Apto::Map<int, int, Apto::DefaultHashBTree>::ValueIterator vit = map1.Values();
   for (int i = 0; vit.Next(); i++) value_array[i] = *vit.Get();
   QSort(value_array);
   for (int i = 0; i < map1.GetSize(); i++) EXPECT_EQ(i, value_array[i]);

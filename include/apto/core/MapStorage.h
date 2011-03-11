@@ -83,8 +83,10 @@ namespace Apto {
   // Map Storage Policies
   // --------------------------------------------------------------------------------------------------------------
   
-  template <class K, class V, int HashFactor> class HashBTree
+  template <class K, class V, int HashFactor, template <class, int> class HashFunctor = HashKey> class HashBTree
   {
+  protected:
+    typedef HashFunctor<K, HashFactor> HF;
   public:
     class Iterator;
     class ConstIterator;
@@ -114,8 +116,9 @@ namespace Apto {
       m_size = 0;
     }
     
-    const V* Find(const K& key, int hash) const
+    const V* Find(const K& key) const
     {
+      int hash = HF::Hash(key);
       if (m_table[hash].GetSize() == 0) return NULL;
       int cur_idx = 0;
       while (true) {
@@ -133,8 +136,9 @@ namespace Apto {
       return NULL;
     }
 
-    V* Find(const K& key, int hash)
+    V* Find(const K& key)
     {
+      int hash = HF::Hash(key);
       if (m_table[hash].GetSize() == 0) return NULL;
       int cur_idx = 0;
       while (true) {
@@ -153,8 +157,9 @@ namespace Apto {
     }
     
     
-    V& Get(const K& key, int hash)
+    V& Get(const K& key)
     {
+      int hash = HF::Hash(key);
       if (m_table[hash].GetSize() == 0) {
         // Create root node
         m_table[hash].Resize(1);
@@ -205,8 +210,9 @@ namespace Apto {
     }
     
     
-    bool Remove(const K& key, int hash)
+    bool Remove(const K& key)
     {
+      int hash = HF::Hash(key);
       if (m_table[hash].GetSize() == 0) return false;
       
       int cur_idx = 0;
@@ -335,16 +341,16 @@ namespace Apto {
   public:
     class Iterator
     {
-      friend class HashBTree<K, V, HashFactor>;
+      friend class HashBTree<K, V, HashFactor, HashFunctor>;
     private:
-      HashBTree<K, V, HashFactor>* m_map;
+      HashBTree<K, V, HashFactor, HashFunctor>* m_map;
       int m_table_idx;
       int m_entry_idx;
       Pair<K, V*> m_pair;
       
       Iterator(); // @not_implemented
 
-      Iterator(HashBTree<K, V, HashFactor>* map) : m_map(map), m_table_idx(-1) { ; }
+      Iterator(HashBTree<K, V, HashFactor, HashFunctor>* map) : m_map(map), m_table_idx(-1) { ; }
       
     public:
       const Pair<K, V*>* Next()
@@ -369,16 +375,16 @@ namespace Apto {
     
     class ConstIterator
     {
-      friend class HashBTree<K, V, HashFactor>;
+      friend class HashBTree<K, V, HashFactor, HashFunctor>;
     private:
-      const HashBTree<K, V, HashFactor>* m_map;
+      const HashBTree<K, V, HashFactor, HashFunctor>* m_map;
       int m_table_idx;
       int m_entry_idx;
       Pair<K, V*> m_pair;
       
       ConstIterator(); // @not_implemented
       
-      ConstIterator(const HashBTree<K, V, HashFactor>* map) : m_map(map), m_table_idx(-1) { ; }
+      ConstIterator(const HashBTree<K, V, HashFactor, HashFunctor>* map) : m_map(map), m_table_idx(-1) { ; }
       
     public:
       const Pair<K, const V*>* Next()
@@ -403,15 +409,15 @@ namespace Apto {
     
     class KeyIterator
     {
-      friend class HashBTree<K, V, HashFactor>;
+      friend class HashBTree<K, V, HashFactor, HashFunctor>;
     private:
-      const HashBTree<K, V, HashFactor>* m_map;
+      const HashBTree<K, V, HashFactor, HashFunctor>* m_map;
       int m_table_idx;
       int m_entry_idx;
       
       KeyIterator(); // @not_implemented
       
-      KeyIterator(const HashBTree<K, V, HashFactor>* map) : m_map(map), m_table_idx(-1) { ; }
+      KeyIterator(const HashBTree<K, V, HashFactor, HashFunctor>* map) : m_map(map), m_table_idx(-1) { ; }
       
     public:
       const K* Next()
@@ -435,15 +441,15 @@ namespace Apto {
     
     class ValueIterator
     {
-      friend class HashBTree<K, V, HashFactor>;
+      friend class HashBTree<K, V, HashFactor, HashFunctor>;
     private:
-      const HashBTree<K, V, HashFactor>* m_map;
+      const HashBTree<K, V, HashFactor, HashFunctor>* m_map;
       int m_table_idx;
       int m_entry_idx;
       
       ValueIterator(); // @not_implemented
       
-      ValueIterator(const HashBTree<K, V, HashFactor>* map) : m_map(map), m_table_idx(-1) { ; }
+      ValueIterator(const HashBTree<K, V, HashFactor, HashFunctor>* map) : m_map(map), m_table_idx(-1) { ; }
       
     public:
       const V* Next()
@@ -464,6 +470,8 @@ namespace Apto {
       }
     };
   };
+  
+  template <class K, class V> class DefaultHashBTree : public HashBTree<K, V, 23> { ; };
   
 };
 

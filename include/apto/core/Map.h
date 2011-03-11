@@ -42,44 +42,42 @@ namespace Apto {
   // Map
   // --------------------------------------------------------------------------------------------------------------
   
-  template<class K, class V, template <class, class, int> class StoragePolicy = HashBTree, int HashFactor = 42,
-           template <class, int> class HashFunctor = HashKey>
-  class Map : public StoragePolicy<K, V, HashFactor>
+  template<class K, class V, template <class, class> class StoragePolicy = DefaultHashBTree>
+  class Map : public StoragePolicy<K, V>
   {
   protected:
-    typedef StoragePolicy<K, V, HashFactor> SP;
-    typedef HashFunctor<K, HashFactor> HF;
+    typedef StoragePolicy<K, V> SP;
     
   public:
     typedef K KeyType;
     typedef V ValueType;
-    typedef typename StoragePolicy<KeyType, ValueType, HashFactor>::Iterator Iterator;
-    typedef typename StoragePolicy<KeyType, ValueType, HashFactor>::ConstIterator ConstIterator;
-    typedef typename StoragePolicy<KeyType, ValueType, HashFactor>::KeyIterator KeyIterator;
-    typedef typename StoragePolicy<KeyType, ValueType, HashFactor>::ValueIterator ValueIterator;
+    typedef typename StoragePolicy<KeyType, ValueType>::Iterator Iterator;
+    typedef typename StoragePolicy<KeyType, ValueType>::ConstIterator ConstIterator;
+    typedef typename StoragePolicy<KeyType, ValueType>::KeyIterator KeyIterator;
+    typedef typename StoragePolicy<KeyType, ValueType>::ValueIterator ValueIterator;
 
   public:
     Map() { ; }
     Map(const Map& rhs) { this->operator=(rhs); }
     
-    template <class K1, class V1, template <class, class, int> class SP1, int F, template <class, int> class H>
-    explicit Map(const Map<K1, V1, SP1, F, H>& rhs) { this->operator=(rhs); }
+    template <class K1, class V1, template <class, class> class SP1>
+    explicit Map(const Map<K1, V1, SP1>& rhs) { this->operator=(rhs); }
     
     inline int GetSize() const { return SP::GetSize(); }
     
-    template <class K1, class V1, template <class, class, int> class SP1, int F, template <class, int> class H>
-    Map& operator=(const Map<K1, V1, SP1, F, H>& rhs)
+    template <class K1, class V1, template <class, class> class SP1>
+    Map& operator=(const Map<K1, V1, SP1>& rhs)
     {
       if (this == &rhs) return *this;
       
       Clear();
-      typename Map<K, V, SP1, F, H>::ConstIterator it = rhs.Begin();
+      typename Map<K, V, SP1>::ConstIterator it = rhs.Begin();
       while (it.Next()) Get(*it.Key()) = *it.Value();
       return *this;
     }
     
-    template <class K1, class V1, template <class, class, int> class SP1, int F, template <class, int> class H>
-    bool operator==(const Map<K1, V1, SP1, F, H>& rhs)
+    template <class K1, class V1, template <class, class> class SP1>
+    bool operator==(const Map<K1, V1, SP1>& rhs)
     {
       if (SP::GetSize() != rhs.GetSize()) return false;
       
@@ -90,31 +88,31 @@ namespace Apto {
       QSort(keys1);
       
       // Get and sort rhs keys
-      typename Map<K1, V1, SP1, F, H>::KeyIterator kit2 = rhs.Keys();
+      typename Map<K1, V1, SP1>::KeyIterator kit2 = rhs.Keys();
       Array<K1> keys2(rhs.GetSize());
       for (int i = 0; kit2.Next(); i++) keys2[i] = *kit2.Get();
       
       for (int i = 0; i < keys1.GetSize(); i++) {
         ValueType v;
-        if (keys1[i] != keys2[i] || !rhs.Get(keys2[i], v) || Get(keys1[i]) != v) return false;
+        if (keys1[i] != keys2[i] || !rhs.Get(keys2[i], v) || SP::Get(keys1[i]) != v) return false;
       }
       
       return true;
     }
 
-    template <class K1, class V1, template <class, class, int> class SP1, int F, template <class, int> class H>
-    inline bool operator!=(const Map<K1, V1, SP1, F, H>& rhs) { return !operator==(rhs); }
+    template <class K1, class V1, template <class, class> class SP1>
+    inline bool operator!=(const Map<K1, V1, SP1>& rhs) { return !operator==(rhs); }
 
     inline void Clear() { SP::Clear(); }
     
-    inline bool Has(const KeyType& key) const { return (SP::Find(key, HF::Hash(key))); }
+    inline bool Has(const KeyType& key) const { return (SP::Find(key)); }
     
-    inline ValueType& Get(const KeyType& key) { return SP::Get(key, HashFunctor<KeyType, HashFactor>::Hash(key)); }
-    inline ValueType& operator[](const KeyType& key) { return Get(key); }
+    inline ValueType& Get(const KeyType& key) { return SP::Get(key); }
+    inline ValueType& operator[](const KeyType& key) { return SP::Get(key); }
             
     
     inline bool Get(const KeyType& key, ValueType& out_value) const { 
-      const ValueType* entry_value = SP::Find(key, HF::Hash(key));
+      const ValueType* entry_value = SP::Find(key);
       if (entry_value) {
         out_value = *entry_value;
         return true;
@@ -124,17 +122,17 @@ namespace Apto {
     
     ValueType& GetWithDefault(const KeyType& key, const ValueType& default_value)
     {
-      ValueType* entry_value = SP::Find(key, HF::Hash(key));
+      ValueType* entry_value = SP::Find(key);
       if (entry_value) return *entry_value;
       ValueType& new_value = Get(key);
       new_value = default_value;
       return new_value;
     }
     
-    inline void Set(const KeyType& key, const ValueType& value) { Get(key) = value; }
+    inline void Set(const KeyType& key, const ValueType& value) { SP::Get(key) = value; }
     
     
-    inline bool Remove(const KeyType& key) { return SP::Remove(key, HashFunctor<KeyType, HashFactor>::Hash(key)); }
+    inline bool Remove(const KeyType& key) { return SP::Remove(key); }
     
     
     Iterator Begin() { return SP::Begin(); }
