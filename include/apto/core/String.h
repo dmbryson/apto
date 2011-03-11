@@ -151,6 +151,22 @@ namespace Apto {
     inline BasicString operator+(const char* str) { return concat(strlen(str), str); }
     template <class R> BasicString operator+(const BasicString<R>& str) { return concat(str.GetSize(), str.GetData()); }
     
+    
+    // Various Character Inspection Utility Methods
+    inline bool IsLetter(int idx) const { return IsUpper(idx) || IsLower(idx); }
+    inline bool IsLower(int idx) const { return ((*this)[idx] >= 'a' && (*this)[idx] <= 'z'); }
+    inline bool IsUpper(int idx) const { return ((*this)[idx] >= 'A' && (*this)[idx] <= 'Z'); }
+    inline bool IsNumber(int idx) const { return (*this)[idx] >= '0' && (*this)[idx] <= '9'; }    
+    inline bool IsWhitespace(int idx) const
+    {
+      return (*this)[idx] == ' ' ||   // space
+             (*this)[idx] == '\f' ||  // form feed
+             (*this)[idx] == '\n' ||  // newline
+             (*this)[idx] == '\r' ||  // carriage return
+             (*this)[idx] == '\t' ||  // horizontal tab
+             (*this)[idx] == '\v';    // vertical tab
+    }
+    
   protected:
     BasicString& append(int size, const char* str)
     {
