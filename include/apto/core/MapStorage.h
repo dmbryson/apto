@@ -383,7 +383,7 @@ namespace Apto {
       const HashBTree<K, V, HashFactor, HashFunctor>* m_map;
       int m_table_idx;
       int m_entry_idx;
-      Pair<K, V*> m_pair;
+      Pair<K, const V*> m_pair;
       
       ConstIterator(); // @not_implemented
       
