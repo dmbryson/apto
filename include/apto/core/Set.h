@@ -31,82 +31,203 @@
 #ifndef AptoCoreSet_h
 #define AptoCoreSet_h
 
-#include "apto/core/ArrayStorage.h"
+#include "apto/core/Array.h"
+#include "apto/core/ArrayUtils.h"
+#include "apto/core/MapStorage.h"
+#include "apto/core/TypeSelect.h"
 
 
 namespace Apto {
-  template<class T, template <class> class StoragePolicy = Basic>
-  class Set : public StoragePolicy<T>
+
+  // Set -- Internals
+  // --------------------------------------------------------------------------------------------------------------
+  
+  namespace Internal {
+    class VoidSetEntry
+    {
+    public:
+      inline void Inc() { ; }
+      inline void Dec() { ; }
+      inline int Count() const { return 1; }
+      inline void Clear() { ; }
+    };
+    
+    class CountSetEntry
+    {
+    private:
+      int m_count;
+    public:
+      inline CountSetEntry() : m_count(0) { ; }
+      inline void Inc() { m_count++; }
+      inline void Dec() { m_count--; }
+      inline int Count() const { return m_count; }
+      inline void Clear() { m_count = 0; }
+    };
+  }
+
+  
+  // MultiSet
+  // --------------------------------------------------------------------------------------------------------------
+  
+  enum { Multi = true };  
+  
+  // Set
+  // --------------------------------------------------------------------------------------------------------------
+  
+  template<class T, template <class, class> class StoragePolicy = DefaultHashBTree, bool MultiSet = false>
+  class Set : public StoragePolicy<T, typename TypeSelect<MultiSet, Internal::CountSetEntry, Internal::VoidSetEntry>::Result>
   {
   protected:
-    typedef StoragePolicy<T> SP;
+    typedef typename TypeSelect<MultiSet, Internal::CountSetEntry, Internal::VoidSetEntry>::Result Entry;
+    typedef StoragePolicy<T, Entry> SP;
+    
+    int m_multiset_size;
     
   public:
-    Set() { ; }
-    template <class T1, template <class> class SP1> Set(const Set<T1, SP1>& rhs) { this->operator=(rhs); }
+    typedef T ValueType;
+    class ConstIterator;
     
-    inline int GetSize() const { return SP::GetSize(); }
+  public:
+    Set() : m_multiset_size(0) { ; }
+    Set(const Set& rhs) : m_multiset_size(0) { this->operator=(rhs); }
+
+    template <class T1, template <class, class> class SP1, bool M>
+    explicit Set(const Set<T1, SP1, M>& rhs) { this->operator=(rhs); }
     
+    inline int GetSize() const { return (MultiSet) ? m_multiset_size : SP::GetSize(); }
     
-    template <class T1, template <class> class SP1>
-    Set& operator=(const Set<T1, SP1>& rhs)
+    inline void Clear()
     {
-      SP::Resize(rhs.GetSize());
-      for (int i = 0; i < rhs.GetSize(); i++) SP::operator[](i) = rhs[i];
+      if (MultiSet) {
+        typename SP::ValueIterator it = SP::Values();
+        while (it.Next()) it.Get()->Clear();
+      }
+      SP::Clear();
+    }
+
+    
+    template <class T1, template <class, class> class SP1, bool M>
+    Set& operator=(const Set<T1, SP1, M>& rhs)
+    {
+      Clear();
+      typename Set<T1, SP1, M>::ConstIterator it = rhs.Begin();
+      while (it.Next()) {
+        if (MultiSet) m_multiset_size++;
+        SP::Get(*it.Get()).Inc();
+      }
       return *this;
     }
     
-    void Add(const T& value)
+    template <class T1, template <class, class> class SP1>
+    inline bool operator==(const Set<T1, SP1, !MultiSet>& rhs) const { (void)rhs; return false; }
+    
+    template <class T1, template <class, class> class SP1>
+    bool operator==(const Set<T1, SP1, MultiSet>& rhs) const
     {
-      for (int i = 0; i < GetSize(); i++) {
-        if (SP::operator[](i) == value) {
-          return;
-        }
+      if (GetSize() != rhs.GetSize()) return false;
+      
+      if (SP::Sorted && Set<T1, SP1, MultiSet>::Sorted) {
+        ConstIterator it1 = Begin();
+        typename Set<T1, SP1, MultiSet>::ConstIterator it2 = rhs.Begin();
+        while (it1.Next() && it2.Next()) if (*it1.Get() != *it2.Get()) return false;
+        return true;
+      } else if (SP::Sorted) {
+        ConstIterator it1 = Begin();
+        typename Set<T1, SP1, MultiSet>::ConstIterator it2 = rhs.Begin();
+        Array<T1> array2(rhs.GetSize());
+        for (int i = 0; it2.Next(); i++) array2[i] = *it2.Get();
+        QSort(array2);
+        for (int i = 0; it1.Next(); i++) if (*it1.Get() != array2[i]) return false;
+        return true;
+      } else if (Set<T1, SP1, MultiSet>::Sorted) {
+        ConstIterator it1 = Begin();
+        Array<T> array1(GetSize());
+        for (int i = 0; it1.Next(); i++) array1[i] = *it1.Get();
+        QSort(array1);
+        typename Set<T1, SP1, MultiSet>::ConstIterator it2 = rhs.Begin();
+        for (int i = 0; it2.Next(); i++) if (array1[i] != *it2.Get()) return false;
+        return true;
       }
-      SP::Resize(GetSize() + 1);
-      SP::operator[](GetSize()) = value;
+
+      ConstIterator it1 = Begin();
+      typename Set<T1, SP1, MultiSet>::ConstIterator it2 = rhs.Begin();
+      Array<T> array1(GetSize());
+      Array<T1> array2(rhs.GetSize());
+      for (int i = 0; it1.Next() && it2.Next(); i++) {
+        array1[i] = *it1.Get();
+        array2[i] = *it2.Get();
+      }
+      QSort(array1);
+      QSort(array2);
+      
+      for (int i = 0; i < array1.GetSize(); i++)
+        if (array1[i] != array2[i])
+          return false;
+      return true;
+    }
+
+    template <class T1, template <class, class> class SP1, bool M>
+    bool operator!=(const Set<T1, SP1, M>& rhs) const { return !operator==(rhs); }
+    
+    inline void Insert(const T& key)
+    {
+      if (MultiSet) m_multiset_size++;
+      SP::Get(key).Inc();
     }
     
-    bool Has(const T& value)
+    inline bool Has(const T& key) const { return (SP::Find(key)); }
+    
+    inline int Count(const T& key) { return SP::Get(key).Count(); }
+    
+    
+    inline ConstIterator Begin() const { return ConstIterator(this); }
+    
+    bool Remove(const T& key)
     {
-      for (int i = 0; i < GetSize(); i++) if (SP::operator[](i) == value) return true;
-      return false;
-    }    
-    
-    
-    inline const T& operator[](int index) const { return SP::operator[](index); }
-    
-    inline ConstIterator<T> Iterator() const { return ValueIterator(*this); }
-    
-    bool Remove(const T& value)
-    {
-      for (int i = 0; i < GetSize(); i++) {
-        if (SP::operator[](i) == value) {
-          int lastkv = GetSize() - 1;
-          if (i != lastkv) SP::operator[](i) = SP::operator[](lastkv);
-          SP::Resize(lastkv);
-          return true;
-        }
+      if (MultiSet) {
+        Entry* entry = SP::Find(key);
+        if (!entry) return false;
+        entry->Dec();
+        m_multiset_size--;
+        if (entry->Count() == 0) SP::Remove(key);
+        return true;
+      } else {
+        return SP::Remove(key);
       }
-      return false;
     }
     
-  protected:    
-    class ValueIterator : public Apto::ConstIterator<T>
+  public:    
+    class ConstIterator
     {
+      friend class Set<T, StoragePolicy, MultiSet>;
     private:
-      const Set& m_set;
-      int m_index;
+      typename Set<T, StoragePolicy, MultiSet>::SP::ConstIterator m_it;
+      int m_count;
       
-      ValueIterator(); // @not_implemented
+      ConstIterator(); // @not_implemented
+      ConstIterator(const Set<T, StoragePolicy, MultiSet>* set) : m_it(set->SP::Begin()), m_count(0) { ; }
       
-    public:
-      ValueIterator(const Set& set) : m_set(set), m_index(0) { ; }
-      
-      const T* Get() { return (m_index < m_set.GetSize()) ? &(m_set.SP::operator[](m_index).Value2()) : NULL; }
-      const T* Next() { return (++m_index < m_set.GetSize()) ? &(m_set.SP::operator[](m_index).Value2()) : NULL; }
+    public:      
+      const T* Get() { return (m_it.Get()) ? &m_it.Get()->Value1() : NULL; }
+      const T* Next()
+      {
+        if (MultiSet) {
+          if (m_count > 1) {
+            m_count--;
+            return &m_it.Get()->Value1();
+          } else {
+            if (m_it.Next()) {
+              m_count = m_it.Get()->Value2()->Count();
+              return &m_it.Get()->Value1();
+            } else {
+              return NULL;
+            }
+          }
+        } else {
+          return (m_it.Next()) ? &m_it.Get()->Value1() : NULL;
+        }
+      }
     };
-    
   };
 };
     
