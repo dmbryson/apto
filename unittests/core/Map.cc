@@ -35,6 +35,9 @@
 #include "gtest/gtest.h"
 
 
+// Map<int, int, HashBTree>
+// --------------------------------------------------------------------------------------------------------------  
+
 TEST(CoreHashBTreeMap, Construction) {
   Apto::Map<int, int, Apto::DefaultHashBTree> map;
   EXPECT_EQ(0, map.GetSize());
