@@ -77,7 +77,7 @@ namespace Apto {
     }
     
     template <class K1, class V1, template <class, class> class SP1>
-    bool operator==(const Map<K1, V1, SP1>& rhs)
+    bool operator==(const Map<K1, V1, SP1>& rhs) const
     {
       if (SP::GetSize() != rhs.GetSize()) return false;
       
@@ -101,7 +101,7 @@ namespace Apto {
     }
 
     template <class K1, class V1, template <class, class> class SP1>
-    inline bool operator!=(const Map<K1, V1, SP1>& rhs) { return !operator==(rhs); }
+    inline bool operator!=(const Map<K1, V1, SP1>& rhs) const { return !operator==(rhs); }
 
     inline void Clear() { SP::Clear(); }
     
