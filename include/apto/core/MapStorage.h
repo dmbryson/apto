@@ -87,12 +87,15 @@ namespace Apto {
   {
   protected:
     typedef HashFunctor<K, HashFactor> HF;
-  public:
+
+    
+  protected:
     class Iterator;
     class ConstIterator;
     class KeyIterator;
     class ValueIterator;
     
+  public:
     static const bool Sorted = false;
     
   protected:
@@ -338,9 +341,7 @@ namespace Apto {
     ValueIterator Values() const { return ValueIterator(this); }
     
     
-    
-    
-  public:
+  protected:
     class Iterator
     {
       friend class HashBTree<K, V, HashFactor, HashFunctor>;
