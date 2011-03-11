@@ -93,6 +93,8 @@ namespace Apto {
     class KeyIterator;
     class ValueIterator;
     
+    static const bool Sorted = false;
+    
   protected:
     struct Entry {
       K key;
