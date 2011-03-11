@@ -117,7 +117,7 @@ namespace Apto {
     int m_reserve;
     
     // "I am so smart..."
-    static const int SMRT_INCREASE_MINIMUM = 10;
+    static const int SMRT_INCREASE_MINIMUM = 4;
     static const int SMRT_INCREASE_FACTOR = 2;
     static const int SMRT_SHRINK_TEST_FACTOR = 4;
     
