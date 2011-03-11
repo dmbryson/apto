@@ -38,50 +38,7 @@
 
 
 namespace Apto {
-  
-  // Map - Hashing Functions
-  // --------------------------------------------------------------------------------------------------------------
-  
-  // HASH_TYPE = basic object
-  // Casts the pointer to an int, shift right last two bit positions, mod by
-  // the size of the hash table and hope for the best.  The shift is to account
-  // for typical 4-byte alignment of pointer values.  Depending on architecture
-  // this may not be true and could result in suboptimal hashing at higher
-  // order alignments.
-  template <class T, int HashFactor> class HashKey
-  {
-  public:
-    static int Hash(const T& key)
-    {
-      // Cast/Dereference of key as an int* tells the compiler that we really want
-      // to truncate the value to an integer, even if a pointer is larger.
-      return abs((*((int*)&key) >> 2) % HashFactor);         
-    }
-  };
-  
-  // HASH_TYPE = int
-  // Simply mod the into by the size of the hash table and hope for the best
-  template<int HashFactor> class HashKey<int, HashFactor>
-  {
-  public:
-    static int Hash(const int key)
-    {
-      return abs(key % HashFactor);
-    }
-  };
-
-  // HASH_TYPE = double
-  // Simply mod the into by the size of the hash table and hope for the best
-  template<int HashFactor> class HashKey<double, HashFactor>
-  {
-  public:
-    static int Hash(const double key)
-    {
-      return abs((int)key % HashFactor);
-    }
-  };
-  
-  
+    
   // Map
   // --------------------------------------------------------------------------------------------------------------
   
