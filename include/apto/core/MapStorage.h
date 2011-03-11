@@ -76,10 +76,10 @@ namespace Apto {
       if (m_table[hash].GetSize() == 0) return NULL;
       int cur_idx = 0;
       while (true) {
-        if (m_table[hash][cur_idx].key < key) {
+        if (key < m_table[hash][cur_idx].key) {
           cur_idx = m_table[hash][cur_idx].left;
           if (cur_idx >= 0) continue;
-        } else if (m_table[hash][cur_idx].key > key) {
+        } else if (key > m_table[hash][cur_idx].key) {
           cur_idx = m_table[hash][cur_idx].right;
           if (cur_idx >= 0) continue;
         } else {
@@ -95,10 +95,10 @@ namespace Apto {
       if (m_table[hash].GetSize() == 0) return NULL;
       int cur_idx = 0;
       while (true) {
-        if (m_table[hash][cur_idx].key < key) {
+        if (key < m_table[hash][cur_idx].key) {
           cur_idx = m_table[hash][cur_idx].left;
           if (cur_idx >= 0) continue;
-        } else if (m_table[hash][cur_idx].key > key) {
+        } else if (key > m_table[hash][cur_idx].key) {
           cur_idx = m_table[hash][cur_idx].right;
           if (cur_idx >= 0) continue;
         } else {
@@ -128,11 +128,11 @@ namespace Apto {
       int cur_idx = 0;
       int past_idx = 0;
       while (true) {
-        if (m_table[hash][cur_idx].key < key) {
+        if (key < m_table[hash][cur_idx].key) {
           past_idx = cur_idx;
           cur_idx = m_table[hash][cur_idx].left;
           if (cur_idx >= 0) continue;
-        } else if (m_table[hash][cur_idx].key > key) {
+        } else if (key > m_table[hash][cur_idx].key) {
           past_idx = cur_idx;
           cur_idx = m_table[hash][cur_idx].right;
           if (cur_idx >= 0) continue;
@@ -164,14 +164,16 @@ namespace Apto {
     
     bool Remove(const K& key, int hash)
     {
+      if (m_table[hash].GetSize() == 0) return false;
+      
       int cur_idx = 0;
       int past_idx = 0;
       while (true) {
-        if (m_table[hash][cur_idx].key < key) {
+        if (key < m_table[hash][cur_idx].key) {
           past_idx = cur_idx;
           cur_idx = m_table[hash][cur_idx].left;
           if (cur_idx >= 0) continue;
-        } else if (m_table[hash][cur_idx].key > key) {
+        } else if (key > m_table[hash][cur_idx].key) {
           past_idx = cur_idx;
           cur_idx = m_table[hash][cur_idx].right;
           if (cur_idx >= 0) continue;
@@ -204,7 +206,8 @@ namespace Apto {
               m_table[hash][cur_idx].key = m_table[hash][sub_idx].key;
               m_table[hash][cur_idx].value = m_table[hash][sub_idx].value;
               m_table[hash][m_table[hash][sub_idx].parent].right = m_table[hash][sub_idx].left;
-              m_table[hash][m_table[hash][sub_idx].left].parent = m_table[hash][sub_idx].parent;
+              if (m_table[hash][sub_idx].left >= 0)
+                m_table[hash][m_table[hash][sub_idx].left].parent = m_table[hash][sub_idx].parent;
               if (sub_idx != right_idx) m_table[hash][cur_idx].left = right_idx;
               else m_table[hash][cur_idx].left = -1;
               m_table[hash][cur_idx].right = -1;
@@ -228,8 +231,9 @@ namespace Apto {
               m_table[hash][cur_idx].key = m_table[hash][sub_idx].key;
               m_table[hash][cur_idx].value = m_table[hash][sub_idx].value;
               m_table[hash][m_table[hash][sub_idx].parent].left = m_table[hash][sub_idx].right;
-              m_table[hash][m_table[hash][sub_idx].right].parent = m_table[hash][sub_idx].parent;
-              if (sub_idx == left_idx) m_table[hash][cur_idx].right = left_idx;
+              if (m_table[hash][sub_idx].right >= 0) 
+                m_table[hash][m_table[hash][sub_idx].right].parent = m_table[hash][sub_idx].parent;
+              if (sub_idx != left_idx) m_table[hash][cur_idx].right = left_idx;
               else m_table[hash][cur_idx].right = -1;
               m_table[hash][cur_idx].left = -1;
               
@@ -250,8 +254,9 @@ namespace Apto {
               // Move extreme right node to current position
               m_table[hash][cur_idx].key = m_table[hash][sub_idx].key;
               m_table[hash][cur_idx].value = m_table[hash][sub_idx].value;
-              m_table[hash][m_table[hash][sub_idx].parent].left = m_table[hash][sub_idx].right;
-              m_table[hash][m_table[hash][sub_idx].right].parent = m_table[hash][sub_idx].parent;
+              m_table[hash][m_table[hash][sub_idx].parent].right = m_table[hash][sub_idx].right;
+              if (m_table[hash][sub_idx].right >= 0)
+                m_table[hash][m_table[hash][sub_idx].right].parent = m_table[hash][sub_idx].parent;
               if (m_table[hash][cur_idx].right == sub_idx) m_table[hash][cur_idx].right = -1;
               if (m_table[hash][cur_idx].left == sub_idx) m_table[hash][cur_idx].left = -1;
               

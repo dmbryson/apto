@@ -94,7 +94,57 @@ TEST(CoreHashBTreeMap, Assignment) {
 
 
 TEST(CoreHashBTreeMap, Removal) {
+  // Set HashFactor to 1 to really test the tree removal
+  Apto::Map<int, int, Apto::HashBTree, 1> map;
+  EXPECT_FALSE(map.Remove(8));
+  EXPECT_EQ(0, map.GetSize());
   
+  // Build fully balanced tree
+  map[4] = 4;
+  map[2] = 2;
+  map[6] = 6;
+  map[1] = 1;
+  map[3] = 3;
+  map[5] = 5;
+  map[7] = 7;
+  
+  // Check full tree
+  EXPECT_EQ(7, map.GetSize());
+  for (int i = 1; i <= 7; i++) EXPECT_EQ(i, map[i]);
+  
+  // Remove left leaf node
+  EXPECT_TRUE(map.Remove(1));
+  EXPECT_EQ(6, map.GetSize());
+  for (int i = 2; i <= 7; i++) EXPECT_EQ(i, map[i]);
+  
+  // Remove right leaf node
+  EXPECT_TRUE(map.Remove(7));
+  EXPECT_EQ(5, map.GetSize());
+  for (int i = 2; i <= 6; i++) EXPECT_EQ(i, map[i]);
+  
+  // Remove internal node with right only subtree
+  EXPECT_TRUE(map.Remove(2));
+  EXPECT_EQ(4, map.GetSize());
+  for (int i = 3; i <= 6; i++) EXPECT_EQ(i, map[i]);
+  
+  // Remove internal node with left only subtree
+  EXPECT_TRUE(map.Remove(6));
+  EXPECT_EQ(3, map.GetSize());
+  for (int i = 3; i <= 5; i++) EXPECT_EQ(i, map[i]);
+  
+  // Remove internal node with two subtrees (also the root node)
+  EXPECT_TRUE(map.Remove(4));
+  EXPECT_EQ(2, map.GetSize());
+  EXPECT_EQ(3, map[3]);
+  EXPECT_EQ(5, map[5]);
+  
+  // Make sure that remove works properly when node does not exist
+  EXPECT_FALSE(map.Remove(8));
+  EXPECT_EQ(2, map.GetSize());
+  
+  // Make sure we can still add into the map
+  map[4] = 4;
+  EXPECT_EQ(3, map.GetSize());
 }
 
 
