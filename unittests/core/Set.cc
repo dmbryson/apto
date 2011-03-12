@@ -127,8 +127,14 @@ TEST(CoreHashBTreeSet, Iteration) {
   for (int i = 0; i < 4; i++) set1.Insert(i);
   
   Apto::Array<int> array(set1.GetSize());
-  Apto::Set<int, Apto::DefaultHashBTree>::ConstIterator it = set1.Begin();
+  Apto::Set<int, Apto::DefaultHashBTree>::Iterator it = set1.Begin();
   for (int i = 0; it.Next(); i++) array[i] = *it.Get();
+  QSort(array);
+  for (int i = 0; i < array.GetSize(); i++) EXPECT_EQ(i, array[i]);  
+
+  const Apto::Set<int, Apto::DefaultHashBTree>& cset1 = set1;
+  Apto::Set<int, Apto::DefaultHashBTree>::ConstIterator cit = cset1.Begin();
+  for (int i = 0; cit.Next(); i++) array[i] = *cit.Get();
   QSort(array);
   for (int i = 0; i < array.GetSize(); i++) EXPECT_EQ(i, array[i]);  
 }
@@ -253,8 +259,17 @@ TEST(CoreHashBTreeMulitSet, Iteration) {
   }
   
   Apto::Array<int> array(set1.GetSize());
-  Apto::Set<int, Apto::DefaultHashBTree, Apto::Multi>::ConstIterator it = set1.Begin();
+  Apto::Set<int, Apto::DefaultHashBTree, Apto::Multi>::Iterator it = set1.Begin();
   for (int i = 0; it.Next(); i++) array[i] = *it.Get();
+  QSort(array);
+  for (int i = 0; i < array.GetSize(); i += 2) {
+    EXPECT_EQ(i, array[i]);
+    EXPECT_EQ(i, array[i + 1]);
+  }
+
+  const Apto::Set<int, Apto::DefaultHashBTree, Apto::Multi>& cset1 = set1;
+  Apto::Set<int, Apto::DefaultHashBTree, Apto::Multi>::ConstIterator cit = cset1.Begin();
+  for (int i = 0; cit.Next(); i++) array[i] = *cit.Get();
   QSort(array);
   for (int i = 0; i < array.GetSize(); i += 2) {
     EXPECT_EQ(i, array[i]);

@@ -85,6 +85,7 @@ namespace Apto {
     
   public:
     typedef T ValueType;
+    class Iterator;
     class ConstIterator;
     
   public:
@@ -180,6 +181,7 @@ namespace Apto {
     inline int Count(const T& key) { return SP::Get(key).Count(); }
     
     
+    inline Iterator Begin() { return Iterator(this); }
     inline ConstIterator Begin() const { return ConstIterator(this); }
     
     bool Remove(const T& key)
@@ -196,7 +198,39 @@ namespace Apto {
       }
     }
     
-  public:    
+  public:
+    class Iterator
+    {
+      friend class Set<T, StoragePolicy, MultiSet>;
+    private:
+      typename Set<T, StoragePolicy, MultiSet>::SP::Iterator m_it;
+      int m_count;
+      
+      Iterator(); // @not_implemented
+      Iterator(Set<T, StoragePolicy, MultiSet>* set) : m_it(set->SP::Begin()), m_count(0) { ; }
+      
+    public:      
+      const T* Get() { return (m_it.Get()) ? &m_it.Get()->Value1() : NULL; }
+      const T* Next()
+      {
+        if (MultiSet) {
+          if (m_count > 1) {
+            m_count--;
+            return &m_it.Get()->Value1();
+          } else {
+            if (m_it.Next()) {
+              m_count = m_it.Get()->Value2()->Count();
+              return &m_it.Get()->Value1();
+            } else {
+              return NULL;
+            }
+          }
+        } else {
+          return (m_it.Next()) ? &m_it.Get()->Value1() : NULL;
+        }
+      }
+    };
+
     class ConstIterator
     {
       friend class Set<T, StoragePolicy, MultiSet>;
