@@ -41,64 +41,43 @@
 
 namespace Apto {
   
+  // Basic String
+  // --------------------------------------------------------------------------------------------------------------
+  
   template <class ThreadingModel = SingleThreaded> class BasicString
   {
+  public:
+    typedef char ValueType;
+    class Iterator;
+    class ConstIterator;
+    
   protected:
-    class StringRep : public TypeSelect<ThreadingModel::UseThreadSafe, MTRefCountObject, RefCountObject>::Result
-    {
-    private:
-      int m_size;
-      char* m_data;
-      
-    public:
-      explicit StringRep(int size = 0) : m_size(size), m_data(new char[size + 1])
-      {
-        assert(m_data);
-        m_data[0] = '\0';
-        m_data[size] = '\0';
-      }
-      StringRep(int size, const char* str) : m_size(size), m_data(new char[size + 1])
-      {
-        assert(m_data);
-        memcpy(m_data, str, m_size);
-        m_data[size] = '\0';
-      }
-      StringRep(const StringRep& rhs) : m_size(rhs.m_size), m_data(new char[m_size + 1])
-      {
-        assert(m_data);
-        memcpy(m_data, rhs.m_data, m_size);
-        m_data[m_size] = '\0';
-      }
-      
-      ~StringRep() { delete [] m_data; }
-      
-      inline int GetSize() const { return m_size; }
-      inline const char* GetRep() const { return m_data; }
-      
-      char operator[](int index) const { return m_data[index]; }
-      char& operator[](int index) { return m_data[index]; }
-    };
-    
+    class StringRep;
     typedef SmartPtr<StringRep, InternalRCObject> StringRepPtr;
-    StringRepPtr m_value;
     
+  protected:
+    StringRepPtr m_value;
     
     BasicString(StringRepPtr rep) : m_value(rep) { ; }
     
   public:
+    // Construction
     BasicString(const char* str = "") : m_value((str) ? new StringRep(strlen(str), str) : new StringRep(0)) { assert(m_value); }
     BasicString(int size, const char* str) : m_value(new StringRep(size, str)) { assert(m_value); }
-    explicit BasicString(int size) : m_value(new StringRep(size)) { assert(m_value); }
     BasicString(const BasicString& rhs) : m_value(rhs.m_value) { ; }
-    template <class T1> BasicString(const BasicString<T1>& rhs) : m_value(new StringRep(rhs.GetSize(), rhs.GetData())) { assert(false); }
+    template <class T1> BasicString(const BasicString<T1>& rhs) : m_value(new StringRep(rhs.GetSize(), rhs.GetData())) { ; }
     
     ~BasicString() { ; }
         
-    inline int GetSize() const { return m_value->GetSize(); }
-    const char* GetData() const { return m_value->GetRep(); }
     
+    // Property Access
+    inline int GetSize() const { return m_value->GetSize(); }
+    inline const char* GetData() const { return m_value->GetRep(); }
+    inline const char* GetCString() const { return m_value->GetRep(); }
     inline operator const char*() const { return m_value->GetRep(); }
 
+    
+    // Assignment
     inline BasicString& operator=(const BasicString& rhs) { m_value = rhs.m_value; return *this; }
     template <class T1> inline BasicString& operator=(const BasicString<T1>& rhs)
     {
@@ -142,14 +121,28 @@ namespace Apto {
     inline bool operator<=(const char* rhs) const { return Compare(rhs) <= 0; }
     inline bool operator>=(const char* rhs) const { return Compare(rhs) >= 0; }
     
+    
+    // Character access
     inline char operator[](int index) const { return m_value->operator[](index); }
     
+    
+    // Concatenation
     inline BasicString& operator+=(const char c) { return append(1, &c); }
     inline BasicString& operator+=(const char* str) { return append(strlen(str), str); }
     template <class R> BasicString& operator+=(const BasicString<R>& str) { return append(str.GetSize(), str.GetData()); }
     inline BasicString operator+(const char c) { return concat(1, &c); }
     inline BasicString operator+(const char* str) { return concat(strlen(str), str); }
     template <class R> BasicString operator+(const BasicString<R>& str) { return concat(str.GetSize(), str.GetData()); }
+    
+    
+    // Substring extraction
+    inline BasicString Substring(int idx = 0, int length = -1)
+    {
+      assert(idx >= 0);
+      assert(idx < GetSize());
+      assert(length <= (GetSize() - idx));
+      return BasicString(m_value->GetRep() + idx, (length >= 0) ? length : (GetSize() - idx));
+    }
     
     
     // Various Character Inspection Utility Methods
@@ -167,7 +160,13 @@ namespace Apto {
              (*this)[idx] == '\v';    // vertical tab
     }
     
+    
+    // Iterators
+    Iterator Begin() { return Iterator(m_value); }
+    ConstIterator Begin() const { return ConstIterator(m_value); }
+    
   protected:
+    // Internal Support Methods
     BasicString& append(int size, const char* str)
     {
       assert(size == 0 || str != NULL);
@@ -188,8 +187,95 @@ namespace Apto {
       for (int i = 0; i < size; i++) newstr->operator[](i + GetSize()) = str[i];
       return BasicString(newstr);
     }
+
+  
+    class StringRep : public TypeSelect<ThreadingModel::UseThreadSafe, MTRefCountObject, RefCountObject>::Result
+    {
+    private:
+      int m_size;
+      char* m_data;
+      
+    public:
+      explicit StringRep(int size = 0) : m_size(size), m_data(new char[size + 1])
+      {
+        assert(m_data);
+        m_data[0] = '\0';
+        m_data[size] = '\0';
+      }
+      StringRep(int size, const char* str) : m_size(size), m_data(new char[size + 1])
+      {
+        assert(m_data);
+        memcpy(m_data, str, m_size);
+        m_data[size] = '\0';
+      }
+      StringRep(const StringRep& rhs) : m_size(rhs.m_size), m_data(new char[m_size + 1])
+      {
+        assert(m_data);
+        memcpy(m_data, rhs.m_data, m_size);
+        m_data[m_size] = '\0';
+      }
+      
+      ~StringRep() { delete [] m_data; }
+      
+      inline int GetSize() const { return m_size; }
+      inline const char* GetRep() const { return m_data; }
+      
+      char operator[](int index) const { return m_data[index]; }
+      char& operator[](int index) { return m_data[index]; }
+    };
+    
+    
+  public:
+    class Iterator
+    {
+      friend class BasicString<ThreadingModel>;
+      
+    private:
+      StringRepPtr m_value;
+      int m_index;
+      
+      inline Iterator(StringRepPtr value) : m_value(value), m_index(-1) { ; }
+      
+    public:
+      inline const char* Get()
+      {
+        return (m_index < 0 || m_index >= m_value->GetSize()) ? NULL : &m_value->operator[](m_index);
+      }
+      
+      inline const char* Next()
+      {
+        if (m_index == m_value->GetSize()) return NULL;
+        return (++m_index == m_value->GetSize()) ? NULL : &m_value->operator[](m_index);
+      }
+    };
+
+    class ConstIterator
+    {
+      friend class BasicString<ThreadingModel>;
+      
+    private:
+      StringRepPtr m_value;
+      int m_index;
+      
+      inline ConstIterator(StringRepPtr value) : m_value(value), m_index(-1) { ; }
+      
+    public:
+      inline const char* Get()
+      {
+        return (m_index < 0 || m_index >= m_value->GetSize()) ? NULL : &m_value->operator[](m_index);
+      }
+      
+      inline const char* Next()
+      {
+        if (m_index == m_value->GetSize()) return NULL;
+        return (++m_index == m_value->GetSize()) ? NULL : &m_value->operator[](m_index);
+      }
+    };
   };
   
+  
+  // Basic String Hashing Support
+  // --------------------------------------------------------------------------------------------------------------
   
   // HASH_TYPE = BasicString<ThreadingModel>
   // We hash a string simply by adding up the individual character values in
@@ -209,6 +295,10 @@ namespace Apto {
     }
   };
 
+
+  // Apto::String
+  // --------------------------------------------------------------------------------------------------------------
+  
   typedef BasicString<> String;
 };
 
