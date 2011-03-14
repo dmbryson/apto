@@ -68,7 +68,7 @@ namespace Apto {
     template <class T1> BasicString(const BasicString<T1>& rhs) : m_value(new StringRep(rhs.GetSize(), rhs.GetData())) { ; }
     
     ~BasicString() { ; }
-        
+    
     
     // Property Access
     inline int GetSize() const { return m_value->GetSize(); }
@@ -107,18 +107,33 @@ namespace Apto {
       return -1;
     }
     
-    bool operator==(const BasicString& rhs) const
+    template <class R>
+    bool operator==(const BasicString<R>& rhs) const
     {
       if (rhs.GetSize() != GetSize()) return false;
       for (int i = 0; i < GetSize(); i++) if ((*this)[i] != rhs[i]) return false;
       return true;
     }
     inline bool operator==(const char* rhs) const { return Compare(rhs) == 0; }
-    inline bool operator!=(const BasicString& rhs) const { return !operator==(rhs); }
+    
+    template <class R>
+    inline bool operator!=(const BasicString<R>& rhs) const { return !operator==(rhs); }
     inline bool operator!=(const char* rhs) const { return Compare(rhs) != 0; }
+    
+    template <class R>
+    inline bool operator<(const BasicString<R>& rhs) const { return Compare(rhs) < 0; }
     inline bool operator<(const char* rhs) const { return Compare(rhs) < 0; }
+    
+    template <class R>
+    inline bool operator>(const BasicString<R>& rhs) const { return Compare(rhs) > 0; }
     inline bool operator>(const char* rhs) const { return Compare(rhs) > 0; }
+
+    template <class R>
+    inline bool operator<=(const BasicString<R>& rhs) const { return Compare(rhs) <= 0; }
     inline bool operator<=(const char* rhs) const { return Compare(rhs) <= 0; }
+
+    template <class R>
+    inline bool operator>=(const BasicString<R>& rhs) const { return Compare(rhs) >= 0; }
     inline bool operator>=(const char* rhs) const { return Compare(rhs) >= 0; }
     
     
@@ -141,7 +156,7 @@ namespace Apto {
       assert(idx >= 0);
       assert(idx < GetSize());
       assert(length <= (GetSize() - idx));
-      return BasicString(m_value->GetRep() + idx, (length >= 0) ? length : (GetSize() - idx));
+      return BasicString((length >= 0) ? length : (GetSize() - idx), m_value->GetRep() + idx);
     }
     
     
@@ -272,6 +287,21 @@ namespace Apto {
       }
     };
   };
+  
+  template <class ThreadingModel>
+  inline bool operator==(const char* lhs, const BasicString<ThreadingModel>& rhs) { return rhs == lhs; }
+  template <class ThreadingModel>
+  inline bool operator!=(const char* lhs, const BasicString<ThreadingModel>& rhs) { return rhs != lhs; }
+  
+  template <class ThreadingModel>
+  inline bool operator<(const char* lhs, const BasicString<ThreadingModel>& rhs) { return rhs > lhs; }
+  template <class ThreadingModel>
+  inline bool operator>(const char* lhs, const BasicString<ThreadingModel>& rhs) { return rhs < lhs; }
+  
+  template <class ThreadingModel>
+  inline bool operator<=(const char* lhs, const BasicString<ThreadingModel>& rhs) { return rhs >= lhs; }
+  template <class ThreadingModel>
+  inline bool operator>=(const char* lhs, const BasicString<ThreadingModel>& rhs) { return rhs <= lhs; }
   
   
   // Basic String Hashing Support
