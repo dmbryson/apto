@@ -72,6 +72,8 @@
 		703548DA132FC7CC00D3865C /* Platform.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 703548AB132FC63500D3865C /* Platform.h */; };
 		703548DB132FC7DA00D3865C /* ContingencyTable.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 703548AE132FC63500D3865C /* ContingencyTable.h */; };
 		703548DC132FC7DA00D3865C /* Functions.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 703548AF132FC63500D3865C /* Functions.h */; };
+		703548DE132FE0A000D3865C /* StringUtils.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 703548DD132FE08000D3865C /* StringUtils.h */; };
+		703548E0132FE6A800D3865C /* StringUtils.cc in Sources */ = {isa = PBXBuildFile; fileRef = 703548DF132FE6A800D3865C /* StringUtils.cc */; };
 		704031F61314259100F2F055 /* Functions.cc in Sources */ = {isa = PBXBuildFile; fileRef = 704031F51314259100F2F055 /* Functions.cc */; };
 		706B1E9712FC9C2C006EAB7F /* RefCount.cc in Sources */ = {isa = PBXBuildFile; fileRef = 706B1E9612FC9C2C006EAB7F /* RefCount.cc */; };
 		7089301B1304F2F200F8C440 /* FileSystem.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7023362012FB5A77000C7BE5 /* FileSystem.cc */; };
@@ -176,6 +178,7 @@
 				703548D0132FC7B400D3865C /* StaticCheck.h in CopyFiles */,
 				703548D1132FC7B400D3865C /* String.h in CopyFiles */,
 				703548D2132FC7B400D3865C /* StringBuffer.h in CopyFiles */,
+				703548DE132FE0A000D3865C /* StringUtils.h in CopyFiles */,
 				703548D3132FC7B400D3865C /* Thread.h in CopyFiles */,
 				703548D4132FC7B400D3865C /* ThreadSpecific.h in CopyFiles */,
 				703548D5132FC7B400D3865C /* TypeSelect.h in CopyFiles */,
@@ -297,6 +300,8 @@
 		703548AE132FC63500D3865C /* ContingencyTable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContingencyTable.h; sourceTree = "<group>"; };
 		703548AF132FC63500D3865C /* Functions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Functions.h; sourceTree = "<group>"; };
 		703548B0132FC63500D3865C /* stat.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = stat.h; sourceTree = "<group>"; };
+		703548DD132FE08000D3865C /* StringUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StringUtils.h; sourceTree = "<group>"; };
+		703548DF132FE6A800D3865C /* StringUtils.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StringUtils.cc; sourceTree = "<group>"; };
 		704031F51314259100F2F055 /* Functions.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Functions.cc; sourceTree = "<group>"; };
 		706B1E9612FC9C2C006EAB7F /* RefCount.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RefCount.cc; sourceTree = "<group>"; };
 		709B2F82131C3A650081E874 /* main.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cc; sourceTree = "<group>"; };
@@ -518,6 +523,7 @@
 				70EE0D811309DB8300D6C016 /* SmartPtr.cc */,
 				70EE0D821309DB8300D6C016 /* String.cc */,
 				70EE0D831309DB8300D6C016 /* StringBuffer.cc */,
+				703548DF132FE6A800D3865C /* StringUtils.cc */,
 				70EE0D841309DB8300D6C016 /* Thread.cc */,
 				70EE0D851309DB8300D6C016 /* ThreadSpecific.cc */,
 			);
@@ -570,6 +576,7 @@
 				703548A2132FC63500D3865C /* StaticCheck.h */,
 				703548A3132FC63500D3865C /* String.h */,
 				703548A4132FC63500D3865C /* StringBuffer.h */,
+				703548DD132FE08000D3865C /* StringUtils.h */,
 				703548A5132FC63500D3865C /* Thread.h */,
 				703548A6132FC63500D3865C /* ThreadSpecific.h */,
 				703548A7132FC63500D3865C /* TypeSelect.h */,
@@ -834,6 +841,7 @@
 				70EE0D961309DD3D00D6C016 /* FloatingPoint.cc in Sources */,
 				70EE0DB7130B17B100D6C016 /* ContingencyTable.cc in Sources */,
 				704031F61314259100F2F055 /* Functions.cc in Sources */,
+				703548E0132FE6A800D3865C /* StringUtils.cc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

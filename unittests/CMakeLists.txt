@@ -15,6 +15,7 @@ SET(CORE_SOURCES
   ${CORE_DIR}/SmartPtr.cc
   ${CORE_DIR}/String.cc
   ${CORE_DIR}/StringBuffer.cc
+  ${CORE_DIR}/StringUtils.cc
   ${CORE_DIR}/Thread.cc
   ${CORE_DIR}/ThreadSpecific.cc
 )
