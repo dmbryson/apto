@@ -171,7 +171,7 @@ public:
 typedef Array<int, EnhancedSmart> MarginalArray;
 
 
-static class FExact
+class FExact
 {
 public:
   // FExact Public Methods
@@ -1292,11 +1292,11 @@ double FExact::longestPath(const MarginalArray::Slice& row_marginals, const Marg
   MarginalArray lcol;
   
   if (row_marginals.GetSize() >= col_marginals.GetSize()) {
-    lrow.EnhancedSmart::operator=(row_marginals);
-    lcol.EnhancedSmart::operator=(col_marginals);
+    lrow.EnhancedSmart<int>::operator=(row_marginals);
+    lcol.EnhancedSmart<int>::operator=(col_marginals);
   } else {
-    lrow.EnhancedSmart::operator=(col_marginals);
-    lcol.EnhancedSmart::operator=(row_marginals);
+    lrow.EnhancedSmart<int>::operator=(col_marginals);
+    lcol.EnhancedSmart<int>::operator=(row_marginals);
   }
   
   Array<int> nt(lcol.GetSize());
