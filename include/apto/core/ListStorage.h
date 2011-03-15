@@ -792,7 +792,6 @@ namespace Apto {
             for (int j = entry_idx; j < cur->used; j++) cur->entries[j] = cur->entries[j + 1];
             if (cur->handles[entry_idx]) cur->handles[entry_idx]->m_seg = NULL;
             for (int j = entry_idx; j < cur->used; j++) cur->handles[j] = cur->handles[j + 1];
-            assert((cur->entries[cur->used] = NULL) == NULL);
           }
           
           m_size--;
