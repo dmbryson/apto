@@ -496,10 +496,12 @@ private:
   {
   private:
     FExact* m_fexact;
+    bool m_run;
     
   public:
-    PathExtremesCalc(FExact* fexact) : m_fexact(fexact) { ; }
+    PathExtremesCalc(FExact* fexact) : m_fexact(fexact), m_run(true) { ; }
     
+    void SetFinished() { m_run = false; }
   protected:
     void Run();
   };
@@ -871,6 +873,10 @@ double FExact::ThreadedCalculate()
     }
   }
   
+  for (int i = 0; i < path_calcs.GetSize(); i++) path_calcs[i]->SetFinished();
+  m_path_extremes_cond.Broadcast();
+  for (int i = 0; i < path_calcs.GetSize(); i++) path_calcs[i]->Join();
+  
   return m_pvalue;
 }
 
@@ -973,8 +979,12 @@ void FExact::PathExtremesCalc::Run()
 
     m_fexact->m_path_extremes_mutex.Lock();
     {
-      while (m_fexact->m_path_extremes_queue.GetSize() == 0) {
+      while (m_fexact->m_path_extremes_queue.GetSize() == 0 && m_run) {
         m_fexact->m_path_extremes_cond.Wait(m_fexact->m_path_extremes_mutex);
+      }
+      if (!m_run) {
+        m_fexact->m_path_extremes_mutex.Unlock();
+        return;
       }
       k = m_fexact->m_path_extremes_queue.Pop();      
       path_idx = m_fexact->m_pending_path_extremes[k].Pop();
