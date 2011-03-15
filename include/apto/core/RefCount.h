@@ -39,16 +39,20 @@ namespace Apto {
   {
   private:
     int m_ref_count;
+    bool m_exclusive;
     
   public:
-    RefCountObject() : m_ref_count(1) { ; }
-    RefCountObject(const RefCountObject&) : m_ref_count(1) { ; }
+    RefCountObject() : m_ref_count(1), m_exclusive(false) { ; }
+    RefCountObject(const RefCountObject&) : m_ref_count(1), m_exclusive(false) { ; }
     virtual ~RefCountObject() = 0;
     
     RefCountObject& operator=(const RefCountObject&) { return *this; }
     
     void AddReference() { m_ref_count++; }
     void RemoveReference() { if (!--m_ref_count) delete this; }
+    
+    bool SetExclusive() { if (!(m_ref_count > 1)) m_exclusive = true; return m_exclusive; }
+    bool IsExclusive() { return m_exclusive; }
   };
 
 
