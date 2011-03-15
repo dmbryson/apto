@@ -268,12 +268,9 @@ namespace Apto {
       EntryHandle& operator=(const EntryHandle&); // @not_implemented
       
       EntryHandle(DL<T>* list, Node* node) : m_list(list), m_node(node) { ; }
-      ~EntryHandle()
-      {
-        if (m_node) m_node->handle = NULL;
-      }
       
     public:
+      ~EntryHandle() { if (m_node) m_node->handle = NULL; }
       bool IsValid() const { return (m_node); }
       void Remove()
       {
@@ -559,12 +556,9 @@ namespace Apto {
       EntryHandle& operator=(const EntryHandle&); // @not_implemented
       
       EntryHandle(BufferedDL<T>* list, Node* node) : m_list(list), m_node(node) { ; }
-      ~EntryHandle()
-      {
-        if (m_node) m_node->handle = NULL;
-      }
       
     public:
+      ~EntryHandle() { if (m_node) m_node->handle = NULL; }
       bool IsValid() const { return (m_node); }
       void Remove()
       {
@@ -898,6 +892,8 @@ namespace Apto {
       EntryHandle& operator=(const EntryHandle&); // @not_implemented
       
       EntryHandle(ListSegment* seg, const T& entry) : m_seg(seg), m_entry(entry) { ; }
+      
+    public:
       ~EntryHandle()
       {
         if (m_seg) {
@@ -909,8 +905,6 @@ namespace Apto {
           }
         }
       }
-      
-    public:
       bool IsValid() const { return (m_seg); }
       void Remove()
       {
