@@ -206,7 +206,8 @@ TEST(CoreHashBTreeMap, Iteration) {
     EXPECT_EQ(i, value_array[i]);
   }
   
-  map1[map1.GetSize()] = map1.GetSize();
+  int new_entry = map1.GetSize();
+  map1[new_entry] = new_entry;
   EXPECT_EQ(map1.GetSize() - 1, map1[map1.GetSize() - 1]);
   
   key_array.Resize(map1.GetSize());
