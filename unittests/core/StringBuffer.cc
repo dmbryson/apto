@@ -28,7 +28,7 @@
  *
  */
 
-//#include "apto/core/String.h"
+#include "apto/core/String.h"
 #include "apto/core/StringBuffer.h"
 
 #include "gtest/gtest.h"
@@ -45,6 +45,9 @@ TEST(CoreStringBuffer, Construction) {
   EXPECT_EQ(11, s2.GetSize());
   Apto::StringBuffer s3(3, teststr);
   EXPECT_EQ(3, s3.GetSize());
+  
+  Apto::String s4(s3);
+  Apto::StringBuffer s5(s4);
 }
 
 

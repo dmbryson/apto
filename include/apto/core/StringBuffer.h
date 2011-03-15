@@ -76,7 +76,7 @@ namespace Apto {
     inline explicit StringBuffer(int size) : m_value(new StringBufferRep(size)) { assert(m_value); }
     inline StringBuffer(const StringBuffer& rhs) : m_value(NULL) { this->operator=(rhs); }
     template <class R>
-    inline StringBuffer(const BasicString<R>& rhs) : m_value(rhs.GetSize(), rhs.GetData()) { ; }
+    inline StringBuffer(const BasicString<R>& rhs) : m_value(new StringBufferRep(rhs.GetSize(), rhs.GetData())) { ; }
     
     inline ~StringBuffer() { m_value->RemoveReference(); }
     
@@ -86,8 +86,6 @@ namespace Apto {
     inline const char* GetData() const { return m_value->GetRep(); }
     inline const char* GetCString() const { return m_value->GetRep(); }
     inline operator const char*() const { return m_value->GetRep(); }
-    template <class R>
-    inline operator BasicString<R>() const { return BasicString<R>(m_value->GetSize(), m_value->GetRep()); }
     
 
     // Assignment
