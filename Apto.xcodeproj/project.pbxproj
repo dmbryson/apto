@@ -3,8 +3,23 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 45;
+	objectVersion = 46;
 	objects = {
+
+/* Begin PBXAggregateTarget section */
+		70354853132EF22200D3865C /* apto */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 70354854132EF22200D3865C /* Build configuration list for PBXAggregateTarget "apto" */;
+			buildPhases = (
+			);
+			dependencies = (
+				70354858132EF23A00D3865C /* PBXTargetDependency */,
+				7035485A132EF23D00D3865C /* PBXTargetDependency */,
+			);
+			name = apto;
+			productName = apto;
+		};
+/* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
 		7023366612FC52E0000C7BE5 /* Platform.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7023364412FC4E31000C7BE5 /* Platform.cc */; };
@@ -14,14 +29,22 @@
 		7023367112FC534E000C7BE5 /* gtest-port.cc in Sources */ = {isa = PBXBuildFile; fileRef = 702335D112FB51EF000C7BE5 /* gtest-port.cc */; };
 		7023367212FC5352000C7BE5 /* gtest-test-part.cc in Sources */ = {isa = PBXBuildFile; fileRef = 702335D212FB51EF000C7BE5 /* gtest-test-part.cc */; };
 		7023367312FC5357000C7BE5 /* gtest-typed-test.cc in Sources */ = {isa = PBXBuildFile; fileRef = 702335D312FB51EF000C7BE5 /* gtest-typed-test.cc */; };
-		7023367712FC53AC000C7BE5 /* libapto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7023364912FC50C1000C7BE5 /* libapto.a */; };
+		7023367712FC53AC000C7BE5 /* apto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7023364912FC50C1000C7BE5 /* apto.dylib */; };
 		7023367812FC53AE000C7BE5 /* libgtest.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7023366B12FC5320000C7BE5 /* libgtest.a */; };
 		7023369E12FC5F51000C7BE5 /* Thread.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7023369D12FC5F51000C7BE5 /* Thread.cc */; };
+		70354820132EBA8A00D3865C /* apto in Headers */ = {isa = PBXBuildFile; fileRef = 7035481F132EBA8A00D3865C /* apto */; settings = {ATTRIBUTES = (Public, ); }; };
+		7035483E132EF0CB00D3865C /* FileSystem.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7023362012FB5A77000C7BE5 /* FileSystem.cc */; };
+		7035483F132EF0CB00D3865C /* Platform.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7023364412FC4E31000C7BE5 /* Platform.cc */; };
+		70354840132EF0CB00D3865C /* Thread.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7023369D12FC5F51000C7BE5 /* Thread.cc */; };
+		70354841132EF0CB00D3865C /* RefCount.cc in Sources */ = {isa = PBXBuildFile; fileRef = 706B1E9612FC9C2C006EAB7F /* RefCount.cc */; };
+		70354842132EF0CB00D3865C /* ContingencyTable.cc in Sources */ = {isa = PBXBuildFile; fileRef = 70EE0DAA130AED6700D6C016 /* ContingencyTable.cc */; };
+		70354843132EF0CB00D3865C /* FishersExact.cc in Sources */ = {isa = PBXBuildFile; fileRef = 70EE0DAB130AED6700D6C016 /* FishersExact.cc */; };
+		70354846132EF0CB00D3865C /* apto in Headers */ = {isa = PBXBuildFile; fileRef = 7035481F132EBA8A00D3865C /* apto */; settings = {ATTRIBUTES = (Public, ); }; };
 		704031F61314259100F2F055 /* Functions.cc in Sources */ = {isa = PBXBuildFile; fileRef = 704031F51314259100F2F055 /* Functions.cc */; };
 		706B1E9712FC9C2C006EAB7F /* RefCount.cc in Sources */ = {isa = PBXBuildFile; fileRef = 706B1E9612FC9C2C006EAB7F /* RefCount.cc */; };
 		7089301B1304F2F200F8C440 /* FileSystem.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7023362012FB5A77000C7BE5 /* FileSystem.cc */; };
 		709B2F90131C3B5B0081E874 /* main.cc in Sources */ = {isa = PBXBuildFile; fileRef = 709B2F82131C3A650081E874 /* main.cc */; };
-		709B2F91131C3B740081E874 /* libapto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7023364912FC50C1000C7BE5 /* libapto.a */; };
+		709B2F91131C3B740081E874 /* apto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7023364912FC50C1000C7BE5 /* apto.dylib */; };
 		70EE0D711309B1C400D6C016 /* Array.cc in Sources */ = {isa = PBXBuildFile; fileRef = 702335F012FB5281000C7BE5 /* Array.cc */; };
 		70EE0D861309DB8400D6C016 /* ArrayUtils.cc in Sources */ = {isa = PBXBuildFile; fileRef = 70EE0D781309DB8300D6C016 /* ArrayUtils.cc */; };
 		70EE0D871309DB8400D6C016 /* ConditionVariable.cc in Sources */ = {isa = PBXBuildFile; fileRef = 70EE0D791309DB8300D6C016 /* ConditionVariable.cc */; };
@@ -45,19 +68,40 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		7023366312FC52CD000C7BE5 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 7023364812FC50C1000C7BE5;
-			remoteInfo = apto;
-		};
 		7023367512FC5399000C7BE5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 7023366A12FC5320000C7BE5;
 			remoteInfo = gtest;
+		};
+		70354857132EF23A00D3865C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7023364812FC50C1000C7BE5;
+			remoteInfo = "apto (dylib)";
+		};
+		70354859132EF23D00D3865C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7035483C132EF0CB00D3865C;
+			remoteInfo = "apto (static)";
+		};
+		7035485B132EF26900D3865C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 70354853132EF22200D3865C;
+			remoteInfo = apto;
+		};
+		7035485D132EF26C00D3865C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 70354853132EF22200D3865C;
+			remoteInfo = apto;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -116,40 +160,20 @@
 		702335EE12FB51EF000C7BE5 /* README.apto */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.apto; sourceTree = "<group>"; };
 		702335F012FB5281000C7BE5 /* Array.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Array.cc; sourceTree = "<group>"; };
 		7023362012FB5A77000C7BE5 /* FileSystem.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystem.cc; sourceTree = "<group>"; };
-		7023362112FB5AA1000C7BE5 /* FileSystem.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = FileSystem.h; sourceTree = "<group>"; };
-		7023364112FC4E19000C7BE5 /* FloatingPoint.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = FloatingPoint.h; sourceTree = "<group>"; };
-		7023364212FC4E19000C7BE5 /* Platform.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = Platform.h; sourceTree = "<group>"; };
 		7023364412FC4E31000C7BE5 /* Platform.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Platform.cc; sourceTree = "<group>"; };
-		7023364912FC50C1000C7BE5 /* libapto.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libapto.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		7023364912FC50C1000C7BE5 /* apto.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = apto.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		7023366B12FC5320000C7BE5 /* libgtest.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libgtest.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		7023369B12FC57BE000C7BE5 /* Array.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = Array.h; sourceTree = "<group>"; };
-		7023369C12FC5F33000C7BE5 /* Thread.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = Thread.h; sourceTree = "<group>"; };
 		7023369D12FC5F51000C7BE5 /* Thread.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Thread.cc; sourceTree = "<group>"; };
-		7023369F12FC5FDD000C7BE5 /* Mutex.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = Mutex.h; sourceTree = "<group>"; };
-		702336A812FC64AC000C7BE5 /* ConditionVariable.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = ConditionVariable.h; sourceTree = "<group>"; };
-		702336A912FC7203000C7BE5 /* ThreadSpecific.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = ThreadSpecific.h; sourceTree = "<group>"; };
-		702336AA12FC7309000C7BE5 /* RWLock.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = RWLock.h; sourceTree = "<group>"; };
-		702336AF12FC8012000C7BE5 /* Atomic.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = Atomic.h; sourceTree = "<group>"; };
-		702336B712FC9106000C7BE5 /* RefCount.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = RefCount.h; sourceTree = "<group>"; };
-		702336C212FC94AA000C7BE5 /* Pair.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = Pair.h; sourceTree = "<group>"; };
-		7030DB0C1326844100B6DADA /* ListStorage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ListStorage.h; sourceTree = "<group>"; };
-		7030DB3A13292FF300B6DADA /* MapStorage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MapStorage.h; sourceTree = "<group>"; };
+		7035481F132EBA8A00D3865C /* apto */ = {isa = PBXFileReference; lastKnownFileType = folder; name = apto; path = include/apto; sourceTree = "<group>"; };
+		7035484A132EF0CB00D3865C /* libapto.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libapto.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		70354871132F0E7700D3865C /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = CMakeLists.txt; path = src/CMakeLists.txt; sourceTree = "<group>"; };
+		70354872132F0EC100D3865C /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		70354873132F0EF000D3865C /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		70354874132F0F1800D3865C /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		704031F51314259100F2F055 /* Functions.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Functions.cc; sourceTree = "<group>"; };
-		7043BEA91304707200EA53D6 /* String.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = String.h; sourceTree = "<group>"; };
-		7043BEE31305925600EA53D6 /* Map.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = Map.h; sourceTree = "<group>"; };
-		7043BEE913059E1200EA53D6 /* ArrayStorage.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = ArrayStorage.h; sourceTree = "<group>"; };
 		706B1E9612FC9C2C006EAB7F /* RefCount.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RefCount.cc; sourceTree = "<group>"; };
-		706B1E9E12FCA5C9006EAB7F /* ArrayUtils.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = ArrayUtils.h; sourceTree = "<group>"; };
-		706B43221304D52000470F38 /* StringBuffer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = StringBuffer.h; sourceTree = "<group>"; };
-		707A254F1327E51900B8CC50 /* StaticCheck.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StaticCheck.h; sourceTree = "<group>"; };
 		709B2F82131C3A650081E874 /* main.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cc; sourceTree = "<group>"; };
 		709B2F87131C3B470081E874 /* fexact */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = fexact; sourceTree = BUILT_PRODUCTS_DIR; };
-		70E1ECDA1300E2CB00F75FA2 /* SmartPtr.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = SmartPtr.h; sourceTree = "<group>"; };
-		70E1ECDB1301C85A00F75FA2 /* TypeSelect.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = TypeSelect.h; sourceTree = "<group>"; };
-		70E1ECDC1301D40500F75FA2 /* RefTransport.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = RefTransport.h; sourceTree = "<group>"; };
-		70EAB1FD1305E866005B0BBF /* Set.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Set.h; sourceTree = "<group>"; };
-		70EE0D6F13099C0A00D6C016 /* List.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = List.h; sourceTree = "<group>"; };
-		70EE0D701309A40400D6C016 /* core.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = core.h; sourceTree = "<group>"; };
 		70EE0D781309DB8300D6C016 /* ArrayUtils.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ArrayUtils.cc; sourceTree = "<group>"; };
 		70EE0D791309DB8300D6C016 /* ConditionVariable.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConditionVariable.cc; sourceTree = "<group>"; };
 		70EE0D7A1309DB8300D6C016 /* FileSystem.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystem.cc; sourceTree = "<group>"; };
@@ -165,12 +189,8 @@
 		70EE0D841309DB8300D6C016 /* Thread.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Thread.cc; sourceTree = "<group>"; };
 		70EE0D851309DB8300D6C016 /* ThreadSpecific.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ThreadSpecific.cc; sourceTree = "<group>"; };
 		70EE0D951309DD3D00D6C016 /* FloatingPoint.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FloatingPoint.cc; sourceTree = "<group>"; };
-		70EE0D971309E04B00D6C016 /* platform.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = platform.h; sourceTree = "<group>"; };
-		70EE0DA7130AED4800D6C016 /* ContingencyTable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContingencyTable.h; sourceTree = "<group>"; };
-		70EE0DA8130AED4800D6C016 /* Functions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Functions.h; sourceTree = "<group>"; };
 		70EE0DAA130AED6700D6C016 /* ContingencyTable.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ContingencyTable.cc; sourceTree = "<group>"; };
 		70EE0DAB130AED6700D6C016 /* FishersExact.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FishersExact.cc; sourceTree = "<group>"; };
-		70EE0DAE130AEDB700D6C016 /* stat.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = stat.h; sourceTree = "<group>"; };
 		70EE0DB6130B17B100D6C016 /* ContingencyTable.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ContingencyTable.cc; sourceTree = "<group>"; };
 		8DD76F6C0486A84900D96B5E /* apto-test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "apto-test"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -190,11 +210,18 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		70354844132EF0CB00D3865C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		709B2F84131C3B470081E874 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				709B2F91131C3B740081E874 /* libapto.a in Frameworks */,
+				709B2F91131C3B740081E874 /* apto.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -203,7 +230,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7023367812FC53AE000C7BE5 /* libgtest.a in Frameworks */,
-				7023367712FC53AC000C7BE5 /* libapto.a in Frameworks */,
+				7023367712FC53AC000C7BE5 /* apto.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -213,11 +240,12 @@
 		08FB7794FE84155DC02AAC07 /* Apto */ = {
 			isa = PBXGroup;
 			children = (
-				7023361C12FB5900000C7BE5 /* include */,
+				70354821132EC13400D3865C /* include */,
 				08FB7795FE84155DC02AAC07 /* src */,
 				702335C212FB41EE000C7BE5 /* unittests */,
 				702335CB12FB51EF000C7BE5 /* utils */,
 				1AB674ADFE9D54B511CA2CBB /* products */,
+				70354874132F0F1800D3865C /* CMakeLists.txt */,
 			);
 			name = Apto;
 			sourceTree = "<group>";
@@ -228,6 +256,7 @@
 				702335C612FB4274000C7BE5 /* core */,
 				7023364312FC4E31000C7BE5 /* platform */,
 				70EE0DA9130AED6700D6C016 /* stat */,
+				70354871132F0E7700D3865C /* CMakeLists.txt */,
 			);
 			name = src;
 			sourceTree = "<group>";
@@ -237,7 +266,8 @@
 			children = (
 				8DD76F6C0486A84900D96B5E /* apto-test */,
 				709B2F87131C3B470081E874 /* fexact */,
-				7023364912FC50C1000C7BE5 /* libapto.a */,
+				7023364912FC50C1000C7BE5 /* apto.dylib */,
+				7035484A132EF0CB00D3865C /* libapto.a */,
 				7023366B12FC5320000C7BE5 /* libgtest.a */,
 			);
 			name = products;
@@ -249,6 +279,7 @@
 				702335EF12FB5281000C7BE5 /* core */,
 				70EE0D941309DD3C00D6C016 /* platform */,
 				70EE0DB5130B17B100D6C016 /* stat */,
+				70354872132F0EC100D3865C /* CMakeLists.txt */,
 				08FB7796FE84155DC02AAC07 /* main.cc */,
 			);
 			path = unittests;
@@ -285,6 +316,7 @@
 		702335CD12FB51EF000C7BE5 /* googletest */ = {
 			isa = PBXGroup;
 			children = (
+				70354873132F0EF000D3865C /* CMakeLists.txt */,
 				702335CE12FB51EF000C7BE5 /* gtest-all.cc */,
 				702335CF12FB51EF000C7BE5 /* gtest-death-test.cc */,
 				702335D012FB51EF000C7BE5 /* gtest-filepath.cc */,
@@ -365,59 +397,6 @@
 			path = core;
 			sourceTree = "<group>";
 		};
-		7023361C12FB5900000C7BE5 /* include */ = {
-			isa = PBXGroup;
-			children = (
-				7023361D12FB5900000C7BE5 /* core */,
-				7023364012FC4E19000C7BE5 /* platform */,
-				70EE0DA6130AED4800D6C016 /* stat */,
-				70EE0D701309A40400D6C016 /* core.h */,
-				70EE0D971309E04B00D6C016 /* platform.h */,
-				70EE0DAE130AEDB700D6C016 /* stat.h */,
-			);
-			name = include;
-			path = include/apto;
-			sourceTree = "<group>";
-		};
-		7023361D12FB5900000C7BE5 /* core */ = {
-			isa = PBXGroup;
-			children = (
-				7023369B12FC57BE000C7BE5 /* Array.h */,
-				706B1E9E12FCA5C9006EAB7F /* ArrayUtils.h */,
-				7043BEE913059E1200EA53D6 /* ArrayStorage.h */,
-				702336AF12FC8012000C7BE5 /* Atomic.h */,
-				702336A812FC64AC000C7BE5 /* ConditionVariable.h */,
-				7023362112FB5AA1000C7BE5 /* FileSystem.h */,
-				70EE0D6F13099C0A00D6C016 /* List.h */,
-				7030DB0C1326844100B6DADA /* ListStorage.h */,
-				7043BEE31305925600EA53D6 /* Map.h */,
-				7030DB3A13292FF300B6DADA /* MapStorage.h */,
-				7023369F12FC5FDD000C7BE5 /* Mutex.h */,
-				702336C212FC94AA000C7BE5 /* Pair.h */,
-				702336AA12FC7309000C7BE5 /* RWLock.h */,
-				702336B712FC9106000C7BE5 /* RefCount.h */,
-				70E1ECDC1301D40500F75FA2 /* RefTransport.h */,
-				70EAB1FD1305E866005B0BBF /* Set.h */,
-				70E1ECDA1300E2CB00F75FA2 /* SmartPtr.h */,
-				707A254F1327E51900B8CC50 /* StaticCheck.h */,
-				7043BEA91304707200EA53D6 /* String.h */,
-				706B43221304D52000470F38 /* StringBuffer.h */,
-				7023369C12FC5F33000C7BE5 /* Thread.h */,
-				702336A912FC7203000C7BE5 /* ThreadSpecific.h */,
-				70E1ECDB1301C85A00F75FA2 /* TypeSelect.h */,
-			);
-			path = core;
-			sourceTree = "<group>";
-		};
-		7023364012FC4E19000C7BE5 /* platform */ = {
-			isa = PBXGroup;
-			children = (
-				7023364112FC4E19000C7BE5 /* FloatingPoint.h */,
-				7023364212FC4E19000C7BE5 /* Platform.h */,
-			);
-			path = platform;
-			sourceTree = "<group>";
-		};
 		7023364312FC4E31000C7BE5 /* platform */ = {
 			isa = PBXGroup;
 			children = (
@@ -425,6 +404,14 @@
 			);
 			name = platform;
 			path = src/platform;
+			sourceTree = "<group>";
+		};
+		70354821132EC13400D3865C /* include */ = {
+			isa = PBXGroup;
+			children = (
+				7035481F132EBA8A00D3865C /* apto */,
+			);
+			name = include;
 			sourceTree = "<group>";
 		};
 		709B2F81131C3A650081E874 /* fexact */ = {
@@ -443,15 +430,6 @@
 			path = platform;
 			sourceTree = "<group>";
 		};
-		70EE0DA6130AED4800D6C016 /* stat */ = {
-			isa = PBXGroup;
-			children = (
-				70EE0DA7130AED4800D6C016 /* ContingencyTable.h */,
-				70EE0DA8130AED4800D6C016 /* Functions.h */,
-			);
-			path = stat;
-			sourceTree = "<group>";
-		};
 		70EE0DA9130AED6700D6C016 /* stat */ = {
 			isa = PBXGroup;
 			children = (
@@ -465,8 +443,8 @@
 		70EE0DB5130B17B100D6C016 /* stat */ = {
 			isa = PBXGroup;
 			children = (
-				704031F51314259100F2F055 /* Functions.cc */,
 				70EE0DB6130B17B100D6C016 /* ContingencyTable.cc */,
+				704031F51314259100F2F055 /* Functions.cc */,
 			);
 			path = stat;
 			sourceTree = "<group>";
@@ -478,6 +456,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				70354820132EBA8A00D3865C /* apto in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -488,25 +467,33 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		70354845132EF0CB00D3865C /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				70354846132EF0CB00D3865C /* apto in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		7023364812FC50C1000C7BE5 /* apto */ = {
+		7023364812FC50C1000C7BE5 /* apto (dylib) */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7023364D12FC50C1000C7BE5 /* Build configuration list for PBXNativeTarget "apto" */;
+			buildConfigurationList = 7023364D12FC50C1000C7BE5 /* Build configuration list for PBXNativeTarget "apto (dylib)" */;
 			buildPhases = (
-				7023364512FC50C1000C7BE5 /* Headers */,
 				7023364612FC50C1000C7BE5 /* Sources */,
 				7023364712FC50C1000C7BE5 /* Frameworks */,
+				7023364512FC50C1000C7BE5 /* Headers */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = apto;
+			name = "apto (dylib)";
 			productName = apto;
-			productReference = 7023364912FC50C1000C7BE5 /* libapto.a */;
-			productType = "com.apple.product-type.library.static";
+			productReference = 7023364912FC50C1000C7BE5 /* apto.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
 		};
 		7023366A12FC5320000C7BE5 /* gtest */ = {
 			isa = PBXNativeTarget;
@@ -525,6 +512,23 @@
 			productReference = 7023366B12FC5320000C7BE5 /* libgtest.a */;
 			productType = "com.apple.product-type.library.static";
 		};
+		7035483C132EF0CB00D3865C /* apto (static) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 70354847132EF0CB00D3865C /* Build configuration list for PBXNativeTarget "apto (static)" */;
+			buildPhases = (
+				7035483D132EF0CB00D3865C /* Sources */,
+				70354844132EF0CB00D3865C /* Frameworks */,
+				70354845132EF0CB00D3865C /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "apto (static)";
+			productName = apto;
+			productReference = 7035484A132EF0CB00D3865C /* libapto.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 		709B2F86131C3B470081E874 /* fexact */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 709B2F8D131C3B480081E874 /* Build configuration list for PBXNativeTarget "fexact" */;
@@ -536,6 +540,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				7035485E132EF26C00D3865C /* PBXTargetDependency */,
 			);
 			name = fexact;
 			productName = fexact;
@@ -553,7 +558,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				7023366412FC52CD000C7BE5 /* PBXTargetDependency */,
+				7035485C132EF26900D3865C /* PBXTargetDependency */,
 				7023367612FC5399000C7BE5 /* PBXTargetDependency */,
 			);
 			name = "apto-test";
@@ -567,8 +572,11 @@
 /* Begin PBXProject section */
 		08FB7793FE84155DC02AAC07 /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+				ORGANIZATIONNAME = "David Michael Bryson";
+			};
 			buildConfigurationList = 1DEB923508733DC60010E9CD /* Build configuration list for PBXProject "Apto" */;
-			compatibilityVersion = "Xcode 3.1";
+			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
@@ -582,8 +590,10 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				7023364812FC50C1000C7BE5 /* apto */,
 				8DD76F620486A84900D96B5E /* apto-test */,
+				70354853132EF22200D3865C /* apto */,
+				7023364812FC50C1000C7BE5 /* apto (dylib) */,
+				7035483C132EF0CB00D3865C /* apto (static) */,
 				7023366A12FC5320000C7BE5 /* gtest */,
 				709B2F86131C3B470081E874 /* fexact */,
 			);
@@ -614,6 +624,19 @@
 				7023367112FC534E000C7BE5 /* gtest-port.cc in Sources */,
 				7023367212FC5352000C7BE5 /* gtest-test-part.cc in Sources */,
 				7023367312FC5357000C7BE5 /* gtest-typed-test.cc in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7035483D132EF0CB00D3865C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7035483E132EF0CB00D3865C /* FileSystem.cc in Sources */,
+				7035483F132EF0CB00D3865C /* Platform.cc in Sources */,
+				70354840132EF0CB00D3865C /* Thread.cc in Sources */,
+				70354841132EF0CB00D3865C /* RefCount.cc in Sources */,
+				70354842132EF0CB00D3865C /* ContingencyTable.cc in Sources */,
+				70354843132EF0CB00D3865C /* FishersExact.cc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -654,15 +677,30 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		7023366412FC52CD000C7BE5 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 7023364812FC50C1000C7BE5 /* apto */;
-			targetProxy = 7023366312FC52CD000C7BE5 /* PBXContainerItemProxy */;
-		};
 		7023367612FC5399000C7BE5 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 7023366A12FC5320000C7BE5 /* gtest */;
 			targetProxy = 7023367512FC5399000C7BE5 /* PBXContainerItemProxy */;
+		};
+		70354858132EF23A00D3865C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7023364812FC50C1000C7BE5 /* apto (dylib) */;
+			targetProxy = 70354857132EF23A00D3865C /* PBXContainerItemProxy */;
+		};
+		7035485A132EF23D00D3865C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7035483C132EF0CB00D3865C /* apto (static) */;
+			targetProxy = 70354859132EF23D00D3865C /* PBXContainerItemProxy */;
+		};
+		7035485C132EF26900D3865C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 70354853132EF22200D3865C /* apto */;
+			targetProxy = 7035485B132EF26900D3865C /* PBXContainerItemProxy */;
+		};
+		7035485E132EF26C00D3865C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 70354853132EF22200D3865C /* apto */;
+			targetProxy = 7035485D132EF26C00D3865C /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -671,14 +709,18 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				HEADER_SEARCH_PATHS = utils/unittest/googletest/include;
 				PRODUCT_NAME = "apto-test";
+				USER_HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/usr/local/include";
 			};
 			name = Debug;
 		};
 		1DEB923308733DC60010E9CD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				HEADER_SEARCH_PATHS = utils/unittest/googletest/include;
 				PRODUCT_NAME = "apto-test";
+				USER_HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/usr/local/include";
 			};
 			name = Release;
 		};
@@ -693,10 +735,6 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = (
-					include,
-					utils/unittest/googletest/include,
-				);
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = "";
 				STRIP_INSTALLED_PRODUCT = NO;
@@ -720,10 +758,6 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = (
-					include,
-					utils/unittest/googletest/include,
-				);
 				SDKROOT = "";
 				STRIP_INSTALLED_PRODUCT = NO;
 				WARNING_CFLAGS = (
@@ -738,6 +772,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				HEADER_SEARCH_PATHS = include;
 				PRODUCT_NAME = apto;
 			};
 			name = Debug;
@@ -746,6 +781,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				HEADER_SEARCH_PATHS = include;
 				PRODUCT_NAME = apto;
 			};
 			name = Release;
@@ -754,6 +790,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				HEADER_SEARCH_PATHS = utils/unittest/googletest/include;
 				PRODUCT_NAME = gtest;
 			};
 			name = Debug;
@@ -762,7 +799,40 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				HEADER_SEARCH_PATHS = utils/unittest/googletest/include;
 				PRODUCT_NAME = gtest;
+			};
+			name = Release;
+		};
+		70354848132EF0CB00D3865C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				HEADER_SEARCH_PATHS = include;
+				PRODUCT_NAME = apto;
+			};
+			name = Debug;
+		};
+		70354849132EF0CB00D3865C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				HEADER_SEARCH_PATHS = include;
+				PRODUCT_NAME = apto;
+			};
+			name = Release;
+		};
+		70354855132EF22200D3865C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		70354856132EF22200D3865C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
 		};
@@ -770,6 +840,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/usr/local/include";
 			};
 			name = Debug;
 		};
@@ -777,6 +848,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/usr/local/include";
 			};
 			name = Release;
 		};
@@ -801,7 +873,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7023364D12FC50C1000C7BE5 /* Build configuration list for PBXNativeTarget "apto" */ = {
+		7023364D12FC50C1000C7BE5 /* Build configuration list for PBXNativeTarget "apto (dylib)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7023364B12FC50C1000C7BE5 /* Debug */,
@@ -818,6 +890,23 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		70354847132EF0CB00D3865C /* Build configuration list for PBXNativeTarget "apto (static)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				70354848132EF0CB00D3865C /* Debug */,
+				70354849132EF0CB00D3865C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		70354854132EF22200D3865C /* Build configuration list for PBXAggregateTarget "apto" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				70354855132EF22200D3865C /* Debug */,
+				70354856132EF22200D3865C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 		709B2F8D131C3B480081E874 /* Build configuration list for PBXNativeTarget "fexact" */ = {
 			isa = XCConfigurationList;
