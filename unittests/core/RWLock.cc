@@ -51,11 +51,13 @@ TEST(CoreRWLock, Usage) {
     TestInfo& m_tinfo;
     
   public:
-    TestReadThread(TestInfo& tinfo) : m_tinfo(tinfo) { ; }
+    TestReadThread(TestInfo& tinfo) : m_tinfo(tinfo)
+    {
+      m_tinfo.rwlock.ReadLock();
+    }
     
   protected:
     void Run() {
-      m_tinfo.rwlock.ReadLock();
       m_tinfo.mutex.Lock();
       m_tinfo.seq.PushRear(1);
       m_tinfo.mutex.Unlock();
