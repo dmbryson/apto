@@ -874,7 +874,7 @@
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				HEADER_SEARCH_PATHS = utils/unittest/googletest/include;
 				PRODUCT_NAME = "apto-test";
-				USER_HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/usr/local/include";
+				USER_HEADER_SEARCH_PATHS = include;
 			};
 			name = Debug;
 		};
@@ -883,7 +883,7 @@
 			buildSettings = {
 				HEADER_SEARCH_PATHS = utils/unittest/googletest/include;
 				PRODUCT_NAME = "apto-test";
-				USER_HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/usr/local/include";
+				USER_HEADER_SEARCH_PATHS = include;
 			};
 			name = Release;
 		};
