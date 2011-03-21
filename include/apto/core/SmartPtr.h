@@ -468,7 +468,7 @@ namespace Apto {
 
 namespace std {
   template <class T, template <class> class OP, template<class> class SP>
-  class less< Apto::SmartPtr<T, OP, SP> >
+  struct less< Apto::SmartPtr<T, OP, SP> >
     : public binary_function<Apto::SmartPtr<T, OP, SP>, Apto::SmartPtr<T, OP, SP>, bool>
   {
   public:
