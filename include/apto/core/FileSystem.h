@@ -56,5 +56,4 @@ inline Apto::String Apto::FileSystem::PathAppend(const String& path, const Strin
 #endif
 }
 
-
 #endif

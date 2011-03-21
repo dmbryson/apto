@@ -360,7 +360,7 @@ namespace Apto {
       {
         if (m_table_idx == HashFactor) return NULL;
         if (m_table_idx == -1 || ++m_entry_idx >= m_map->m_table[m_table_idx].GetSize()) {
-          while (++m_table_idx < HashFactor && m_map->m_table[m_table_idx].GetSize() == 0);
+          while (++m_table_idx < HashFactor && m_map->m_table[m_table_idx].GetSize() == 0) ;
           if (m_table_idx == HashFactor) return NULL;
           m_entry_idx = 0;
         }
@@ -394,7 +394,7 @@ namespace Apto {
       {
         if (m_table_idx == HashFactor) return NULL;
         if (m_table_idx == -1 || ++m_entry_idx >= m_map->m_table[m_table_idx].GetSize()) {
-          while (++m_table_idx < HashFactor && m_map->m_table[m_table_idx].GetSize() == 0);
+          while (++m_table_idx < HashFactor && m_map->m_table[m_table_idx].GetSize() == 0) ;
           if (m_table_idx == HashFactor) return NULL;
           m_entry_idx = 0;
         }
@@ -427,7 +427,7 @@ namespace Apto {
       {
         if (m_table_idx == HashFactor) return NULL;
         if (m_table_idx == -1 || ++m_entry_idx >= m_map->m_table[m_table_idx].GetSize()) {
-          while (++m_table_idx < HashFactor && m_map->m_table[m_table_idx].GetSize() == 0);
+          while (++m_table_idx < HashFactor && m_map->m_table[m_table_idx].GetSize() == 0) ;
           if (m_table_idx == HashFactor) return NULL;
           m_entry_idx = 0;
         }
@@ -459,7 +459,7 @@ namespace Apto {
       {
         if (m_table_idx == HashFactor) return NULL;
         if (m_table_idx == -1 || ++m_entry_idx >= m_map->m_table[m_table_idx].GetSize()) {
-          while (++m_table_idx < HashFactor && m_map->m_table[m_table_idx].GetSize() == 0);
+          while (++m_table_idx < HashFactor && m_map->m_table[m_table_idx].GetSize() == 0) ;
           if (m_table_idx == HashFactor) return NULL;
           m_entry_idx = 0;
         }

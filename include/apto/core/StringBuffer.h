@@ -71,7 +71,7 @@ namespace Apto {
     
   public:
     inline StringBuffer(const char* str = "")
-      : m_value((str) ? new StringBufferRep(strlen(str), str) : new StringBufferRep) { assert(m_value); }
+      : m_value((str) ? new StringBufferRep(static_cast<int>(strlen(str)), str) : new StringBufferRep) { assert(m_value); }
     inline StringBuffer(int size, const char* str) : m_value(new StringBufferRep(size, str)) { assert(m_value); }
     inline explicit StringBuffer(int size) : m_value(new StringBufferRep(size)) { assert(m_value); }
     inline StringBuffer(const StringBuffer& rhs) : m_value(NULL) { this->operator=(rhs); }
@@ -105,7 +105,7 @@ namespace Apto {
     {
       assert(rhs);
       m_value->RemoveReference();
-      m_value = new StringBufferRep(strlen(rhs), rhs);
+      m_value = new StringBufferRep(static_cast<int>(strlen(rhs)), rhs);
       assert(m_value);
       return *this;
     }
@@ -116,7 +116,7 @@ namespace Apto {
     {
       assert(str);
       int i;
-      for (i = 0; i < GetSize() && str[i] != '\0' && (*this)[i] == str[i]; i++);
+      for (i = 0; i < GetSize() && str[i] != '\0' && (*this)[i] == str[i]; i++) ;
       
       if (i == GetSize() && str[i] == '\0') return 0;
       if (i < GetSize() && str[i] < (*this)[i]) return 1;
@@ -154,10 +154,10 @@ namespace Apto {
     
     // Concatenation
     inline StringBuffer& operator+=(const char c) { return append(1, &c); }
-    inline StringBuffer& operator+=(const char* str) { return append(strlen(str), str); }
+    inline StringBuffer& operator+=(const char* str) { return append(static_cast<int>(strlen(str)), str); }
     inline StringBuffer& operator+=(const StringBuffer& str) { return append(str.GetSize(), str.GetData()); }
     inline StringBuffer operator+(const char c) { return concat(1, &c); }
-    inline StringBuffer operator+(const char* str) { return concat(strlen(str), str); }
+    inline StringBuffer operator+(const char* str) { return concat(static_cast<int>(strlen(str)), str); }
     inline StringBuffer operator+(const StringBuffer& str) { return concat(str.GetSize(), str.GetData()); }
     
     
@@ -237,7 +237,8 @@ namespace Apto {
         memcpy(m_data, str, m_size);
         m_data[size] = '\0';
       }
-      StringBufferRep(const StringBufferRep& rhs) : m_capacity(rhs.m_size + 1), m_size(rhs.m_size), m_data(new char[m_size + 1])
+      StringBufferRep(const StringBufferRep& rhs)
+        : RefCountObject(), m_capacity(rhs.m_size + 1), m_size(rhs.m_size), m_data(new char[m_size + 1])
       {
         assert(m_data);
         memcpy(m_data, rhs.m_data, m_size);

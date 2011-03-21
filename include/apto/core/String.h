@@ -62,7 +62,8 @@ namespace Apto {
     
   public:
     // Construction
-    BasicString(const char* str = "") : m_value((str) ? new StringRep(strlen(str), str) : new StringRep(0)) { assert(m_value); }
+    BasicString(const char* str = "")
+      : m_value((str) ? new StringRep(static_cast<int>(strlen(str)), str) : new StringRep(0)) { assert(m_value); }
     BasicString(int size, const char* str) : m_value(new StringRep(size, str)) { assert(m_value); }
     BasicString(const BasicString& rhs) : m_value(rhs.m_value) { ; }
     template <class T1> BasicString(const BasicString<T1>& rhs) : m_value(new StringRep(rhs.GetSize(), rhs.GetData())) { ; }
@@ -89,7 +90,7 @@ namespace Apto {
     inline BasicString& operator=(const char* rhs)
     {
       assert(rhs);
-      m_value = StringRepPtr(new StringRep(strlen(rhs), rhs));
+      m_value = StringRepPtr(new StringRep(static_cast<int>(strlen(rhs)), rhs));
       assert(m_value);
       return *this;
     }
@@ -100,7 +101,7 @@ namespace Apto {
     {
       assert(str);
       int i;
-      for (i = 0; i < GetSize() && str[i] != '\0' && (*this)[i] == str[i]; i++);
+      for (i = 0; i < GetSize() && str[i] != '\0' && (*this)[i] == str[i]; i++) ;
       
       if (i == GetSize() && str[i] == '\0') return 0;
       if (i < GetSize() && str[i] < (*this)[i]) return 1;
@@ -143,10 +144,10 @@ namespace Apto {
     
     // Concatenation
     inline BasicString& operator+=(const char c) { return append(1, &c); }
-    inline BasicString& operator+=(const char* str) { return append(strlen(str), str); }
+    inline BasicString& operator+=(const char* str) { return append(static_cast<int>(strlen(str)), str); }
     template <class R> BasicString& operator+=(const BasicString<R>& str) { return append(str.GetSize(), str.GetData()); }
     inline BasicString operator+(const char c) { return concat(1, &c); }
-    inline BasicString operator+(const char* str) { return concat(strlen(str), str); }
+    inline BasicString operator+(const char* str) { return concat(static_cast<int>(strlen(str)), str); }
     template <class R> BasicString operator+(const BasicString<R>& str) { return concat(str.GetSize(), str.GetData()); }
     
     

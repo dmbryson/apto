@@ -39,13 +39,13 @@
 # include <pthread.h>
 
 #ifdef DEBUG
-# define PTHREAD_MUTEX_CHKRTN(OP) \
+# define APTO_PTHREAD_MUTEX_CHKRTN(OP) \
 { \
 int ret = OP; \
 ASSERT_MSG(ret == 0, "OP failed"); \
 }
 #else
-# define PTHREAD_MUTEX_CHKRTN(OP) OP
+# define APTO_PTHREAD_MUTEX_CHKRTN(OP) OP
 #endif
 
 namespace Apto {  
@@ -66,26 +66,26 @@ namespace Apto {
 #ifdef DEBUG
     Mutex() : m_locked(false)
     {
-      PTHREAD_MUTEX_CHKRTN(pthread_mutex_init(&m_mutex, NULL));
+      APTO_PTHREAD_MUTEX_CHKRTN(pthread_mutex_init(&m_mutex, NULL));
     }
 #else
-    inline Mutex() { PTHREAD_MUTEX_CHKRTN(pthread_mutex_init(&m_mutex, NULL)); }
+    inline Mutex() { APTO_PTHREAD_MUTEX_CHKRTN(pthread_mutex_init(&m_mutex, NULL)); }
 #endif
     
     inline ~Mutex()
     {
       ASSERT_MSG(!m_locked, "destroying locked mutex");
-      PTHREAD_MUTEX_CHKRTN(pthread_mutex_destroy(&m_mutex));
+      APTO_PTHREAD_MUTEX_CHKRTN(pthread_mutex_destroy(&m_mutex));
     }
     
 #ifdef DEBUG
     void Lock()
     {
-      PTHREAD_MUTEX_CHKRTN(pthread_mutex_lock(&m_mutex));
+      APTO_PTHREAD_MUTEX_CHKRTN(pthread_mutex_lock(&m_mutex));
       m_locked = true;
     }
 #else
-    inline void Lock() { PTHREAD_MUTEX_CHKRTN(pthread_mutex_lock(&m_mutex)); }
+    inline void Lock() { APTO_PTHREAD_MUTEX_CHKRTN(pthread_mutex_lock(&m_mutex)); }
 #endif
   
 #ifdef DEBUG
@@ -93,15 +93,15 @@ namespace Apto {
     {
       ASSERT_MSG(m_locked, "mutex not locked");
       m_locked = false;
-      PTHREAD_MUTEX_CHKRTN(pthread_mutex_unlock(&m_mutex));
+      APTO_PTHREAD_MUTEX_CHKRTN(pthread_mutex_unlock(&m_mutex));
     }
 #else
-    inline void Unlock() { PTHREAD_MUTEX_CHKRTN(pthread_mutex_unlock(&m_mutex)); }
+    inline void Unlock() { APTO_PTHREAD_MUTEX_CHKRTN(pthread_mutex_unlock(&m_mutex)); }
 #endif
   };
 };
 
-#undef PTHREAD_MUTEX_CHKRTN
+#undef APTO_PTHREAD_MUTEX_CHKRTN
 
 
 #elif APTO_PLATFORM(THREADS) && APTO_PLATFORM(WINDOWS)
