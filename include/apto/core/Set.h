@@ -90,7 +90,7 @@ namespace Apto {
     
   public:
     Set() : m_multiset_size(0) { ; }
-    Set(const Set& rhs) : m_multiset_size(0) { this->operator=(rhs); }
+    Set(const Set& rhs) : SP(), m_multiset_size(0) { this->operator=(rhs); }
 
     template <class T1, template <class, class> class SP1, bool M>
     explicit Set(const Set<T1, SP1, M>& rhs) { this->operator=(rhs); }

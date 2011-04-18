@@ -58,7 +58,7 @@ namespace Apto {
 
   public:
     Map() { ; }
-    Map(const Map& rhs) { this->operator=(rhs); }
+    Map(const Map& rhs) : SP() { this->operator=(rhs); }
     
     template <class K1, class V1, template <class, class> class SP1>
     explicit Map(const Map<K1, V1, SP1>& rhs) { this->operator=(rhs); }

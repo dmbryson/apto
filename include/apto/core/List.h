@@ -54,7 +54,7 @@ namespace Apto {
     
   public:
     List() { ; }
-    List(const List& rhs) { this->operator=(rhs); }
+    List(const List& rhs) : SP() { this->operator=(rhs); }
     
     template <class T1, template <class> class SP1>
     explicit inline List(const List<T1, SP1>& rhs)

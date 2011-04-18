@@ -62,13 +62,15 @@ namespace Apto {
     Node m_root;
     int m_size;
     
+    DL(const DL& rhs) { ; }
+    
   protected:
     DL() : m_size(0)
     {
       m_root.next = &m_root;
       m_root.prev = &m_root;
     }
-    
+        
     ~DL()
     {
       // Clear handles and delete nodes
@@ -332,7 +334,9 @@ namespace Apto {
     Array<Buffer, ManagedPointer> m_bufs;
     ListIndex m_next;
     Node m_root;
-    int m_size;
+    unsigned int m_size;
+    
+    BufferedDL(const BufferedDL& rhs) { ; }
     
   protected:
     BufferedDL() : m_size(0) { Clear(); }
@@ -604,6 +608,8 @@ namespace Apto {
     ListSegment* m_head_seg;
     ListSegment* m_tail_seg;
     
+    SparseVector(const SparseVector& rhs) { ; }
+
     
   protected:
     SparseVector() : m_size(0), m_segs(0), m_head_seg(NULL), m_tail_seg(NULL) { ; }
