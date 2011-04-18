@@ -38,6 +38,11 @@
 
 #if defined(WIN32) || defined(_WIN32)
 # define APTO_PLATFORM_WINDOWS 1
+# ifdef _MSC_VER
+#  define APTO_PLATFORM_MSVC 1
+# else
+#  define APTO_PLATFORM_MSVC 0
+# endif
 # ifdef ENABLE_THREADS
 #  define APTO_PLATFORM_THREADS 1
 # else
@@ -58,6 +63,10 @@
 
 #if defined(__APPLE__)
 # define APTO_PLATFORM_APPLE 1
+#endif
+
+#if defined(__GNUC__) && __GNUC__ >= 4
+# define APTO_PLATFORM_GNUC
 #endif
 
 #if defined(__hppa__) || defined(__m68k__) || defined(mc68000) || defined(_M_M68K) || \

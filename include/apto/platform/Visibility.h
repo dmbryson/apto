@@ -1,8 +1,8 @@
 /*
- *  platform.h
+ *  Visibility.h
  *  Apto
  *
- *  Created by David on 2/14/11.
+ *  Created by David on 4/18/11.
  *  Copyright 2011 David Michael Bryson. All rights reserved.
  *  http://programerror.com/software/apto
  *
@@ -28,12 +28,36 @@
  *
  */
 
-#ifndef AptoPlatform_h
-#define AptoPlatform_h
+#ifndef AptoPlatformVisibility_h
+#define AptoPlatformVisibility_h
 
 #include "apto/platform/Platform.h"
-#include "apto/platform/Visibility.h"
 
-#include "apto/platform/FloatingPoint.h"
-
+#if APTO_PLATFORM(WINDOWS)
+# ifdef BUILDING_DLL
+#  if APTO_PLATFORM(MSVC)
+#   define LIB_EXPORT __declspec(dllexport)
+#  elif APTO_PLATFORM(GNUC)
+#   define LIB_EXPORT __attribute__((dllexport))
+#  else
+#   define LIB_EXPORT
+#  endif
+# else
+#  if APTO_PLATFORM(MSVC)
+#   define LIB_EXPORT __declspec(dllimport)
+#  elif APTO_PLATFORM(GNUC)
+#   define LIB_EXPORT __attribute__((dllimport))
+#  else
+#   define LIB_EXPORT
+#  endif
+# endif
+# define LIB_LOCAL
+#else
+# if APTO_PLATFORM(GNUC)
+#  define LIB_EXPORT __attribute__ ((visibility("default")))
+#  define LIB_LOCAL  __attribute__ ((visibility("hidden")))
+# else
+#  define LIB_EXPORT
+#  define LIB_LOCAL
+# endif
 #endif

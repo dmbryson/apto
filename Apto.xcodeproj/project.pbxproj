@@ -324,6 +324,7 @@
 		70EE0DAA130AED6700D6C016 /* ContingencyTable.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ContingencyTable.cc; sourceTree = "<group>"; };
 		70EE0DAB130AED6700D6C016 /* FishersExact.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FishersExact.cc; sourceTree = "<group>"; };
 		70EE0DB6130B17B100D6C016 /* ContingencyTable.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ContingencyTable.cc; sourceTree = "<group>"; };
+		70F962D3135C91EE008EDD1C /* Visibility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Visibility.h; sourceTree = "<group>"; };
 		8DD76F6C0486A84900D96B5E /* apto-test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "apto-test"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -589,6 +590,7 @@
 			children = (
 				703548AA132FC63500D3865C /* FloatingPoint.h */,
 				703548AB132FC63500D3865C /* Platform.h */,
+				70F962D3135C91EE008EDD1C /* Visibility.h */,
 			);
 			path = platform;
 			sourceTree = "<group>";
