@@ -1,0 +1,39 @@
+<project name="apto" default="install" basedir=".">
+  <property name="root" location=""/>
+  <property name="build" location="cbuild"/>
+
+  <target name="builddir">
+    <mkdir dir="${build}"/>
+  </target>
+
+  <target name="configure" depends="builddir">
+    <exec dir="${build}" executable="cmake" failonerror="true">
+      <arg path="${root}"/>
+    </exec>
+  </target>
+
+  <target name="compile" depends="configure">
+    <exec dir="${build}" osfamily="unix" executable="make" failonerror="true"/>
+  </target>
+
+  <target name="install" depends="compile">
+    <exec dir="${build}" osfamily="unix" executable="make" failonerror="true">
+      <arg value="install"/>
+    </exec>
+  </target>
+
+  <target name="check-for-apto-test">
+    <available file="${build}/bin/apto-test" property="apto-test.built"/>
+  </target>
+  <target name="test" depends="check-for-apto-test" if="apto-test.built">
+    <chmod file="${build}/bin/apto-test" perm="ugo+rx"/>
+    <exec dir="${root}" osfamily="unix" executable="${build}/bin/apto-test" failonerror="false">
+      <arg path="--gtest_output=xml:${build}/reports/apto.xml"/>
+    </exec>
+  </target>
+
+  <target name="clean">
+    <delete dir="${build}"/>
+  </target>
+</project>
+
