@@ -33,6 +33,7 @@
 
 #include "apto/core/Array.h"
 #include "apto/core/ArrayUtils.h"
+#include "apto/core/Definitions.h"
 #include "apto/core/MapStorage.h"
 #include "apto/core/TypeSelect.h"
 

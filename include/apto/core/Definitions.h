@@ -1,8 +1,8 @@
 /*
- *  StringUtils.h
+ *  Definitions.h
  *  Apto
  *
- *  Created by David on 3/15/11.
+ *  Created by David on 4/30/11.
  *  Copyright 2011 David Michael Bryson. All rights reserved.
  *  http://programerror.com/software/apto
  *
@@ -28,55 +28,11 @@
  *
  */
 
-#ifndef AptoCoreStringUtils_h
-#define AptoCoreStringUtils_h
+#ifndef AptoCoreDefinitions_h
+#define AptoCoreDefinitions_h
 
-#include "apto/core/Definitions.h"
-
-#include <cstdlib>
-
-namespace Apto {
-
-  class StrAs
-  {
-  private:
-    const char* m_str;
-    
-    StrAs(); // @not_implemented
-    
-  public:
-    inline explicit StrAs(const char* str) : m_str(str) { ; }
-    template <class T> explicit StrAs(const T& str) : m_str(str) { ; }
-    
-    inline operator bool() const;
-    
-    inline operator int() const { return strtol(m_str, NULL, 0); }
-    inline operator long() const { return strtol(m_str, NULL, 0); }
-    inline operator long long() const { return strtoll(m_str, NULL, 0); }
-    inline operator unsigned int() const { return strtoul(m_str, NULL, 0); }
-    inline operator unsigned long() const { return strtoul(m_str, NULL, 0); }
-    inline operator unsigned long long() const { return strtoull(m_str, NULL, 0); }
-      
-    inline operator float() const { return strtof(m_str, NULL); }
-    inline operator double() const { return strtod(m_str, NULL); }
-    inline operator long double() const { return strtold(m_str, NULL); }
-    
-    inline operator const char*() const { return m_str; }
-  };
-  
-  inline StrAs::operator bool() const
-  {
-    const int size = strlen(m_str);
-    if (size == 1) {
-      if (m_str[0] == '1' || m_str[0] == 'T' || m_str[0] == 't') return true;
-      else return false;
-    }
-    if (size == 4 && (m_str[0] == 'T' || m_str[0] == 't') && (m_str[1] == 'R' || m_str[1] == 'r') &&
-                     (m_str[2] == 'U' || m_str[2] == 'u') && (m_str[3] == 'E' || m_str[3] == 'e')) {
-      return true;
-    }
-    return false;
-  }
-};
+#ifndef NULL
+#define NULL 0
+#endif
 
 #endif

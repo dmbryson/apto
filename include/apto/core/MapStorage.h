@@ -32,6 +32,7 @@
 #define AptoCoreMapStorage_h
 
 #include "apto/core/Array.h"
+#include "apto/core/Definitions.h"
 #include "apto/core/Pair.h"
 
 

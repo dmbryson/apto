@@ -31,6 +31,7 @@
 #ifndef AptoCoreArray_h
 #define AptoCoreArray_h
 
+#include "apto/core/Definitions.h"
 #include "apto/core/ArrayStorage.h"
 
 #include <cassert>

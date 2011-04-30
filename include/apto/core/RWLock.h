@@ -31,6 +31,7 @@
 #ifndef AptoCoreRWLock_h
 #define AptoCoreRWLock_h
 
+#include "apto/core/Definitions.h"
 #include "apto/platform/Platform.h"
 
 

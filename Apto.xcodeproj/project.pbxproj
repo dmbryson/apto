@@ -306,6 +306,7 @@
 		706B1E9612FC9C2C006EAB7F /* RefCount.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RefCount.cc; sourceTree = "<group>"; };
 		709B2F82131C3A650081E874 /* main.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cc; sourceTree = "<group>"; };
 		709B2F87131C3B470081E874 /* fexact */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = fexact; sourceTree = BUILT_PRODUCTS_DIR; };
+		70E3711B136CA79000F35D1D /* Definitions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Definitions.h; sourceTree = "<group>"; };
 		70EE0D781309DB8300D6C016 /* ArrayUtils.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ArrayUtils.cc; sourceTree = "<group>"; };
 		70EE0D791309DB8300D6C016 /* ConditionVariable.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConditionVariable.cc; sourceTree = "<group>"; };
 		70EE0D7A1309DB8300D6C016 /* FileSystem.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystem.cc; sourceTree = "<group>"; };
@@ -562,6 +563,7 @@
 				70354893132FC63500D3865C /* ArrayUtils.h */,
 				70354894132FC63500D3865C /* Atomic.h */,
 				70354895132FC63500D3865C /* ConditionVariable.h */,
+				70E3711B136CA79000F35D1D /* Definitions.h */,
 				70354896132FC63500D3865C /* FileSystem.h */,
 				70354897132FC63500D3865C /* List.h */,
 				70354898132FC63500D3865C /* ListStorage.h */,

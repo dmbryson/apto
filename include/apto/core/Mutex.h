@@ -31,6 +31,7 @@
 #ifndef AptoCoreMutex_h
 #define AptoCoreMutex_h
 
+#include "apto/core/Definitions.h"
 #include "apto/platform/Platform.h"
 
 #if APTO_PLATFORM(THREADS) && APTO_PLATFORM(UNIX)

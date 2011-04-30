@@ -33,6 +33,7 @@
 #define AptoCoreSmartPtr_h
 
 #include "apto/core/Atomic.h"
+#include "apto/core/Definitions.h"
 #include "apto/core/RefTransport.h"
 #include "apto/core/StaticCheck.h"
 #include "apto/core/TypeSelect.h"

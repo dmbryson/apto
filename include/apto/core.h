@@ -35,6 +35,7 @@
 #include "apto/core/ArrayUtils.h"
 #include "apto/core/Atomic.h"
 #include "apto/core/ConditionVariable.h"
+#include "apto/core/Definitions.h"
 #include "apto/core/FileSystem.h"
 #include "apto/core/List.h"
 #include "apto/core/Map.h"

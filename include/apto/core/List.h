@@ -31,6 +31,7 @@
 #ifndef AptoCoreList_h
 #define AptoCoreList_h
 
+#include "apto/core/Definitions.h"
 #include "apto/core/ListStorage.h"
 
 #include <cassert>

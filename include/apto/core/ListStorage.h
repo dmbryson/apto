@@ -32,6 +32,7 @@
 #define AptoCoreListStorage_h
 
 #include "apto/core/Array.h"
+#include "apto/core/Definitions.h"
 #include "apto/platform/Platform.h"
 
 #include <cassert>

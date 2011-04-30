@@ -31,6 +31,7 @@
 #ifndef AptoCoreThreadSpecific_h
 #define AptoCoreThreadSpecific_h
 
+#include "apto/core/Definitions.h"
 #include "apto/platform/Platform.h"
 
 

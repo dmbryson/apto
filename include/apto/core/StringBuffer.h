@@ -31,10 +31,11 @@
 #ifndef AptoCoreStringBuffer_h
 #define AptoCoreStringBuffer_h
 
+#include "apto/core/Definitions.h"
+#include "apto/core/RefCount.h"
+
 #include <cassert>
 #include <string.h>
-
-#include "apto/core/RefCount.h"
 
 
 namespace Apto {
