@@ -66,7 +66,7 @@ namespace Apto {
   };
 };
 
-#elif AVIDA_PLATFORM(THREADS) && AVIDA_PLATFORM(WINDOWS)
+#elif APTO_PLATFORM(THREADS) && APTO_PLATFORM(WINDOWS)
 
 // Use Windows Threading
 #include <windows.h>
