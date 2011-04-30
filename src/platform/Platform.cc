@@ -28,7 +28,7 @@
  *
  */
 
-#include "apto/Platform/Platform.h"
+#include "apto/platform/Platform.h"
 
 #if APTO_PLATFORM(APPLE)
 # include <mach/mach.h>
@@ -36,7 +36,7 @@
 # include <unistd.h>
 #endif
 
-#include "apto/Platform/FloatingPoint.h"
+#include "apto/platform/FloatingPoint.h"
 
 
 // Initialize various platform settings and system handlers
