@@ -29,7 +29,7 @@
     <chmod file="${build}/bin/apto-test" perm="ugo+rx"/>
     <mkdir dir="${build}/reports"/>
     <exec dir="${root}" osfamily="unix" executable="${build}/bin/apto-test" failonerror="false">
-      <arg path="--gtest_output=xml:${build}/reports/apto.xml"/>
+      <arg value="--gtest_output=xml:${build}/reports/apto.xml"/>
     </exec>
   </target>
 
