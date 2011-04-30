@@ -27,6 +27,7 @@
   </target>
   <target name="test" depends="check-for-apto-test" if="apto-test.built">
     <chmod file="${build}/bin/apto-test" perm="ugo+rx"/>
+    <mkdir dir="${build}/reports"/>
     <exec dir="${root}" osfamily="unix" executable="${build}/bin/apto-test" failonerror="false">
       <arg path="--gtest_output=xml:${build}/reports/apto.xml"/>
     </exec>
