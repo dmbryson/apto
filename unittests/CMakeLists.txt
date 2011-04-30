@@ -40,5 +40,9 @@ LIST(APPEND APTO_CORE_SOURCES ${STAT_SOURCES})
 INCLUDE_DIRECTORIES(../include ../utils/unittest/googletest/include)
 
 ADD_EXECUTABLE(apto-test main.cc ${APTO_CORE_SOURCES})
-TARGET_LINK_LIBRARIES(apto-test aptostatic gtest)
+IF(NOT MSVC)
+  TARGET_LINK_LIBRARIES(apto-test aptostatic gtest pthread)
+ELSE(NOT MSVC)
+  TARGET_LINK_LIBRARIES(apto-test aptostatic gtest)
+ENDIF(NOT MSVC)
 
