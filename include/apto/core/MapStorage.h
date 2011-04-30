@@ -35,6 +35,8 @@
 #include "apto/core/Definitions.h"
 #include "apto/core/Pair.h"
 
+#include <cstdlib>
+
 
 namespace Apto {
   
