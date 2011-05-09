@@ -213,7 +213,7 @@ private:
   // Core Algorithm
   inline bool generateFirstDaughter(const MarginalArray& row_marginals, int n, MarginalArray& row_diff, int& kmax, int& kd);
   bool generateNewDaughter(int kmax, const MarginalArray& row_marginals, MarginalArray& row_diff, int& idx_dec, int& idx_inc);
-  NodePtr handlePastPaths(NodePtr& cur_node, double obs2, double obs3, double ddf, double drn, double kval, NodeHashTable& nht);
+  NodePtr handlePastPaths(NodePtr& cur_node, double obs2, double obs3, double ddf, double drn, int kval, NodeHashTable& nht);
   void recordPath(double path_length, int path_freq, Array<PastPathLength, Smart>& past_entries);
 
   void handleNode(int k, NodePtr cur_node);
@@ -1106,7 +1106,7 @@ bool FExact::generateNewDaughter(int kmax, const MarginalArray& row_marginals, M
 }
 
 
-FExact::NodePtr FExact::handlePastPaths(NodePtr& cur_node, double obs2, double obs3, double ddf, double drn, double kval,
+FExact::NodePtr FExact::handlePastPaths(NodePtr& cur_node, double obs2, double obs3, double ddf, double drn, int kval,
                              NodeHashTable& nht)
 {
   NodePtr new_node(NULL);
@@ -1408,8 +1408,8 @@ double FExact::longestPath(const MarginalArray::Slice& row_marginals, const Marg
         lev++;
         int nc1 = lcol.GetSize() - lev - 1;
         int nct = lcol[lev];
-        lb[lev] = (double)((nrt + 1) * (nct + 1)) / (double)(nn1 + nr1 * nc1 + 1) - m_tolerance;
-        nu[lev] = (double)((nrt + nc1) * (nct + nr1)) / (double)(nn1 + nr1 + nc1) - lb[lev] + 1;
+        lb[lev] = (int)((double)((nrt + 1) * (nct + 1)) / (double)(nn1 + nr1 * nc1 + 1) - m_tolerance);
+        nu[lev] = (int)((double)((nrt + nc1) * (nct + nr1)) / (double)(nn1 + nr1 + nc1) - lb[lev] + 1);
         nr[lev] = nrt - lb[lev];
       }
       alen[lcol.GetSize()] = alen[lev + 1] + m_facts[nr[lev]];
