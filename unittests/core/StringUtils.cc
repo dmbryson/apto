@@ -60,7 +60,7 @@ TEST(CoreStringUtils, StrAs) {
   EXPECT_EQ((int)1, (int)Apto::StrAs("1"));
   EXPECT_EQ((int)-1, (int)Apto::StrAs("-1"));
   EXPECT_EQ((int)2147483647, (int)Apto::StrAs("2147483647"));
-  EXPECT_EQ((int)-2147483648, (int)Apto::StrAs("-2147483648"));
+  EXPECT_EQ((int)(-2147483647-1), (int)Apto::StrAs("-2147483648"));
   EXPECT_EQ((int)0, (int)Apto::StrAs("0foo"));
   EXPECT_EQ((int)0, (int)Apto::StrAs("foo"));  
   
@@ -68,7 +68,7 @@ TEST(CoreStringUtils, StrAs) {
   EXPECT_EQ((long)1, (long)Apto::StrAs("1"));
   EXPECT_EQ((long)-1, (long)Apto::StrAs("-1"));
   EXPECT_EQ((long)2147483647, (long)Apto::StrAs("2147483647"));
-  EXPECT_EQ((long)-2147483648, (long)Apto::StrAs("-2147483648"));
+  EXPECT_EQ((long)(-2147483647-1), (long)Apto::StrAs("-2147483648"));
   EXPECT_EQ((long)0, (long)Apto::StrAs("0foo"));
   EXPECT_EQ((long)0, (long)Apto::StrAs("foo"));  
   
@@ -76,9 +76,9 @@ TEST(CoreStringUtils, StrAs) {
   EXPECT_EQ((long long)1, (long long)Apto::StrAs("1"));
   EXPECT_EQ((long long)-1, (long long)Apto::StrAs("-1"));
   EXPECT_EQ((long long)2147483647, (long long)Apto::StrAs("2147483647"));
-  EXPECT_EQ((long long)-2147483648, (long long)Apto::StrAs("-2147483648"));
-  EXPECT_EQ((long long)22147483647, (long long)Apto::StrAs("22147483647"));
-  EXPECT_EQ((long long)-22147483648, (long long)Apto::StrAs("-22147483648"));
+  EXPECT_EQ((long long)(-2147483647-1), (long long)Apto::StrAs("-2147483648"));
+  EXPECT_EQ((long long)22147483647ll, (long long)Apto::StrAs("22147483647"));
+  EXPECT_EQ((long long)-22147483648ll, (long long)Apto::StrAs("-22147483648"));
   EXPECT_EQ((long long)0, (long long)Apto::StrAs("0foo"));
   EXPECT_EQ((long long)0, (long long)Apto::StrAs("foo"));  
   
@@ -86,7 +86,7 @@ TEST(CoreStringUtils, StrAs) {
   EXPECT_EQ((unsigned int)1, (unsigned int)Apto::StrAs("1"));
   EXPECT_EQ((unsigned int)-1, (unsigned int)Apto::StrAs("-1"));
   EXPECT_EQ((unsigned int)2147483647, (unsigned int)Apto::StrAs("2147483647"));
-  EXPECT_EQ((unsigned int)-2147483648, (unsigned int)Apto::StrAs("-2147483648"));
+  EXPECT_EQ((unsigned int)(-2147483647-1), (unsigned int)Apto::StrAs("-2147483648"));
   EXPECT_EQ((unsigned int)0, (unsigned int)Apto::StrAs("0foo"));
   EXPECT_EQ((unsigned int)0, (unsigned int)Apto::StrAs("foo"));  
   
@@ -94,7 +94,7 @@ TEST(CoreStringUtils, StrAs) {
   EXPECT_EQ((unsigned long)1, (unsigned long)Apto::StrAs("1"));
   EXPECT_EQ((unsigned long)-1, (unsigned long)Apto::StrAs("-1"));
   EXPECT_EQ((unsigned long)2147483647, (unsigned long)Apto::StrAs("2147483647"));
-  EXPECT_EQ((unsigned long)-2147483648, (unsigned long)Apto::StrAs("-2147483648"));
+  EXPECT_EQ((unsigned long)(-2147483647-1), (unsigned long)Apto::StrAs("-2147483648"));
   EXPECT_EQ((unsigned long)0, (unsigned long)Apto::StrAs("0foo"));
   EXPECT_EQ((unsigned long)0, (unsigned long)Apto::StrAs("foo"));  
   
@@ -102,9 +102,9 @@ TEST(CoreStringUtils, StrAs) {
   EXPECT_EQ((unsigned long long)1, (unsigned long long)Apto::StrAs("1"));
   EXPECT_EQ((unsigned long long)-1, (unsigned long long)Apto::StrAs("-1"));
   EXPECT_EQ((unsigned long long)2147483647, (unsigned long long)Apto::StrAs("2147483647"));
-  EXPECT_EQ((unsigned long long)-2147483648, (unsigned long long)Apto::StrAs("-2147483648"));
-  EXPECT_EQ((unsigned long long)22147483647, (unsigned long long)Apto::StrAs("22147483647"));
-  EXPECT_EQ((unsigned long long)-22147483648, (unsigned long long)Apto::StrAs("-22147483648"));
+  EXPECT_EQ((unsigned long long)(-2147483647-1), (unsigned long long)Apto::StrAs("-2147483648"));
+  EXPECT_EQ((unsigned long long)22147483647ll, (unsigned long long)Apto::StrAs("22147483647"));
+  EXPECT_EQ((unsigned long long)-22147483648ll, (unsigned long long)Apto::StrAs("-22147483648"));
   EXPECT_EQ((unsigned long long)0, (unsigned long long)Apto::StrAs("0foo"));
   EXPECT_EQ((unsigned long long)0, (unsigned long long)Apto::StrAs("foo"));  
   
