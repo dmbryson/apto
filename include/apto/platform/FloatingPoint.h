@@ -41,7 +41,7 @@ namespace Apto {
 #endif
     
 #if FPE_X86
-    void set_fpu (unsigned int mode)
+    inline void set_fpu (unsigned int mode)
     { 
 #ifdef WIN32
       __asm fldcw mode;
