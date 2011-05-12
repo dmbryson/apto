@@ -71,7 +71,13 @@ namespace Apto {
       
     public:
       typedef TypeList<T1, Next> Result;
-    }
+    };
+    
+    template <> class Create<>
+    {
+    public:
+      typedef NullType Result;
+    };
     
     
     // TL::Length
@@ -82,7 +88,7 @@ namespace Apto {
     {
       enum { Value = 0 };
     };
-    template <class T, class U> struct Length<Typelist<T, U> >
+    template <class T, class U> struct Length<TypeList<T, U> >
     {
       enum { Value = 1 + Length<U>::Value };
     };
@@ -108,7 +114,7 @@ namespace Apto {
     template <class TList, unsigned int idx, typename Default = NullType> struct TypeAtNonStrict
     {
       typedef Default Result;
-    }
+    };
     template <class Current, class Next, typename Default>
     struct TypeAtNonStrict<TypeList<Current, Next>, 0, Default>
     {
@@ -120,6 +126,22 @@ namespace Apto {
       typedef typename TypeAtNonStrict<Next, idx - 1, Default>::Result Result;
     };
     
+    
+    // TL::IndexOf
+    // --------------------------------------------------------------------------------------------------------------
+    template <class TList, class T> struct IndexOf;
+    template <class T> struct IndexOf<NullType, T>
+    {
+      enum { Value = -1 };
+    };
+    template <class T, class Next> struct IndexOf<TypeList<T, Next>, T>
+    {
+      enum { Value = 0 };
+    };
+    template <class Current, class Next, class T> struct IndexOf<TypeList<Current, Next>, T>
+    {
+      enum { Value = (IndexOf<Next, T>::Value == -1) ? -1 : 1 + IndexOf<Next, T>::Value };
+    };
     
   };
 };

@@ -37,6 +37,7 @@
 #include "apto/core/ConditionVariable.h"
 #include "apto/core/Definitions.h"
 #include "apto/core/FileSystem.h"
+#include "apto/core/Functor.h"
 #include "apto/core/List.h"
 #include "apto/core/Map.h"
 #include "apto/core/Mutex.h"
@@ -52,6 +53,7 @@
 #include "apto/core/Thread.h"
 #include "apto/core/ThreadSpecific.h"
 #include "apto/core/TypeList.h"
+#include "apto/core/TypeTraits.h"
 #include "apto/core/TypeUtil.h"
 
 #endif

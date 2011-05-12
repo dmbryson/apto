@@ -6,6 +6,7 @@ SET(CORE_SOURCES
   ${CORE_DIR}/ArrayUtils.cc
   ${CORE_DIR}/ConditionVariable.cc
   ${CORE_DIR}/FileSystem.cc
+  ${CORE_DIR}/Functor.cc
   ${CORE_DIR}/List.cc
   ${CORE_DIR}/Map.cc
   ${CORE_DIR}/Mutex.cc
