@@ -34,7 +34,7 @@
 #include "apto/core/Definitions.h"
 #include "apto/core/RefCount.h"
 #include "apto/core/SmartPtr.h"
-#include "apto/core/TypeSelect.h"
+#include "apto/core/TypeUtil.h"
 
 #include <cassert>
 #include <string.h>

@@ -35,7 +35,7 @@
 #include "apto/core/ArrayUtils.h"
 #include "apto/core/Definitions.h"
 #include "apto/core/MapStorage.h"
-#include "apto/core/TypeSelect.h"
+#include "apto/core/TypeUtil.h"
 
 
 namespace Apto {

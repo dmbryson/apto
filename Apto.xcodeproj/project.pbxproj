@@ -64,7 +64,6 @@
 		703548D2132FC7B400D3865C /* StringBuffer.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 703548A4132FC63500D3865C /* StringBuffer.h */; };
 		703548D3132FC7B400D3865C /* Thread.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 703548A5132FC63500D3865C /* Thread.h */; };
 		703548D4132FC7B400D3865C /* ThreadSpecific.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 703548A6132FC63500D3865C /* ThreadSpecific.h */; };
-		703548D5132FC7B400D3865C /* TypeSelect.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 703548A7132FC63500D3865C /* TypeSelect.h */; };
 		703548D6132FC7BF00D3865C /* core.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 703548A8132FC63500D3865C /* core.h */; };
 		703548D7132FC7BF00D3865C /* platform.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 703548AC132FC63500D3865C /* platform.h */; };
 		703548D8132FC7BF00D3865C /* stat.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 703548B0132FC63500D3865C /* stat.h */; };
@@ -181,7 +180,6 @@
 				703548DE132FE0A000D3865C /* StringUtils.h in CopyFiles */,
 				703548D3132FC7B400D3865C /* Thread.h in CopyFiles */,
 				703548D4132FC7B400D3865C /* ThreadSpecific.h in CopyFiles */,
-				703548D5132FC7B400D3865C /* TypeSelect.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -292,7 +290,6 @@
 		703548A4132FC63500D3865C /* StringBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StringBuffer.h; sourceTree = "<group>"; };
 		703548A5132FC63500D3865C /* Thread.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Thread.h; sourceTree = "<group>"; };
 		703548A6132FC63500D3865C /* ThreadSpecific.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ThreadSpecific.h; sourceTree = "<group>"; };
-		703548A7132FC63500D3865C /* TypeSelect.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TypeSelect.h; sourceTree = "<group>"; };
 		703548A8132FC63500D3865C /* core.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = core.h; sourceTree = "<group>"; };
 		703548AA132FC63500D3865C /* FloatingPoint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FloatingPoint.h; sourceTree = "<group>"; };
 		703548AB132FC63500D3865C /* Platform.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Platform.h; sourceTree = "<group>"; };
@@ -306,6 +303,8 @@
 		706B1E9612FC9C2C006EAB7F /* RefCount.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RefCount.cc; sourceTree = "<group>"; };
 		709B2F82131C3A650081E874 /* main.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cc; sourceTree = "<group>"; };
 		709B2F87131C3B470081E874 /* fexact */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = fexact; sourceTree = BUILT_PRODUCTS_DIR; };
+		70AB8D76137C23330030A1AD /* TypeList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TypeList.h; sourceTree = "<group>"; };
+		70AB8D79137C292A0030A1AD /* TypeUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TypeUtil.h; sourceTree = "<group>"; };
 		70E3711B136CA79000F35D1D /* Definitions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Definitions.h; sourceTree = "<group>"; };
 		70EE0D781309DB8300D6C016 /* ArrayUtils.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ArrayUtils.cc; sourceTree = "<group>"; };
 		70EE0D791309DB8300D6C016 /* ConditionVariable.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConditionVariable.cc; sourceTree = "<group>"; };
@@ -582,7 +581,8 @@
 				703548DD132FE08000D3865C /* StringUtils.h */,
 				703548A5132FC63500D3865C /* Thread.h */,
 				703548A6132FC63500D3865C /* ThreadSpecific.h */,
-				703548A7132FC63500D3865C /* TypeSelect.h */,
+				70AB8D76137C23330030A1AD /* TypeList.h */,
+				70AB8D79137C292A0030A1AD /* TypeUtil.h */,
 			);
 			path = core;
 			sourceTree = "<group>";

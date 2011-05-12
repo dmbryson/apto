@@ -1,8 +1,8 @@
 /*
- *  TypeSelect.h
+ *  TypeUtil.h
  *  Apto
  *
- *  Created by David on 2/8/11.
+ *  Created by David on 5/12/11.
  *  Copyright 2011 David Michael Bryson. All rights reserved.
  *  http://programerror.com/software/apto
  *
@@ -28,12 +28,32 @@
  *
  */
 
-#ifndef AptoCoreTypeSelect_h
-#define AptoCoreTypeSelect_h
+#ifndef AptoCoreTypeUtil_h
+#define AptoCoreTypeUtil_h
 
 namespace Apto {
+  
+  // TypeSelect
+  // --------------------------------------------------------------------------------------------------------------
+  
   template <bool flag, typename T, typename U> struct TypeSelect { typedef T Result; };
   template <typename T, typename U> struct TypeSelect<false, T, U> { typedef U Result; };
-}
+  
+  
+  // TypeAsType
+  // --------------------------------------------------------------------------------------------------------------
+  
+  template <typename T> struct TypeAsType
+  {
+    typedef T BaseType;
+  };
+  
+
+  // Placeholder Types
+  // --------------------------------------------------------------------------------------------------------------
+  class NullType { ; };
+  class EmptyType { ; };
+  
+};
 
 #endif

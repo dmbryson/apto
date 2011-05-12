@@ -36,7 +36,7 @@
 #include "apto/core/Definitions.h"
 #include "apto/core/RefTransport.h"
 #include "apto/core/StaticCheck.h"
-#include "apto/core/TypeSelect.h"
+#include "apto/core/TypeUtil.h"
 
 #include <cassert>
 #include <string>

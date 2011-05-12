@@ -51,6 +51,6 @@
 #include "apto/core/StringBuffer.h"
 #include "apto/core/Thread.h"
 #include "apto/core/ThreadSpecific.h"
-#include "apto/core/TypeSelect.h"
+#include "apto/core/TypeUtil.h"
 
 #endif
