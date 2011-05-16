@@ -297,6 +297,15 @@ TEST(CoreBasicString, Substring) {
   EXPECT_EQ('r', s2[2]);
 }
 
+TEST(CoreBasicString, Pop) {
+  Apto::String s1("foo bar,baz");
+  Apto::String foo = s1.Pop(' ');
+  EXPECT_TRUE(foo == Apto::String("foo"));
+  Apto::String bar = s1.Pop(',');
+  EXPECT_TRUE(bar == Apto::String("bar"));
+  EXPECT_TRUE(s1 == Apto::String("baz"));
+}
+
 
 TEST(CoreBasicString, CharacterInstpection) {
   Apto::String s1("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 \f\n\r\t\v.");

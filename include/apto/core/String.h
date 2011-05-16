@@ -161,6 +161,20 @@ namespace Apto {
       return BasicString((length >= 0) ? length : (GetSize() - idx), m_value->GetRep() + idx);
     }
     
+    BasicString Pop(const char delimeter)
+    {
+      StringRepPtr value = m_value;
+      for (int i = 0; i < GetSize(); i++) {
+        if (m_value->operator[](i) == delimeter) {
+          *this = Substring(i + 1);
+          return BasicString(i, value->GetRep());
+        }
+      }
+      BasicString rtn(*this);
+      *this = BasicString();
+      return rtn;
+    }
+    
     
     // Various Character Inspection Utility Methods
     inline bool IsLetter(int idx) const { return IsUpper(idx) || IsLower(idx); }
