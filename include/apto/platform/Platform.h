@@ -66,7 +66,7 @@
 #endif
 
 #if defined(__GNUC__) && __GNUC__ >= 4
-# define APTO_PLATFORM_GNUC
+# define APTO_PLATFORM_GNUC 1
 #endif
 
 #if defined(__hppa__) || defined(__m68k__) || defined(mc68000) || defined(_M_M68K) || \
