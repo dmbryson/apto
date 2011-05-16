@@ -359,7 +359,10 @@ namespace Apto {
     SmartPtr(SmartPtr<T1, OP1, SP1>& rhs) : SP(rhs), OP(rhs) { GetInternalPtrRef(*this) = OP::Clone(GetInternalPtrRef(rhs)); }
     
     // Reference Transport to allow immediate use of SmartPtr return values
-    SmartPtr(RefTransport<SmartPtr> rhs) : SP(rhs), OP(rhs) { ; }
+    SmartPtr(RefTransport<SmartPtr> rhs) : SP(rhs), OP(rhs)
+    {
+      GetInternalPtrRef(*this) = OP::Clone(GetInternalPtrRef(static_cast<SmartPtr&>(rhs)));
+    }
     inline operator RefTransport<SmartPtr>() { return RefTransport<SmartPtr>(*this); }
     
     SmartPtr& operator=(CopyArgType& rhs)
