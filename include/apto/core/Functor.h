@@ -397,7 +397,355 @@ namespace Apto {
     typedef typename TypeTraits<P16>::ParameterType Param16;
     virtual ReturnType operator()(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16) = 0;
   };
+
   
+  template <
+  typename ReturnType,
+  typename P1
+  > class FunctorContainer<ReturnType, TypeList<P1, NullType> >
+  : public Internal::FunctorBase<ReturnType>
+  {
+  public:
+    typedef typename TypeTraits<P1>::ParameterType Param1;
+    virtual ReturnType operator()(P1) = 0;
+  };
+  
+  template <
+  typename ReturnType,
+  typename P1, typename P2
+  > class FunctorContainer<ReturnType, TypeList<P2, TypeList<P1, NullType> > >
+  : public Internal::FunctorBase<ReturnType>
+  {
+  public:
+    typedef typename TypeTraits<P1>::ParameterType Param1;
+    typedef typename TypeTraits<P2>::ParameterType Param2;
+    virtual ReturnType operator()(P1, P2) = 0;
+  };
+  
+  template <
+  typename ReturnType,
+  typename P1, typename P2, typename P3
+  > class FunctorContainer<ReturnType, TypeList<P3, TypeList<P2, TypeList<P1, NullType> > > >
+  : public Internal::FunctorBase<ReturnType>
+  {
+  public:
+    typedef typename TypeTraits<P1>::ParameterType Param1;
+    typedef typename TypeTraits<P2>::ParameterType Param2;
+    typedef typename TypeTraits<P3>::ParameterType Param3;
+    virtual ReturnType operator()(P1, P2, P3) = 0;
+  };
+  
+  template <
+  typename ReturnType,
+  typename P1, typename P2, typename P3, typename P4
+  > class FunctorContainer<ReturnType, TypeList<P4, TypeList<P3, TypeList<P2, TypeList<P1, NullType> > > > >
+  : public Internal::FunctorBase<ReturnType>
+  {
+  public:
+    typedef typename TypeTraits<P1>::ParameterType Param1;
+    typedef typename TypeTraits<P2>::ParameterType Param2;
+    typedef typename TypeTraits<P3>::ParameterType Param3;
+    typedef typename TypeTraits<P4>::ParameterType Param4;
+    virtual ReturnType operator()(P1, P2, P3, P4) = 0;
+  };
+  
+  template <
+  typename ReturnType,
+  typename P1, typename P2, typename P3, typename P4, typename P5
+  > class FunctorContainer<ReturnType, TypeList<P5, TypeList<P4, TypeList<P3, TypeList<P2, TypeList<P1, NullType> > > > > >
+  : public Internal::FunctorBase<ReturnType>
+  {
+  public:
+    typedef typename TypeTraits<P1>::ParameterType Param1;
+    typedef typename TypeTraits<P2>::ParameterType Param2;
+    typedef typename TypeTraits<P3>::ParameterType Param3;
+    typedef typename TypeTraits<P4>::ParameterType Param4;
+    typedef typename TypeTraits<P5>::ParameterType Param5;
+    virtual ReturnType operator()(P1, P2, P3, P4, P5) = 0;
+  };
+  
+  template <
+  typename ReturnType,
+  typename P1, typename P2, typename P3, typename P4, typename P5, typename P6
+  > class FunctorContainer<
+    ReturnType,
+    TypeList<P6, TypeList<P5, TypeList<P4, TypeList<P3, TypeList<P2, TypeList<P1, NullType> > > > > >
+  >
+  : public Internal::FunctorBase<ReturnType>
+  {
+  public:
+    typedef typename TypeTraits<P1>::ParameterType Param1;
+    typedef typename TypeTraits<P2>::ParameterType Param2;
+    typedef typename TypeTraits<P3>::ParameterType Param3;
+    typedef typename TypeTraits<P4>::ParameterType Param4;
+    typedef typename TypeTraits<P5>::ParameterType Param5;
+    typedef typename TypeTraits<P6>::ParameterType Param6;
+    virtual ReturnType operator()(P1, P2, P3, P4, P5, P6) = 0;
+  };
+  
+  template <
+  typename ReturnType,
+  typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7
+  > class FunctorContainer<
+    ReturnType,
+    TypeList<P7, TypeList<P6, TypeList<P5, TypeList<P4, TypeList<P3, TypeList<P2, TypeList<P1, NullType> > > > > > >
+  >
+  {
+  public:
+    typedef typename TypeTraits<P1>::ParameterType Param1;
+    typedef typename TypeTraits<P2>::ParameterType Param2;
+    typedef typename TypeTraits<P3>::ParameterType Param3;
+    typedef typename TypeTraits<P4>::ParameterType Param4;
+    typedef typename TypeTraits<P5>::ParameterType Param5;
+    typedef typename TypeTraits<P6>::ParameterType Param6;
+    typedef typename TypeTraits<P7>::ParameterType Param7;
+    virtual ReturnType operator()(P1, P2, P3, P4, P5, P6, P7) = 0;
+  };
+  
+  template <
+  typename ReturnType,
+  typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8
+  > class FunctorContainer<
+    ReturnType,
+    TypeList<P8, TypeList<P7, TypeList<P6, TypeList<P5, TypeList<P4, TypeList<P3, TypeList<P2,
+      TypeList<P1, NullType> > > > > > > >
+  >
+  : public Internal::FunctorBase<ReturnType>
+  {
+  public:
+    typedef typename TypeTraits<P1>::ParameterType Param1;
+    typedef typename TypeTraits<P2>::ParameterType Param2;
+    typedef typename TypeTraits<P3>::ParameterType Param3;
+    typedef typename TypeTraits<P4>::ParameterType Param4;
+    typedef typename TypeTraits<P5>::ParameterType Param5;
+    typedef typename TypeTraits<P6>::ParameterType Param6;
+    typedef typename TypeTraits<P7>::ParameterType Param7;
+    typedef typename TypeTraits<P8>::ParameterType Param8;
+    virtual ReturnType operator()(P1, P2, P3, P4, P5, P6, P7, P8) = 0;
+  };
+  
+  template <
+  typename ReturnType,
+  typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8,
+  typename P9
+  > class FunctorContainer<
+    ReturnType,
+    TypeList<P9, TypeList<P8, TypeList<P7, TypeList<P6, TypeList<P5, TypeList<P4, TypeList<P3, TypeList<P2,
+      TypeList<P1, NullType> > > > > > > > >
+  >
+  : public Internal::FunctorBase<ReturnType>
+  {
+  public:
+    typedef typename TypeTraits<P1>::ParameterType Param1;
+    typedef typename TypeTraits<P2>::ParameterType Param2;
+    typedef typename TypeTraits<P3>::ParameterType Param3;
+    typedef typename TypeTraits<P4>::ParameterType Param4;
+    typedef typename TypeTraits<P5>::ParameterType Param5;
+    typedef typename TypeTraits<P6>::ParameterType Param6;
+    typedef typename TypeTraits<P7>::ParameterType Param7;
+    typedef typename TypeTraits<P8>::ParameterType Param8;
+    typedef typename TypeTraits<P9>::ParameterType Param9;
+    virtual ReturnType operator()(P1, P2, P3, P4, P5, P6, P7, P8, P9) = 0;
+  };
+  
+  template <
+  typename ReturnType,
+  typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8,
+  typename P9, typename P10
+  > class FunctorContainer<
+    ReturnType,
+    TypeList<P10, TypeList<P9, TypeList<P8, TypeList<P7, TypeList<P6, TypeList<P5, TypeList<P4, TypeList<P3, TypeList<P2,
+      TypeList<P1, NullType> > > > > > > > > >
+  >
+  : public Internal::FunctorBase<ReturnType>
+  {
+  public:
+    typedef typename TypeTraits<P1>::ParameterType Param1;
+    typedef typename TypeTraits<P2>::ParameterType Param2;
+    typedef typename TypeTraits<P3>::ParameterType Param3;
+    typedef typename TypeTraits<P4>::ParameterType Param4;
+    typedef typename TypeTraits<P5>::ParameterType Param5;
+    typedef typename TypeTraits<P6>::ParameterType Param6;
+    typedef typename TypeTraits<P7>::ParameterType Param7;
+    typedef typename TypeTraits<P8>::ParameterType Param8;
+    typedef typename TypeTraits<P9>::ParameterType Param9;
+    typedef typename TypeTraits<P10>::ParameterType Param10;
+    virtual ReturnType operator()(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10) = 0;
+  };
+  
+  template <
+  typename ReturnType,
+  typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8,
+  typename P9, typename P10, typename P11
+  > class FunctorContainer<
+    ReturnType,
+    TypeList<P11, TypeList<P10, TypeList<P9, TypeList<P8, TypeList<P7, TypeList<P6, TypeList<P5, TypeList<P4, TypeList<P3,
+      TypeList<P2, TypeList<P1, NullType> > > > > > > > > > >
+  >
+  : public Internal::FunctorBase<ReturnType>
+  {
+  public:
+    typedef typename TypeTraits<P1>::ParameterType Param1;
+    typedef typename TypeTraits<P2>::ParameterType Param2;
+    typedef typename TypeTraits<P3>::ParameterType Param3;
+    typedef typename TypeTraits<P4>::ParameterType Param4;
+    typedef typename TypeTraits<P5>::ParameterType Param5;
+    typedef typename TypeTraits<P6>::ParameterType Param6;
+    typedef typename TypeTraits<P7>::ParameterType Param7;
+    typedef typename TypeTraits<P8>::ParameterType Param8;
+    typedef typename TypeTraits<P9>::ParameterType Param9;
+    typedef typename TypeTraits<P10>::ParameterType Param10;
+    typedef typename TypeTraits<P11>::ParameterType Param11;
+    virtual ReturnType operator()(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11) = 0;
+  };
+  
+  template <
+  typename ReturnType,
+  typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8,
+  typename P9, typename P10, typename P11, typename P12
+  > class FunctorContainer<
+    ReturnType,
+    TypeList<P12, TypeList<P11, TypeList<P10, TypeList<P9, TypeList<P8, TypeList<P7, TypeList<P6, TypeList<P5, TypeList<P4,
+      TypeList<P3, TypeList<P2, TypeList<P1, NullType> > > > > > > > > > > >
+  >
+  : public Internal::FunctorBase<ReturnType>
+  {
+  public:
+    typedef typename TypeTraits<P1>::ParameterType Param1;
+    typedef typename TypeTraits<P2>::ParameterType Param2;
+    typedef typename TypeTraits<P3>::ParameterType Param3;
+    typedef typename TypeTraits<P4>::ParameterType Param4;
+    typedef typename TypeTraits<P5>::ParameterType Param5;
+    typedef typename TypeTraits<P6>::ParameterType Param6;
+    typedef typename TypeTraits<P7>::ParameterType Param7;
+    typedef typename TypeTraits<P8>::ParameterType Param8;
+    typedef typename TypeTraits<P9>::ParameterType Param9;
+    typedef typename TypeTraits<P10>::ParameterType Param10;
+    typedef typename TypeTraits<P11>::ParameterType Param11;
+    typedef typename TypeTraits<P12>::ParameterType Param12;
+    virtual ReturnType operator()(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12) = 0;
+  };
+  
+  template <
+  typename ReturnType,
+  typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8,
+  typename P9, typename P10, typename P11, typename P12, typename P13
+  > class FunctorContainer<
+    ReturnType,
+    TypeList<P13, TypeList<P12, TypeList<P11, TypeList<P10, TypeList<P9, TypeList<P8, TypeList<P7, TypeList<P6, TypeList<P5,
+      TypeList<P4, TypeList<P3, TypeList<P2, TypeList<P1, NullType> > > > > > > > > > > > >
+  >
+  : public Internal::FunctorBase<ReturnType>
+  {
+  public:
+    typedef typename TypeTraits<P1>::ParameterType Param1;
+    typedef typename TypeTraits<P2>::ParameterType Param2;
+    typedef typename TypeTraits<P3>::ParameterType Param3;
+    typedef typename TypeTraits<P4>::ParameterType Param4;
+    typedef typename TypeTraits<P5>::ParameterType Param5;
+    typedef typename TypeTraits<P6>::ParameterType Param6;
+    typedef typename TypeTraits<P7>::ParameterType Param7;
+    typedef typename TypeTraits<P8>::ParameterType Param8;
+    typedef typename TypeTraits<P9>::ParameterType Param9;
+    typedef typename TypeTraits<P10>::ParameterType Param10;
+    typedef typename TypeTraits<P11>::ParameterType Param11;
+    typedef typename TypeTraits<P12>::ParameterType Param12;
+    typedef typename TypeTraits<P13>::ParameterType Param13;
+    virtual ReturnType operator()(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13) = 0;
+  };
+  
+  template <
+  typename ReturnType,
+  typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8,
+  typename P9, typename P10, typename P11, typename P12, typename P13, typename P14
+  > class FunctorContainer<
+    ReturnType,
+    TypeList<P14, TypeList<P13, TypeList<P12, TypeList<P11, TypeList<P10, TypeList<P9, TypeList<P8, TypeList<P7, TypeList<P6,
+      TypeList<P5, TypeList<P4, TypeList<P3, TypeList<P2, TypeList<P1, NullType> > > > > > > > > > > > > >
+  >
+  : public Internal::FunctorBase<ReturnType>
+  {
+  public:
+    typedef typename TypeTraits<P1>::ParameterType Param1;
+    typedef typename TypeTraits<P2>::ParameterType Param2;
+    typedef typename TypeTraits<P3>::ParameterType Param3;
+    typedef typename TypeTraits<P4>::ParameterType Param4;
+    typedef typename TypeTraits<P5>::ParameterType Param5;
+    typedef typename TypeTraits<P6>::ParameterType Param6;
+    typedef typename TypeTraits<P7>::ParameterType Param7;
+    typedef typename TypeTraits<P8>::ParameterType Param8;
+    typedef typename TypeTraits<P9>::ParameterType Param9;
+    typedef typename TypeTraits<P10>::ParameterType Param10;
+    typedef typename TypeTraits<P11>::ParameterType Param11;
+    typedef typename TypeTraits<P12>::ParameterType Param12;
+    typedef typename TypeTraits<P13>::ParameterType Param13;
+    typedef typename TypeTraits<P14>::ParameterType Param14;
+    virtual ReturnType operator()(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14) = 0;
+  };
+  
+  template <
+  typename ReturnType,
+  typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8,
+  typename P9, typename P10, typename P11, typename P12, typename P13, typename P14, typename P15
+  > class FunctorContainer<
+    ReturnType,
+    TypeList<P15, TypeList<P14, TypeList<P13, TypeList<P12, TypeList<P11, TypeList<P10, TypeList<P9, TypeList<P8,
+      TypeList<P7, TypeList<P6, TypeList<P5, TypeList<P4, TypeList<P3, TypeList<P2, TypeList<P1, NullType>
+    > > > > > > > > > > > > > >
+  >
+  : public Internal::FunctorBase<ReturnType>
+  {
+  public:
+    typedef typename TypeTraits<P1>::ParameterType Param1;
+    typedef typename TypeTraits<P2>::ParameterType Param2;
+    typedef typename TypeTraits<P3>::ParameterType Param3;
+    typedef typename TypeTraits<P4>::ParameterType Param4;
+    typedef typename TypeTraits<P5>::ParameterType Param5;
+    typedef typename TypeTraits<P6>::ParameterType Param6;
+    typedef typename TypeTraits<P7>::ParameterType Param7;
+    typedef typename TypeTraits<P8>::ParameterType Param8;
+    typedef typename TypeTraits<P9>::ParameterType Param9;
+    typedef typename TypeTraits<P10>::ParameterType Param10;
+    typedef typename TypeTraits<P11>::ParameterType Param11;
+    typedef typename TypeTraits<P12>::ParameterType Param12;
+    typedef typename TypeTraits<P13>::ParameterType Param13;
+    typedef typename TypeTraits<P14>::ParameterType Param14;
+    typedef typename TypeTraits<P15>::ParameterType Param15;
+    virtual ReturnType operator()(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15) = 0;
+  };
+  
+  template <
+  typename ReturnType,
+  typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8,
+  typename P9, typename P10, typename P11, typename P12, typename P13, typename P14, typename P15, typename P16
+  > class FunctorContainer<
+    ReturnType,
+    TypeList<P16, TypeList<P15, TypeList<P14, TypeList<P13, TypeList<P12, TypeList<P11, TypeList<P10, TypeList<P9,
+      TypeList<P8, TypeList<P7, TypeList<P6, TypeList<P5, TypeList<P4, TypeList<P3, TypeList<P2, TypeList<P1, NullType>
+    > > > > > > > > > > > > > > >
+  >
+  : public Internal::FunctorBase<ReturnType>
+  {
+  public:
+    typedef typename TypeTraits<P1>::ParameterType Param1;
+    typedef typename TypeTraits<P2>::ParameterType Param2;
+    typedef typename TypeTraits<P3>::ParameterType Param3;
+    typedef typename TypeTraits<P4>::ParameterType Param4;
+    typedef typename TypeTraits<P5>::ParameterType Param5;
+    typedef typename TypeTraits<P6>::ParameterType Param6;
+    typedef typename TypeTraits<P7>::ParameterType Param7;
+    typedef typename TypeTraits<P8>::ParameterType Param8;
+    typedef typename TypeTraits<P9>::ParameterType Param9;
+    typedef typename TypeTraits<P10>::ParameterType Param10;
+    typedef typename TypeTraits<P11>::ParameterType Param11;
+    typedef typename TypeTraits<P12>::ParameterType Param12;
+    typedef typename TypeTraits<P13>::ParameterType Param13;
+    typedef typename TypeTraits<P14>::ParameterType Param14;
+    typedef typename TypeTraits<P15>::ParameterType Param15;
+    typedef typename TypeTraits<P16>::ParameterType Param16;
+    virtual ReturnType operator()(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16) = 0;
+  };
+
   
   // BasicFunctorHandler - handle raw function pointers and other functor objects
   // --------------------------------------------------------------------------------------------------------------
@@ -809,8 +1157,166 @@ namespace Apto {
     
   public:
     inline operator PlaceholderBooleanType() const { return (m_container ? &Tester::Placeholder : NULL); }
+  };  
+  
+
+  // Parameter Binding Internal Support
+  // --------------------------------------------------------------------------------------------------------------
+  
+  namespace Internal {
+    
+    template <class Fctor> struct BindFirstTraits;
+    template <typename R, class TList> struct BindFirstTraits<Functor<R, TList> >
+    {
+      typedef Functor<R, TList> OriginalFunctor;
+      typedef typename TL::Remove<TList, typename TL::TypeAt<TList, 0>::Result>::Result ParameterList;
+      typedef typename TL::TypeAt<TList, 0>::Result OriginalParam1;
+      typedef Functor<R, ParameterList> BoundFunctorType;
+      typedef typename BoundFunctorType::ContainerType ContainerType;
+    };
+    
+    
+    template <class T> struct BindTypeStorage;
+    template <class T> struct BindTypeStorage
+    {
+      typedef typename TypeTraits<T>::ParameterType RefOrValue;
+    };
+    template <typename R, class TList> struct BindTypeStorage<Functor<R, TList> >
+    {
+      typedef Functor<R, TList> OriginalFunctor;
+      typedef const typename TypeTraits<OriginalFunctor>::ReferredType RefOrValue;
+    };
+    
+    
+    template <class OriginalFunctor> class BindFirst : public BindFirstTraits<OriginalFunctor>::ContainerType
+    {
+    public:
+      typedef typename BindFirstTraits<OriginalFunctor>::ContainerType Base;
+      typedef typename OriginalFunctor::ReturnType ReturnType;
+      typedef typename OriginalFunctor::Param1 BoundType;
+      typedef typename BindTypeStorage<typename BindFirstTraits<OriginalFunctor>::OriginalParam1>::RefOrValue
+        BoundTypeStorage;
+      
+      typedef typename OriginalFunctor::Param2 Param1;
+      typedef typename OriginalFunctor::Param3 Param2;
+      typedef typename OriginalFunctor::Param4 Param3;
+      typedef typename OriginalFunctor::Param5 Param4;
+      typedef typename OriginalFunctor::Param6 Param5;
+      typedef typename OriginalFunctor::Param7 Param6;
+      typedef typename OriginalFunctor::Param8 Param7;
+      typedef typename OriginalFunctor::Param9 Param8;
+      typedef typename OriginalFunctor::Param10 Param9;
+      typedef typename OriginalFunctor::Param11 Param10;
+      typedef typename OriginalFunctor::Param12 Param11;
+      typedef typename OriginalFunctor::Param13 Param12;
+      typedef typename OriginalFunctor::Param14 Param13;
+      typedef typename OriginalFunctor::Param15 Param14;
+      typedef typename OriginalFunctor::Param16 Param15;
+      typedef EmptyType Param16;
+      
+    private:
+      OriginalFunctor m_functor;
+      BoundTypeStorage m_param;
+      
+    public:
+      BindFirst(const OriginalFunctor& functor, BoundType param) : m_functor(functor), m_param(param) { ; }
+      BindFirst* DoClone() const { return new BindFirst(*this); }
+      
+      ReturnType operator()()
+      {
+        return m_functor(m_param);
+      }
+      
+      ReturnType operator()(Param1 p1)
+      {
+        return m_functor(m_param, p1);
+      }
+      
+      ReturnType operator()(Param1 p1, Param2 p2)
+      {
+        return m_functor(m_param, p1, p2);
+      }
+      
+      ReturnType operator()(Param1 p1, Param2 p2, Param3 p3)
+      {
+        return m_functor(m_param, p1, p2, p3);
+      }
+      
+      ReturnType operator()(Param1 p1, Param2 p2, Param3 p3, Param4 p4)
+      {
+        return m_functor(m_param, p1, p2, p3, p4);
+      }
+      
+      ReturnType operator()(Param1 p1, Param2 p2, Param3 p3, Param4 p4, Param5 p5)
+      {
+        return m_functor(m_param, p1, p2, p3, p4, p5);
+      }
+      
+      ReturnType operator()(Param1 p1, Param2 p2, Param3 p3, Param4 p4, Param5 p5, Param6 p6)
+      {
+        return m_functor(m_param, p1, p2, p3, p4, p5, p6);
+      }
+      
+      ReturnType operator()(Param1 p1, Param2 p2, Param3 p3, Param4 p4, Param5 p5, Param6 p6, Param7 p7)
+      {
+        return m_functor(m_param, p1, p2, p3, p4, p5, p6, p7);
+      }
+      
+      ReturnType operator()(Param1 p1, Param2 p2, Param3 p3, Param4 p4, Param5 p5, Param6 p6, Param7 p7, Param2 p8)
+      {
+        return m_functor(m_param, p1, p2, p3, p4, p5, p6, p7, p8);
+      }
+      
+      ReturnType operator()(Param1 p1, Param2 p2, Param3 p3, Param4 p4, Param5 p5, Param6 p6, Param7 p7, Param2 p8,
+                            Param9 p9)
+      {
+        return m_functor(m_param, p1, p2, p3, p4, p5, p6, p7, p8, p9);
+      }
+      
+      ReturnType operator()(Param1 p1, Param2 p2, Param3 p3, Param4 p4, Param5 p5, Param6 p6, Param7 p7, Param2 p8,
+                            Param9 p9, Param10 p10)
+      {
+        return m_functor(m_param, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10);
+      }
+      
+      ReturnType operator()(Param1 p1, Param2 p2, Param3 p3, Param4 p4, Param5 p5, Param6 p6, Param7 p7, Param2 p8,
+                            Param9 p9, Param10 p10, Param11 p11)
+      {
+        return m_functor(m_param, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11);
+      }
+      
+      ReturnType operator()(Param1 p1, Param2 p2, Param3 p3, Param4 p4, Param5 p5, Param6 p6, Param7 p7, Param2 p8,
+                            Param9 p9, Param10 p10, Param11 p11, Param12 p12)
+      {
+        return m_functor(m_param, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12);
+      }
+      
+      ReturnType operator()(Param1 p1, Param2 p2, Param3 p3, Param4 p4, Param5 p5, Param6 p6, Param7 p7, Param2 p8,
+                            Param9 p9, Param10 p10, Param11 p11, Param12 p12, Param13 p13)
+      {
+        return m_functor(m_param, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13);
+      }
+      
+      ReturnType operator()(Param1 p1, Param2 p2, Param3 p3, Param4 p4, Param5 p5, Param6 p6, Param7 p7, Param2 p8,
+                            Param9 p9, Param10 p10, Param11 p11, Param12 p12, Param13 p13, Param14 p14)
+      {
+        return m_functor(m_param, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14);
+      }
+      
+      ReturnType operator()(Param1 p1, Param2 p2, Param3 p3, Param4 p4, Param5 p5, Param6 p6, Param7 p7, Param2 p8,
+                            Param9 p9, Param10 p10, Param11 p11, Param12 p12, Param13 p13, Param14 p14, Param15 p15)
+      {
+        return m_functor(m_param, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15);
+      }
+    };
   };
   
+  template <class Fctor>
+  typename Internal::BindFirstTraits<Fctor>::BoundFunctorType BindFirst(const Fctor& f, typename Fctor::Param1 p)
+  {
+    typedef typename Internal::BindFirstTraits<Fctor>::BoundFunctorType Outgoing;
+    return Outgoing(SmartPtr<typename Outgoing::ContainerType, DestructiveCopy>(new Internal::BindFirst<Fctor>(f, p)));
+  }
   
 
 };

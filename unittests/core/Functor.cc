@@ -321,3 +321,33 @@ TEST(CoreFunctor, MemberFunctionFunctor) {
   Apto::Functor<int, Apto::TL::Create<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int> > a16(obj, &FunctorTest::Add16);
   EXPECT_EQ(136, a16(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16));
 }
+
+
+TEST(CoreFunctor, BindFirst) {
+  Apto::Functor<int, Apto::TL::Create<int> > a1(Add1);
+  Apto::Functor<int, Apto::NullType> a1b = Apto::BindFirst(a1, 1);
+  EXPECT_EQ(1, a1(1));
+  EXPECT_EQ(1, a1b());
+  
+  Apto::Functor<int, Apto::TL::Create<int, int> > a2(Add2);
+  Apto::Functor<int, Apto::TL::Create<int> > a2b = Apto::BindFirst(a2, 1);
+  EXPECT_EQ(3, a2(1, 2));
+  EXPECT_EQ(3, a2b(2));
+  
+  Apto::Functor<int, Apto::TL::Create<int, int, int> > a3(Add3);
+  Apto::Functor<int, Apto::TL::Create<int, int> > a3b = Apto::BindFirst(a3, 1);
+  EXPECT_EQ(6, a3(1, 2, 3));
+  EXPECT_EQ(6, a3b(2, 3));
+  
+  a3b = a2;
+  EXPECT_EQ(3, a3b(1, 2));
+  
+  a2 = Apto::BindFirst(a3, 1);
+  EXPECT_EQ(6, a2(2, 3));
+  
+  a1 = Apto::BindFirst(Apto::BindFirst(a3, 1), 2);
+  EXPECT_EQ(6, a1(3));
+  
+  a1b = Apto::BindFirst(a1, 3);
+  EXPECT_EQ(6, a1b());
+}

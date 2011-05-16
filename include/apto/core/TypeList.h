@@ -67,16 +67,16 @@ namespace Apto {
       typedef typename Create<
              T2,  T3,  T4,  T5,  T6,  T7,  T8,  T9,  T10, T11, T12, T13, T14, T15, T16,
         T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32
-      >::Result Next;
+      >::Type Next;
       
     public:
-      typedef TypeList<T1, Next> Result;
+      typedef TypeList<T1, Next> Type;
     };
     
     template <> class Create<>
     {
     public:
-      typedef NullType Result;
+      typedef NullType Type;
     };
     
     
@@ -108,6 +108,28 @@ namespace Apto {
       typedef typename TypeAt<Next, idx - 1>::Result Result;
     };
     
+    template <
+      typename T1,  typename T2,  typename T3,  typename T4,  typename T5,  typename T6,  typename T7,  typename T8,
+      typename T9,  typename T10, typename T11, typename T12, typename T13, typename T14, typename T15, typename T16,
+      typename T17, typename T18, typename T19, typename T20, typename T21, typename T22, typename T23, typename T24,
+      typename T25, typename T26, typename T27, typename T28, typename T29, typename T30, typename T31, typename T32,
+      unsigned int idx
+    >
+    struct TypeAt<
+      Create<
+        T1,  T2,  T3,  T4,  T5,  T6,  T7,  T8,  T9,  T10, T11, T12, T13, T14, T15, T16,
+        T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32
+      >, idx
+    >
+    {
+      typedef typename TypeAt<
+        typename Create<
+          T1,  T2,  T3,  T4,  T5,  T6,  T7,  T8,  T9,  T10, T11, T12, T13, T14, T15, T16,
+          T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32
+        >::Type
+      , idx>::Result Result;
+    };
+    
     
     // TL::TypeAtNonStrict
     // --------------------------------------------------------------------------------------------------------------
@@ -126,6 +148,28 @@ namespace Apto {
       typedef typename TypeAtNonStrict<Next, idx - 1, Default>::Result Result;
     };
     
+    template <
+      typename T1,  typename T2,  typename T3,  typename T4,  typename T5,  typename T6,  typename T7,  typename T8,
+      typename T9,  typename T10, typename T11, typename T12, typename T13, typename T14, typename T15, typename T16,
+      typename T17, typename T18, typename T19, typename T20, typename T21, typename T22, typename T23, typename T24,
+      typename T25, typename T26, typename T27, typename T28, typename T29, typename T30, typename T31, typename T32,
+      unsigned int idx, typename Default
+    >
+    struct TypeAtNonStrict<
+      Create<
+        T1,  T2,  T3,  T4,  T5,  T6,  T7,  T8,  T9,  T10, T11, T12, T13, T14, T15, T16,
+        T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32
+      >, idx, Default
+    >
+    {
+      typedef typename TypeAtNonStrict<
+        typename Create<
+          T1,  T2,  T3,  T4,  T5,  T6,  T7,  T8,  T9,  T10, T11, T12, T13, T14, T15, T16,
+          T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32
+        >::Type
+      , idx, Default>::Result Result;
+    };
+    
     
     // TL::IndexOf
     // --------------------------------------------------------------------------------------------------------------
@@ -141,6 +185,68 @@ namespace Apto {
     template <class Current, class Next, class T> struct IndexOf<TypeList<Current, Next>, T>
     {
       enum { Value = (IndexOf<Next, T>::Value == -1) ? -1 : 1 + IndexOf<Next, T>::Value };
+    };
+    template <
+      typename T1,  typename T2,  typename T3,  typename T4,  typename T5,  typename T6,  typename T7,  typename T8,
+      typename T9,  typename T10, typename T11, typename T12, typename T13, typename T14, typename T15, typename T16,
+      typename T17, typename T18, typename T19, typename T20, typename T21, typename T22, typename T23, typename T24,
+      typename T25, typename T26, typename T27, typename T28, typename T29, typename T30, typename T31, typename T32,
+      class T
+    >
+    struct IndexOf<
+      Create<
+        T1,  T2,  T3,  T4,  T5,  T6,  T7,  T8,  T9,  T10, T11, T12, T13, T14, T15, T16,
+        T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32
+      >, T
+    >
+    {
+      enum {
+        Value = IndexOf<
+          typename Create<
+            T1,  T2,  T3,  T4,  T5,  T6,  T7,  T8,  T9,  T10, T11, T12, T13, T14, T15, T16,
+            T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32
+          >::Type
+          , T>::Value
+      };
+    };
+    
+
+    // TL::Remove
+    // --------------------------------------------------------------------------------------------------------------
+    template <class TList, class T> struct Remove;
+    template <class T> struct Remove<NullType, T>
+    {
+      typedef NullType Result;
+    };
+    template <class T, class Next> struct Remove<TypeList<T, Next>, T>
+    {
+      typedef Next Result;
+    };
+    template <class Current, class Next, class T> struct Remove<TypeList<Current, Next>, T>
+    {
+      typedef TypeList<Current, typename Remove<Next, T>::Result> Result;
+    };
+    template <
+      typename T1,  typename T2,  typename T3,  typename T4,  typename T5,  typename T6,  typename T7,  typename T8,
+      typename T9,  typename T10, typename T11, typename T12, typename T13, typename T14, typename T15, typename T16,
+      typename T17, typename T18, typename T19, typename T20, typename T21, typename T22, typename T23, typename T24,
+      typename T25, typename T26, typename T27, typename T28, typename T29, typename T30, typename T31, typename T32,
+      class T
+    >
+    struct Remove<
+      Create<
+        T1,  T2,  T3,  T4,  T5,  T6,  T7,  T8,  T9,  T10, T11, T12, T13, T14, T15, T16,
+        T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32
+      >, T
+    >
+    {
+      typedef typename Remove<
+        typename Create<
+          T1,  T2,  T3,  T4,  T5,  T6,  T7,  T8,  T9,  T10, T11, T12, T13, T14, T15, T16,
+          T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32
+        >::Type
+        , T
+      >::Result Result;
     };
     
   };

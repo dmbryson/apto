@@ -39,19 +39,19 @@ namespace Apto {
   namespace Types {
     typedef TL::Create<
       unsigned char, unsigned short int, unsigned int, unsigned long int, unsigned long long int
-    >::Result StandardUnsignedInts;
+    >::Type StandardUnsignedInts;
     
     typedef TL::Create<
       signed char, signed short int, signed int, signed long int, signed long long int
-    >::Result StandardSignedInts;
+    >::Type StandardSignedInts;
     
     typedef TL::Create<
       bool, char, wchar_t
-    >::Result StandardOtherInts;
+    >::Type StandardOtherInts;
     
     typedef TL::Create<
       float, double, long double
-    >::Result StandardFloatingPoint;
+    >::Type StandardFloatingPoint;
   }
   
   namespace Internal {
