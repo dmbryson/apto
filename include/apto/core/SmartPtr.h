@@ -232,7 +232,7 @@ namespace Apto {
     
     void Swap(ThreadSafeRefCount& rhs)
     {
-      int* temp = m_p_refs;
+      volatile int* temp = m_p_refs;
       m_p_refs = rhs.m_p_refs;
       rhs.m_p_refs = temp;
     }
@@ -356,7 +356,10 @@ namespace Apto {
     SmartPtr(CopyArgType& rhs) : SP(rhs), OP(rhs) { GetInternalPtrRef(*this) = OP::Clone(GetInternalPtrRef(rhs)); }
     
     template <typename T1, template<class> class OP1, template<class> class SP1>
-    SmartPtr(SmartPtr<T1, OP1, SP1>& rhs) : SP(rhs), OP(rhs) { GetInternalPtrRef(*this) = OP::Clone(GetInternalPtrRef(rhs)); }
+    SmartPtr(const SmartPtr<T1, OP1, SP1>& rhs) : SP(rhs), OP(rhs)
+    {
+      GetInternalPtrRef(*this) = OP::Clone(GetInternalPtrRef(rhs));
+    }
     
     // Reference Transport to allow immediate use of SmartPtr return values
     SmartPtr(RefTransport<SmartPtr> rhs) : SP(rhs), OP(rhs)
@@ -373,7 +376,7 @@ namespace Apto {
     }
     
     template <typename T1, template<class> class OP1, template<class> class SP1>
-    SmartPtr& operator=(SmartPtr<T1, OP1, SP1>& rhs)
+    SmartPtr& operator=(const SmartPtr<T1, OP1, SP1>& rhs)
     {
       SmartPtr temp(rhs);
       temp.Swap(*this);
