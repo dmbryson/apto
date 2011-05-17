@@ -332,7 +332,7 @@ namespace Apto {
   template <class ThreadingModel, int HashFactor> class HashKey<BasicString<ThreadingModel>, HashFactor>
   {
   public:
-    int Hash(const BasicString<ThreadingModel>& key)
+    static int Hash(const BasicString<ThreadingModel>& key)
     {
       unsigned int out_hash = 0;
       for (int i = 0; i < key.GetSize(); i++)
