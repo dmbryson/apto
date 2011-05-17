@@ -157,6 +157,7 @@ namespace Apto {
   // --------------------------------------------------------------------------------------------------------------
   template <class T> class RefCount
   {
+    template <class T1> friend class RefCount;
   private:
     int* m_p_refs;
     
@@ -169,7 +170,7 @@ namespace Apto {
     RefCount(const RefCount& rhs) : m_p_refs(rhs.m_p_refs) { ; }
     
     template <class T1>
-    RefCount(const RefCount<T1>& rhs) : m_p_refs(reinterpret_cast<const RefCount&>(rhs).m_p_refs) { ; }
+    RefCount(const RefCount<T1>& rhs) : m_p_refs(rhs.m_p_refs) { ; }
     
     T Clone(const T& value)
     {
@@ -200,6 +201,7 @@ namespace Apto {
   
   template <class T> class ThreadSafeRefCount
   {
+    template <class T1> friend class ThreadSafeRefCount;
   private:
     volatile int* m_p_refs;
     
