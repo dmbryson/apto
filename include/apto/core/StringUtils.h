@@ -34,6 +34,8 @@
 #include "apto/core/Definitions.h"
 
 #include <cstdlib>
+#include <cstdio>
+
 
 namespace Apto {
 
@@ -77,6 +79,54 @@ namespace Apto {
     }
     return false;
   }
+  
+  
+  template <class T> class ConvertToStr
+  {
+  private:
+    T m_value;
+    
+  public:
+    ConvertToStr(T value) : m_value(value) { ; }
+    
+    inline operator const char*() const { return m_value; }
+  };
+  
+  
+  template <> class ConvertToStr<int>
+  {
+  private:
+    char m_str[15];
+    
+  public:
+    ConvertToStr(int value) { sprintf(m_str, "%d", value); }
+    
+    inline operator const char*() const { return m_str; }
+  };
+  
+  template <> class ConvertToStr<double>
+  {
+  private:
+    char m_str[20];
+    
+  public:
+    ConvertToStr(double value) { sprintf(m_str, "%f", value); }
+    
+    inline operator const char*() const { return m_str; }
+  };
+  
+  template <> class ConvertToStr<bool>
+  {
+  private:
+    const char* m_str;
+    
+  public:
+    ConvertToStr(bool value) : m_str(value ? "true" : "false") { ; }
+    
+    inline operator const char*() const { return m_str; }
+  };
+  
+  template <class T> ConvertToStr<T> AsStr(T value) { return ConvertToStr<T>(value); }
 };
 
 #endif
