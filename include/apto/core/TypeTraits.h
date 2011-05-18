@@ -175,8 +175,11 @@ namespace Apto {
     enum { IsFloatingPoint = IsStandardFloatingPoint };
     enum { IsArithmetic = IsIntegral || IsFloatingPoint };
     
-    typedef typename TypeSelect<IsArithmetic || IsPointer || IsMemberPointer, T, Internal::MakeParameterType<T> >::Result
-      ParameterType;
+    typedef typename TypeSelect<
+      IsArithmetic || IsPointer || IsMemberPointer,
+      T,
+      typename Internal::MakeParameterType<T>::Result
+    >::Result ParameterType;
   };
 };
 

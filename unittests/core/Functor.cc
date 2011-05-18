@@ -205,6 +205,101 @@ public:
   }
 };
 
+class IntW
+{
+private:
+  int m_value;
+public:
+  IntW(int value) : m_value(value) { ; }
+  operator int() { return m_value; }
+};
+
+
+static int Add1W(IntW p1)
+{
+  return p1;
+}
+
+static int Add2W(IntW p1, IntW p2)
+{
+  return p1 + p2;
+}
+
+static int Add3W(IntW p1, IntW p2, IntW p3)
+{
+  return p1 + p2 + p3;
+}
+
+static int Add4W(IntW p1, IntW p2, IntW p3, IntW p4)
+{
+  return p1 + p2 + p3 + p4;
+}
+
+static int Add5W(IntW p1, IntW p2, IntW p3, IntW p4, IntW p5)
+{
+  return p1 + p2 + p3 + p4 + p5;
+}
+
+static int Add6W(IntW p1, IntW p2, IntW p3, IntW p4, IntW p5, IntW p6)
+{
+  return p1 + p2 + p3 + p4 + p5 + p6;
+}
+
+static int Add7W(IntW p1, IntW p2, IntW p3, IntW p4, IntW p5, IntW p6, IntW p7)
+{
+  return p1 + p2 + p3 + p4 + p5 + p6 + p7;
+}
+
+static int Add8W(IntW p1, IntW p2, IntW p3, IntW p4, IntW p5, IntW p6, IntW p7, IntW p8)
+{
+  return p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8;
+}
+
+static int Add9W(IntW p1, IntW p2, IntW p3, IntW p4, IntW p5, IntW p6, IntW p7, IntW p8, IntW p9)
+{
+  return p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9;
+}
+
+static int Add10W(IntW p1, IntW p2, IntW p3, IntW p4, IntW p5, IntW p6, IntW p7, IntW p8, IntW p9, IntW p10)
+{
+  return p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9 + p10;
+}
+
+static int Add11W(IntW p1, IntW p2, IntW p3, IntW p4, IntW p5, IntW p6, IntW p7, IntW p8, IntW p9, IntW p10, IntW p11)
+{
+  return p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9 + p10 + p11;
+}
+
+static int Add12W(IntW p1, IntW p2, IntW p3, IntW p4, IntW p5, IntW p6, IntW p7, IntW p8, IntW p9, IntW p10, IntW p11,
+                 IntW p12)
+{
+  return p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9 + p10 + p11 + p12;
+}
+
+static int Add13W(IntW p1, IntW p2, IntW p3, IntW p4, IntW p5, IntW p6, IntW p7, IntW p8, IntW p9, IntW p10, IntW p11,
+                 IntW p12, IntW p13)
+{
+  return p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9 + p10 + p11 + p12 + p13;
+}
+
+static int Add14W(IntW p1, IntW p2, IntW p3, IntW p4, IntW p5, IntW p6, IntW p7, IntW p8, IntW p9, IntW p10, IntW p11,
+                 IntW p12, IntW p13, IntW p14)
+{
+  return p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9 + p10 + p11 + p12 + p13 + p14;
+}
+
+static int Add15W(IntW p1, IntW p2, IntW p3, IntW p4, IntW p5, IntW p6, IntW p7, IntW p8, IntW p9, IntW p10, IntW p11,
+                 IntW p12, IntW p13, IntW p14, IntW p15)
+{
+  return p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9 + p10 + p11 + p12 + p13 + p14 + p15;
+}
+
+static int Add16W(IntW p1, IntW p2, IntW p3, IntW p4, IntW p5, IntW p6, IntW p7, IntW p8, IntW p9, IntW p10, IntW p11,
+                 IntW p12, IntW p13, IntW p14, IntW p15, IntW p16)
+{
+  return p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9 + p10 + p11 + p12 + p13 + p14 + p15 + p16;
+}
+
 
 TEST(CoreFunctor, BasicFunctor) {
   Apto::Functor<> t1(VoidFunction);
@@ -319,6 +414,56 @@ TEST(CoreFunctor, MemberFunctionFunctor) {
   EXPECT_EQ(120, a15(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15));
   
   Apto::Functor<int, Apto::TL::Create<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int> > a16(obj, &FunctorTest::Add16);
+  EXPECT_EQ(136, a16(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16));
+}
+
+TEST(CoreFunctor, NonTrivialArguments) {
+  Apto::Functor<int, Apto::TL::Create<IntW> > a1(Add1W);
+  EXPECT_EQ(1, a1(1));
+  
+  Apto::Functor<int, Apto::TL::Create<IntW, IntW> > a2(Add2W);
+  EXPECT_EQ(3, a2(1, 2));
+  
+  Apto::Functor<int, Apto::TL::Create<IntW, IntW, IntW> > a3(Add3W);
+  EXPECT_EQ(6, a3(1, 2, 3));
+  
+  Apto::Functor<int, Apto::TL::Create<IntW, IntW, IntW, IntW> > a4(Add4W);
+  EXPECT_EQ(10, a4(1, 2, 3, 4));
+  
+  Apto::Functor<int, Apto::TL::Create<IntW, IntW, IntW, IntW, IntW> > a5(Add5W);
+  EXPECT_EQ(15, a5(1, 2, 3, 4, 5));
+  
+  Apto::Functor<int, Apto::TL::Create<IntW, IntW, IntW, IntW, IntW, IntW> > a6(Add6W);
+  EXPECT_EQ(21, a6(1, 2, 3, 4, 5, 6));
+  
+  Apto::Functor<int, Apto::TL::Create<IntW, IntW, IntW, IntW, IntW, IntW, IntW> > a7(Add7W);
+  EXPECT_EQ(28, a7(1, 2, 3, 4, 5, 6, 7));
+  
+  Apto::Functor<int, Apto::TL::Create<IntW, IntW, IntW, IntW, IntW, IntW, IntW, IntW> > a8(Add8W);
+  EXPECT_EQ(36, a8(1, 2, 3, 4, 5, 6, 7, 8));
+  
+  Apto::Functor<int, Apto::TL::Create<IntW, IntW, IntW, IntW, IntW, IntW, IntW, IntW, IntW> > a9(Add9W);
+  EXPECT_EQ(45, a9(1, 2, 3, 4, 5, 6, 7, 8, 9));
+  
+  Apto::Functor<int, Apto::TL::Create<IntW, IntW, IntW, IntW, IntW, IntW, IntW, IntW, IntW, IntW> > a10(Add10W);
+  EXPECT_EQ(55, a10(1, 2, 3, 4, 5, 6, 7, 8, 9, 10));
+  
+  Apto::Functor<int, Apto::TL::Create<IntW, IntW, IntW, IntW, IntW, IntW, IntW, IntW, IntW, IntW, IntW> > a11(Add11W);
+  EXPECT_EQ(66, a11(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11));
+  
+  Apto::Functor<int, Apto::TL::Create<IntW, IntW, IntW, IntW, IntW, IntW, IntW, IntW, IntW, IntW, IntW, IntW> > a12(Add12W);
+  EXPECT_EQ(78, a12(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12));
+  
+  Apto::Functor<int, Apto::TL::Create<IntW, IntW, IntW, IntW, IntW, IntW, IntW, IntW, IntW, IntW, IntW, IntW, IntW> > a13(Add13W);
+  EXPECT_EQ(91, a13(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13));
+  
+  Apto::Functor<int, Apto::TL::Create<IntW, IntW, IntW, IntW, IntW, IntW, IntW, IntW, IntW, IntW, IntW, IntW, IntW, IntW> > a14(Add14W);
+  EXPECT_EQ(105, a14(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14));
+  
+  Apto::Functor<int, Apto::TL::Create<IntW, IntW, IntW, IntW, IntW, IntW, IntW, IntW, IntW, IntW, IntW, IntW, IntW, IntW, IntW> > a15(Add15W);
+  EXPECT_EQ(120, a15(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15));
+  
+  Apto::Functor<int, Apto::TL::Create<IntW, IntW, IntW, IntW, IntW, IntW, IntW, IntW, IntW, IntW, IntW, IntW, IntW, IntW, IntW, IntW> > a16(Add16W);
   EXPECT_EQ(136, a16(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16));
 }
 

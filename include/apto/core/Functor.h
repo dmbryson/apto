@@ -103,7 +103,7 @@ namespace Apto {
   {
   public:
     typedef typename TypeTraits<P1>::ParameterType Param1;
-    virtual ReturnType operator()(P1) = 0;
+    virtual ReturnType operator()(Param1) = 0;
   };
   
   template <
@@ -115,7 +115,7 @@ namespace Apto {
   public:
     typedef typename TypeTraits<P1>::ParameterType Param1;
     typedef typename TypeTraits<P2>::ParameterType Param2;
-    virtual ReturnType operator()(P1, P2) = 0;
+    virtual ReturnType operator()(Param1, Param2) = 0;
   };
   
   template <
@@ -128,7 +128,7 @@ namespace Apto {
     typedef typename TypeTraits<P1>::ParameterType Param1;
     typedef typename TypeTraits<P2>::ParameterType Param2;
     typedef typename TypeTraits<P3>::ParameterType Param3;
-    virtual ReturnType operator()(P1, P2, P3) = 0;
+    virtual ReturnType operator()(Param1, Param2, Param3) = 0;
   };
 
   template <
@@ -142,7 +142,7 @@ namespace Apto {
     typedef typename TypeTraits<P2>::ParameterType Param2;
     typedef typename TypeTraits<P3>::ParameterType Param3;
     typedef typename TypeTraits<P4>::ParameterType Param4;
-    virtual ReturnType operator()(P1, P2, P3, P4) = 0;
+    virtual ReturnType operator()(Param1, Param2, Param3, Param4) = 0;
   };
 
   template <
@@ -157,7 +157,7 @@ namespace Apto {
     typedef typename TypeTraits<P3>::ParameterType Param3;
     typedef typename TypeTraits<P4>::ParameterType Param4;
     typedef typename TypeTraits<P5>::ParameterType Param5;
-    virtual ReturnType operator()(P1, P2, P3, P4, P5) = 0;
+    virtual ReturnType operator()(Param1, Param2, Param3, Param4, Param5) = 0;
   };
   
   template <
@@ -173,7 +173,7 @@ namespace Apto {
     typedef typename TypeTraits<P4>::ParameterType Param4;
     typedef typename TypeTraits<P5>::ParameterType Param5;
     typedef typename TypeTraits<P6>::ParameterType Param6;
-    virtual ReturnType operator()(P1, P2, P3, P4, P5, P6) = 0;
+    virtual ReturnType operator()(Param1, Param2, Param3, Param4, Param5, Param6) = 0;
   };
   
   template <
@@ -189,7 +189,7 @@ namespace Apto {
     typedef typename TypeTraits<P5>::ParameterType Param5;
     typedef typename TypeTraits<P6>::ParameterType Param6;
     typedef typename TypeTraits<P7>::ParameterType Param7;
-    virtual ReturnType operator()(P1, P2, P3, P4, P5, P6, P7) = 0;
+    virtual ReturnType operator()(Param1, Param2, Param3, Param4, Param5, Param6, Param7) = 0;
   };
   
   template <
@@ -207,7 +207,7 @@ namespace Apto {
     typedef typename TypeTraits<P6>::ParameterType Param6;
     typedef typename TypeTraits<P7>::ParameterType Param7;
     typedef typename TypeTraits<P8>::ParameterType Param8;
-    virtual ReturnType operator()(P1, P2, P3, P4, P5, P6, P7, P8) = 0;
+    virtual ReturnType operator()(Param1, Param2, Param3, Param4, Param5, Param6, Param7, Param8) = 0;
   };
   
   template <
@@ -227,7 +227,7 @@ namespace Apto {
     typedef typename TypeTraits<P7>::ParameterType Param7;
     typedef typename TypeTraits<P8>::ParameterType Param8;
     typedef typename TypeTraits<P9>::ParameterType Param9;
-    virtual ReturnType operator()(P1, P2, P3, P4, P5, P6, P7, P8, P9) = 0;
+    virtual ReturnType operator()(Param1, Param2, Param3, Param4, Param5, Param6, Param7, Param8, Param9) = 0;
   };
   
   template <
@@ -248,7 +248,7 @@ namespace Apto {
     typedef typename TypeTraits<P8>::ParameterType Param8;
     typedef typename TypeTraits<P9>::ParameterType Param9;
     typedef typename TypeTraits<P10>::ParameterType Param10;
-    virtual ReturnType operator()(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10) = 0;
+    virtual ReturnType operator()(Param1, Param2, Param3, Param4, Param5, Param6, Param7, Param8, Param9, Param10) = 0;
   };
   
   template <
@@ -270,7 +270,8 @@ namespace Apto {
     typedef typename TypeTraits<P9>::ParameterType Param9;
     typedef typename TypeTraits<P10>::ParameterType Param10;
     typedef typename TypeTraits<P11>::ParameterType Param11;
-    virtual ReturnType operator()(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11) = 0;
+    virtual ReturnType operator()(Param1, Param2, Param3, Param4, Param5, Param6, Param7, Param8, Param9, Param10,
+                                  Param11) = 0;
   };
   
   template <
@@ -293,7 +294,8 @@ namespace Apto {
     typedef typename TypeTraits<P10>::ParameterType Param10;
     typedef typename TypeTraits<P11>::ParameterType Param11;
     typedef typename TypeTraits<P12>::ParameterType Param12;
-    virtual ReturnType operator()(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12) = 0;
+    virtual ReturnType operator()(Param1, Param2, Param3, Param4, Param5, Param6, Param7, Param8, Param9, Param10,
+                                  Param11, Param12) = 0;
   };
   
   template <
@@ -317,7 +319,8 @@ namespace Apto {
     typedef typename TypeTraits<P11>::ParameterType Param11;
     typedef typename TypeTraits<P12>::ParameterType Param12;
     typedef typename TypeTraits<P13>::ParameterType Param13;
-    virtual ReturnType operator()(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13) = 0;
+    virtual ReturnType operator()(Param1, Param2, Param3, Param4, Param5, Param6, Param7, Param8, Param9, Param10,
+                                  Param11, Param12, Param13) = 0;
   };
   
   template <
@@ -342,7 +345,8 @@ namespace Apto {
     typedef typename TypeTraits<P12>::ParameterType Param12;
     typedef typename TypeTraits<P13>::ParameterType Param13;
     typedef typename TypeTraits<P14>::ParameterType Param14;
-    virtual ReturnType operator()(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14) = 0;
+    virtual ReturnType operator()(Param1, Param2, Param3, Param4, Param5, Param6, Param7, Param8, Param9, Param10,
+                                  Param11, Param12, Param13, Param14) = 0;
   };
   
   template <
@@ -368,7 +372,8 @@ namespace Apto {
     typedef typename TypeTraits<P13>::ParameterType Param13;
     typedef typename TypeTraits<P14>::ParameterType Param14;
     typedef typename TypeTraits<P15>::ParameterType Param15;
-    virtual ReturnType operator()(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15) = 0;
+    virtual ReturnType operator()(Param1, Param2, Param3, Param4, Param5, Param6, Param7, Param8, Param9, Param10,
+                                  Param11, Param12, Param13, Param14, Param15) = 0;
   };
   
   template <
@@ -395,7 +400,8 @@ namespace Apto {
     typedef typename TypeTraits<P14>::ParameterType Param14;
     typedef typename TypeTraits<P15>::ParameterType Param15;
     typedef typename TypeTraits<P16>::ParameterType Param16;
-    virtual ReturnType operator()(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16) = 0;
+    virtual ReturnType operator()(Param1, Param2, Param3, Param4, Param5, Param6, Param7, Param8, Param9, Param10,
+                                  Param11, Param12, Param13, Param14, Param15, Param16) = 0;
   };
 
   
@@ -407,7 +413,7 @@ namespace Apto {
   {
   public:
     typedef typename TypeTraits<P1>::ParameterType Param1;
-    virtual ReturnType operator()(P1) = 0;
+    virtual ReturnType operator()(Param1) = 0;
   };
   
   template <
@@ -419,7 +425,7 @@ namespace Apto {
   public:
     typedef typename TypeTraits<P1>::ParameterType Param1;
     typedef typename TypeTraits<P2>::ParameterType Param2;
-    virtual ReturnType operator()(P1, P2) = 0;
+    virtual ReturnType operator()(Param1, Param2) = 0;
   };
   
   template <
@@ -432,7 +438,7 @@ namespace Apto {
     typedef typename TypeTraits<P1>::ParameterType Param1;
     typedef typename TypeTraits<P2>::ParameterType Param2;
     typedef typename TypeTraits<P3>::ParameterType Param3;
-    virtual ReturnType operator()(P1, P2, P3) = 0;
+    virtual ReturnType operator()(Param1, Param2, Param3) = 0;
   };
   
   template <
@@ -446,7 +452,7 @@ namespace Apto {
     typedef typename TypeTraits<P2>::ParameterType Param2;
     typedef typename TypeTraits<P3>::ParameterType Param3;
     typedef typename TypeTraits<P4>::ParameterType Param4;
-    virtual ReturnType operator()(P1, P2, P3, P4) = 0;
+    virtual ReturnType operator()(Param1, Param2, Param3, Param4) = 0;
   };
   
   template <
@@ -461,7 +467,7 @@ namespace Apto {
     typedef typename TypeTraits<P3>::ParameterType Param3;
     typedef typename TypeTraits<P4>::ParameterType Param4;
     typedef typename TypeTraits<P5>::ParameterType Param5;
-    virtual ReturnType operator()(P1, P2, P3, P4, P5) = 0;
+    virtual ReturnType operator()(Param1, Param2, Param3, Param4, Param5) = 0;
   };
   
   template <
@@ -480,7 +486,7 @@ namespace Apto {
     typedef typename TypeTraits<P4>::ParameterType Param4;
     typedef typename TypeTraits<P5>::ParameterType Param5;
     typedef typename TypeTraits<P6>::ParameterType Param6;
-    virtual ReturnType operator()(P1, P2, P3, P4, P5, P6) = 0;
+    virtual ReturnType operator()(Param1, Param2, Param3, Param4, Param5, Param6) = 0;
   };
   
   template <
@@ -499,7 +505,7 @@ namespace Apto {
     typedef typename TypeTraits<P5>::ParameterType Param5;
     typedef typename TypeTraits<P6>::ParameterType Param6;
     typedef typename TypeTraits<P7>::ParameterType Param7;
-    virtual ReturnType operator()(P1, P2, P3, P4, P5, P6, P7) = 0;
+    virtual ReturnType operator()(Param1, Param2, Param3, Param4, Param5, Param6, Param7) = 0;
   };
   
   template <
@@ -521,7 +527,7 @@ namespace Apto {
     typedef typename TypeTraits<P6>::ParameterType Param6;
     typedef typename TypeTraits<P7>::ParameterType Param7;
     typedef typename TypeTraits<P8>::ParameterType Param8;
-    virtual ReturnType operator()(P1, P2, P3, P4, P5, P6, P7, P8) = 0;
+    virtual ReturnType operator()(Param1, Param2, Param3, Param4, Param5, Param6, Param7, Param8) = 0;
   };
   
   template <
@@ -545,7 +551,7 @@ namespace Apto {
     typedef typename TypeTraits<P7>::ParameterType Param7;
     typedef typename TypeTraits<P8>::ParameterType Param8;
     typedef typename TypeTraits<P9>::ParameterType Param9;
-    virtual ReturnType operator()(P1, P2, P3, P4, P5, P6, P7, P8, P9) = 0;
+    virtual ReturnType operator()(Param1, Param2, Param3, Param4, Param5, Param6, Param7, Param8, Param9) = 0;
   };
   
   template <
@@ -570,7 +576,7 @@ namespace Apto {
     typedef typename TypeTraits<P8>::ParameterType Param8;
     typedef typename TypeTraits<P9>::ParameterType Param9;
     typedef typename TypeTraits<P10>::ParameterType Param10;
-    virtual ReturnType operator()(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10) = 0;
+    virtual ReturnType operator()(Param1, Param2, Param3, Param4, Param5, Param6, Param7, Param8, Param9, Param10) = 0;
   };
   
   template <
@@ -596,7 +602,8 @@ namespace Apto {
     typedef typename TypeTraits<P9>::ParameterType Param9;
     typedef typename TypeTraits<P10>::ParameterType Param10;
     typedef typename TypeTraits<P11>::ParameterType Param11;
-    virtual ReturnType operator()(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11) = 0;
+    virtual ReturnType operator()(Param1, Param2, Param3, Param4, Param5, Param6, Param7, Param8, Param9, Param10,
+                                  Param11) = 0;
   };
   
   template <
@@ -623,7 +630,8 @@ namespace Apto {
     typedef typename TypeTraits<P10>::ParameterType Param10;
     typedef typename TypeTraits<P11>::ParameterType Param11;
     typedef typename TypeTraits<P12>::ParameterType Param12;
-    virtual ReturnType operator()(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12) = 0;
+    virtual ReturnType operator()(Param1, Param2, Param3, Param4, Param5, Param6, Param7, Param8, Param9, Param10,
+                                  Param11, Param12) = 0;
   };
   
   template <
@@ -651,7 +659,8 @@ namespace Apto {
     typedef typename TypeTraits<P11>::ParameterType Param11;
     typedef typename TypeTraits<P12>::ParameterType Param12;
     typedef typename TypeTraits<P13>::ParameterType Param13;
-    virtual ReturnType operator()(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13) = 0;
+    virtual ReturnType operator()(Param1, Param2, Param3, Param4, Param5, Param6, Param7, Param8, Param9, Param10,
+                                  Param11, Param12, Param13) = 0;
   };
   
   template <
@@ -680,7 +689,8 @@ namespace Apto {
     typedef typename TypeTraits<P12>::ParameterType Param12;
     typedef typename TypeTraits<P13>::ParameterType Param13;
     typedef typename TypeTraits<P14>::ParameterType Param14;
-    virtual ReturnType operator()(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14) = 0;
+    virtual ReturnType operator()(Param1, Param2, Param3, Param4, Param5, Param6, Param7, Param8, Param9, Param10,
+                                  Param11, Param12, Param13, Param14) = 0;
   };
   
   template <
@@ -711,7 +721,8 @@ namespace Apto {
     typedef typename TypeTraits<P13>::ParameterType Param13;
     typedef typename TypeTraits<P14>::ParameterType Param14;
     typedef typename TypeTraits<P15>::ParameterType Param15;
-    virtual ReturnType operator()(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15) = 0;
+    virtual ReturnType operator()(Param1, Param2, Param3, Param4, Param5, Param6, Param7, Param8, Param9, Param10,
+                                  Param11, Param12, Param13, Param14, Param15) = 0;
   };
   
   template <
@@ -743,7 +754,8 @@ namespace Apto {
     typedef typename TypeTraits<P14>::ParameterType Param14;
     typedef typename TypeTraits<P15>::ParameterType Param15;
     typedef typename TypeTraits<P16>::ParameterType Param16;
-    virtual ReturnType operator()(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16) = 0;
+    virtual ReturnType operator()(Param1, Param2, Param3, Param4, Param5, Param6, Param7, Param8, Param9, Param10,
+                                  Param11, Param12, Param13, Param14, Param15, Param16) = 0;
   };
 
   
