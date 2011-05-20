@@ -96,7 +96,7 @@ namespace Apto {
       mutex.m_locked = true;
     }
 #else
-    inline void Wait(cMutex& mutex) { SleepConditionVariableCS(&m_cond, &(mutex.m_mutex)); }
+    inline void Wait(Mutex& mutex) { SleepConditionVariableCS(&m_cond, &(mutex.m_mutex)); }
 #endif
     
     inline void Signal() { WakeConditionVariable(&m_cond); }
@@ -119,7 +119,7 @@ namespace Apto {
     inline ConditionVariable() { ; }
     inline ~ConditionVariable() { ; }
     
-    inline void Wait(cMutex& mutex) { ; }
+    inline void Wait(Mutex& mutex) { ; }
     
     inline void Signal() { ; }
     inline void Broadcast() { ; }
