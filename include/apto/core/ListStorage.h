@@ -162,7 +162,7 @@ namespace Apto {
       m_size++;
     }
     
-    T Remove(const T& value)
+    bool Remove(const T& value)
     {
       for (Node* cur = &m_root; cur->next != &m_root; cur = cur->next) {
         if (cur->data == value) {
@@ -433,7 +433,7 @@ namespace Apto {
       incSize();
     }
     
-    T Remove(const T& value)
+    bool Remove(const T& value)
     {
       ListIndex i;
       for (i.index = 0; i.index < m_size; i.index++) {
