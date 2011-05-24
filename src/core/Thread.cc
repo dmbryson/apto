@@ -83,6 +83,8 @@ void* Apto::Thread::EntryPoint(void* arg)
 
 #elif APTO_PLATFORM(THREADS) && APTO_PLATFORM(WINDOWS)
 
+#include <process.h>
+
 Apto::Thread::~Thread() { if (m_thread) CloseHandle(m_thread); }
 
 bool Apto::Thread::Start()
@@ -90,7 +92,7 @@ bool Apto::Thread::Start()
   MutexAutoLock lock(m_mutex);
   
   if (m_thread == 0) {
-    unsigned long tid = 0;
+    unsigned int tid = 0;
     m_thread = (HANDLE)_beginthreadex(0, 0, &Thread::EntryPoint, this, 0, &tid);
     
     if (m_thread) return true;
@@ -115,7 +117,7 @@ void Apto::Thread::Join()
   if (m_thread) WaitForSingleObject(m_thread, INFINITE);
 }
 
-unsigned int __stdcall cThread::EntryPoint(void* arg)
+unsigned int __stdcall Apto::Thread::EntryPoint(void* arg)
 {
   // Common entry point to start cThread objects
   // Calls Run method of appropriate subclass to do the actual work

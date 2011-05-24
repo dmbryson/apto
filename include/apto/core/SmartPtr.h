@@ -39,6 +39,7 @@
 #include "apto/core/TypeUtil.h"
 
 #include <cassert>
+#include <functional>
 #include <string>
 
 
@@ -476,7 +477,7 @@ namespace Apto {
 
 
 namespace std {
-  template <class T, template <class> class OP, template<class> class SP>
+  template <typename T, template <class> class OP, template <class> class SP>
   struct less< Apto::SmartPtr<T, OP, SP> >
     : public binary_function<Apto::SmartPtr<T, OP, SP>, Apto::SmartPtr<T, OP, SP>, bool>
   {

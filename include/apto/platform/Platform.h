@@ -40,13 +40,14 @@
 # define APTO_PLATFORM_WINDOWS 1
 # ifdef _MSC_VER
 #  define APTO_PLATFORM_MSVC 1
+#  define NOMINMAX
 # else
 #  define APTO_PLATFORM_MSVC 0
 # endif
-# ifdef ENABLE_THREADS
-#  define APTO_PLATFORM_THREADS 1
-# else
+# ifdef DISABLE_THREADS
 #  define APTO_PLATFORM_THREADS 0
+# else
+#  define APTO_PLATFORM_THREADS 1
 # endif
 // Disable warning C4355: 'this' : used in base member initializer list
 # pragma warning( disable : 4355 )

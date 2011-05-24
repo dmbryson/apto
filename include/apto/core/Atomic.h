@@ -69,6 +69,8 @@ inline void Apto::Atomic::Set(volatile int* atomic, int value)
 
 #elif APTO_PLATFORM(WINDOWS)
 
+#include <Windows.h>
+
 inline int Apto::Atomic::Add(volatile int* atomic, int value)
 {
   return InterlockedExchangeAdd(reinterpret_cast<volatile LONG*>(atomic), static_cast<LONG>(value)) + value;

@@ -69,7 +69,7 @@ namespace Apto {
 #elif APTO_PLATFORM(THREADS) && APTO_PLATFORM(WINDOWS)
 
 // Use Windows Threading
-#include <windows.h>
+#include <Windows.h>
 
 namespace Apto {
   class Thread

@@ -37,6 +37,8 @@
  *
  */
 
+#include "apto/platform.h"
+
 #include "apto/stat/ContingencyTable.h"
 #include "apto/stat/Functions.h"
 
@@ -160,7 +162,7 @@ public:
     return Slice(Smart<T>::m_data + start, end - start + 1);
   }
   
-  EnhancedSmart& operator=(const EnhancedSmart::Slice& rhs)
+  EnhancedSmart& operator=(const Slice& rhs)
   {
     if (Smart<T>::m_active != rhs.GetSize()) Smart<T>::ResizeClear(rhs.GetSize());
     for (int i = 0; i < rhs.GetSize(); i++) Smart<T>::m_data[i] = rhs.m_data[i];

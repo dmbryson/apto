@@ -31,6 +31,7 @@
 #ifndef AptoCoreStringUtils_h
 #define AptoCoreStringUtils_h
 
+#include "apto/platform.h"
 #include "apto/core/Definitions.h"
 
 #include <cstdlib>
@@ -52,6 +53,18 @@ namespace Apto {
     
     inline operator bool() const;
     
+#if APTO_PLATFORM(WINDOWS)
+    inline operator int() const { return strtol(m_str, NULL, 0); }
+    inline operator long() const { return strtol(m_str, NULL, 0); }
+    inline operator long long() const { return _strtoi64(m_str, NULL, 0); }
+    inline operator unsigned int() const { return strtoul(m_str, NULL, 0); }
+    inline operator unsigned long() const { return strtoul(m_str, NULL, 0); }
+    inline operator unsigned long long() const { return _strtoui64(m_str, NULL, 0); }
+      
+    inline operator float() const { return (float)strtod(m_str, NULL); }
+    inline operator double() const { return strtod(m_str, NULL); }
+    inline operator long double() const { return (long double)strtod(m_str, NULL); }
+#else
     inline operator int() const { return strtol(m_str, NULL, 0); }
     inline operator long() const { return strtol(m_str, NULL, 0); }
     inline operator long long() const { return strtoll(m_str, NULL, 0); }
@@ -62,6 +75,8 @@ namespace Apto {
     inline operator float() const { return strtof(m_str, NULL); }
     inline operator double() const { return strtod(m_str, NULL); }
     inline operator long double() const { return strtold(m_str, NULL); }
+#endif
+
     
     inline operator const char*() const { return m_str; }
   };

@@ -32,8 +32,14 @@
 #include "apto/core/Mutex.h"
 #include "apto/core/RWLock.h"
 #include "apto/core/Thread.h"
+#include "apto/platform.h"
 
-#include <unistd.h>
+#if APTO_PLATFORM(WINDOWS)
+# include <io.h>
+# define sleep(x) Sleep(x ## 000)
+#else
+# include <unistd.h>
+#endif
 
 #include "gtest/gtest.h"
 

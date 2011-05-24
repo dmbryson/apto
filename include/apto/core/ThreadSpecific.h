@@ -41,8 +41,7 @@
 #include <pthread.h>
 
 namespace Apto {
-  template<typename T>
-  class ThreadSpecific
+  template <typename T> class ThreadSpecific
   {
   private:
     pthread_key_t m_key;
@@ -62,17 +61,33 @@ namespace Apto {
 
 #elif APTO_PLATFORM(THREADS) && APTO_PLATFORM(WINDOWS)
 
-// Use Windows Threading
-#include <windows.h>
+// Use Windows Threads
+#include <Windows.h>
 
-#error Windows ThreadSpecific not currently implemented
+namespace Apto {
+  template <typename T> class ThreadSpecific
+  {
+  private:
+     DWORD m_key;
+     static void destroySpecific(void* data) { delete (T*)data; }
+
+     ThreadSpecific(const ThreadSpecific&); // @not_implemented
+     ThreadSpecific& operator=(const ThreadSpecific&); // @not_implemented
+
+  public:
+    ThreadSpecific() { m_key = TlsAlloc(); }
+    ~ThreadSpecific() { destroySpecific(TlsGetValue(m_key)); TlsFree(m_key); }
+
+    T* Get() { return (T*)TlsGetValue(m_key); }
+    void Set(T* value) { destroySpecific(TlsGetValue(m_key)); TlsSetValue(m_key, value); }
+  };
+};
 
 #else
 
 // Disable Threading
 namespace Apto {
-  template<typename T>
-  class ThreadSpecific
+  template <typename T> class ThreadSpecific
   {
   private:
     T* m_value;
