@@ -71,7 +71,7 @@ void Apto::Thread::Join()
 
 void* Apto::Thread::EntryPoint(void* arg)
 {
-  // Common entry point to start cThread objects
+  // Common entry point to start Thread objects
   // Calls Run method of appropriate subclass to do the actual work
   Thread* thread = static_cast<Thread*>(arg);
   thread->Run();
@@ -119,7 +119,7 @@ void Apto::Thread::Join()
 
 unsigned int __stdcall Apto::Thread::EntryPoint(void* arg)
 {
-  // Common entry point to start cThread objects
+  // Common entry point to start Thread objects
   // Calls Run method of appropriate subclass to do the actual work
   Thread* thread = static_cast<Thread*>(arg);
   thread->Run();
