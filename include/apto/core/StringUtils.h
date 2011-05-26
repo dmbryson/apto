@@ -65,10 +65,10 @@ namespace Apto {
     inline operator double() const { return strtod(m_str, NULL); }
     inline operator long double() const { return (long double)strtod(m_str, NULL); }
 #else
-    inline operator int() const { return strtol(m_str, NULL, 0); }
+    inline operator int() const { return (int)strtol(m_str, NULL, 0); }
     inline operator long() const { return strtol(m_str, NULL, 0); }
     inline operator long long() const { return strtoll(m_str, NULL, 0); }
-    inline operator unsigned int() const { return strtoul(m_str, NULL, 0); }
+    inline operator unsigned int() const { return (unsigned int)strtoul(m_str, NULL, 0); }
     inline operator unsigned long() const { return strtoul(m_str, NULL, 0); }
     inline operator unsigned long long() const { return strtoull(m_str, NULL, 0); }
       
@@ -83,7 +83,7 @@ namespace Apto {
   
   inline StrAs::operator bool() const
   {
-    const int size = strlen(m_str);
+    size_t size = strlen(m_str);
     if (size == 1) {
       if (m_str[0] == '1' || m_str[0] == 'T' || m_str[0] == 't') return true;
       else return false;
