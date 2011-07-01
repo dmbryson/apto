@@ -436,6 +436,27 @@ namespace Apto {
 
   public:
     inline operator PlaceholderBooleanType() const { return (GetInternalPtr(*this) ? &Tester::Placeholder : NULL); }
+    
+    
+  private:
+    class DynamicCastPlaceholder { ; };
+    
+    template <typename T1, template<class> class OP1, template<class> class SP1>
+    SmartPtr(SmartPtr<T1, OP1, SP1>& rhs, const DynamicCastPlaceholder& placeholder) : SP(rhs), OP(rhs)
+    {
+      (void)placeholder;
+      PointerType casted_ptr = dynamic_cast<PointerType>(GetInternalPtrRef(rhs));
+      GetInternalPtrRef(*this) = OP::Clone(casted_ptr);
+    }
+    
+  public:
+    template <typename T1, template<class> class OP1, template<class> class SP1>
+    SmartPtr& DynamicCastFrom(SmartPtr<T1, OP1, SP1>& rhs)
+    {
+      SmartPtr temp(rhs, DynamicCastPlaceholder());
+      temp.Swap(*this);
+      return *this;
+    }
   };
 
   template <typename T, template<class> class OP, template<class> class SP, typename U>

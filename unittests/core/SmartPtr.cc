@@ -115,6 +115,32 @@ private:
 };
 
 
+class Feline
+{
+public:
+  virtual ~Feline() {; }
+};
+
+class Lion : public Feline
+{
+public:
+  virtual ~Lion() { ; }
+};
+
+class Tiger : public Feline
+{
+public:
+  virtual ~Tiger() { ; }
+};
+
+class Dog
+{
+public:
+  virtual ~Dog() { ; }
+};
+
+
+
 // Define Test Class Statics
 // --------------------------------------------------------------------------------------------------------------
 
@@ -471,4 +497,48 @@ TEST(CoreSmartPtr, ForwardReference) {
 //  p3 = p2;
 }
 
+TEST(CoreSmartPtr, DynamicCast) {
+  typedef Apto::SmartPtr<Feline> FelinePtr;
+  typedef Apto::SmartPtr<Lion> LionPtr;
+  typedef Apto::SmartPtr<Tiger> TigerPtr;
+  typedef Apto::SmartPtr<Dog> DogPtr;
+  
+  Feline* feline = new Lion;
+  Lion* lion = new Lion;
+  Tiger* tiger = new Tiger;
+  Dog* dog = new Dog;
+  
+  FelinePtr pFeline(feline);
+  LionPtr pLion(lion);
+  TigerPtr pTiger(tiger);
+  DogPtr pDog(dog);
+  
+  // Legal downcast
+  pFeline = pLion;
+  
+  // Illegal upcast
+  //pLion = pFeline;
+    
+  // Can dynamic up-cast from feline to lion
+  EXPECT_TRUE(pFeline);
+  pLion.DynamicCastFrom(pFeline);
+  EXPECT_TRUE(pLion);
+  EXPECT_TRUE(pLion == pFeline);
+  
+  // Can't cast from lion to tiger
+  pTiger.DynamicCastFrom(pLion);
+  EXPECT_TRUE(!pTiger);
+  
+  // Can't cast from dog to lion
+  pLion.DynamicCastFrom(pDog);
+  EXPECT_TRUE(!pLion);
+  
+  pLion.DynamicCastFrom(pFeline);
+  EXPECT_TRUE(pLion);
+  EXPECT_TRUE(pLion == pFeline);
+  
+  // Can't cast from lion to dog
+  pDog.DynamicCastFrom(pLion);
+  EXPECT_TRUE(!pDog);
+}
 
