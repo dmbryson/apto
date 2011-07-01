@@ -754,6 +754,7 @@
 		08FB7793FE84155DC02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastUpgradeCheck = 0420;
 				ORGANIZATIONNAME = "David Michael Bryson";
 			};
 			buildConfigurationList = 1DEB923508733DC60010E9CD /* Build configuration list for PBXProject "Apto" */;
@@ -891,7 +892,6 @@
 		1DEB923208733DC60010E9CD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				HEADER_SEARCH_PATHS = utils/unittest/googletest/include;
 				PRODUCT_NAME = "apto-test";
 				USER_HEADER_SEARCH_PATHS = include;
@@ -955,7 +955,6 @@
 		7023364B12FC50C1000C7BE5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				HEADER_SEARCH_PATHS = include;
 				PRODUCT_NAME = apto;
 			};
@@ -964,7 +963,6 @@
 		7023364C12FC50C1000C7BE5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				HEADER_SEARCH_PATHS = include;
 				PRODUCT_NAME = apto;
 			};
@@ -973,7 +971,6 @@
 		7023366C12FC5320000C7BE5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				HEADER_SEARCH_PATHS = utils/unittest/googletest/include;
 				PRODUCT_NAME = gtest;
 			};
@@ -982,7 +979,6 @@
 		7023366D12FC5320000C7BE5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				HEADER_SEARCH_PATHS = utils/unittest/googletest/include;
 				PRODUCT_NAME = gtest;
 			};
@@ -991,7 +987,6 @@
 		70354848132EF0CB00D3865C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				HEADER_SEARCH_PATHS = include;
 				PRODUCT_NAME = apto;
 			};
@@ -1000,7 +995,6 @@
 		70354849132EF0CB00D3865C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				HEADER_SEARCH_PATHS = include;
 				PRODUCT_NAME = apto;
 			};
