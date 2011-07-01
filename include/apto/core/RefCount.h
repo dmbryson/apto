@@ -61,7 +61,7 @@ namespace Apto {
     
   public:
     MTRefCountObject() { Atomic::Set(&m_ref_count, 1); }
-    MTRefCountObject(const RefCountObject&) { Atomic::Set(&m_ref_count, 1); }
+    MTRefCountObject(const MTRefCountObject&) { Atomic::Set(&m_ref_count, 1); }
     virtual ~MTRefCountObject() = 0;
     
     MTRefCountObject& operator=(const MTRefCountObject&) { return *this; }
