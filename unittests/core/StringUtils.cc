@@ -126,3 +126,17 @@ TEST(CoreStringUtils, StrAs) {
   EXPECT_EQ((long double)1.6e-10L, (long double)Apto::StrAs("1.6e-10"));
   EXPECT_EQ((long double)-1.5e12L, (long double)Apto::StrAs("-1.5e12"));
 }
+
+TEST(CoreStringUtils, AsStr) {
+  EXPECT_TRUE(Apto::String("12") == Apto::AsStr(12));
+  EXPECT_TRUE(Apto::AsStr(1.5)[0] == '1' && Apto::AsStr(1.5)[1] == '.' && Apto::AsStr(1.5)[2] == '5');
+  EXPECT_TRUE(Apto::String("true") == Apto::AsStr(true));
+  EXPECT_TRUE(Apto::String("false") == Apto::AsStr(false));
+  EXPECT_TRUE(Apto::String("barbaz") == Apto::AsStr("barbaz"));
+  EXPECT_TRUE(Apto::String("barbazf") == Apto::AsStr(Apto::String("barbazf")));
+}
+
+TEST(CoreStringUtils, FormatStr) {
+  Apto::String str = Apto::FormatStr("%d foo", 42);
+  EXPECT_TRUE(str == "42 foo");
+}

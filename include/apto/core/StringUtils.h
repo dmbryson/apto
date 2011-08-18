@@ -34,12 +34,16 @@
 #include "apto/platform.h"
 #include "apto/core/Definitions.h"
 
+#include <cstdarg>
 #include <cstdlib>
 #include <cstdio>
 
 
 namespace Apto {
 
+  // StrAs - Convert string into various native types
+  // --------------------------------------------------------------------------------------------------------------
+  
   class StrAs
   {
   private:
@@ -96,6 +100,9 @@ namespace Apto {
   }
   
   
+  // AsStr - Convert native types into strings
+  // --------------------------------------------------------------------------------------------------------------
+  
   template <class T> class ConvertToStr
   {
   private:
@@ -142,6 +149,49 @@ namespace Apto {
   };
   
   template <class T> ConvertToStr<T> AsStr(T value) { return ConvertToStr<T>(value); }
+  
+  
+  // String formatting
+  // --------------------------------------------------------------------------------------------------------------
+  
+  class FormatStr
+  {
+  private:
+    char* m_buffer;
+    
+  public:
+    FormatStr(const char* format, ...) : m_buffer(NULL)
+    {
+      va_list args;
+      va_start(args, format);
+      
+      // Determine the string length after formatting
+#if APTO_PLATFORM(WINDOWS)
+      int len = _vscprintf(format, args) + 1;
+#else
+      int len = vsnprintf(NULL, 0, format, args) + 1;
+#endif
+      
+      va_end(args);
+      va_start(args, format);
+      
+      // Allocate buffer of appropriate size
+      m_buffer = new char[len];
+      
+      // Format string into newly allocated buffer
+      if (vsnprintf(m_buffer, len, format, args) < 0) {
+        // set buffer to empty string if formatting fails
+        m_buffer[0] = '\0';          
+      }
+      
+      va_end(args);
+    }
+    inline ~FormatStr() { delete [] m_buffer; }
+    
+    template <class T>
+    inline operator BasicString<T>() const { return BasicString<T>(m_buffer); }
+  };
+  
 };
 
 #endif
