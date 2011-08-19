@@ -33,6 +33,7 @@
 
 #include "apto/platform.h"
 #include "apto/core/Definitions.h"
+#include "apto/core/String.h"
 
 #include <cstdarg>
 #include <cstdlib>
