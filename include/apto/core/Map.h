@@ -139,7 +139,7 @@ namespace Apto {
     ConstIterator Begin() const { return SP::Begin(); }
     
     KeyIterator Keys() const { return SP::Keys(); }
-    ValueIterator Values() const { return SP::Values(); }
+    ValueIterator Values() { return SP::Values(); }
   };
 };
 

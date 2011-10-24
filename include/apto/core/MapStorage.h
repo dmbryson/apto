@@ -341,7 +341,7 @@ namespace Apto {
     ConstIterator Begin() const { return ConstIterator(this); }
     
     KeyIterator Keys() const { return KeyIterator(this); }
-    ValueIterator Values() const { return ValueIterator(this); }
+    ValueIterator Values() { return ValueIterator(this); }
     
     
   protected:
@@ -449,16 +449,16 @@ namespace Apto {
     {
       friend class HashBTree<K, V, HashFactor, HashFunctor>;
     private:
-      const HashBTree<K, V, HashFactor, HashFunctor>* m_map;
+      HashBTree<K, V, HashFactor, HashFunctor>* m_map;
       int m_table_idx;
       int m_entry_idx;
       
       ValueIterator(); // @not_implemented
       
-      ValueIterator(const HashBTree<K, V, HashFactor, HashFunctor>* map) : m_map(map), m_table_idx(-1) { ; }
+      ValueIterator(HashBTree<K, V, HashFactor, HashFunctor>* map) : m_map(map), m_table_idx(-1) { ; }
       
     public:
-      const V* Next()
+      V* Next()
       {
         if (m_table_idx == HashFactor) return NULL;
         if (m_table_idx == -1 || ++m_entry_idx >= m_map->m_table[m_table_idx].GetSize()) {
@@ -468,7 +468,7 @@ namespace Apto {
         }
         return &m_map->m_table[m_table_idx][m_entry_idx].value;
       }
-      const V* Get()
+      V* Get()
       {
         if (m_table_idx < HashFactor && m_entry_idx < m_map->m_table[m_table_idx].GetSize())
           return &m_map->m_table[m_table_idx][m_entry_idx].value;

@@ -153,7 +153,7 @@ namespace Apto {
     
     
     // Substring extraction
-    inline BasicString Substring(int idx = 0, int length = -1)
+    inline BasicString Substring(int idx = 0, int length = -1) const
     {
       assert(idx >= 0);
       assert(idx < GetSize());

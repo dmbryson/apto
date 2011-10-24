@@ -113,7 +113,7 @@ namespace Apto {
     {
       Clear();
       typename Set<T1, SP1, M>::ConstIterator it = rhs.Begin();
-      while (it.Next()) {
+      while (it.Next(MultiSet)) {
         if (MultiSet) m_multiset_size++;
         SP::Get(*it.Get()).Inc();
       }
@@ -212,9 +212,9 @@ namespace Apto {
       
     public:      
       const T* Get() { return (m_it.Get()) ? &m_it.Get()->Value1() : NULL; }
-      const T* Next()
+      const T* Next(bool use_multi = MultiSet)
       {
-        if (MultiSet) {
+        if (MultiSet && use_multi) {
           if (m_count > 1) {
             m_count--;
             return &m_it.Get()->Value1();
@@ -227,6 +227,7 @@ namespace Apto {
             }
           }
         } else {
+          m_count = 0;
           return (m_it.Next()) ? &m_it.Get()->Value1() : NULL;
         }
       }
@@ -244,9 +245,9 @@ namespace Apto {
       
     public:      
       const T* Get() { return (m_it.Get()) ? &m_it.Get()->Value1() : NULL; }
-      const T* Next()
+      const T* Next(bool use_multi = MultiSet)
       {
-        if (MultiSet) {
+        if (MultiSet && use_multi) {
           if (m_count > 1) {
             m_count--;
             return &m_it.Get()->Value1();
@@ -259,6 +260,7 @@ namespace Apto {
             }
           }
         } else {
+          m_count = 0;
           return (m_it.Next()) ? &m_it.Get()->Value1() : NULL;
         }
       }
