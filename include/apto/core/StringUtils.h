@@ -108,6 +108,17 @@ namespace Apto {
   };
   
   
+  template <> class ConvertToStr<char>
+  {
+  private:
+    char m_str[2];
+    
+  public:
+    ConvertToStr(char value) { m_str[0] = value; m_str[1] = '\0'; }
+    
+    inline operator const char*() const { return m_str; }
+  };
+  
   template <> class ConvertToStr<int>
   {
   private:

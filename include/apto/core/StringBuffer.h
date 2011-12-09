@@ -157,9 +157,13 @@ namespace Apto {
     inline StringBuffer& operator+=(const char c) { return append(1, &c); }
     inline StringBuffer& operator+=(const char* str) { return append(static_cast<int>(strlen(str)), str); }
     inline StringBuffer& operator+=(const StringBuffer& str) { return append(str.GetSize(), str.GetData()); }
+    template <class R>
+    inline StringBuffer& operator+=(const BasicString<R>& str) { return append(str.GetSize(), str.GetData()); }
     inline StringBuffer operator+(const char c) { return concat(1, &c); }
     inline StringBuffer operator+(const char* str) { return concat(static_cast<int>(strlen(str)), str); }
     inline StringBuffer operator+(const StringBuffer& str) { return concat(str.GetSize(), str.GetData()); }
+    template <class R>
+    inline StringBuffer operator+(const BasicString<R>& str) { return concat(str.GetSize(), str.GetData()); }
     
     
     // Substring extraction

@@ -50,6 +50,7 @@
 #include "apto/core/StaticCheck.h"
 #include "apto/core/String.h"
 #include "apto/core/StringBuffer.h"
+#include "apto/core/StringUtils.h"
 #include "apto/core/Thread.h"
 #include "apto/core/ThreadSpecific.h"
 #include "apto/core/TypeList.h"
