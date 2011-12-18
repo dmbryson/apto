@@ -42,11 +42,13 @@ namespace Apto {
   // Map
   // --------------------------------------------------------------------------------------------------------------
   
-  template<class K, class V, template <class, class> class StoragePolicy = DefaultHashBTree>
-  class Map : public StoragePolicy<K, V>
+  template<class K, class V, template <class, class> class StoragePolicy = DefaultHashBTree,
+           template <class> class ConstAccess = ExplicitDefault>
+  class Map : public StoragePolicy<K, V>, public ConstAccess<V>
   {
   protected:
     typedef StoragePolicy<K, V> SP;
+    typedef ConstAccess<V> CP;
     
   public:
     typedef K KeyType;
@@ -111,6 +113,22 @@ namespace Apto {
     inline ValueType& operator[](const KeyType& key) { return SP::Get(key); }
             
     
+    // Non-updating const value accessors that return the default
+    inline const ValueType& Get(const KeyType& key) const
+    {
+      const ValueType* entry_value = SP::Find(key);
+      if (entry_value) return *entry_value;
+      return CP::DefaultValue();
+    }
+    inline const ValueType& operator[](const KeyType& key) const
+    {
+      const ValueType* entry_value = SP::Find(key);
+      if (entry_value) return *entry_value;
+      return CP::DefaultValue();
+    }
+
+    
+    // Conditional const value accessor
     inline bool Get(const KeyType& key, ValueType& out_value) const { 
       const ValueType* entry_value = SP::Find(key);
       if (entry_value) {
@@ -120,6 +138,7 @@ namespace Apto {
       return false;
     }
     
+    // Explicit default value accessor
     ValueType& GetWithDefault(const KeyType& key, const ValueType& default_value)
     {
       ValueType* entry_value = SP::Find(key);
@@ -128,7 +147,18 @@ namespace Apto {
       new_value = default_value;
       return new_value;
     }
+        
     
+    // Non-updating const value accessor that returns explicit default
+    const ValueType& GetWithDefault(const KeyType& key, const ValueType& default_value) const
+    {
+      CP::AllowNonUpdatingExplictDefault();
+      ValueType* entry_value = SP::Find(key);
+      if (entry_value) return *entry_value;
+      return default_value;
+    }
+
+
     inline void Set(const KeyType& key, const ValueType& value) { SP::Get(key) = value; }
     
     

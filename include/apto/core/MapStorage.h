@@ -479,6 +479,36 @@ namespace Apto {
   
   template <class K, class V> class DefaultHashBTree : public HashBTree<K, V, 23> { ; };
   
+
+  // Map ConstAccess Policies
+  // --------------------------------------------------------------------------------------------------------------
+  
+  template <class ValueType> class NoDefault
+  {
+  };
+  
+
+  template <class ValueType> class ExplicitDefault
+  {
+  protected:
+    inline void AllowNonUpdatingExplicitDefault() { ; }
+  };
+  
+  
+  template <class ValueType> class ImplicitDefault
+  {
+  protected:
+    ValueType m_default;
+    
+    inline void AllowNonUpdatingExplicitDefault() { ; }
+    
+  public:
+    // Accessors for configuring the default value
+    void SetDefaultValue(const ValueType& new_default) { m_default = new_default; }
+    ValueType& DefaultValue() { return m_default; }
+    const ValueType& DefaultValue() const { return m_default; }
+  };
+  
 };
 
 #endif

@@ -132,6 +132,8 @@ namespace Apto {
       return SP::operator[](index);
     }
     
+    inline T& Get(const int index) { return operator[](index); }
+    inline const T& Get(const int index) const { return operator[](index); }
     
     // Stack-like Methods...
     void Push(const T& value)
