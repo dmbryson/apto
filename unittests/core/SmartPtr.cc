@@ -515,6 +515,7 @@ TEST(CoreSmartPtr, DynamicCast) {
   
   // Legal downcast
   pFeline = pLion;
+  FelinePtr pFeline2(pLion);
   
   // Illegal upcast
   //pLion = pFeline;

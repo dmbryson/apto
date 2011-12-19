@@ -364,6 +364,12 @@ namespace Apto {
       GetInternalPtrRef(*this) = OP::Clone(GetInternalPtrRef(rhs));
     }
     
+    template <typename T1, template<class> class OP1, template<class> class SP1>
+    SmartPtr(const SmartPtr<T1, OP1, SP1>& rhs) : SP(rhs), OP(rhs)
+    {
+      GetInternalPtrRef(*this) = OP::Clone(GetInternalPtrRef(rhs));
+    }
+    
     // Reference Transport to allow immediate use of SmartPtr return values
     SmartPtr(RefTransport<SmartPtr> rhs) : SP(rhs), OP(rhs)
     {
@@ -449,9 +455,25 @@ namespace Apto {
       GetInternalPtrRef(*this) = OP::Clone(casted_ptr);
     }
     
+    template <typename T1, template<class> class OP1, template<class> class SP1>
+    SmartPtr(const SmartPtr<T1, OP1, SP1>& rhs, const DynamicCastPlaceholder& placeholder) : SP(rhs), OP(rhs)
+    {
+      (void)placeholder;
+      PointerType casted_ptr = dynamic_cast<PointerType>(GetInternalPtrRef(rhs));
+      GetInternalPtrRef(*this) = OP::Clone(casted_ptr);
+    }
+    
   public:
     template <typename T1, template<class> class OP1, template<class> class SP1>
     SmartPtr& DynamicCastFrom(SmartPtr<T1, OP1, SP1>& rhs)
+    {
+      SmartPtr temp(rhs, DynamicCastPlaceholder());
+      temp.Swap(*this);
+      return *this;
+    }
+
+    template <typename T1, template<class> class OP1, template<class> class SP1>
+    SmartPtr& DynamicCastFrom(const SmartPtr<T1, OP1, SP1>& rhs)
     {
       SmartPtr temp(rhs, DynamicCastPlaceholder());
       temp.Swap(*this);
