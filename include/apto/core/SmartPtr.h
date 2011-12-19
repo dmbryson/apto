@@ -300,6 +300,13 @@ namespace Apto {
     DestructiveCopy(const DestructiveCopy<T1>& rhs) { (void)rhs; }
     
     template <class T1>
+    static T Clone(const T1& value) {
+      T rval(value);
+      const_cast<T1&>(value) = T1();
+      return rval;
+    }
+    
+    template <class T1>
     static T Clone(T1& value) {
       T rval(value);
       value = T1();
