@@ -152,8 +152,8 @@ namespace Apto {
     // Non-updating const value accessor that returns explicit default
     const ValueType& GetWithDefault(const KeyType& key, const ValueType& default_value) const
     {
-      CP::AllowNonUpdatingExplictDefault();
-      ValueType* entry_value = SP::Find(key);
+      CP::AllowNonUpdatingExplicitDefault();
+      const ValueType* entry_value = SP::Find(key);
       if (entry_value) return *entry_value;
       return default_value;
     }

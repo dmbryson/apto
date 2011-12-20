@@ -461,6 +461,9 @@ namespace Apto {
       out_node->prev->next = out_node->next;
       out_node->next->prev = out_node->prev;
       
+      // Clean up now unused data with default (should, for example, force SmartPtr clean up)
+      out_node->data = T();
+      
       m_next.index--;
       Node* next_node = &m_bufs[m_next.buffer.num][m_next.buffer.offset];
       if (next_node != out_node) {
@@ -799,6 +802,9 @@ namespace Apto {
             for (int j = entry_idx; j < cur->used; j++) cur->entries[j] = cur->entries[j + 1];
             if (cur->handles[entry_idx]) cur->handles[entry_idx]->m_seg = NULL;
             for (int j = entry_idx; j < cur->used; j++) cur->handles[j] = cur->handles[j + 1];
+            
+            // Clean up now unused entry with default (should, for example, force SmartPtr clean up)
+            cur->entries[cur->used] = T();
           }
           
           m_size--;

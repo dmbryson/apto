@@ -392,6 +392,14 @@ namespace Apto {
     }
     
     template <typename T1, template<class> class OP1, template<class> class SP1>
+    SmartPtr& operator=(const SmartPtr<T1, OP1, SP1>& rhs)
+    {
+      SmartPtr temp(rhs);
+      temp.Swap(*this);
+      return *this;
+    }
+
+    template <typename T1, template<class> class OP1, template<class> class SP1>
     SmartPtr& operator=(SmartPtr<T1, OP1, SP1>& rhs)
     {
       SmartPtr temp(rhs);

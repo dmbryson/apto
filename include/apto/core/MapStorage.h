@@ -491,7 +491,7 @@ namespace Apto {
   template <class ValueType> class ExplicitDefault
   {
   protected:
-    inline void AllowNonUpdatingExplicitDefault() { ; }
+    inline void AllowNonUpdatingExplicitDefault() const { ; }
   };
   
   
@@ -500,7 +500,7 @@ namespace Apto {
   protected:
     ValueType m_default;
     
-    inline void AllowNonUpdatingExplicitDefault() { ; }
+    inline void AllowNonUpdatingExplicitDefault() const { ; }
     
   public:
     // Accessors for configuring the default value
