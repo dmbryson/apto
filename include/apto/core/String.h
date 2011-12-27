@@ -227,19 +227,19 @@ namespace Apto {
       char* m_data;
       
     public:
-      explicit StringRep(int size = 0) : m_size(size), m_data(new char[size + 1])
+      inline explicit StringRep(int size = 0) : m_size(size), m_data(new char[size + 1])
       {
         assert(m_data);
         m_data[0] = '\0';
         m_data[size] = '\0';
       }
-      StringRep(int size, const char* str) : m_size(size), m_data(new char[size + 1])
+      inline StringRep(int size, const char* str) : m_size(size), m_data(new char[size + 1])
       {
         assert(m_data);
         memcpy(m_data, str, m_size);
         m_data[size] = '\0';
       }
-      StringRep(const StringRep& rhs) : m_size(rhs.m_size), m_data(new char[m_size + 1])
+      inline StringRep(const StringRep& rhs) : m_size(rhs.m_size), m_data(new char[m_size + 1])
       {
         assert(m_data);
         memcpy(m_data, rhs.m_data, m_size);

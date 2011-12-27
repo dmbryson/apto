@@ -63,7 +63,7 @@ namespace Apto {
     Node m_root;
     int m_size;
     
-    DL(const DL& rhs) { ; }
+    DL(const DL&) { ; }
     
   protected:
     DL() : m_size(0)
@@ -337,7 +337,7 @@ namespace Apto {
     Node m_root;
     unsigned int m_size;
     
-    BufferedDL(const BufferedDL& rhs) { ; }
+    BufferedDL(const BufferedDL&) { ; }
     
   protected:
     BufferedDL() : m_size(0) { Clear(); }
@@ -612,7 +612,7 @@ namespace Apto {
     ListSegment* m_head_seg;
     ListSegment* m_tail_seg;
     
-    SparseVector(const SparseVector& rhs) { ; }
+    SparseVector(const SparseVector&) { ; }
 
     
   protected:
