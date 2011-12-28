@@ -35,6 +35,10 @@
 
 
 namespace Apto {
+  
+  // RefCountObject - Internal reference counted object
+  // --------------------------------------------------------------------------------------------------------------
+
   class RefCountObject
   {
   private:
@@ -54,6 +58,9 @@ namespace Apto {
   };
 
 
+  // MTRefCountObject - Thread safe internal reference counted object
+  // --------------------------------------------------------------------------------------------------------------
+  
   class MTRefCountObject
   {
   private:

@@ -49,12 +49,23 @@ namespace Apto {
   {
   private:
     const char* m_str;
+    char* m_str_copy;
     
     StrAs(); // @not_implemented
     
   public:
-    inline explicit StrAs(const char* str) : m_str(str) { ; }
-    template <class T> explicit StrAs(const T& str) : m_str(str) { ; }
+    inline StrAs(const char* str) : m_str(str), m_str_copy(NULL) { ; }
+    inline StrAs(const BasicString<SingleThreaded>& str) : m_str_copy(new char[str.GetSize()])
+    {
+      memcpy(m_str_copy, str.GetCString(), str.GetSize());
+      m_str = m_str_copy;
+    }
+    inline StrAs(const BasicString<ThreadSafe>& str) : m_str_copy(new char[str.GetSize()])
+    {
+      memcpy(m_str_copy, str.GetCString(), str.GetSize());
+      m_str = m_str_copy;
+    }
+    inline ~StrAs() { delete [] m_str_copy; }
     
     inline operator bool() const;
     
