@@ -123,7 +123,7 @@ namespace Apto {
   public:
     ConvertToStr(T value) : m_value(value) { ; }
     
-    inline operator const char*() const { return m_value; }
+    template <class M> inline operator Apto::BasicString<M>() const { return Apto::BasicString<M>(m_value); }
   };
   
   
@@ -135,7 +135,6 @@ namespace Apto {
   public:
     ConvertToStr(char value) { m_str[0] = value; m_str[1] = '\0'; }
     
-    inline operator const char*() const { return m_str; }
     template <class M> inline operator Apto::BasicString<M>() const { return Apto::BasicString<M>(m_str); }
   };
   
@@ -147,7 +146,6 @@ namespace Apto {
   public:
     ConvertToStr(int value) { sprintf(m_str, "%d", value); }
     
-    inline operator const char*() const { return m_str; }
     template <class M> inline operator Apto::BasicString<M>() const { return Apto::BasicString<M>(m_str); }
   };
   
@@ -159,7 +157,6 @@ namespace Apto {
   public:
     ConvertToStr(double value) { sprintf(m_str, "%f", value); }
     
-    inline operator const char*() const { return m_str; }
     template <class M> inline operator Apto::BasicString<M>() const { return Apto::BasicString<M>(m_str); }
   };
   
@@ -171,7 +168,6 @@ namespace Apto {
   public:
     ConvertToStr(bool value) : m_str(value ? "true" : "false") { ; }
     
-    inline operator const char*() const { return m_str; }
     template <class M> inline operator Apto::BasicString<M>() const { return Apto::BasicString<M>(m_str); }
   };
 
@@ -183,9 +179,7 @@ namespace Apto {
   public:
     ConvertToStr(const Apto::BasicString<M>& value) : m_str(value) { ; }
     
-    inline operator const char*() const { return (const char*)m_str; }
     inline operator const Apto::BasicString<M>&() const { return m_str; }
-    template <class M2> inline operator Apto::BasicString<M2>() const { return Apto::BasicString<M2>(m_str); }
   };
 
   template <class T> inline ConvertToStr<T> AsStr(T value) { return ConvertToStr<T>(value); }

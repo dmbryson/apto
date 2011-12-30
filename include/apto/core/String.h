@@ -146,10 +146,10 @@ namespace Apto {
     // Concatenation
     inline BasicString& operator+=(const char c) { return append(1, &c); }
     inline BasicString& operator+=(const char* str) { return append(static_cast<int>(strlen(str)), str); }
-    template <class R> BasicString& operator+=(const BasicString<R>& str) { return append(str.GetSize(), str.GetData()); }
+    inline BasicString& operator+=(const BasicString& str) { return append(str.GetSize(), str.GetData()); }
     inline BasicString operator+(const char c) { return concat(1, &c); }
     inline BasicString operator+(const char* str) { return concat(static_cast<int>(strlen(str)), str); }
-    template <class R> BasicString operator+(const BasicString<R>& str) { return concat(str.GetSize(), str.GetData()); }
+    inline BasicString operator+(const BasicString& str) { return concat(str.GetSize(), str.GetData()); }
     
     
     // Substring extraction
