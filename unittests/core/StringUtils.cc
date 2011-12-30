@@ -129,7 +129,8 @@ TEST(CoreStringUtils, StrAs) {
 
 TEST(CoreStringUtils, AsStr) {
   EXPECT_TRUE(Apto::String("12") == Apto::AsStr(12));
-  EXPECT_TRUE(Apto::AsStr(1.5)[0] == '1' && Apto::AsStr(1.5)[1] == '.' && Apto::AsStr(1.5)[2] == '5');
+  Apto::String test_str(Apto::AsStr(1.5));
+  EXPECT_TRUE(test_str[0] == '1' && test_str[1] == '.' && test_str[2] == '5');
   EXPECT_TRUE(Apto::String("true") == Apto::AsStr(true));
   EXPECT_TRUE(Apto::String("false") == Apto::AsStr(false));
   EXPECT_TRUE(Apto::String("barbaz") == Apto::AsStr("barbaz"));

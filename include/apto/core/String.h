@@ -109,8 +109,7 @@ namespace Apto {
       return -1;
     }
     
-    template <class R>
-    bool operator==(const BasicString<R>& rhs) const
+    bool operator==(const BasicString& rhs) const
     {
       if (rhs.GetSize() != GetSize()) return false;
       for (int i = 0; i < GetSize(); i++) if ((*this)[i] != rhs[i]) return false;
