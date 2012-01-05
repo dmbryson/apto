@@ -30,19 +30,31 @@
 #ifndef AptoCoreFileSystem_h
 #define AptoCoreFileSystem_h
 
+#include "apto/core/Array.h"
 #include "apto/core/String.h"
 #include "apto/platform/Platform.h"
+#include "apto/platform/Visibility.h"
+
 
 namespace Apto {
   namespace FileSystem {
 
     const int MAXIMUM_DIRECTORY_LENGTH = 2048;
     
-    bool MkDir(const String& dirname);
-    String GetCWD();
-    String GetAbsolutePath(const String& path, const String& working_dir);
-    inline String PathAppend(const String& path, const String& path_add);
+    LIB_EXPORT String GetCWD();
+    LIB_EXPORT String GetAbsolutePath(const String& path, const String& working_dir);
+    LIB_EXPORT inline String PathAppend(const String& path, const String& path_add);
     
+    LIB_EXPORT bool IsDir(const String& path);
+    LIB_EXPORT bool IsFile(const String& path);
+    
+    LIB_EXPORT bool CpDir(const String& src, const String& dest);
+    LIB_EXPORT bool MkDir(const String& dirname);
+    LIB_EXPORT bool RmDir(const String& dirname, bool recursive = false);
+    LIB_EXPORT bool ReadDir(const String& path, Array<String, Smart>& entries);
+    
+    LIB_EXPORT bool CpFile(const String& src, const String& dest);
+    LIB_EXPORT bool RmFile(const String& path);
   };
 };
 

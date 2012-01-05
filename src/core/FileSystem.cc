@@ -35,6 +35,8 @@
 #include <cerrno>
 #include <sys/stat.h>
 #include <cstdio>
+#include <dirent.h>
+#include <fstream>
 
 
 // mkdir undefined in ms windows
@@ -61,26 +63,6 @@
 namespace Apto {
   namespace FileSystem {
 
-    bool MkDir(const String& dirname)
-    {
-      FILE* fp = fopen(dirname, "r");
-      if (fp == 0) {
-        if (errno == ENOENT) {
-          // not found, creating...
-          if (mkdir(dirname, (S_IRWXU | S_IRWXG | S_IRWXO))) return false;
-          
-          return true;
-        }
-        
-        return false;
-      }
-      fclose(fp);
-      
-      // found
-      return true;
-    }
-
-    
     String GetCWD()
     {
       String cwd_str;
@@ -105,6 +87,143 @@ namespace Apto {
 #endif
       
       return path;
+    }
+    
+    bool IsDir(const String& path)
+    {
+      struct stat st;
+      if (stat(path, &st) == 0 && st.st_mode & S_IFDIR) return true;
+      return false;
+    }
+    
+    bool IsFile(const String& path)
+    {
+      struct stat st;
+      if (stat(path, &st) == 0 && st.st_mode & S_IFREG) return true;
+      return false;
+    }
+    
+    
+    bool CpDir(const String& src, const String& dest)
+    {
+      if (!IsDir(src)) return false;
+      
+      MkDir(dest);
+
+      // Collect entries in directory
+      Array<String, Smart> direntries;
+      ReadDir(src, direntries);
+      
+      // Process all entries, removing them as appropriate
+      for (int i = 0; i < direntries.GetSize(); i++) {
+        // Do not copy current or parent directory entries
+        if (direntries[i] == "." || direntries[i] == "..") continue;
+        
+        Apto::String src_path = PathAppend(src, direntries[i]);
+        Apto::String dest_path = PathAppend(dest, direntries[i]);
+        
+        struct stat st;
+        if (stat(src_path, &st) != 0) continue;
+        
+        if (st.st_mode & S_IFDIR) {
+          // Recursively copy subdirectory
+          if (!CpDir(src_path, dest_path)) return false;
+        } else if (st.st_mode & S_IFREG) {
+          // Cop regular file
+          if (!CpFile(src_path, dest_path)) return false;
+        }
+      }
+      
+      return true;
+    }
+    
+    
+    bool MkDir(const String& dirname)
+    {
+      FILE* fp = fopen(dirname, "r");
+      if (fp == 0) {
+        if (errno == ENOENT) {
+          // not found, creating...
+          if (mkdir(dirname, (S_IRWXU | S_IRWXG | S_IRWXO))) return false;
+          
+          return true;
+        }
+        
+        return false;
+      }
+      fclose(fp);
+      
+      // found
+      return true;
+    }
+    
+    
+    bool RmDir(const String& dirname, bool recursive)
+    {
+      if (!IsDir(dirname)) return false;
+      
+      if (recursive) {
+        // Collect entries in directory
+        Array<String, Smart> direntries;
+        ReadDir(dirname, direntries);
+        
+        // Process all entries, removing them as appropriate
+        for (int i = 0; i < direntries.GetSize(); i++) {
+          // Do not remove current or parent directory entries
+          if (direntries[i] == "." || direntries[i] == "..") continue;
+          
+          Apto::String path = PathAppend(dirname, direntries[i]);
+          
+          struct stat st;
+          if (stat(path, &st) != 0) continue;
+          
+          if (st.st_mode & S_IFDIR) {
+            // Recursively remove subdirectory
+            if (!RmDir(path)) return false;
+          } else {
+            // Remove regular (or other) file
+            if (remove(path) != 0) return false;
+          }
+        }
+      }
+      
+      // Attempt to remove the directory itself
+      return (rmdir(dirname) == 0);
+    }
+    
+    
+    bool ReadDir(const String& path, Array<String, Smart>& entries)
+    {
+      DIR* dp;
+      struct dirent* dirp;
+      if ((dp = opendir(path)) == NULL) return false;
+      
+      while ((dirp = readdir(dp)) != NULL) entries.Push(dirp->d_name);
+      
+      closedir(dp);      
+      return true;
+    }
+    
+    
+    bool CpFile(const String& src, const String& dest)
+    {
+      std::ifstream ifs(src, std::ios::binary);
+      std::ofstream ofs(dest, std::ios::binary);
+      
+      if (!ifs.is_open() || !ofs.is_open()) return false;
+      
+      ofs << ifs.rdbuf();
+      
+      ifs.close();
+      ofs.close();
+      
+      return true;
+    }
+    
+
+    bool RmFile(const String& path)
+    {
+      return (remove(path) == 0);
     }
     
   };
