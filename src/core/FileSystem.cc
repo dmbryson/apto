@@ -31,11 +31,11 @@
 #include "apto/core/FileSystem.h"
 
 #include "apto/platform/Platform.h"
+#include "apto/platform/FileSystem.h"
 
 #include <cerrno>
 #include <sys/stat.h>
 #include <cstdio>
-#include <dirent.h>
 #include <fstream>
 
 

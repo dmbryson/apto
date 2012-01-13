@@ -26,6 +26,8 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		701C38C614C0B14700EB6B41 /* FileSystem.cc in Sources */ = {isa = PBXBuildFile; fileRef = 701C38C514C0B14700EB6B41 /* FileSystem.cc */; };
+		701C38C714C0B14700EB6B41 /* FileSystem.cc in Sources */ = {isa = PBXBuildFile; fileRef = 701C38C514C0B14700EB6B41 /* FileSystem.cc */; };
 		7023366612FC52E0000C7BE5 /* Platform.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7023364412FC4E31000C7BE5 /* Platform.cc */; };
 		7023366E12FC533E000C7BE5 /* gtest.cc in Sources */ = {isa = PBXBuildFile; fileRef = 702335D412FB51EF000C7BE5 /* gtest.cc */; };
 		7023366F12FC5344000C7BE5 /* gtest-death-test.cc in Sources */ = {isa = PBXBuildFile; fileRef = 702335CF12FB51EF000C7BE5 /* gtest-death-test.cc */; };
@@ -228,6 +230,8 @@
 
 /* Begin PBXFileReference section */
 		08FB7796FE84155DC02AAC07 /* main.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cc; sourceTree = "<group>"; };
+		701C38C314C0B0E900EB6B41 /* FileSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileSystem.h; sourceTree = "<group>"; };
+		701C38C514C0B14700EB6B41 /* FileSystem.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystem.cc; sourceTree = "<group>"; };
 		702335CE12FB51EF000C7BE5 /* gtest-all.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "gtest-all.cc"; sourceTree = "<group>"; };
 		702335CF12FB51EF000C7BE5 /* gtest-death-test.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "gtest-death-test.cc"; sourceTree = "<group>"; };
 		702335D012FB51EF000C7BE5 /* gtest-filepath.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "gtest-filepath.cc"; sourceTree = "<group>"; };
@@ -539,6 +543,7 @@
 		7023364312FC4E31000C7BE5 /* platform */ = {
 			isa = PBXGroup;
 			children = (
+				701C38C514C0B14700EB6B41 /* FileSystem.cc */,
 				7023364412FC4E31000C7BE5 /* Platform.cc */,
 			);
 			name = platform;
@@ -597,6 +602,7 @@
 		703548A9132FC63500D3865C /* platform */ = {
 			isa = PBXGroup;
 			children = (
+				701C38C314C0B0E900EB6B41 /* FileSystem.h */,
 				703548AA132FC63500D3865C /* FloatingPoint.h */,
 				703548AB132FC63500D3865C /* Platform.h */,
 				70F962D3135C91EE008EDD1C /* Visibility.h */,
@@ -793,6 +799,7 @@
 				706B1E9712FC9C2C006EAB7F /* RefCount.cc in Sources */,
 				70EE0DAC130AED6700D6C016 /* ContingencyTable.cc in Sources */,
 				70EE0DAD130AED6700D6C016 /* FishersExact.cc in Sources */,
+				701C38C614C0B14700EB6B41 /* FileSystem.cc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -819,6 +826,7 @@
 				70354841132EF0CB00D3865C /* RefCount.cc in Sources */,
 				70354842132EF0CB00D3865C /* ContingencyTable.cc in Sources */,
 				70354843132EF0CB00D3865C /* FishersExact.cc in Sources */,
+				701C38C714C0B14700EB6B41 /* FileSystem.cc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

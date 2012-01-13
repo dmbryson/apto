@@ -361,8 +361,8 @@ namespace Apto {
     typedef typename SP::ReferenceType ReferenceType;
     typedef typename TypeSelect<OP::CopyIsDestructive, SmartPtr, const SmartPtr>::Result CopyArgType;
     
-    SmartPtr() { ; }
-    explicit SmartPtr(const StoredType& ptr) : StoragePolicy<T>(ptr) { ; }
+    SmartPtr() : SP(), OP() { ; }
+    explicit SmartPtr(const StoredType& ptr) : SP(ptr), OP() { ; }
     SmartPtr(CopyArgType& rhs) : SP(rhs), OP(rhs) { GetInternalPtrRef(*this) = OP::Clone(GetInternalPtrRef(rhs)); }
     
     template <typename T1, template<class> class OP1, template<class> class SP1>
