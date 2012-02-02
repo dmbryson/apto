@@ -55,14 +55,14 @@ namespace Apto {
     
   public:
     inline StrAs(const char* str) : m_str(str), m_str_copy(NULL) { ; }
-    inline StrAs(const BasicString<SingleThreaded>& str) : m_str_copy(new char[str.GetSize()])
+    inline StrAs(const BasicString<SingleThreaded>& str) : m_str_copy(new char[str.GetSize() + 1])
     {
-      memcpy(m_str_copy, str.GetCString(), str.GetSize());
+      memcpy(m_str_copy, str.GetCString(), str.GetSize() + 1);
       m_str = m_str_copy;
     }
-    inline StrAs(const BasicString<ThreadSafe>& str) : m_str_copy(new char[str.GetSize()])
+    inline StrAs(const BasicString<ThreadSafe>& str) : m_str_copy(new char[str.GetSize() + 1])
     {
-      memcpy(m_str_copy, str.GetCString(), str.GetSize());
+      memcpy(m_str_copy, str.GetCString(), str.GetSize() + 1);
       m_str = m_str_copy;
     }
     inline ~StrAs() { delete [] m_str_copy; }
