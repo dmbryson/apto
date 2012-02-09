@@ -141,10 +141,10 @@ namespace Apto {
   template <> class ConvertToStr<int>
   {
   private:
-    char m_str[15];
+    char m_str[64];
     
   public:
-    ConvertToStr(int value) { sprintf(m_str, "%d", value); }
+    ConvertToStr(int value) { snprintf(m_str, 64, "%d", value); m_str[63] = '\0'; }
     
     template <class M> inline operator Apto::BasicString<M>() const { return Apto::BasicString<M>(m_str); }
   };
@@ -152,10 +152,10 @@ namespace Apto {
   template <> class ConvertToStr<double>
   {
   private:
-    char m_str[20];
+    char m_str[128];
     
   public:
-    ConvertToStr(double value) { sprintf(m_str, "%f", value); }
+    ConvertToStr(double value) { snprintf(m_str, 128, "%f", value); m_str[127] = '\0'; }
     
     template <class M> inline operator Apto::BasicString<M>() const { return Apto::BasicString<M>(m_str); }
   };

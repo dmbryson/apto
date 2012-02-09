@@ -161,6 +161,16 @@ namespace Apto {
     }  
     
     
+    void RemoveAt(int idx)
+    {
+      assert(idx >= 0);
+      assert(idx < SP::GetSize());
+      
+      for (int i = idx; i < SP::GetSize() - 1; i++) SP::operator[](i) = SP::operator[](i + 1);
+      SP::Resize(SP::GetSize() - 1);
+    }
+    
+    
     void SetAll(const T& value)
     {
       for (int i = 0; i < SP::GetSize(); i++) SP::operator[](i) = value;
