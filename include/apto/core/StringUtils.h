@@ -155,7 +155,7 @@ namespace Apto {
     char m_str[128];
     
   public:
-    ConvertToStr(double value) { snprintf(m_str, 128, "%f", value); m_str[127] = '\0'; }
+    ConvertToStr(double value) { snprintf(m_str, 128, "%g", value); m_str[127] = '\0'; }
     
     template <class M> inline operator Apto::BasicString<M>() const { return Apto::BasicString<M>(m_str); }
   };
