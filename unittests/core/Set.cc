@@ -76,13 +76,26 @@ TEST(CoreHashBTreeSet, Assignment) {
 }
 
 
+template <class K, class V> class Hash23BTree : public Apto::HashBTree<K, V, 23> { ; };
+
+
 TEST(CoreHashBTreeSet, Removal) {
   Apto::Set<int, Apto::DefaultHashBTree> set;
   for (int i = 0; i < 5; i++) set.Insert(i);
   EXPECT_EQ(5, set.GetSize());
   
   set.Remove(4);
-  EXPECT_EQ(4, set.GetSize());  
+  EXPECT_EQ(4, set.GetSize());
+  
+  
+  // Test to check for proper removal of last entry in the tree array
+  // - was crashing when cur_idx == last_idx, but size > 0
+  Apto::Set<int, Hash23BTree> set2;
+  set2.Insert(23);
+  set2.Insert(46);
+  
+  set2.Remove(46);
+  set2.Insert(46);
 }
 
 

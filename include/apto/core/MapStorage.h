@@ -326,7 +326,14 @@ namespace Apto {
               }
               
             }
+          } else {
+            int parent_idx = m_table[hash][last_idx].parent;
+            if (parent_idx >= 0) {
+              if (m_table[hash][parent_idx].left == last_idx) m_table[hash][parent_idx].left = -1;
+              else m_table[hash][parent_idx].right = -1;
+            }
           }
+          
           m_table[hash].Resize(last_idx);
           m_size--;
           return true;
