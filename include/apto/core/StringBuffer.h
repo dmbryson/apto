@@ -72,7 +72,7 @@ namespace Apto {
     
   public:
     inline StringBuffer(const char* str = "")
-      : m_value((str) ? new StringBufferRep(static_cast<int>(strlen(str)), str) : new StringBufferRep) { assert(m_value); }
+      : m_value((str) ? new StringBufferRep(static_cast<int>(strlen(str)), str) : new StringBufferRep(0, "")) { assert(m_value); }
     inline StringBuffer(int size, const char* str) : m_value(new StringBufferRep(size, str)) { assert(m_value); }
     inline explicit StringBuffer(int size) : m_value(new StringBufferRep(size)) { assert(m_value); }
     inline StringBuffer(const StringBuffer& rhs) : m_value(NULL) { this->operator=(rhs); }
@@ -250,7 +250,7 @@ namespace Apto {
         m_data[m_size] = '\0';
       }
       
-      StringBufferRep() { delete [] m_data; }
+      ~StringBufferRep() { delete [] m_data; }
       
       inline int GetSize() const { return m_size; }
       inline const char* GetRep() const { return m_data; }
@@ -294,7 +294,7 @@ namespace Apto {
         }
         
         m_size = new_size;
-        m_data[new_size + 1] = '\0';  // NULL terminate character buffer
+        m_data[new_size] = '\0';  // NULL terminate character buffer
       }
     };
     

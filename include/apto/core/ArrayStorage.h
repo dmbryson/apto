@@ -127,7 +127,7 @@ namespace Apto {
     
     explicit Smart(int size = 0) : m_data(NULL), m_size(0), m_active(0), m_reserve(0) { ResizeClear(size); }
     Smart(const Smart& rhs) : m_data(NULL), m_size(0), m_active(0), m_reserve(0) { this->operator=(rhs); }
-    Smart() { delete [] m_data; }
+    ~Smart() { delete [] m_data; }
     
     int GetSize() const { return m_active; }
     

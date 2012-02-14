@@ -114,6 +114,7 @@ namespace Apto {
     int m_size;
     
     HashBTree() : m_size(0) { ; }
+    ~HashBTree() { ; }
     
     
     inline int GetSize() const { return m_size; }
