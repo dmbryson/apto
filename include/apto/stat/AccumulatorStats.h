@@ -34,6 +34,7 @@
 #include "apto/core/TypeList.h"
 
 #include <cmath>
+#include <cstring>
 #include <limits>
 
 
