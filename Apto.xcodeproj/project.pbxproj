@@ -78,6 +78,7 @@
 		704031F61314259100F2F055 /* Functions.cc in Sources */ = {isa = PBXBuildFile; fileRef = 704031F51314259100F2F055 /* Functions.cc */; };
 		706B1E9712FC9C2C006EAB7F /* RefCount.cc in Sources */ = {isa = PBXBuildFile; fileRef = 706B1E9612FC9C2C006EAB7F /* RefCount.cc */; };
 		7089301B1304F2F200F8C440 /* FileSystem.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7023362012FB5A77000C7BE5 /* FileSystem.cc */; };
+		708B5B1114EE037A000774EA /* Accumulator.cc in Sources */ = {isa = PBXBuildFile; fileRef = 708B5B1014EE037A000774EA /* Accumulator.cc */; };
 		709B2F90131C3B5B0081E874 /* main.cc in Sources */ = {isa = PBXBuildFile; fileRef = 709B2F82131C3A650081E874 /* main.cc */; };
 		709B2F91131C3B740081E874 /* apto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7023364912FC50C1000C7BE5 /* apto.dylib */; };
 		70AB8D7D137C6E4F0030A1AD /* Functor.cc in Sources */ = {isa = PBXBuildFile; fileRef = 70AB8D7C137C6E4F0030A1AD /* Functor.cc */; };
@@ -306,6 +307,10 @@
 		703548DF132FE6A800D3865C /* StringUtils.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StringUtils.cc; sourceTree = "<group>"; };
 		704031F51314259100F2F055 /* Functions.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Functions.cc; sourceTree = "<group>"; };
 		706B1E9612FC9C2C006EAB7F /* RefCount.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RefCount.cc; sourceTree = "<group>"; };
+		708B5B1014EE037A000774EA /* Accumulator.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Accumulator.cc; sourceTree = "<group>"; };
+		708DA42D14ED50AC00A38B44 /* Accumulator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Accumulator.h; sourceTree = "<group>"; };
+		708DA42F14ED6BC400A38B44 /* AccumulatorStats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccumulatorStats.h; sourceTree = "<group>"; };
+		708DA43014ED82F000A38B44 /* HierarchyGeneration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HierarchyGeneration.h; sourceTree = "<group>"; };
 		709B2F82131C3A650081E874 /* main.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cc; sourceTree = "<group>"; };
 		709B2F87131C3B470081E874 /* fexact */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = fexact; sourceTree = BUILT_PRODUCTS_DIR; };
 		70AB8D76137C23330030A1AD /* TypeList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TypeList.h; sourceTree = "<group>"; };
@@ -575,6 +580,7 @@
 				70E3711B136CA79000F35D1D /* Definitions.h */,
 				70354896132FC63500D3865C /* FileSystem.h */,
 				70AB8D7A137C3D6E0030A1AD /* Functor.h */,
+				708DA43014ED82F000A38B44 /* HierarchyGeneration.h */,
 				70354897132FC63500D3865C /* List.h */,
 				70354898132FC63500D3865C /* ListStorage.h */,
 				70354899132FC63500D3865C /* Map.h */,
@@ -613,6 +619,8 @@
 		703548AD132FC63500D3865C /* stat */ = {
 			isa = PBXGroup;
 			children = (
+				708DA42D14ED50AC00A38B44 /* Accumulator.h */,
+				708DA42F14ED6BC400A38B44 /* AccumulatorStats.h */,
 				703548AE132FC63500D3865C /* ContingencyTable.h */,
 				703548AF132FC63500D3865C /* Functions.h */,
 			);
@@ -648,6 +656,7 @@
 		70EE0DB5130B17B100D6C016 /* stat */ = {
 			isa = PBXGroup;
 			children = (
+				708B5B1014EE037A000774EA /* Accumulator.cc */,
 				70EE0DB6130B17B100D6C016 /* ContingencyTable.cc */,
 				704031F51314259100F2F055 /* Functions.cc */,
 			);
@@ -863,6 +872,7 @@
 				704031F61314259100F2F055 /* Functions.cc in Sources */,
 				703548E0132FE6A800D3865C /* StringUtils.cc in Sources */,
 				70AB8D7D137C6E4F0030A1AD /* Functor.cc in Sources */,
+				708B5B1114EE037A000774EA /* Accumulator.cc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

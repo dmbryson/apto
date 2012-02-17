@@ -54,6 +54,97 @@ namespace Apto {
   class NullType { ; };
   class EmptyType { ; };
   
+
+  // IsSameType
+  // --------------------------------------------------------------------------------------------------------------
+  
+  template <typename T, typename U> struct IsSameType { enum { Result = false }; };
+  template <typename T> struct IsSameType<T, T> { enum { Result = true }; };
+  
+    
+  // TypeConversion
+  // --------------------------------------------------------------------------------------------------------------
+  
+  // Inspired by The Loki Library Conversion - Copyright 2001 by Andrei Alexandrescu
+
+  namespace Internal {
+    template <typename T, typename U> struct TypeConversionHelper
+    {
+      typedef char Small;
+      struct Big { char foo[2]; };
+      static Big Test(...);
+      static Small Test(U);
+      static T MakeT();
+    };
+  };
+  
+  template <typename T, typename U> struct TypeConversion
+  {
+    typedef Internal::TypeConversionHelper<T, U> Helper;
+    enum { Exists = sizeof(typename Helper::Small) == sizeof((Helper::Test(Helper::MakeT()))) };
+    enum { ExistsTwoWay = Exists && TypeConversion<U, T>::Exists };
+    enum { SameType = false };
+  };
+  
+  template <typename T> struct TypeConversion<T, T> { enum { Exists = true, ExistsTwoWay = true, SameType = true }; };
+  template <typename T> struct TypeConversion<void, T> { enum { Exists = false, ExistsTwoWay = false, SameType = false }; };
+  template <typename T> struct TypeConversion<T, void> { enum { Exists = false, ExistsTwoWay = false, SameType = false }; };
+  template <> struct TypeConversion<void, void> { enum { Exists = true, ExistsTwoWay = true, SameType = true }; };
+  
+
+  // IsSubclassOf
+  // --------------------------------------------------------------------------------------------------------------
+  
+  template <typename T, typename U> struct IsSubclassOf
+  {
+    enum { Result = (TypeConversion<const volatile U*, const volatile T*>::Exists &&
+                     !TypeConversion<const volatile T*, const volatile void*>::SameType) };
+    enum { disallowIncompleteTypes = (sizeof(T) == sizeof(U)) };
+  };
+  
+  template <> struct IsSubclassOf<void, void> { enum { Result = false }; };
+  
+  template <typename U> struct IsSubclassOf<void, U>
+  {
+    enum { Result = (TypeConversion<const volatile U*, const volatile void*>::Exists &&
+                     !TypeConversion<const volatile void*, const volatile void*>::SameType) };
+    enum { disallowIncompleteTypes = (0 == sizeof(U)) };
+  };
+  
+  template <typename T> struct IsSubclassOf<T, void>
+  {
+    enum { Result = (TypeConversion<const volatile void*, const volatile T*>::Exists &&
+                     !TypeConversion<const volatile T*, const volatile void*>::SameType) };
+    enum { disallowIncompleteTypes = (sizeof(T) == 0) };
+  };
+  
+  // IsStrictSubclassOf
+  // --------------------------------------------------------------------------------------------------------------
+  
+  template <typename T, typename U> struct IsStrictSubclassOf
+  {
+    enum { Result = (TypeConversion<const volatile U*, const volatile T*>::Exists &&
+                     !TypeConversion<const volatile T*, const volatile void*>::SameType &&
+                     !TypeConversion<const volatile T*, const volatile U*>::SameType) };
+    enum { disallowIncompleteTypes = (sizeof(T) == sizeof(U)) };
+  };
+  
+  template <> struct IsStrictSubclassOf<void, void> { enum { Result = false }; };
+  
+  template <typename U> struct IsStrictSubclassOf<void, U>
+  {
+    enum { Result = (TypeConversion<const volatile U*, const volatile void*>::Exists &&
+                     !TypeConversion<const volatile void*, const volatile void*>::SameType &&
+                     !TypeConversion<const volatile void*, const volatile U*>::SameType) };
+    enum { disallowIncompleteTypes = (0 == sizeof(U)) };
+  };
+  
+  template <typename T> struct IsStrictSubclassOf<T, void>
+  {
+    enum { Result = (TypeConversion<const volatile void*, const volatile T*>::Exists &&
+                     !TypeConversion<const volatile T*, const volatile void*>::SameType) };
+    enum { disallowIncompleteTypes = (sizeof(T) == 0) };
+  };
 };
 
 #endif

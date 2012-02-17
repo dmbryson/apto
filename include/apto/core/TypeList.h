@@ -83,6 +83,7 @@ namespace Apto {
     // TL::Length
     // --------------------------------------------------------------------------------------------------------------
     
+    
     template <class TList> struct Length;
     template <> struct Length<NullType>
     {
@@ -96,6 +97,7 @@ namespace Apto {
 
     // TL::TypeAt
     // --------------------------------------------------------------------------------------------------------------
+    
     template <class TList, unsigned int idx> struct TypeAt;
     template <class Current, class Next>
     struct TypeAt<TypeList<Current, Next>, 0>
@@ -133,6 +135,7 @@ namespace Apto {
     
     // TL::TypeAtNonStrict
     // --------------------------------------------------------------------------------------------------------------
+    
     template <class TList, unsigned int idx, typename Default = NullType> struct TypeAtNonStrict
     {
       typedef Default Result;
@@ -173,6 +176,7 @@ namespace Apto {
     
     // TL::IndexOf
     // --------------------------------------------------------------------------------------------------------------
+    
     template <class TList, class T> struct IndexOf;
     template <class T> struct IndexOf<NullType, T>
     {
@@ -213,6 +217,7 @@ namespace Apto {
 
     // TL::Remove
     // --------------------------------------------------------------------------------------------------------------
+    
     template <class TList, class T> struct Remove;
     template <class T> struct Remove<NullType, T>
     {
@@ -249,6 +254,63 @@ namespace Apto {
       >::Result Result;
     };
     
+    
+    // TL::Unique
+    // --------------------------------------------------------------------------------------------------------------
+    
+    template <class TList> struct Unique;
+    template <> struct Unique<NullType> { typedef NullType Result; };
+    template <class Head, class Tail> struct Unique<TypeList<Head, Tail> >
+    {
+    private:
+      typedef typename Unique<Tail>::Result L1;
+      typedef typename Remove<L1, Head>::Result L2;
+    public:
+      typedef TypeList<Head, L2> Result;
+    };
+    
+    
+    // TL::Replace
+    // --------------------------------------------------------------------------------------------------------------
+    
+    template <class TList, class T, class U> struct Replace;
+    template <class T, class U> struct Replace<NullType, T, U> { typedef NullType Result; };
+    template <class T, class Tail, class U> struct Replace<TypeList<T, Tail>, T, U> { typedef TypeList<U, Tail> Result; };
+    template <class Head, class Tail, class T, class U> struct Replace<TypeList<Head, Tail>, T, U>
+    {
+      typedef TypeList<Head, typename Replace<Tail, T, U>::Result> Result;
+    };
+
+    
+    // TL::MostDerived
+    // --------------------------------------------------------------------------------------------------------------
+
+    template <class TList, class T> struct MostDerived;
+    template <class T> struct MostDerived<NullType, T> { typedef T Result; };
+    template <class Head, class Tail, class T> struct MostDerived<TypeList<Head, Tail>, T>
+    {
+    private:
+      typedef typename MostDerived<Tail, T>::Result Candidate;
+    public:
+      typedef typename TypeSelect<IsSubclassOf<Candidate, Head>::Result, Head, Candidate>::Result Result;
+    };
+    
+    
+    // TL::SortDerived
+    // --------------------------------------------------------------------------------------------------------------
+    
+    template <class TList> struct SortDerived;
+    template <> struct SortDerived<NullType> { typedef NullType Result; };
+    template <class Head, class Tail> struct SortDerived<TypeList<Head, Tail> >
+    {
+    private:
+      typedef typename MostDerived<Tail, Head>::Result TheMostDerived;
+      typedef typename Replace<Tail, TheMostDerived, Head>::Result Temp;
+      typedef typename SortDerived<Temp>::Result RestOfList;
+    public:
+      typedef TypeList<TheMostDerived, RestOfList> Result;
+    };
+
   };
 };
 

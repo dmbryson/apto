@@ -32,6 +32,7 @@ LIST(APPEND APTO_CORE_SOURCES ${PLATFORM_SOURCES})
 
 SET(STAT_DIR ${PROJECT_SOURCE_DIR}/unittests/stat)
 SET(STAT_SOURCES
+  ${STAT_DIR}/Accumulator.cc
   ${STAT_DIR}/ContingencyTable.cc
   ${STAT_DIR}/Functions.cc
 )
