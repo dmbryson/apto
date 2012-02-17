@@ -89,3 +89,59 @@ TEST(StatAccumulator, Mean) {
   EXPECT_EQ(4, ac.Mean());
 }
 
+
+TEST(StatAccumulator, Min) {
+  Apto::Stat::Accumulator<int> ac;
+  
+  ac.Add(1);
+  EXPECT_EQ(1, ac.Min());
+  
+  ac.Add(2);
+  EXPECT_EQ(1, ac.Min());
+  
+  ac.Add(-1);
+  EXPECT_EQ(-1, ac.Min());
+}
+
+
+TEST(StatAccumulator, Max) {
+  Apto::Stat::Accumulator<int> ac;
+  
+  ac.Add(1);
+  EXPECT_EQ(1, ac.Max());
+  
+  ac.Add(2);
+  EXPECT_EQ(2, ac.Max());
+  
+  ac.Add(-1);
+  EXPECT_EQ(2, ac.Max());
+}
+
+
+TEST(StatAccumulator, Variance) {
+  Apto::Stat::Accumulator<int> ac;
+  
+  ac.Add(1);
+  ac.Add(2);
+  ac.Add(3);
+  ac.Add(4);
+  ac.Add(5);
+  ac.Add(6);
+  EXPECT_LT(2.91666666, ac.Variance());
+  EXPECT_GT(2.91666667, ac.Variance());
+}
+
+
+TEST(StatAccumulator, StdError) {
+  Apto::Stat::Accumulator<int> ac;
+  
+  ac.Add(1);
+  ac.Add(2);
+  ac.Add(3);
+  ac.Add(4);
+  ac.Add(5);
+  ac.Add(6);
+  EXPECT_LT(0.76376261, ac.StdError());
+  EXPECT_GT(0.76376262, ac.StdError());
+}
+

@@ -33,6 +33,7 @@
 
 #include "apto/core/TypeList.h"
 
+#include <cstdio>
 #include <cmath>
 #include <limits>
 
@@ -41,28 +42,46 @@ namespace Apto {
   namespace Stat {
     namespace AccumulatorStats {
 
+      // Stats Available
+      // --------------------------------------------------------------------------------------------------------------
+      
+      class Count { ; };
+      class Max { ; };
+      class Mean { ; };
+      class Min { ; };
+      template <int N> class Moment { enum { Value = N }; };
+      class StdError { ; };
+      class Sum { ; };
+      class Variance { ; };
+
+      
+      // DependsOn - AccumulatorStats variant of LinearHierarchy. Passes AccumulatorTypes and defines SubClass
+      // --------------------------------------------------------------------------------------------------------------
+      
+      namespace Internal { template <class AccTypes> class StatImplRoot; };
       
       template <class AccTypes, class TList, template <class _AccTypes, class StatType, class Base> class Unit,
-                class Root = EmptyType>
+                class Root = Internal::StatImplRoot<AccTypes> >
       class DependsOn;
       
       template <class AccTypes, class T1, class T2, template <class, class, class> class Unit, class Root>
       class DependsOn<AccTypes, TypeList<T1, T2>, Unit, Root>
-        : public TypeSelect<IsSubclassOf<T1, DependsOn<AccTypes, T2, Unit, Root> >::Result,
-                            DependsOn<AccTypes, T2, Unit, Root>,
-                            Unit<AccTypes, T1, DependsOn<AccTypes, T2, Unit, Root> > >::Result
+      : public TypeSelect<TL::IndexOf<typename DependsOn<AccTypes, T2, Unit, Root>::SubClass::Features, T1>::Value == -1,
+                          Unit<AccTypes, T1, typename DependsOn<AccTypes, T2, Unit, Root>::SubClass>,
+                          typename DependsOn<AccTypes, T2, Unit, Root>::SubClass>::Result
       {
       public:
-        typedef typename TypeSelect<IsSubclassOf<T1, DependsOn<AccTypes, T2, Unit, Root> >::Result,
-                                    typename DependsOn<AccTypes, T2, Unit, Root>::SubClass,
-                                    Unit<AccTypes, T1, DependsOn<AccTypes, T2, Unit, Root> > >::Result SubClass;
+        typedef typename TypeSelect<TL::IndexOf<typename DependsOn<AccTypes, T2, Unit, Root>::SubClass::Features, T1>::Value == -1,
+                                    Unit<AccTypes, T1, typename DependsOn<AccTypes, T2, Unit, Root>::SubClass>,
+                                    typename DependsOn<AccTypes, T2, Unit, Root>::SubClass>::Result SubClass;
       };
-            
+
       template <class AccTypes, class T, template <class, class, class> class Unit, class Root>
-      class DependsOn<AccTypes, TypeList<T, NullType>, Unit, Root> : public Unit<AccTypes, T, Root>
+      class DependsOn<AccTypes, TypeList<T, NullType>, Unit, Root>
+      : public TypeSelect<TL::IndexOf<typename Root::Features, T>::Value == -1, Unit<AccTypes, T, Root>, Root >::Result
       {
-      protected:
-        typedef Unit<AccTypes, T, Root> SubClass;
+      public:
+        typedef typename TypeSelect<TL::IndexOf<typename Root::Features, T>::Value == -1, Unit<AccTypes, T, Root>, Root >::Result SubClass;
       };
       
       template <class AccTypes, template <class, class, class> class Unit, class Root>
@@ -74,76 +93,252 @@ namespace Apto {
       
       
       
-      class Count { ; };
-      class Sum { ; };
-      class Mean { ; };
+      // Internal
+      // --------------------------------------------------------------------------------------------------------------
       
+      namespace Internal {
       
-      template <class AccTypes, class F, class Base>
-      class StatImpl : public Base
-      {
-      protected:
-        typedef Base SubClass;
-        typedef typename AccTypes::ValueType ValueType;
+        template <class AccTypes>
+        class StatImplRoot
+        {
+        public:
+          typedef TypeList<NullType, NullType> Features;
+          typedef typename AccTypes::ValueType ValueType;
+          
+        protected:
+          inline void clear() { ; }
+          inline void addValue(ValueType value) { (void)value; }
+          
+        public:
+          inline void Moment() { ; }
+        };
+
+
+        // StatImpl - base class for AccumulatorStats implementations
+        // --------------------------------------------------------------------------------------------------------------
         
-        inline void clear() { ; }
-        inline void addValue(ValueType value) { (void)value; }
-      };
+        template <class AccTypes, class F, class Base> class StatImpl;
+        
+        
+        // StatImpl<Count>
+        // --------------------------------------------------------------------------------------------------------------
+        
+        template <class AccTypes, class Base> class StatImpl<AccTypes, Count, Base>
+          : public Base
+        {
+        private:
+          std::size_t m_n;
+          
+        public:
+          typedef Base SubClass;
+          typedef TypeList<Count, typename SubClass::Features> Features;
+          typedef typename AccTypes::ValueType ValueType;
+          
+        protected:
+          inline void clear() { SubClass::clear(); m_n = 0; }
+          inline void addValue(ValueType value) { SubClass::addValue(value); m_n++; }
+          
+        public:
+          std::size_t Count() const { return m_n; }
+        };
+        
+        
+        // StatImpl<Max>
+        // --------------------------------------------------------------------------------------------------------------
+        
+        template <class AccTypes, class Base> class StatImpl<AccTypes, Max, Base>
+          : public Base
+        {
+        public:
+          typedef Base SubClass;
+          typedef TypeList<Max, typename SubClass::Features> Features;
+          typedef typename AccTypes::ValueType ValueType;
+          
+        private:
+          ValueType m_max;
+          
+        protected:
+          inline void clear() { SubClass::clear(); m_max = std::numeric_limits<ValueType>::min(); }
+          inline void addValue(ValueType value) { SubClass::addValue(value); if (value > m_max) m_max = value; }
+          
+        public:
+          inline const ValueType& Max() const { return m_max; }
+        };
+        
+        
+        // StatImpl<Min>
+        // --------------------------------------------------------------------------------------------------------------
+        
+        template <class AccTypes, class Base> class StatImpl<AccTypes, Min, Base>
+          : public Base
+        {
+        public:
+          typedef Base SubClass;
+          typedef TypeList<Min, typename SubClass::Features> Features;
+          typedef typename AccTypes::ValueType ValueType;
+          
+        private:
+          ValueType m_min;
+          
+        protected:
+          inline void clear() { SubClass::clear(); m_min = std::numeric_limits<ValueType>::max(); }
+          inline void addValue(ValueType value) { SubClass::addValue(value); if (value < m_min) m_min = value; }
+          
+        public:
+          inline const ValueType& Min() const { return m_min; }
+        };
+        
+        
+        // StatImpl<Moment<N> >
+        // --------------------------------------------------------------------------------------------------------------
+        
+        template <class AccTypes, typename Base, int N> class StatImpl<AccTypes, Moment<N>, Base>
+          : public DependsOn<AccTypes,
+                             typename TL::SortDerived<TL::Create<Count>::Type>::Result,
+                             ::Apto::Stat::AccumulatorStats::Internal::StatImpl, Base>::SubClass
+        {
+        public:
+          typedef typename DependsOn<AccTypes,
+                                     typename TL::SortDerived<TL::Create<Count>::Type>::Result,
+                                     ::Apto::Stat::AccumulatorStats::Internal::StatImpl, Base>::SubClass SubClass;
+          typedef TypeList<Moment<N>, typename SubClass::Features> Features;
+          typedef typename AccTypes::ValueType ValueType;
+          typedef typename AccTypes::FloatType FloatType;
+          
+        private:
+          ValueType m_s;
+          
+          template <typename T> const T& pow(const T& x, Type::Int<1>) { return x; }
+          template <typename T, int E> T pow(const T& x, Type::Int<E>)
+          {
+            T y = pow(x, Type::Int<E / 2>());
+            T z = y * y;
+            return (E % 2) ? (z * x) : z;
+          }
+          
+        protected:
+          inline void clear() { SubClass::clear(); m_s = 0; }
+          inline void addValue(ValueType value) { SubClass::addValue(value); m_s += pow(value, Type::Int<N>()); }
+          
+        public:
+          using SubClass::Moment;
+          inline FloatType Moment(Type::Int<N>) const { return static_cast<FloatType>(m_s) / this->Count(); }
+        };
+        
+        
+        // StatImpl<Sum>
+        // --------------------------------------------------------------------------------------------------------------
+        
+        template <class AccTypes, typename Base> class StatImpl<AccTypes, Sum, Base>
+          : public Base
+        {
+        public:
+          typedef Base SubClass;
+          typedef TypeList<Sum, typename SubClass::Features> Features;
+          typedef typename AccTypes::ValueType ValueType;
+          
+        private:
+          ValueType m_s;
+          
+        protected:
+          inline void clear() { SubClass::clear(); m_s = 0; }
+          inline void addValue(ValueType value) { SubClass::addValue(value); m_s += value; }
+          
+        public:
+          inline const ValueType& Sum() const { return m_s; }
+        };
+        
+        
+       
+        // StatImpl<Mean>
+        // --------------------------------------------------------------------------------------------------------------
+        
+        template <class AccTypes, typename Base> class StatImpl<AccTypes, Mean, Base>
+          : public DependsOn<AccTypes,
+                             typename TL::SortDerived<TL::Create<Count, Sum>::Type>::Result,
+                             ::Apto::Stat::AccumulatorStats::Internal::StatImpl, Base>::SubClass
+        {
+        public:
+          typedef typename DependsOn<AccTypes,
+                                     typename TL::SortDerived<TL::Create<Count, Sum>::Type>::Result,
+                                     ::Apto::Stat::AccumulatorStats::Internal::StatImpl, Base>::SubClass SubClass;
+          typedef TypeList<Mean, typename SubClass::Features> Features;
+          typedef typename AccTypes::ValueType ValueType;
+          typedef typename AccTypes::FloatType FloatType;
+          
+        protected:
+          inline void clear() { SubClass::clear(); }
+          inline void addValue(ValueType value) { SubClass::addValue(value); }
+          
+        public:
+          inline FloatType Mean()
+          {
+            return (this->Count() > 0) ? (static_cast<FloatType>(this->Sum()) / this->Count()) :
+                                                                std::numeric_limits<FloatType>::quiet_NaN();
+          }
+        };
+
       
-      
-      template <class AccTypes, class Base> class StatImpl<AccTypes, Count, Base> : public Base
-      {
-      private:
-        std::size_t m_n;
+        // StatImpl<Variance>
+        // --------------------------------------------------------------------------------------------------------------
+        // 
+        //  Lazy calculation of sample variance based on the second moment, mean
+        //
         
-      protected:
-        typedef Base SubClass;
-        typedef typename AccTypes::ValueType ValueType;
+        template <class AccTypes, typename Base> class StatImpl<AccTypes, Variance, Base>
+          : public DependsOn<AccTypes,
+                             typename TL::SortDerived<TL::Create<Moment<2>, Mean>::Type>::Result,
+        ::Apto::Stat::AccumulatorStats::Internal::StatImpl, Base>::SubClass
+        {
+        public:
+          typedef typename DependsOn<AccTypes,
+                                     typename TL::SortDerived<TL::Create<Moment<2>, Mean>::Type>::Result,
+                                     ::Apto::Stat::AccumulatorStats::Internal::StatImpl, Base>::SubClass SubClass;
+          typedef TypeList<Variance, typename SubClass::Features> Features;
+          typedef typename AccTypes::ValueType ValueType;
+          typedef typename AccTypes::FloatType FloatType;
+          
+        protected:
+          inline void clear() { SubClass::clear(); }
+          inline void addValue(ValueType value) { SubClass::addValue(value); }
+          
+        public:
+          inline FloatType Variance()
+          {
+            FloatType mean = this->Mean();
+            return this->Moment(Type::Int<2>()) - (mean * mean);
+          }
+        };
         
-        inline void clear() { SubClass::clear(); m_n = 0; }
-        inline void addValue(ValueType value) { SubClass::addValue(value); m_n++; }
         
-      public:
-        std::size_t Count() const { return m_n; }
-      };
-      
-      
-      template <class AccTypes, typename Base> class StatImpl<AccTypes, Sum, Base> : public Base
-      {
-      protected:
-        typedef Base SubClass;
-        typedef typename Base::ValueType ValueType;
+        // StatImpl<StdError>
+        // --------------------------------------------------------------------------------------------------------------
         
-      private:
-        ValueType m_s;
+        template <class AccTypes, typename Base> class StatImpl<AccTypes, StdError, Base>
+          : public DependsOn<AccTypes,
+                             typename TL::Create<Variance>::Type,
+        ::Apto::Stat::AccumulatorStats::Internal::StatImpl, Base>::SubClass
+        {
+        public:
+          typedef typename DependsOn<AccTypes,
+                                     typename TL::Create<Variance>::Type,
+                                     ::Apto::Stat::AccumulatorStats::Internal::StatImpl, Base>::SubClass SubClass;
+          typedef TypeList<StdError, typename SubClass::Features> Features;
+          typedef typename AccTypes::ValueType ValueType;
+          typedef typename AccTypes::FloatType FloatType;
+          
+        protected:
+          inline void clear() { SubClass::clear(); }
+          inline void addValue(ValueType value) { SubClass::addValue(value); }
+          
+        public:
+          inline FloatType StdError() { return sqrt(this->Variance() / (this->Count() - 1)); }
+        };
         
-      protected:
-        inline void clear() { SubClass::clear(); m_s = 0; }
-        inline void addValue(ValueType value) { SubClass::addValue(value); m_s += value; }
-        
-      public:
-        ValueType Sum() const { return m_s; }
-      };
-      
-      
-      template <class AccTypes, typename Base> class StatImpl<AccTypes, Mean, Base>
-        : public DependsOn<AccTypes, typename TL::Create<Count, Sum, Base>::Type, Apto::Stat::AccumulatorStats::StatImpl>
-      {
-      protected:
-        typedef typename DependsOn<AccTypes,
-                                   typename TL::Create<Count, Sum, Base>::Type,
-                                   Apto::Stat::AccumulatorStats::StatImpl>::SubClass SubClass;
-        typedef typename AccTypes::ValueType ValueType;
-        typedef typename AccTypes::FloatType FloatType;
-        
-        inline void clear() { SubClass::clear(); }
-        inline void addValue(ValueType value) { SubClass::addValue(value); }
-        
-      public:
-        inline FloatType Mean() { return (this->Count() > 0) ? (static_cast<FloatType>(this->Sum()) / this->Count()) :
-                                                              std::numeric_limits<FloatType>::quiet_NaN(); }
       };
     };
+    
+    
   };
 };
 

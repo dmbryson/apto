@@ -47,7 +47,15 @@ namespace Apto {
   {
     typedef T BaseType;
   };
+
   
+  // Type : Integral Constants as Types
+  // --------------------------------------------------------------------------------------------------------------
+  
+  namespace Type {  
+    template <int N> struct Int { enum { Value = N }; };
+  };
+
 
   // Placeholder Types
   // --------------------------------------------------------------------------------------------------------------

@@ -36,19 +36,29 @@
 namespace Apto {
   namespace Stat {
     
+    // AccumulatorTypes - helper struct for passing type parameters used by AccumulatorStats
+    // --------------------------------------------------------------------------------------------------------------
+    
     template <typename T, typename D> struct AccumulatorTypes
     {
       typedef T ValueType;
       typedef D FloatType;
     };
     
-    typedef TL::Create<AccumulatorStats::Mean>::Type DefaultAccumulatorStats;
+    typedef TL::Create<AccumulatorStats::Count, AccumulatorStats::Min, AccumulatorStats::Max, AccumulatorStats::Mean,
+                       AccumulatorStats::Variance, AccumulatorStats::StdError>::Type DefaultAccumulatorStats;
+    
+
+    // Accumulator
+    // --------------------------------------------------------------------------------------------------------------
     
     template <typename T, typename TList = DefaultAccumulatorStats, typename D = double> class Accumulator
-      : public AccumulatorStats::DependsOn<AccumulatorTypes<T, D>, TList, AccumulatorStats::StatImpl>
+      : public AccumulatorStats::DependsOn<AccumulatorTypes<T, D>, typename TL::SortDerived<TList>::Result, AccumulatorStats::Internal::StatImpl>
     {
     protected:
-      typedef typename AccumulatorStats::DependsOn<AccumulatorTypes<T, D>, TList, AccumulatorStats::StatImpl>::SubClass SubClass;
+      typedef typename AccumulatorStats::DependsOn<AccumulatorTypes<T, D>,
+                                                   TList,
+                                                   AccumulatorStats::Internal::StatImpl>::SubClass SubClass;
       
     public:
       inline Accumulator() { Clear(); }
