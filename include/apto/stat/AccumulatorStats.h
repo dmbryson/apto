@@ -35,6 +35,7 @@
 
 #include <cstdio>
 #include <cmath>
+#include <cstring>
 #include <limits>
 
 
