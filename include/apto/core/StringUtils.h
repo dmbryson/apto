@@ -144,8 +144,12 @@ namespace Apto {
     char m_str[64];
     
   public:
+#if APTO_PLATFORM(WINDOWS)
+    ConvertToStr(int value) { _snprintf_s(m_str, 64, 63, "%d", value); }
+#else
     ConvertToStr(int value) { snprintf(m_str, 64, "%d", value); m_str[63] = '\0'; }
-    
+#endif
+
     template <class M> inline operator Apto::BasicString<M>() const { return Apto::BasicString<M>(m_str); }
   };
   
@@ -155,8 +159,12 @@ namespace Apto {
     char m_str[128];
     
   public:
+#if APTO_PLATFORM(WINDOWS)
+    ConvertToStr(double value) { _snprintf_s(m_str, 128, 127, "%g", value); }
+#else
     ConvertToStr(double value) { snprintf(m_str, 128, "%g", value); m_str[127] = '\0'; }
-    
+#endif
+
     template <class M> inline operator Apto::BasicString<M>() const { return Apto::BasicString<M>(m_str); }
   };
   
@@ -213,7 +221,11 @@ namespace Apto {
       m_buffer = new char[len];
       
       // Format string into newly allocated buffer
-      if (vsnprintf(m_buffer, len, format, args) < 0) {
+#if APTO_PLATFORM(WINDOWS)
+      if (_vsnprintf_s(m_buffer, len, len - 1, format, args) < 0) {
+#else
+      if (vsnprintf(m_buffer, len - 1, format, args) < 0) {
+#endif
         // set buffer to empty string if formatting fails
         m_buffer[0] = '\0';          
       }

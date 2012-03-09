@@ -105,7 +105,10 @@
  * First version.
  *****************************************************************************/
 
-  
+#ifdef __cplusplus
+extern "C" {
+#endif
+
   /*****************************************************************************
    * Open directory stream DIRNAME for read and return a pointer to the
    * internal working area that is used to retrieve individual directory

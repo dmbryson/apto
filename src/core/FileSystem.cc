@@ -67,8 +67,12 @@ namespace Apto {
     {
       String cwd_str;
       
-      char* dirbuf = new char[MAXIMUM_DIRECTORY_LENGTH];    
+      char* dirbuf = new char[MAXIMUM_DIRECTORY_LENGTH];
+#if APTO_PLATFORM(WINDOWS)
+      char* cwd = _getcwd(dirbuf, MAXIMUM_DIRECTORY_LENGTH);
+#else
       char* cwd = getcwd(dirbuf, MAXIMUM_DIRECTORY_LENGTH);
+#endif
       if (cwd != NULL) cwd_str = cwd;
       delete [] dirbuf;
       
@@ -140,8 +144,14 @@ namespace Apto {
     
     bool MkDir(const String& dirname)
     {
-      FILE* fp = fopen(dirname, "r");
+      FILE* fp = 0;
+
+#if APTO_PLATFORM(WINDOWS)
+      if (fopen_s(&fp, dirname, "r") == 0) {
+#else
+      fp = fopen(dirname, "r");
       if (fp == 0) {
+#endif
         if (errno == ENOENT) {
           // not found, creating...
           if (mkdir(dirname, (S_IRWXU | S_IRWXG | S_IRWXO))) return false;
@@ -188,7 +198,11 @@ namespace Apto {
       }
       
       // Attempt to remove the directory itself
+#if APTO_PLATFORM(WINDOWS)
+      return (_rmdir(dirname) == 0);
+#else
       return (rmdir(dirname) == 0);
+#endif
     }
     
     
