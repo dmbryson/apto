@@ -224,7 +224,7 @@ namespace Apto {
 #if APTO_PLATFORM(WINDOWS)
       if (_vsnprintf_s(m_buffer, len, len - 1, format, args) < 0) {
 #else
-      if (vsnprintf(m_buffer, len - 1, format, args) < 0) {
+      if (vsnprintf(m_buffer, len, format, args) < 0) {
 #endif
         // set buffer to empty string if formatting fails
         m_buffer[0] = '\0';          
