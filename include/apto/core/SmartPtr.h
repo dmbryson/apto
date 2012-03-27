@@ -38,6 +38,8 @@
 #include "apto/core/StaticCheck.h"
 #include "apto/core/TypeUtil.h"
 
+#include "apto/platform/Visibility.h"
+
 #include <cassert>
 #include <functional>
 #include <string>
@@ -450,7 +452,7 @@ namespace Apto {
   private:
     struct Tester
     {
-      void Placeholder() { ; }
+      LIB_EXPORT void Placeholder() { ; }
     };
     
     typedef void (Tester::*PlaceholderBooleanType)();

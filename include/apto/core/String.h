@@ -59,17 +59,17 @@ namespace Apto {
   protected:
     StringRepPtr m_value;
     
-    BasicString(StringRepPtr rep) : m_value(rep) { ; }
+    inline BasicString(StringRepPtr rep) : m_value(rep) { ; }
     
   public:
     // Construction
-    BasicString(const char* str = "")
+    inline BasicString(const char* str = "")
       : m_value((str) ? new StringRep(static_cast<int>(strlen(str)), str) : new StringRep(0)) { assert(m_value); }
-    BasicString(int size, const char* str) : m_value(new StringRep(size, str)) { assert(m_value); }
-    BasicString(const BasicString& rhs) : m_value(rhs.m_value) { ; }
-    template <class T1> BasicString(const BasicString<T1>& rhs) : m_value(new StringRep(rhs.GetSize(), rhs.GetData())) { ; }
+    inline BasicString(int size, const char* str) : m_value(new StringRep(size, str)) { assert(m_value); }
+    inline BasicString(const BasicString& rhs) : m_value(rhs.m_value) { ; }
+    template <class T1> inline BasicString(const BasicString<T1>& rhs) : m_value(new StringRep(rhs.GetSize(), rhs.GetData())) { ; }
     
-    ~BasicString() { ; }
+    inline ~BasicString() { ; }
     
     
     // Property Access
@@ -245,7 +245,7 @@ namespace Apto {
         m_data[m_size] = '\0';
       }
       
-      ~StringRep() { delete [] m_data; }
+      inline ~StringRep() { delete [] m_data; }
       
       inline int GetSize() const { return m_size; }
       inline const char* GetRep() const { return m_data; }
