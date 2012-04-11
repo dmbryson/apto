@@ -63,8 +63,8 @@ namespace Apto {
     
   public:
     // Construction
-    inline BasicString(const char* str = "")
-      : m_value((str) ? new StringRep(static_cast<int>(strlen(str)), str) : new StringRep(0)) { assert(m_value); }
+    inline BasicString() { ; }
+    inline BasicString(const char* str) : m_value((str != NULL) ? new StringRep(static_cast<int>(strlen(str)), str) : NULL) { assert(str == NULL || m_value); }
     inline BasicString(int size, const char* str) : m_value(new StringRep(size, str)) { assert(m_value); }
     inline BasicString(const BasicString& rhs) : m_value(rhs.m_value) { ; }
     template <class T1> inline BasicString(const BasicString<T1>& rhs) : m_value(new StringRep(rhs.GetSize(), rhs.GetData())) { ; }
@@ -73,10 +73,10 @@ namespace Apto {
     
     
     // Property Access
-    inline int GetSize() const { return m_value->GetSize(); }
-    inline const char* GetData() const { return m_value->GetRep(); }
-    inline const char* GetCString() const { return m_value->GetRep(); }
-    inline operator const char*() const { return m_value->GetRep(); }
+    inline int GetSize() const { return (m_value) ? m_value->GetSize() : 0; }
+    inline const char* GetData() const { return (m_value) ? m_value->GetRep() : ""; }
+    inline const char* GetCString() const { return GetData(); }
+    inline operator const char*() const { return GetData(); }
 
     
     // Assignment

@@ -110,7 +110,7 @@ namespace Apto {
       int parent;
     };
     
-    Array<Entry, Smart> m_table[HashFactor];
+    Array<Entry, ManagedPointer> m_table[HashFactor];
     int m_size;
     
     HashBTree() : m_size(0) { ; }
@@ -486,6 +486,290 @@ namespace Apto {
   };
   
   template <class K, class V> class DefaultHashBTree : public HashBTree<K, V, 23> { ; };
+      
+      
+      
+  template <class K, class V, int HashFactor, template <class, int> class HashFunctor = HashKey>
+  class HashStaticTableLinkedList
+  {
+  protected:
+    typedef HashFunctor<K, HashFactor> HF;
+
+    
+  protected:
+    class Iterator;
+    class ConstIterator;
+    class KeyIterator;
+    class ValueIterator;
+    
+  public:
+    static const bool Sorted = false;
+    
+  protected:
+    struct Entry {
+      K key;
+      V value;
+      Entry* prev;
+      Entry* next;
+      
+      inline ~Entry() { ; }
+    };
+    
+    Entry* m_table[HashFactor];
+    int m_size;
+    
+    inline HashStaticTableLinkedList() : m_size(0)
+    {
+      for (int i = 0; i < HashFactor; i++) m_table[i] = NULL;
+    }
+    inline ~HashStaticTableLinkedList() { Clear(); }
+    
+    
+    inline int GetSize() const { return m_size; }
+    
+    void Clear()
+    {
+      if (m_size) {
+        for (int i = 0; i < HashFactor; i++) {
+          if (m_table[i]) {
+            Entry* cur_entry = m_table[i];
+            Entry* next_entry;
+            while (cur_entry) {
+              next_entry = cur_entry->next;
+              delete cur_entry;
+              cur_entry = next_entry;
+            }
+            m_table[i] = NULL;
+          }
+        }
+      }
+      m_size = 0;
+    }
+    
+    const V* Find(const K& key) const
+    {
+      int hash = HF::Hash(key);
+      Entry* cur_entry = m_table[hash];
+      while (cur_entry) {
+        if (key == cur_entry->key) return &cur_entry->value;
+        cur_entry = cur_entry->next;
+      }
+      return NULL;
+    }
+
+    V* Find(const K& key)
+    {
+      int hash = HF::Hash(key);
+      Entry* cur_entry = m_table[hash];
+      while (cur_entry) {
+        if (key == cur_entry->key) return &cur_entry->value;
+        cur_entry = cur_entry->next;
+      }
+      return NULL;
+    }
+    
+    
+    V& Get(const K& key)
+    {
+      int hash = HF::Hash(key);
+      Entry* cur_entry = m_table[hash];
+      if (cur_entry == NULL) {
+        // Create root node
+        cur_entry = new Entry;
+        m_table[hash] = cur_entry;
+        cur_entry->key = key;
+        cur_entry->next = NULL;
+        cur_entry->prev = NULL;
+        m_size++;
+        
+        return cur_entry->value;
+      }
+      
+      // Search the list for the key
+      Entry* last_entry = NULL;
+      while (cur_entry) {
+        if (key == cur_entry->key) return cur_entry->value;
+        last_entry = cur_entry;
+        cur_entry = cur_entry->next;
+      }
+      
+      // Add new entry into the list
+      cur_entry = new Entry;
+      last_entry->next = cur_entry;
+      cur_entry->key = key;
+      cur_entry->next = NULL;
+      cur_entry->prev = last_entry;
+      m_size++;
+      
+      return cur_entry->value;
+    }
+    
+    
+    bool Remove(const K& key)
+    {
+      int hash = HF::Hash(key);
+      Entry* cur_entry = m_table[hash];
+      if (cur_entry == NULL) return false;
+      
+      // Search the tree for the key
+      while (cur_entry) {
+        if (key == cur_entry->key) {
+          if (cur_entry->prev) {
+            cur_entry->prev->next = cur_entry->next;
+            cur_entry->next->prev = cur_entry->prev;
+          } else {
+            m_table[hash] = cur_entry->next;
+            cur_entry->next->prev = NULL;
+          }
+          m_size--;
+      
+          return true;
+        }
+        cur_entry = cur_entry->next;
+      }
+
+      return false;
+    }
+    
+    
+    Iterator Begin() { return Iterator(this); }
+    ConstIterator Begin() const { return ConstIterator(this); }
+    
+    KeyIterator Keys() const { return KeyIterator(this); }
+    ValueIterator Values() { return ValueIterator(this); }
+    
+    
+  protected:
+    class Iterator
+    {
+      friend class HashBTree<K, V, HashFactor, HashFunctor>;
+    private:
+      HashStaticTableLinkedList<K, V, HashFactor, HashFunctor>* m_map;
+      int m_table_idx;
+      Entry* m_cur_entry;
+      Pair<K, V*> m_pair;
+      
+      Iterator(); // @not_implemented
+
+      Iterator(HashStaticTableLinkedList<K, V, HashFactor, HashFunctor>* map) : m_map(map), m_table_idx(-1), m_cur_entry(NULL) { ; }
+      
+    public:
+      const Pair<K, V*>* Next()
+      {
+        if (m_table_idx == HashFactor) return NULL;
+        if (m_table_idx == -1 || (m_cur_entry && m_cur_entry->next == NULL)) {
+          while (++m_table_idx < HashFactor && m_map->m_table[m_table_idx] == NULL) ;
+          if (m_table_idx == HashFactor) return NULL;
+          m_cur_entry = m_map->m_table[m_table_idx];
+        }
+        m_pair.Value1() = m_cur_entry->key;
+        m_pair.Value2() = &m_cur_entry->value;
+        return &m_pair;
+      }
+      const Pair<K, V*>* Get()
+      {
+        if (m_table_idx < HashFactor && m_cur_entry) return &m_pair;
+        return NULL;
+      }
+    };
+    
+    
+    class ConstIterator
+    {
+      friend class HashStaticTableLinkedList<K, V, HashFactor, HashFunctor>;
+    private:
+      const HashBTree<K, V, HashFactor, HashFunctor>* m_map;
+      int m_table_idx;
+      Entry* m_cur_entry;
+      Pair<K, const V*> m_pair;
+      
+      ConstIterator(); // @not_implemented
+      
+      ConstIterator(const HashStaticTableLinkedList<K, V, HashFactor, HashFunctor>* map) : m_map(map), m_table_idx(-1), m_cur_entry(NULL) { ; }
+      
+    public:
+      const Pair<K, const V*>* Next()
+      {
+        if (m_table_idx == HashFactor) return NULL;
+        if (m_table_idx == -1 || (m_cur_entry && m_cur_entry->next == NULL)) {
+          while (++m_table_idx < HashFactor && m_map->m_table[m_table_idx] == NULL) ;
+          if (m_table_idx == HashFactor) return NULL;
+          m_cur_entry = m_map->m_table[m_table_idx];
+        }
+        m_pair.Value1() = m_cur_entry->key;
+        m_pair.Value2() = &m_cur_entry->value;
+        return &m_pair;
+      }
+      const Pair<K, const V*>* Get()
+      {
+        if (m_table_idx < HashFactor && m_cur_entry) return &m_pair;
+        return NULL;
+      }
+    };
+    
+    
+    class KeyIterator
+    {
+      friend class HashStaticTableLinkedList<K, V, HashFactor, HashFunctor>;
+    private:
+      const HashStaticTableLinkedList<K, V, HashFactor, HashFunctor>* m_map;
+      int m_table_idx;
+      Entry* m_cur_entry;
+      
+      KeyIterator(); // @not_implemented
+      
+      KeyIterator(const HashStaticTableLinkedList<K, V, HashFactor, HashFunctor>* map) : m_map(map), m_table_idx(-1), m_cur_entry(NULL) { ; }
+      
+    public:
+      const K* Next()
+      {
+        if (m_table_idx == HashFactor) return NULL;
+        if (m_table_idx == -1 || (m_cur_entry && m_cur_entry->next == NULL)) {
+          while (++m_table_idx < HashFactor && m_map->m_table[m_table_idx] == NULL) ;
+          if (m_table_idx == HashFactor) return NULL;
+          m_cur_entry = m_map->m_table[m_table_idx];
+        }
+        return &m_cur_entry->key;
+      }
+      const K* Get()
+      {
+        if (m_table_idx < HashFactor && m_cur_entry) return &m_cur_entry->key;
+        return NULL;
+      }
+    };
+    
+    
+    class ValueIterator
+    {
+      friend class HashStaticTableLinkedList<K, V, HashFactor, HashFunctor>;
+    private:
+      HashBTree<K, V, HashFactor, HashFunctor>* m_map;
+      int m_table_idx;
+      Entry* m_cur_entry;
+      
+      ValueIterator(); // @not_implemented
+      
+      ValueIterator(HashStaticTableLinkedList<K, V, HashFactor, HashFunctor>* map) : m_map(map), m_table_idx(-1), m_cur_entry(NULL) { ; }
+      
+    public:
+      V* Next()
+      {
+        if (m_table_idx == HashFactor) return NULL;
+        if (m_table_idx == -1 || (m_cur_entry && m_cur_entry->next == NULL)) {
+          while (++m_table_idx < HashFactor && m_map->m_table[m_table_idx] == NULL) ;
+          if (m_table_idx == HashFactor) return NULL;
+          m_cur_entry = m_map->m_table[m_table_idx];
+        }
+        return &m_cur_entry->value;
+      }
+      V* Get()
+      {
+        if (m_table_idx < HashFactor && m_cur_entry) return &m_cur_entry->value;
+        return NULL;
+      }
+    };
+  };
+  
   
 
   // Map ConstAccess Policies
