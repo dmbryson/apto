@@ -147,7 +147,8 @@ namespace Apto {
       FILE* fp = 0;
 
 #if APTO_PLATFORM(WINDOWS)
-      if (fopen_s(&fp, dirname, "r") == 0) {
+      fopen_s(&fp, dirname, "r");
+      if (fp == 0) {
 #else
       fp = fopen(dirname, "r");
       if (fp == 0) {
