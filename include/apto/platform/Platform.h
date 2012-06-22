@@ -94,13 +94,14 @@ defined(__sparc__)
 #define NULL 0
 #endif
 
+#include "apto/platform/Visibility.h"
 
 namespace Apto {
   namespace Platform
   {
-    void Initialize();
+    LIB_EXPORT void Initialize();
     
-    int AvailableCPUs();
+    LIB_EXPORT int AvailableCPUs();
   };
 };
 

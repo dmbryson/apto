@@ -32,6 +32,7 @@
 #define AptoCoreRefCount_h
 
 #include "apto/core/Atomic.h"
+#include "apto/platform/Visibility.h"
 
 
 namespace Apto {
@@ -45,16 +46,16 @@ namespace Apto {
     int m_ref_count;
     
   public:
-    RefCountObject() : m_ref_count(1) { ; }
-    RefCountObject(const RefCountObject&) : m_ref_count(1) { ; }
-    virtual ~RefCountObject() = 0;
+    LIB_EXPORT inline RefCountObject() : m_ref_count(1) { ; }
+    LIB_EXPORT inline RefCountObject(const RefCountObject&) : m_ref_count(1) { ; }
+    LIB_EXPORT virtual ~RefCountObject() = 0;
     
-    RefCountObject& operator=(const RefCountObject&) { return *this; }
+    LIB_EXPORT inline RefCountObject& operator=(const RefCountObject&) { return *this; }
     
-    void AddReference() { m_ref_count++; }
-    void RemoveReference() { if (!--m_ref_count) delete this; }
+    LIB_EXPORT inline void AddReference() { m_ref_count++; }
+    LIB_EXPORT inline void RemoveReference() { if (!--m_ref_count) delete this; }
     
-    bool IsExclusive() { return (m_ref_count == 1); }
+    LIB_EXPORT inline bool IsExclusive() { return (m_ref_count == 1); }
   };
 
 
@@ -67,14 +68,14 @@ namespace Apto {
     volatile int m_ref_count;
     
   public:
-    MTRefCountObject() { Atomic::Set(&m_ref_count, 1); }
-    MTRefCountObject(const MTRefCountObject&) { Atomic::Set(&m_ref_count, 1); }
-    virtual ~MTRefCountObject() = 0;
+    LIB_EXPORT inline MTRefCountObject() { Atomic::Set(&m_ref_count, 1); }
+    LIB_EXPORT inline MTRefCountObject(const MTRefCountObject&) { Atomic::Set(&m_ref_count, 1); }
+    LIB_EXPORT virtual ~MTRefCountObject() = 0;
     
-    MTRefCountObject& operator=(const MTRefCountObject&) { return *this; }
+    LIB_EXPORT inline MTRefCountObject& operator=(const MTRefCountObject&) { return *this; }
     
-    void AddReference() { Atomic::Inc(&m_ref_count); }
-    void RemoveReference() { if (Atomic::DecAndTest(&m_ref_count)) delete this; }
+    LIB_EXPORT inline void AddReference() { Atomic::Inc(&m_ref_count); }
+    LIB_EXPORT inline void RemoveReference() { if (Atomic::DecAndTest(&m_ref_count)) delete this; }
   };
   
   struct ThreadSafe {

@@ -78,21 +78,21 @@ namespace Apto {
     HANDLE m_thread;
     Mutex m_mutex;
     
-    void Stop();
+    LIB_EXPORT void Stop();
     
-    virtual void Run() = 0;
+    LIB_EXPORT virtual void Run() = 0;
     
-    static unsigned int __stdcall EntryPoint(void* arg);
+    LIB_EXPORT static unsigned int __stdcall EntryPoint(void* arg);
     
     Thread(const Thread&); // @not_implemented
     Thread& operator=(const Thread&); // @not_implemented
     
   public:
-    Thread() : m_thread(0) { ; }
-    virtual ~Thread();
+    LIB_EXPORT inline Thread() : m_thread(0) { ; }
+    LIB_EXPORT virtual ~Thread();
     
-    bool Start();
-    void Join();
+    LIB_EXPORT bool Start();
+    LIB_EXPORT void Join();
   };
 };
 
