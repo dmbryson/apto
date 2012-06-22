@@ -101,7 +101,7 @@ protected:
   
   explicit ManualBuffer(int size = 0) : m_data(NULL), m_size(size) { ; }
   ManualBuffer(const ManualBuffer& rhs) : m_data(NULL), m_size(0) { this->operator=(rhs); }
-  ManualBuffer() { ; }
+  ~ManualBuffer() { ; }
   
   int GetSize() const { return m_size; }
   void ResizeClear(const int in_size) { m_size = in_size; }

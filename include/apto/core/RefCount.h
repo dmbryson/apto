@@ -46,16 +46,16 @@ namespace Apto {
     int m_ref_count;
     
   public:
-    LIB_EXPORT inline RefCountObject() : m_ref_count(1) { ; }
-    LIB_EXPORT inline RefCountObject(const RefCountObject&) : m_ref_count(1) { ; }
+    inline RefCountObject() : m_ref_count(1) { ; }
+    inline RefCountObject(const RefCountObject&) : m_ref_count(1) { ; }
     LIB_EXPORT virtual ~RefCountObject() = 0;
     
-    LIB_EXPORT inline RefCountObject& operator=(const RefCountObject&) { return *this; }
+    inline RefCountObject& operator=(const RefCountObject&) { return *this; }
     
-    LIB_EXPORT inline void AddReference() { m_ref_count++; }
-    LIB_EXPORT inline void RemoveReference() { if (!--m_ref_count) delete this; }
+    inline void AddReference() { m_ref_count++; }
+    inline void RemoveReference() { if (!--m_ref_count) delete this; }
     
-    LIB_EXPORT inline bool IsExclusive() { return (m_ref_count == 1); }
+    inline bool IsExclusive() { return (m_ref_count == 1); }
   };
 
 
@@ -68,14 +68,14 @@ namespace Apto {
     volatile int m_ref_count;
     
   public:
-    LIB_EXPORT inline MTRefCountObject() { Atomic::Set(&m_ref_count, 1); }
-    LIB_EXPORT inline MTRefCountObject(const MTRefCountObject&) { Atomic::Set(&m_ref_count, 1); }
+    inline MTRefCountObject() { Atomic::Set(&m_ref_count, 1); }
+    inline MTRefCountObject(const MTRefCountObject&) { Atomic::Set(&m_ref_count, 1); }
     LIB_EXPORT virtual ~MTRefCountObject() = 0;
     
-    LIB_EXPORT inline MTRefCountObject& operator=(const MTRefCountObject&) { return *this; }
+    inline MTRefCountObject& operator=(const MTRefCountObject&) { return *this; }
     
-    LIB_EXPORT inline void AddReference() { Atomic::Inc(&m_ref_count); }
-    LIB_EXPORT inline void RemoveReference() { if (Atomic::DecAndTest(&m_ref_count)) delete this; }
+    inline void AddReference() { Atomic::Inc(&m_ref_count); }
+    inline void RemoveReference() { if (Atomic::DecAndTest(&m_ref_count)) delete this; }
   };
   
   struct ThreadSafe {

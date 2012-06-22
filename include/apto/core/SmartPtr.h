@@ -452,7 +452,7 @@ namespace Apto {
   private:
     struct Tester
     {
-      LIB_EXPORT void Placeholder() { ; }
+      void Placeholder() { ; }
     };
     
     typedef void (Tester::*PlaceholderBooleanType)();
