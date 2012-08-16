@@ -226,32 +226,32 @@ namespace Apto {
       char* m_data;
       
     public:
-      inline explicit StringRep(int size = 0) : m_size(size), m_data(new char[size + 1])
+      LIB_EXPORT inline explicit StringRep(int size = 0) : m_size(size), m_data(new char[size + 1])
       {
         assert(m_data);
         m_data[0] = '\0';
         m_data[size] = '\0';
       }
-      inline StringRep(int size, const char* str) : m_size(size), m_data(new char[size + 1])
+      LIB_EXPORT inline StringRep(int size, const char* str) : m_size(size), m_data(new char[size + 1])
       {
         assert(m_data);
         memcpy(m_data, str, m_size);
         m_data[size] = '\0';
       }
-      inline StringRep(const StringRep& rhs) : m_size(rhs.m_size), m_data(new char[m_size + 1])
+      LIB_EXPORT inline StringRep(const StringRep& rhs) : m_size(rhs.m_size), m_data(new char[m_size + 1])
       {
         assert(m_data);
         memcpy(m_data, rhs.m_data, m_size);
         m_data[m_size] = '\0';
       }
       
-      inline ~StringRep() { delete [] m_data; }
+      LIB_EXPORT ~StringRep();
       
-      inline int GetSize() const { return m_size; }
-      inline const char* GetRep() const { return m_data; }
+      LIB_EXPORT inline int GetSize() const { return m_size; }
+      LIB_EXPORT inline const char* GetRep() const { return m_data; }
       
-      char operator[](int index) const { return m_data[index]; }
-      char& operator[](int index) { return m_data[index]; }
+      LIB_EXPORT inline char operator[](int index) const { return m_data[index]; }
+      LIB_EXPORT inline char& operator[](int index) { return m_data[index]; }
     };
     
     

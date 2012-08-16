@@ -1171,7 +1171,7 @@ namespace Apto {
     
   public:
     inline operator PlaceholderBooleanType() const { return (m_container ? &Tester::Placeholder : NULL); }
-  };  
+  };
   
 
   // Parameter Binding Internal Support

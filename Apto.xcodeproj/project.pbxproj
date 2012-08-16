@@ -26,6 +26,8 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		7000B66B15C84F5500EE3F14 /* String.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7000B66815C84E5F00EE3F14 /* String.cc */; };
+		7000B66C15C84F5500EE3F14 /* String.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7000B66815C84E5F00EE3F14 /* String.cc */; };
 		701C38C614C0B14700EB6B41 /* FileSystem.cc in Sources */ = {isa = PBXBuildFile; fileRef = 701C38C514C0B14700EB6B41 /* FileSystem.cc */; };
 		701C38C714C0B14700EB6B41 /* FileSystem.cc in Sources */ = {isa = PBXBuildFile; fileRef = 701C38C514C0B14700EB6B41 /* FileSystem.cc */; };
 		7023366612FC52E0000C7BE5 /* Platform.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7023364412FC4E31000C7BE5 /* Platform.cc */; };
@@ -231,6 +233,7 @@
 
 /* Begin PBXFileReference section */
 		08FB7796FE84155DC02AAC07 /* main.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cc; sourceTree = "<group>"; };
+		7000B66815C84E5F00EE3F14 /* String.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = String.cc; sourceTree = "<group>"; };
 		701C38C314C0B0E900EB6B41 /* FileSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileSystem.h; sourceTree = "<group>"; };
 		701C38C514C0B14700EB6B41 /* FileSystem.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystem.cc; sourceTree = "<group>"; };
 		702335CE12FB51EF000C7BE5 /* gtest-all.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "gtest-all.cc"; sourceTree = "<group>"; };
@@ -436,6 +439,7 @@
 			children = (
 				7023362012FB5A77000C7BE5 /* FileSystem.cc */,
 				706B1E9612FC9C2C006EAB7F /* RefCount.cc */,
+				7000B66815C84E5F00EE3F14 /* String.cc */,
 				7023369D12FC5F51000C7BE5 /* Thread.cc */,
 			);
 			name = core;
@@ -809,6 +813,7 @@
 				70EE0DAC130AED6700D6C016 /* ContingencyTable.cc in Sources */,
 				70EE0DAD130AED6700D6C016 /* FishersExact.cc in Sources */,
 				701C38C614C0B14700EB6B41 /* FileSystem.cc in Sources */,
+				7000B66B15C84F5500EE3F14 /* String.cc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -836,6 +841,7 @@
 				70354842132EF0CB00D3865C /* ContingencyTable.cc in Sources */,
 				70354843132EF0CB00D3865C /* FishersExact.cc in Sources */,
 				701C38C714C0B14700EB6B41 /* FileSystem.cc in Sources */,
+				7000B66C15C84F5500EE3F14 /* String.cc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1035,7 +1041,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				USER_HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/usr/local/include";
+				USER_HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/usr/local/include include";
 			};
 			name = Debug;
 		};
@@ -1043,7 +1049,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				USER_HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/usr/local/include";
+				USER_HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/usr/local/include include";
 			};
 			name = Release;
 		};

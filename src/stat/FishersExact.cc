@@ -64,7 +64,7 @@ using namespace Apto;
 // -------------------------------------------------------------------------------------------------------------- 
 
 static const double TOLERANCE = 3.4525e-7;  // Tolerance, as used in Algorithm 643
-static const int THREADING_THRESHOLD = 25;
+static const int THREADING_THRESHOLD = 20;
 static const int DEFAULT_TABLE_SIZE = 300;
 
 
