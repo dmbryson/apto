@@ -155,7 +155,7 @@ namespace Apto {
     inline BasicString Substring(int idx = 0, int length = -1) const
     {
       assert(idx >= 0);
-      assert(idx < GetSize());
+      assert(idx <= GetSize());
       assert(length <= (GetSize() - idx));
       return BasicString((length >= 0) ? length : (GetSize() - idx), m_value->GetRep() + idx);
     }
