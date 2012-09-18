@@ -127,23 +127,7 @@ public:
   void SetBuffer(T* data) { m_data = data; }
 };
 
-
-template <class T> class EnhancedSmart : public Smart<T>
-{
-public:
-  EnhancedSmart(int size = 0) : Smart<T>(size) { ; }
-  EnhancedSmart(const EnhancedSmart& rhs) : Smart<T>(rhs) { ; }
-  
-  template <typename Slice>
-  EnhancedSmart& operator=(const Slice& rhs)
-  {
-    if (Smart<T>::m_active != rhs.GetSize()) Smart<T>::ResizeClear(rhs.GetSize());
-    for (int i = 0; i < rhs.GetSize(); i++) Smart<T>::m_data[i] = rhs[i];
-    return *this; 
-  }
-};
-
-typedef Array<int, EnhancedSmart> MarginalArray;
+typedef Array<int, Smart> MarginalArray;
 
 
 class FExact
@@ -1277,11 +1261,11 @@ double FExact::longestPath(const MarginalArray::Slice& row_marginals, const Marg
   MarginalArray lcol;
   
   if (row_marginals.GetSize() >= col_marginals.GetSize()) {
-    lrow.EnhancedSmart<int>::operator=(row_marginals);
-    lcol.EnhancedSmart<int>::operator=(col_marginals);
+    lrow = row_marginals;
+    lcol = col_marginals;
   } else {
-    lrow.EnhancedSmart<int>::operator=(col_marginals);
-    lcol.EnhancedSmart<int>::operator=(row_marginals);
+    lrow = col_marginals;
+    lcol = row_marginals;
   }
   
   Array<int> nt(lcol.GetSize());

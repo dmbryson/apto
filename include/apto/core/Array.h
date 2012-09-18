@@ -70,8 +70,40 @@ namespace Apto {
       return *this;
     }
     
+    Array& operator=(const Slice& rhs)
+    {
+      if (SP::GetSize() != rhs.GetSize()) SP::Resize(rhs.GetSize());
+      for (int i = 0; i < GetSize(); i++) SP::operator[](i) = rhs[i];
+      return *this;
+    }
+    
+    Array& operator=(const ConstSlice& rhs)
+    {
+      if (SP::GetSize() != rhs.GetSize()) SP::Resize(rhs.GetSize());
+      for (int i = 0; i < GetSize(); i++) SP::operator[](i) = rhs[i];
+      return *this;
+    }
+    
     template <typename T1, template <class> class SP1>
     Array& operator+=(const Array<T1, SP1>& rhs)
+    {
+      int old_size = SP::GetSize();
+      int rhs_size = rhs.GetSize();
+      SP::Resize(old_size + rhs_size);
+      for (int i = 0; i < rhs_size; i++) SP::operator[](i + old_size) = rhs[i];
+      return *this;
+    }
+
+    Array& operator+=(const Slice& rhs)
+    {
+      int old_size = SP::GetSize();
+      int rhs_size = rhs.GetSize();
+      SP::Resize(old_size + rhs_size);
+      for (int i = 0; i < rhs_size; i++) SP::operator[](i + old_size) = rhs[i];
+      return *this;
+    }
+
+    Array& operator+=(const ConstSlice& rhs)
     {
       int old_size = SP::GetSize();
       int rhs_size = rhs.GetSize();
@@ -88,9 +120,39 @@ namespace Apto {
       for (int i = 0; i < rhs.GetSize(); i++) new_arr[SP::GetSize() + i] = rhs[i];
       return new_arr;
     }
-    
+
+    Array operator+(const Slice& rhs) const
+    {
+      Array new_arr(SP::GetSize() + rhs.GetSize());
+      for (int i = 0; i < SP::GetSize(); i++) new_arr[i] = SP::operator[](i);
+      for (int i = 0; i < rhs.GetSize(); i++) new_arr[SP::GetSize() + i] = rhs[i];
+      return new_arr;
+    }
+
+    Array operator+(const ConstSlice& rhs) const
+    {
+      Array new_arr(SP::GetSize() + rhs.GetSize());
+      for (int i = 0; i < SP::GetSize(); i++) new_arr[i] = SP::operator[](i);
+      for (int i = 0; i < rhs.GetSize(); i++) new_arr[SP::GetSize() + i] = rhs[i];
+      return new_arr;
+    }
+
     template <typename T1, template <class> class SP1>
     bool operator==(const Array<T1, SP1>& rhs)
+    {
+      if (SP::GetSize() != rhs.GetSize()) return false;
+      for (int i = 0; i < SP::GetSize(); i++) if (SP::operator[](i) != rhs[i]) return false;
+      return true;
+    }
+
+    bool operator==(const Slice& rhs)
+    {
+      if (SP::GetSize() != rhs.GetSize()) return false;
+      for (int i = 0; i < SP::GetSize(); i++) if (SP::operator[](i) != rhs[i]) return false;
+      return true;
+    }
+
+    bool operator==(const ConstSlice& rhs)
     {
       if (SP::GetSize() != rhs.GetSize()) return false;
       for (int i = 0; i < SP::GetSize(); i++) if (SP::operator[](i) != rhs[i]) return false;
@@ -99,6 +161,9 @@ namespace Apto {
     
     template <typename T1, template <class> class SP1>
     bool operator!=(const Array<T1, SP1>& rhs) { return !operator==(rhs); }
+    
+    bool operator!=(const Slice& rhs) { return !operator==(rhs); }
+    bool operator!=(const ConstSlice& rhs) { return !operator==(rhs); }
 
     inline int GetSize() const { return SP::GetSize(); }
     
@@ -247,7 +312,7 @@ namespace Apto {
       {
         assert(index >= 0);       // Lower Bounds Error
         assert(index < GetSize()); // Upper Bounds Error
-        return m_arr[index];
+        return m_arr[m_start_idx + index];
       }
       
       inline T& Get(const int index) { return operator[](index); }
@@ -281,7 +346,7 @@ namespace Apto {
       {
         assert(index >= 0);       // Lower Bounds Error
         assert(index < GetSize()); // Upper Bounds Error
-        return m_arr[index];
+        return m_arr[m_start_idx + index];
       }
       
       inline const T& Get(const int index) const { return operator[](index); }
