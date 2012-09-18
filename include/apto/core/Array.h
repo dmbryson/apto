@@ -50,7 +50,9 @@ namespace Apto {
   public:
     typedef T ValueType;
     class Iterator;
-    class ConstIterator;    
+    class ConstIterator;
+    class Slice;
+    class ConstSlice;
     
   public:
     inline explicit Array(int size = 0) : SP(size) { ; }
@@ -179,6 +181,9 @@ namespace Apto {
     Iterator Begin() { return Iterator(*this); }
     ConstIterator Begin() const { return ConstIterator(*this); }
     
+    Slice Range(int start_idx, int end_idx) { return Slice(*this, start_idx, end_idx); }
+    ConstSlice Range(int start_idx, int end_idx) const { return ConstSlice(*this, start_idx, end_idx); }
+    
     
   public:
     class Iterator
@@ -210,6 +215,78 @@ namespace Apto {
     public:
       const T* Get() { return (m_index < m_arr.GetSize()) ? &(m_arr.SP::operator[](m_index)) : NULL; }
       const T* Next() { return (++m_index < m_arr.GetSize()) ? &(m_arr.SP::operator[](m_index)) : NULL; }
+    };
+    
+    class Slice
+    {
+      friend class Array;
+      
+    private:
+      Array& m_arr;
+      int m_start_idx;
+      int m_end_idx;
+      
+      Slice(); // @not_implemented
+      inline Slice(Array& arr, int start_idx, int end_idx) : m_arr(arr), m_start_idx(start_idx), m_end_idx(end_idx)
+      {
+        assert(end_idx >= start_idx);
+        assert(end_idx < arr.GetSize());
+        assert(start_idx >= 0);
+      }
+      
+    public:
+      inline int GetSize() const { return m_end_idx - m_start_idx + 1; }
+
+      inline T& operator[](const int index)
+      {
+        assert(index >= 0);        // Lower Bounds Error
+        assert(index < GetSize()); // Upper Bounds Error
+        return m_arr[m_start_idx + index];
+      }
+      inline const T& operator[](const int index) const
+      {
+        assert(index >= 0);       // Lower Bounds Error
+        assert(index < GetSize()); // Upper Bounds Error
+        return m_arr[index];
+      }
+      
+      inline T& Get(const int index) { return operator[](index); }
+      inline const T& Get(const int index) const { return operator[](index); }
+      
+      Slice Range(int start_idx, int end_idx) { return Slice(m_arr, m_start_idx + start_idx, m_start_idx + end_idx); }
+      ConstSlice Range(int start_idx, int end_idx) const { return ConstSlice(m_arr, m_start_idx + start_idx, m_start_idx + end_idx); }
+    };
+
+    class ConstSlice
+    {
+      friend class Array;
+      
+    private:
+      const Array& m_arr;
+      int m_start_idx;
+      int m_end_idx;
+      
+      ConstSlice(); // @not_implemented
+      inline ConstSlice(Array& arr, int start_idx, int end_idx) : m_arr(arr), m_start_idx(start_idx), m_end_idx(end_idx)
+      {
+        assert(end_idx >= start_idx);
+        assert(end_idx < arr.GetSize());
+        assert(start_idx >= 0);
+      }
+      
+    public:
+      inline int GetSize() const { return m_end_idx - m_start_idx + 1; }
+      
+      inline const T& operator[](const int index) const
+      {
+        assert(index >= 0);       // Lower Bounds Error
+        assert(index < GetSize()); // Upper Bounds Error
+        return m_arr[index];
+      }
+      
+      inline const T& Get(const int index) const { return operator[](index); }
+
+      ConstSlice Range(int start_idx, int end_idx) const { return ConstSlice(m_arr, m_start_idx + start_idx, m_start_idx + end_idx); }
     };
   };
 };

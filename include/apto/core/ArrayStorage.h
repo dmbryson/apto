@@ -152,9 +152,12 @@ namespace Apto {
       
       // If new size is 0, clean up and go!
       if (new_size == 0) {
-        if (m_data != NULL) delete [] m_data;
-        m_data = NULL;
-        m_size = 0;
+        if (m_size > m_reserve && m_size > SMRT_INCREASE_MINIMUM) {
+          // clean up if more than reserve or the minimum, otherwise keep the memory
+          if (m_data != NULL) delete [] m_data;
+          m_data = NULL;
+          m_size = 0;
+        }
         m_active = 0;
         return;
       }

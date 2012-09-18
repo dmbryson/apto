@@ -31,6 +31,9 @@
 #ifndef AptoCoreArrayUtils_h
 #define AptoCoreArrayUtils_h
 
+#include "apto/core/Functor.h"
+
+
 namespace Apto {
   
   const int QUICKSORT_THRESHOLD = 10;
@@ -73,6 +76,48 @@ namespace Apto {
     QSort(array, begin, r);
     QSort(array, l, end);
   }
+  
+  
+  template <class A> inline void QSort(A& array, Functor<int, Apto::TL::Create<const typename A::ValueType&, const typename A::ValueType&> > comparator)
+  {
+    QSort(array, 0, array.GetSize() - 1, comparator);
+  }
+  template <class A> void QSort(A& array, int begin, int end, Functor<int, Apto::TL::Create<const typename A::ValueType&, const typename A::ValueType&> > comparator)
+  {
+    if (end < begin) return;
+    
+    if (begin - end <= QUICKSORT_THRESHOLD) {
+      ISort(array, begin, end, comparator);
+      return;
+    }
+    
+    typename A::ValueType pivot = array[begin];
+    int l = begin + 1;
+    int r = end;
+    
+    while (l != r - 1) {
+      if (comparator(array[l], pivot) < 0)
+        l++;
+      else
+        array.Swap(l, r--);
+    }
+    
+    if (comparator(array[l], pivot) < 0 && comparator(array[r], pivot) < 0) {
+      l = r + 1;
+    } else if (comparator(array[l], pivot) < 0 && comparator(array[r], pivot) >= 0) {
+      l++; r--;
+    } else if (comparator(array[l], pivot) >= 0 && comparator(array[r], pivot) < 0) {
+      array.Swap(l++, r--);
+    } else {
+      r = l - 1;
+    }
+    
+    array.Swap(r--, begin);
+    QSort(array, begin, r, comparator);
+    QSort(array, l, end, comparator);
+  }
+
+  
 
   template<class A> inline void ISort(A& array) { ISort(array, 0, array.GetSize() - 1); }
   template<class A> void ISort(A& array, int begin, int end)
@@ -92,7 +137,30 @@ namespace Apto {
       array[j + 1] = value;
     }
   }
+
   
+  template<class A> inline void ISort(A& array, Functor<int, Apto::TL::Create<const typename A::ValueType&, const typename A::ValueType&> > comparator)
+  {
+    ISort(array, 0, array.GetSize() - 1, comparator);
+  }
+  template<class A> void ISort(A& array, int begin, int end, Functor<int, Apto::TL::Create<const typename A::ValueType&, const typename A::ValueType&> > comparator)
+  {
+    typename A::ValueType value;
+    int j;
+    
+    // for each entry
+    for (int i = begin + 1; i <= end; i++) {
+      // insert into array starting from the end of our sub-array
+      value = array[i];
+      j = i - 1;
+      while (j >= begin && comparator(array[j], value) > 0) {
+        array[j + 1] = array[j];
+        j--;
+      }
+      array[j + 1] = value;
+    }
+  }
+
 };
 
 #endif

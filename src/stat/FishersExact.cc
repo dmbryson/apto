@@ -134,38 +134,11 @@ public:
   EnhancedSmart(int size = 0) : Smart<T>(size) { ; }
   EnhancedSmart(const EnhancedSmart& rhs) : Smart<T>(rhs) { ; }
   
-  class Slice
-  {
-    friend class EnhancedSmart;
-  private:
-    const T* m_data;
-    const int m_size;
-    
-    Slice(const T* data, const int size) : m_data(data), m_size(size) { ; }
-    
-  public:
-    inline int GetSize() const { return m_size; }
-    
-    inline const T& operator[](const int index) const
-    {
-      assert(index >= 0);       // Lower Bounds Error
-      assert(index < m_size); // Upper Bounds Error
-      return m_data[index];
-    }
-  };
-  
-  inline Slice GetSlice(int start, int end) const
-  {
-    assert(start >= 0);
-    assert(end < Smart<T>::m_active);
-    
-    return Slice(Smart<T>::m_data + start, end - start + 1);
-  }
-  
+  template <typename Slice>
   EnhancedSmart& operator=(const Slice& rhs)
   {
     if (Smart<T>::m_active != rhs.GetSize()) Smart<T>::ResizeClear(rhs.GetSize());
-    for (int i = 0; i < rhs.GetSize(); i++) Smart<T>::m_data[i] = rhs.m_data[i];
+    for (int i = 0; i < rhs.GetSize(); i++) Smart<T>::m_data[i] = rhs[i];
     return *this; 
   }
 };
@@ -703,8 +676,8 @@ double FExact::Calculate()
         }
         
         // Build adjusted row array
-        MarginalArray::Slice sub_rows = irn.GetSlice(nrb, irn.GetSize() - 1);
-        MarginalArray::Slice sub_cols = m_col_marginals.GetSlice(kb + 1, m_col_marginals.GetSize() - 1);
+        MarginalArray::Slice sub_rows = irn.Range(nrb, irn.GetSize() - 1);
+        MarginalArray::Slice sub_cols = m_col_marginals.Range(kb + 1, m_col_marginals.GetSize() - 1);
         
         double ddf = logMultinomial(m_col_marginals[kb], row_diff);
         double drn = logMultinomial(ntot, sub_rows) - m_den_observed_path + ddf;
@@ -913,8 +886,8 @@ void FExact::handleNode(int k, NodePtr cur_node)
     }
     
     // Build adjusted row array
-    MarginalArray::Slice sub_rows = irn.GetSlice(nrb, irn.GetSize() - 1);
-    MarginalArray::Slice sub_cols = m_col_marginals.GetSlice(kb + 1, m_col_marginals.GetSize() - 1);
+    MarginalArray::Slice sub_rows = irn.Range(nrb, irn.GetSize() - 1);
+    MarginalArray::Slice sub_cols = m_col_marginals.Range(kb + 1, m_col_marginals.GetSize() - 1);
     
     double ddf = logMultinomial(m_col_marginals[kb], row_diff);
     double drn = logMultinomial(ntot, sub_rows) - m_den_observed_path + ddf;
@@ -997,12 +970,12 @@ void FExact::PathExtremesCalc::Run()
     
     PendingPathExtremes& p = m_fexact->m_pending_path_extremes[k][path_idx];
     
-    double longest_path = m_fexact->longestPath(p.rows.GetSlice(0, p.rows.GetSize() - 1), p.cols.GetSlice(0, p.cols.GetSize() - 1), p.ntot);
+    double longest_path = m_fexact->longestPath(p.rows.Range(0, p.rows.GetSize() - 1), p.cols.Range(0, p.cols.GetSize() - 1), p.ntot);
     if (longest_path > 0.0) longest_path = 0.0;
     
     double dspt = m_fexact->m_observed_path - p.obs2 - p.ddf;
     double shortest_path = dspt;
-    m_fexact->shortestPath(p.rows.GetSlice(0, p.rows.GetSize() - 1), p.cols.GetSlice(0, p.cols.GetSize() - 1), shortest_path);
+    m_fexact->shortestPath(p.rows.Range(0, p.rows.GetSize() - 1), p.cols.Range(0, p.cols.GetSize() - 1), shortest_path);
     shortest_path -= dspt;
     if (shortest_path > 0.0) shortest_path = 0.0;
     
@@ -1367,10 +1340,10 @@ double FExact::longestPath(const MarginalArray::Slice& row_marginals, const Marg
                
                 min = false;
                 if (lrow[lrow.GetSize() - 1] <= lrow[0] + lcol.GetSize()) {
-                  min = longestPathSpecial(lrow.GetSlice(0, lrow.GetSize() - 1), lcol.GetSlice(0, lcol.GetSize() - 1), val);
+                  min = longestPathSpecial(lrow.Range(0, lrow.GetSize() - 1), lcol.Range(0, lcol.GetSize() - 1), val);
                 }
                 if (!min && lcol[lcol.GetSize() - 1] <= lcol[0] + lrow.GetSize()) {
-                  min = longestPathSpecial(lrow.GetSlice(0, lrow.GetSize() - 1), lcol.GetSlice(0, lcol.GetSize() - 1), val);
+                  min = longestPathSpecial(lrow.Range(0, lrow.GetSize() - 1), lcol.Range(0, lcol.GetSize() - 1), val);
                 }
                 
                 if (min) {
