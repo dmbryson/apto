@@ -76,7 +76,7 @@ namespace Apto {
       {
         if (!obj) return NULL;
         U* clone = static_cast<U*>(obj->DoClone());
-        assert(typeid(*clone) == typeid(*obj));
+        //assert(typeid(*clone) == typeid(*obj));
         return clone;
       }
     };
