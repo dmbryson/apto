@@ -367,7 +367,7 @@ namespace Apto {
       Iterator(HashBTree<K, V, HashFactor, HashFunctor>* map) : m_map(map), m_table_idx(-1) { ; }
       
     public:
-      const Pair<K, V*>* Next()
+      Pair<K, V*>* Next()
       {
         if (m_table_idx == HashFactor) return NULL;
         if (m_table_idx == -1 || ++m_entry_idx >= m_map->m_table[m_table_idx].GetSize()) {
@@ -379,7 +379,7 @@ namespace Apto {
         m_pair.Value2() = &m_map->m_table[m_table_idx][m_entry_idx].value;
         return &m_pair;
       }
-      const Pair<K, V*>* Get()
+      Pair<K, V*>* Get()
       {
         if (m_table_idx < HashFactor && m_entry_idx < m_map->m_table[m_table_idx].GetSize()) return &m_pair;
         return NULL;
@@ -654,7 +654,7 @@ namespace Apto {
       Iterator(HashStaticTableLinkedList<K, V, HashFactor, HashFunctor>* map) : m_map(map), m_table_idx(-1), m_cur_entry(NULL) { ; }
       
     public:
-      const Pair<K, V*>* Next()
+      Pair<K, V*>* Next()
       {
         if (m_table_idx == HashFactor) return NULL;
         if (m_table_idx == -1 || (m_cur_entry && m_cur_entry->next == NULL)) {
@@ -666,7 +666,7 @@ namespace Apto {
         m_pair.Value2() = &m_cur_entry->value;
         return &m_pair;
       }
-      const Pair<K, V*>* Get()
+      Pair<K, V*>* Get()
       {
         if (m_table_idx < HashFactor && m_cur_entry) return &m_pair;
         return NULL;

@@ -1044,7 +1044,7 @@ namespace Apto {
     typedef typename ContainerType::Param16 Param16;
     
   private:
-    SmartPtr<ContainerType, DestructiveCopy> m_container;
+    mutable SmartPtr<ContainerType, DestructiveCopy> m_container;
     
   public:
     Functor() : m_container(NULL) { ; }

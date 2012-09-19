@@ -211,8 +211,8 @@ namespace Apto {
       Iterator(Set<T, StoragePolicy, MultiSet>* set) : m_it(set->SP::Begin()), m_count(0) { ; }
       
     public:      
-      const T* Get() { return (m_it.Get()) ? &m_it.Get()->Value1() : NULL; }
-      const T* Next(bool use_multi = MultiSet)
+      T* Get() { return (m_it.Get()) ? &m_it.Get()->Value1() : NULL; }
+      T* Next(bool use_multi = MultiSet)
       {
         if (MultiSet && use_multi) {
           if (m_count > 1) {

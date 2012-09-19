@@ -55,7 +55,9 @@ namespace Apto {
     typedef T* StoredType;
     typedef T* InitPointerType;
     typedef T* PointerType;
+    typedef const T* ConstPointerType;
     typedef T& ReferenceType;
+    typedef const T& ConstReferenceType;
     
   protected:
     inline HeapStorage() : m_ptr(Default()) { ; }
@@ -108,7 +110,9 @@ namespace Apto {
     typedef T* StoredType;
     typedef T* InitPointerType;
     typedef T* PointerType;
+    typedef const T* ConstPointerType;
     typedef T& ReferenceType;
+    typedef const T& ConstReferenceType;
     
   protected:
     inline ArrayStorage() : m_ptr(Default()) { ; }
@@ -359,8 +363,10 @@ namespace Apto {
     
   public:
     typedef typename SP::PointerType PointerType;
+    typedef typename SP::ConstPointerType ConstPointerType;
     typedef typename SP::StoredType StoredType;
     typedef typename SP::ReferenceType ReferenceType;
+    typedef typename SP::ConstReferenceType ConstReferenceType;
     typedef typename TypeSelect<OP::CopyIsDestructive, SmartPtr, const SmartPtr>::Result CopyArgType;
     
     SmartPtr() : SP(), OP() { ; }
@@ -420,10 +426,10 @@ namespace Apto {
     
     // Pointer usage
     inline PointerType operator->() { return SP::operator->(); }
-    inline const PointerType operator->() const { return SP::operator->(); }
+    inline ConstPointerType operator->() const { return SP::operator->(); }
     
     inline ReferenceType operator*() { return SP::operator*(); }
-    inline const ReferenceType operator*() const { return SP::operator*(); }
+    inline ConstReferenceType operator*() const { return SP::operator*(); }
     
     static inline T* GetPointer(const SmartPtr& ptr) { return GetInternalPtr(ptr); }
 
