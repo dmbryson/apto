@@ -45,7 +45,7 @@ namespace Apto {
   // Basic String
   // --------------------------------------------------------------------------------------------------------------
   
-  template <class ThreadingModel = SingleThreaded> class BasicString
+  template <class ThreadingModel = ThreadSafe> class BasicString
   {
   public:
     typedef char ValueType;
