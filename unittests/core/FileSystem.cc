@@ -56,3 +56,4 @@ TEST(CoreFileSystem, PathAppend) {
   EXPECT_TRUE(Apto::FileSystem::PathAppend("foo", "bar") == "foo/bar");
 #endif
 }
+
