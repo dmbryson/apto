@@ -773,7 +773,7 @@
 		08FB7793FE84155DC02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0440;
+				LastUpgradeCheck = 0450;
 				ORGANIZATIONNAME = "David Michael Bryson";
 			};
 			buildConfigurationList = 1DEB923508733DC60010E9CD /* Build configuration list for PBXProject "Apto" */;
@@ -978,6 +978,7 @@
 		7023364B12FC50C1000C7BE5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				HEADER_SEARCH_PATHS = include;
 				PRODUCT_NAME = apto;
 			};
@@ -986,6 +987,7 @@
 		7023364C12FC50C1000C7BE5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				HEADER_SEARCH_PATHS = include;
 				PRODUCT_NAME = apto;
 			};
@@ -994,6 +996,7 @@
 		7023366C12FC5320000C7BE5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				HEADER_SEARCH_PATHS = utils/unittest/googletest/include;
 				PRODUCT_NAME = gtest;
 			};
@@ -1002,6 +1005,7 @@
 		7023366D12FC5320000C7BE5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				HEADER_SEARCH_PATHS = utils/unittest/googletest/include;
 				PRODUCT_NAME = gtest;
 			};
@@ -1010,6 +1014,7 @@
 		70354848132EF0CB00D3865C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				HEADER_SEARCH_PATHS = include;
 				PRODUCT_NAME = apto;
 			};
@@ -1018,6 +1023,7 @@
 		70354849132EF0CB00D3865C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				HEADER_SEARCH_PATHS = include;
 				PRODUCT_NAME = apto;
 			};
@@ -1026,6 +1032,7 @@
 		70354855132EF22200D3865C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -1033,6 +1040,7 @@
 		70354856132EF22200D3865C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
