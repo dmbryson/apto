@@ -32,6 +32,7 @@
 #define AptoCoreStringUtils_h
 
 #include "apto/platform.h"
+#include "apto/core/Algorithms.h"
 #include "apto/core/Definitions.h"
 #include "apto/core/String.h"
 
@@ -237,6 +238,62 @@ namespace Apto {
     template <class T>
     inline operator BasicString<T>() const { return BasicString<T>(m_buffer); }
   };
+  
+
+  // String Algorithms
+  // --------------------------------------------------------------------------------------------------------------
+  
+  // EditDistance - aka Levenshtein Distance
+  //   algorithm implementation adapted from
+  //   http://en.wikibooks.org/wiki/Algorithm_Implementation/Strings/Levenshtein_distance#C.2B.2B
+  template <class S> int EditDistance(const S& s1, const S& s2)
+  {
+    const int sz1 = s1.GetSize();
+    const int sz2 = s2.GetSize();
+    
+    // If either string is empty, the edit distance is the length of the other string
+    if (sz1 == 0) return sz2;
+    if (sz2 == 0) return sz1;
+    
+    int* cur = new int[sz2 + 1];
+    int* prev = new int[sz2 + 1];
+    
+    for (int i = 0; i <= sz2; i++) prev[i] = i;
+    
+    for (int i = 0; i < sz1; i++) {
+      cur[0] = i + 1;
+      for (int j = 0; j < sz2; j++) {
+        cur[j + 1] = Min(Min(1 + cur[j], 1 + prev[1 + j]), prev[j] + (s1[i] == s2[j] ? 0 : 1));
+        
+        int* tmp = cur;
+        cur = prev;
+        prev = tmp;
+      }
+    }
+    
+    int rtn = prev[sz2];
+    
+    delete [] cur;
+    delete [] prev;
+    
+    return rtn;
+  }
+    
+  
+  // NearMatch - return the best match (string) element from a collection iterator, as calculated by EditDistance
+  template <class S, class A> S NearMatch(const S& v, A iterator)
+  {
+    S best_match;
+    int best_dist = v.GetSize();
+    while (iterator.Next()) {
+      int cur_dist = EditDistance(v, *iterator.Get());
+      if (cur_dist < best_dist) {
+        best_dist = cur_dist;
+        best_match = *iterator.Get();
+      }
+    }
+    return best_match;
+  }
   
 };
 

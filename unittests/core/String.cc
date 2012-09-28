@@ -307,7 +307,7 @@ TEST(CoreBasicString, Pop) {
 }
 
 
-TEST(CoreBasicString, CharacterInstpection) {
+TEST(CoreBasicString, CharacterInspection) {
   Apto::String s1("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 \f\n\r\t\v.");
   for (int i = 0; i < s1.GetSize(); i++) {
     if (i <  26          ) EXPECT_TRUE(s1.IsUpper(i));  else EXPECT_FALSE(s1.IsUpper(i));
@@ -317,3 +317,126 @@ TEST(CoreBasicString, CharacterInstpection) {
     if (i >= 62 && i < 68) EXPECT_TRUE(s1.IsWhitespace(i)); else EXPECT_FALSE(s1.IsWhitespace(i));
   }
 }
+
+TEST(CoreBasicString, ToLower) {
+  Apto::String s1("ABCDEFG");
+  Apto::String s1c(s1);
+  
+  EXPECT_TRUE(s1 == s1c);
+  s1.ToLower();
+  EXPECT_FALSE(s1 == s1c);
+  EXPECT_TRUE(s1 == "abcdefg");
+  EXPECT_TRUE(s1c == "ABCDEFG");
+  
+  Apto::String s2("ABcdEFG12");
+  Apto::String s2c(s2);
+  
+  EXPECT_TRUE(s2 == s2c);
+  s2.ToLower();
+  EXPECT_FALSE(s2 == s2c);
+  EXPECT_TRUE(s2 == "abcdefg12");
+  EXPECT_TRUE(s2c == "ABcdEFG12");
+}
+
+TEST(CoreBasicString, AsLower) {
+  Apto::String s1("ABCDEFG");
+  Apto::String s1c(s1);
+  
+  EXPECT_TRUE(s1 == s1c);
+  Apto::String s1a = s1.AsLower();
+  EXPECT_TRUE(s1 == s1c);
+  EXPECT_FALSE(s1 == s1a);
+  EXPECT_TRUE(s1a == "abcdefg");
+  EXPECT_TRUE(s1 == "ABCDEFG");
+  EXPECT_TRUE(s1c == "ABCDEFG");
+  
+  Apto::String s2("ABcdEFG12");
+  Apto::String s2c(s2);
+  
+  EXPECT_TRUE(s2 == s2c);
+  Apto::String s2a = s2.AsLower();
+  EXPECT_TRUE(s2 == s2c);
+  EXPECT_FALSE(s2 == s2a);
+  EXPECT_TRUE(s2a == "abcdefg12");
+  EXPECT_TRUE(s2 == "ABcdEFG12");
+  EXPECT_TRUE(s2c == "ABcdEFG12");
+}
+
+TEST(CoreBasicString, ToUpper) {
+  Apto::String s1("abcdefg");
+  Apto::String s1c(s1);
+  
+  EXPECT_TRUE(s1 == s1c);
+  s1.ToUpper();
+  EXPECT_FALSE(s1 == s1c);
+  EXPECT_TRUE(s1 == "ABCDEFG");
+  EXPECT_TRUE(s1c == "abcdefg");
+  
+  Apto::String s2("ABcdEFG12");
+  Apto::String s2c(s2);
+  
+  EXPECT_TRUE(s2 == s2c);
+  s2.ToUpper();
+  EXPECT_FALSE(s2 == s2c);
+  EXPECT_TRUE(s2 == "ABCDEFG12");
+  EXPECT_TRUE(s2c == "ABcdEFG12");
+}
+
+TEST(CoreBasicString, AsUpper) {
+  Apto::String s1("abcdefg");
+  Apto::String s1c(s1);
+  
+  EXPECT_TRUE(s1 == s1c);
+  Apto::String s1a = s1.AsUpper();
+  EXPECT_TRUE(s1 == s1c);
+  EXPECT_FALSE(s1 == s1a);
+  EXPECT_TRUE(s1a == "ABCDEFG");
+  EXPECT_TRUE(s1 == "abcdefg");
+  EXPECT_TRUE(s1c == "abcdefg");
+  
+  Apto::String s2("ABcdEFG12");
+  Apto::String s2c(s2);
+  
+  EXPECT_TRUE(s2 == s2c);
+  Apto::String s2a = s2.AsUpper();
+  EXPECT_TRUE(s2 == s2c);
+  EXPECT_FALSE(s2 == s2a);
+  EXPECT_TRUE(s2a == "ABCDEFG12");
+  EXPECT_TRUE(s2 == "ABcdEFG12");
+  EXPECT_TRUE(s2c == "ABcdEFG12");
+}
+
+TEST(CoreBasicString, Trim) {
+  Apto::String s1("  foo  ");
+  Apto::String s1c(s1);
+  
+  EXPECT_TRUE(s1 == s1c);
+  s1.Trim();
+  EXPECT_FALSE(s1 == s1c);
+  EXPECT_TRUE(s1 == "foo");
+  EXPECT_TRUE(s1c == "  foo  ");
+  
+  Apto::String s2("bar");
+  EXPECT_TRUE(s2 == "bar");
+  s2.Trim();
+  EXPECT_TRUE(s2 == "bar");
+}
+
+TEST(CoreBasicString, Trimmed) {
+  Apto::String s1("  foo  ");
+  Apto::String s1c(s1);
+  
+  EXPECT_TRUE(s1 == s1c);
+  Apto::String s1t = s1.Trimmed();
+  EXPECT_TRUE(s1 == s1c);
+  EXPECT_FALSE(s1 == s1t);
+  EXPECT_TRUE(s1t == "foo");
+  EXPECT_TRUE(s1 == "  foo  ");
+  EXPECT_TRUE(s1c == "  foo  ");
+  
+  Apto::String s2("bar");
+  EXPECT_TRUE(s2 == "bar");
+  Apto::String s2t = s2.Trimmed();
+  EXPECT_TRUE(s2t == "bar");
+}
+

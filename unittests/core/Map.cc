@@ -31,6 +31,7 @@
 #include "apto/core/Array.h"
 #include "apto/core/ArrayUtils.h"
 #include "apto/core/Map.h"
+#include "apto/core/String.h"
 
 #include "gtest/gtest.h"
 
@@ -149,6 +150,20 @@ TEST(CoreHashBTreeMap, Removal) {
   // Make sure we can still add into the map
   map[4] = 4;
   EXPECT_EQ(3, map.GetSize());
+  
+  
+  Apto::Map<Apto::String, int, HashBTreeSize1> map2;
+  map2["DIVIDE_DEL_PROB"] = 1;
+  map2["RETURN_STORED_ON_DEATH"] = 2;
+  map2["REQUIRED_RESOURCE_LEVEL"] = 3;
+
+  EXPECT_TRUE(map2.Has("DIVIDE_DEL_PROB"));
+  EXPECT_TRUE(map2.Has("RETURN_STORED_ON_DEATH"));
+  EXPECT_TRUE(map2.Has("REQUIRED_RESOURCE_LEVEL"));
+  map2.Remove("DIVIDE_DEL_PROB");
+  EXPECT_FALSE(map2.Has("DIVIDE_DEL_PROB"));
+  EXPECT_TRUE(map2.Has("RETURN_STORED_ON_DEATH"));
+  EXPECT_TRUE(map2.Has("REQUIRED_RESOURCE_LEVEL"));
 }
 
 

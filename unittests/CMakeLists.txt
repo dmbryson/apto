@@ -2,6 +2,7 @@ SET(APTO_CORE_SOURCES)
 
 SET(CORE_DIR ${PROJECT_SOURCE_DIR}/unittests/core)
 SET(CORE_SOURCES
+  ${CORE_DIR}/Algorithms.cc
   ${CORE_DIR}/Array.cc
   ${CORE_DIR}/ArrayUtils.cc
   ${CORE_DIR}/ConditionVariable.cc

@@ -116,6 +116,30 @@ namespace Apto {
     HashBTree() : m_size(0) { ; }
     ~HashBTree() { ; }
     
+  public:
+    void Debug(int t = -1)
+    {
+      std::cout << "Tables: ";
+      for (int i = 0; i < HashFactor; i++) {
+        std::cout << "t[" << i << "](" << m_table[i].GetSize() << ") ";
+      }
+      std::cout << std::endl;
+      
+      if (t >= 0) {
+        std::cout << "Table " << t << " Contents:" << std::endl;
+        for (int i = 0; i < m_table[t].GetSize(); i++) {
+          std::cout << "  Left: " << m_table[t][i].left;
+          std::cout << "  Right: " << m_table[t][i].right;
+          std::cout << "  Parent: " << m_table[t][i].parent;
+          std::cout << "  Key: " << m_table[t][i].key;
+          std::cout << "  Value: " << m_table[t][i].value;
+          std::cout << std::endl;
+        }
+      }
+    }
+    
+  protected:
+    
     
     inline int GetSize() const { return m_size; }
     
@@ -255,20 +279,20 @@ namespace Apto {
             } else if (m_table[hash][cur_idx].left < 0) {
               // all child nodes greater than current
               
-              // Find most extreme right node
+              // Find next right node
               int sub_idx = m_table[hash][cur_idx].right;
-              while (m_table[hash][sub_idx].right > 0) sub_idx = m_table[hash][sub_idx].right;
+              while (m_table[hash][sub_idx].left > 0) sub_idx = m_table[hash][sub_idx].left;
               
-              // Move extreme right node to current position
+              // Move next right node to current position
               int right_idx = m_table[hash][cur_idx].right;             // Save right subtree index
               m_table[hash][cur_idx].key = m_table[hash][sub_idx].key;
               m_table[hash][cur_idx].value = m_table[hash][sub_idx].value;
-              m_table[hash][m_table[hash][sub_idx].parent].right = m_table[hash][sub_idx].left;
-              if (m_table[hash][sub_idx].left >= 0)
-                m_table[hash][m_table[hash][sub_idx].left].parent = m_table[hash][sub_idx].parent;
-              if (sub_idx != right_idx) m_table[hash][cur_idx].left = right_idx;
-              else m_table[hash][cur_idx].left = -1;
-              m_table[hash][cur_idx].right = -1;
+              m_table[hash][m_table[hash][sub_idx].parent].left = m_table[hash][sub_idx].right;
+              if (m_table[hash][sub_idx].right >= 0)
+                m_table[hash][m_table[hash][sub_idx].right].parent = m_table[hash][sub_idx].parent;
+              if (sub_idx != right_idx) m_table[hash][cur_idx].right = right_idx;
+              else m_table[hash][cur_idx].right = -1;
+              m_table[hash][cur_idx].left = -1;
               
               // Move last node to the position of the old subtree leaf node
               if (sub_idx != last_idx) {
@@ -280,20 +304,20 @@ namespace Apto {
             } else if (m_table[hash][cur_idx].right < 0) {
               // all child node less than current
               
-              // Find most extreme left node
+              // Find next left node
               int sub_idx = m_table[hash][cur_idx].left;
-              while (m_table[hash][sub_idx].left > 0) sub_idx = m_table[hash][sub_idx].left;
+              while (m_table[hash][sub_idx].right > 0) sub_idx = m_table[hash][sub_idx].right;
               
               // Move extreme right node to current position
               int left_idx = m_table[hash][cur_idx].left;               // Save right subtree index
               m_table[hash][cur_idx].key = m_table[hash][sub_idx].key;
               m_table[hash][cur_idx].value = m_table[hash][sub_idx].value;
-              m_table[hash][m_table[hash][sub_idx].parent].left = m_table[hash][sub_idx].right;
-              if (m_table[hash][sub_idx].right >= 0) 
-                m_table[hash][m_table[hash][sub_idx].right].parent = m_table[hash][sub_idx].parent;
-              if (sub_idx != left_idx) m_table[hash][cur_idx].right = left_idx;
-              else m_table[hash][cur_idx].right = -1;
-              m_table[hash][cur_idx].left = -1;
+              m_table[hash][m_table[hash][sub_idx].parent].right = m_table[hash][sub_idx].left;
+              if (m_table[hash][sub_idx].left >= 0)
+                m_table[hash][m_table[hash][sub_idx].left].parent = m_table[hash][sub_idx].parent;
+              if (sub_idx != left_idx) m_table[hash][cur_idx].left = left_idx;
+              else m_table[hash][cur_idx].left = -1;
+              m_table[hash][cur_idx].right = -1;
               
               // Move last node to the position of the old subtree leaf node
               if (sub_idx != last_idx) {

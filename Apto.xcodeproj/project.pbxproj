@@ -84,6 +84,7 @@
 		709B2F90131C3B5B0081E874 /* main.cc in Sources */ = {isa = PBXBuildFile; fileRef = 709B2F82131C3A650081E874 /* main.cc */; };
 		709B2F91131C3B740081E874 /* apto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7023364912FC50C1000C7BE5 /* apto.dylib */; };
 		70AB8D7D137C6E4F0030A1AD /* Functor.cc in Sources */ = {isa = PBXBuildFile; fileRef = 70AB8D7C137C6E4F0030A1AD /* Functor.cc */; };
+		70C99F1E161630AC00592BCC /* Algorithms.cc in Sources */ = {isa = PBXBuildFile; fileRef = 70C99F1C161630AC00592BCC /* Algorithms.cc */; };
 		70EE0D711309B1C400D6C016 /* Array.cc in Sources */ = {isa = PBXBuildFile; fileRef = 702335F012FB5281000C7BE5 /* Array.cc */; };
 		70EE0D861309DB8400D6C016 /* ArrayUtils.cc in Sources */ = {isa = PBXBuildFile; fileRef = 70EE0D781309DB8300D6C016 /* ArrayUtils.cc */; };
 		70EE0D871309DB8400D6C016 /* ConditionVariable.cc in Sources */ = {isa = PBXBuildFile; fileRef = 70EE0D791309DB8300D6C016 /* ConditionVariable.cc */; };
@@ -321,6 +322,8 @@
 		70AB8D7A137C3D6E0030A1AD /* Functor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Functor.h; sourceTree = "<group>"; };
 		70AB8D7B137C45250030A1AD /* TypeTraits.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TypeTraits.h; sourceTree = "<group>"; };
 		70AB8D7C137C6E4F0030A1AD /* Functor.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Functor.cc; sourceTree = "<group>"; };
+		70B974EE1615F231007A1C22 /* Algorithms.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Algorithms.h; sourceTree = "<group>"; };
+		70C99F1C161630AC00592BCC /* Algorithms.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Algorithms.cc; sourceTree = "<group>"; };
 		70E3711B136CA79000F35D1D /* Definitions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Definitions.h; sourceTree = "<group>"; };
 		70EE0D781309DB8300D6C016 /* ArrayUtils.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ArrayUtils.cc; sourceTree = "<group>"; };
 		70EE0D791309DB8300D6C016 /* ConditionVariable.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConditionVariable.cc; sourceTree = "<group>"; };
@@ -528,6 +531,7 @@
 		702335EF12FB5281000C7BE5 /* core */ = {
 			isa = PBXGroup;
 			children = (
+				70C99F1C161630AC00592BCC /* Algorithms.cc */,
 				702335F012FB5281000C7BE5 /* Array.cc */,
 				70EE0D781309DB8300D6C016 /* ArrayUtils.cc */,
 				70EE0D791309DB8300D6C016 /* ConditionVariable.cc */,
@@ -576,6 +580,7 @@
 		70354890132FC63500D3865C /* core */ = {
 			isa = PBXGroup;
 			children = (
+				70B974EE1615F231007A1C22 /* Algorithms.h */,
 				70354891132FC63500D3865C /* Array.h */,
 				70354892132FC63500D3865C /* ArrayStorage.h */,
 				70354893132FC63500D3865C /* ArrayUtils.h */,
@@ -879,6 +884,7 @@
 				703548E0132FE6A800D3865C /* StringUtils.cc in Sources */,
 				70AB8D7D137C6E4F0030A1AD /* Functor.cc in Sources */,
 				708B5B1114EE037A000774EA /* Accumulator.cc in Sources */,
+				70C99F1E161630AC00592BCC /* Algorithms.cc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

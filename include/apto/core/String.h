@@ -175,6 +175,74 @@ namespace Apto {
     }
     
     
+    // Modified content
+    BasicString& ToLower()
+    {
+      m_value = StringRepPtr(new StringRep(*m_value));
+      for (int i = 0; i < m_value->GetSize(); i++) {
+        if (m_value->operator[](i) >= 'A' && m_value->operator[](i) <= 'Z' )
+          m_value->operator[](i) += 'a' - 'A';
+      }
+      
+      return *this;
+    }
+
+    BasicString AsLower() const
+    {
+      StringRepPtr value(new StringRep(*m_value));
+      for (int i = 0; i < value->GetSize(); i++) {
+        if (value->operator[](i) >= 'A' && value->operator[](i) <= 'Z' )
+          value->operator[](i) += 'a' - 'A';
+      }
+      
+      return BasicString(value);
+    }
+    
+    BasicString& ToUpper()
+    {
+      m_value = StringRepPtr(new StringRep(*m_value));
+      for (int i = 0; i < m_value->GetSize(); i++) {
+        if (m_value->operator[](i) >= 'a' && m_value->operator[](i) <= 'z' )
+          m_value->operator[](i) += 'A' - 'a';
+      }
+      
+      return *this;
+    }
+
+    BasicString AsUpper() const
+    {
+      StringRepPtr value(new StringRep(*m_value));
+      for (int i = 0; i < value->GetSize(); i++) {
+        if (value->operator[](i) >= 'a' && value->operator[](i) <= 'z' )
+          value->operator[](i) += 'A' - 'a';
+      }
+      
+      return BasicString(value);
+    }
+    
+    BasicString& Trim()
+    {
+      int start_idx = 0;
+      while (start_idx < GetSize() && IsWhitespace(start_idx)) start_idx++;
+      int end_idx = GetSize() - 1;
+      while (end_idx > start_idx && IsWhitespace(end_idx)) end_idx--;
+      
+      m_value = StringRepPtr(new StringRep(end_idx - start_idx + 1, m_value->GetRep() + start_idx));
+      
+      return *this;
+    }
+    
+    BasicString Trimmed() const
+    {
+      int start_idx = 0;
+      while (start_idx < GetSize() && IsWhitespace(start_idx)) start_idx++;
+      int end_idx = GetSize() - 1;
+      while (end_idx > start_idx && IsWhitespace(end_idx)) end_idx--;
+      
+      return BasicString(end_idx - start_idx + 1, m_value->GetRep() + start_idx);
+    }
+
+    
     // Various Character Inspection Utility Methods
     inline bool IsLetter(int idx) const { return IsUpper(idx) || IsLower(idx); }
     inline bool IsLower(int idx) const { return ((*this)[idx] >= 'a' && (*this)[idx] <= 'z'); }
