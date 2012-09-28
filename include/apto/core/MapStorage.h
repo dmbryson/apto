@@ -116,31 +116,6 @@ namespace Apto {
     HashBTree() : m_size(0) { ; }
     ~HashBTree() { ; }
     
-  public:
-    void Debug(int t = -1)
-    {
-      std::cout << "Tables: ";
-      for (int i = 0; i < HashFactor; i++) {
-        std::cout << "t[" << i << "](" << m_table[i].GetSize() << ") ";
-      }
-      std::cout << std::endl;
-      
-      if (t >= 0) {
-        std::cout << "Table " << t << " Contents:" << std::endl;
-        for (int i = 0; i < m_table[t].GetSize(); i++) {
-          std::cout << "  Left: " << m_table[t][i].left;
-          std::cout << "  Right: " << m_table[t][i].right;
-          std::cout << "  Parent: " << m_table[t][i].parent;
-          std::cout << "  Key: " << m_table[t][i].key;
-          std::cout << "  Value: " << m_table[t][i].value;
-          std::cout << std::endl;
-        }
-      }
-    }
-    
-  protected:
-    
-    
     inline int GetSize() const { return m_size; }
     
     void Clear()
