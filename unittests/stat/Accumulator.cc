@@ -36,19 +36,19 @@
 TEST(StatAccumulator, Count) {
   Apto::Stat::Accumulator<int> ac;
   ac.Add(1);
-  EXPECT_EQ(1, ac.Count());
+  EXPECT_EQ(1u, ac.Count());
   
   ac.Add(2);
-  EXPECT_EQ(2, ac.Count());
+  EXPECT_EQ(2u, ac.Count());
   
   ac.Add(3);
-  EXPECT_EQ(3, ac.Count());
+  EXPECT_EQ(3u, ac.Count());
   
   ac.Clear();
-  EXPECT_EQ(0, ac.Count());
+  EXPECT_EQ(0u, ac.Count());
   
   ac.Add(4);
-  EXPECT_EQ(1, ac.Count());
+  EXPECT_EQ(1u, ac.Count());
 }
 
 TEST(StatAccumulator, Sum) {
