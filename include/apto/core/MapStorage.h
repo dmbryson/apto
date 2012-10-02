@@ -267,7 +267,6 @@ namespace Apto {
                 m_table[hash][m_table[hash][sub_idx].right].parent = m_table[hash][sub_idx].parent;
               if (sub_idx != right_idx) m_table[hash][cur_idx].right = right_idx;
               else m_table[hash][cur_idx].right = -1;
-              m_table[hash][cur_idx].left = -1;
               
               // Move last node to the position of the old subtree leaf node
               if (sub_idx != last_idx) {
@@ -292,7 +291,6 @@ namespace Apto {
                 m_table[hash][m_table[hash][sub_idx].left].parent = m_table[hash][sub_idx].parent;
               if (sub_idx != left_idx) m_table[hash][cur_idx].left = left_idx;
               else m_table[hash][cur_idx].left = -1;
-              m_table[hash][cur_idx].right = -1;
               
               // Move last node to the position of the old subtree leaf node
               if (sub_idx != last_idx) {
@@ -336,6 +334,13 @@ namespace Apto {
           
           m_table[hash].Resize(last_idx);
           m_size--;
+          
+//          std::cout << "\nRemove " << key << std::endl;
+//          for (int i = 0; i < m_table[hash].GetSize(); i++) {
+//            printf("%d -- l: %d  r: %d  p: %d  ", i, m_table[hash][i].left, m_table[hash][i].right, m_table[hash][i].parent);
+//            std::cout << m_table[hash][i].key << std::endl;
+//          }          
+          
           return true;
         }
         break;
