@@ -4,7 +4,6 @@ SET(APTO_CORE_SOURCES)
 SET(CORE_DIR ${PROJECT_SOURCE_DIR}/src/core)
 SET(CORE_SOURCES
   ${CORE_DIR}/FileSystem.cc
-  ${CORE_DIR}/RefCount.cc
   ${CORE_DIR}/String.cc
   ${CORE_DIR}/Thread.cc
 )

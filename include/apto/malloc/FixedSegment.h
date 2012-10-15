@@ -1,25 +1,25 @@
 /*
- *  RefCount.cc
+ *  FixedSegment.h
  *  Apto
  *
- *  Created by David on 11/12/08.
- *  Copyright 2008-2011 David Michael Bryson. All rights reserved.
+ *  Created by David on 10/10/12.
+ *  Copyright 2012 David Michael Bryson. All rights reserved.
  *  http://programerror.com/software/apto
  *
  *  Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
  *  following conditions are met:
- *  
+ *
  *  1.  Redistributions of source code must retain the above copyright notice, this list of conditions and the
  *      following disclaimer.
  *  2.  Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the
  *      following disclaimer in the documentation and/or other materials provided with the distribution.
  *  3.  Neither the name of David Michael Bryson, nor the names of contributors may be used to endorse or promote
  *      products derived from this software without specific prior written permission.
- *  
+ *
  *  THIS SOFTWARE IS PROVIDED BY DAVID MICHAEL BRYSON AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
  *  INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
  *  DISCLAIMED. IN NO EVENT SHALL DAVID MICHAEL BRYSON OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- *  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR 
+ *  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
  *  SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
  *  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
@@ -28,7 +28,41 @@
  *
  */
 
-#include "apto/core/RefCount.h"
+#ifndef AptoMallocFixedSegment_h
+#define AptoMallocFixedSegment_h
 
-Apto::RefCountObject::~RefCountObject() { ; }
-Apto::MTRefCountObject::~MTRefCountObject() { ; }
+namespace Apto {
+  namespace Malloc {
+    
+    // FixedSegment - Single fixed block size segment handled by SmallAlloc, all other requests forwarded to BigAlloc
+    // --------------------------------------------------------------------------------------------------------------
+    
+    template <std::size_t BlockSize, class SmallAlloc, class BigAlloc>
+    class FixedSegment
+    {
+    public:      
+      static inline void* Allocate(std::size_t size)
+      {
+        if (size <= BlockSize) {
+          return SmallAlloc::Allocate(BlockSize);
+        }
+        
+        return BigAlloc::Allocate(size);
+      }
+      
+      static inline void Deallocate(void* ptr, std::size_t size)
+      {
+        if (size <= BlockSize) {
+          SmallAlloc::Deallocate(ptr, size);
+        } else {
+          BigAlloc::Deallocate(ptr, size);
+        }
+      }
+
+    };
+    
+  };
+};
+
+
+#endif

@@ -32,6 +32,7 @@
 #ifndef AptoCoreFunctor_h
 #define AptoCoreFunctor_h
 
+#include "apto/core/Malloc.h"
 #include "apto/core/SmartPtr.h"
 #include "apto/core/TypeList.h"
 #include "apto/core/TypeTraits.h"
@@ -47,7 +48,8 @@ namespace Apto {
   // --------------------------------------------------------------------------------------------------------------
   
   namespace Internal {
-    template <typename R> class FunctorBase
+    template <typename R, class Allocator>
+    class FunctorBase : public ClassAllocator<Allocator>
     {
     public:
       typedef R ReturnType;
@@ -86,12 +88,13 @@ namespace Apto {
   // Functor Container Interface Definitions (supporting up to 16 arguments)
   // --------------------------------------------------------------------------------------------------------------
   
-  template <typename ReturnType, class TList> class FunctorContainer;
+  template <typename ReturnType, class TList, class Allocator> class FunctorContainer;
   
   template <
-    typename ReturnType
-  > class FunctorContainer<ReturnType, NullType>
-  : public Internal::FunctorBase<ReturnType>
+    typename ReturnType,
+    class Allocator
+  > class FunctorContainer<ReturnType, NullType, Allocator>
+  : public Internal::FunctorBase<ReturnType, Allocator>
   {
   public:    
     virtual ReturnType operator()() = 0;
@@ -99,9 +102,10 @@ namespace Apto {
 
   template <
     typename ReturnType,
-    typename P1
-  > class FunctorContainer<ReturnType, TL::Create<P1> >
-  : public Internal::FunctorBase<ReturnType>
+    typename P1,
+    class Allocator
+  > class FunctorContainer<ReturnType, TL::Create<P1>, Allocator>
+  : public Internal::FunctorBase<ReturnType, Allocator>
   {
   public:
     typedef typename TypeTraits<P1>::ParameterType Param1;
@@ -110,9 +114,10 @@ namespace Apto {
   
   template <
     typename ReturnType,
-    typename P1, typename P2
-  > class FunctorContainer<ReturnType, TL::Create<P1, P2> >
-  : public Internal::FunctorBase<ReturnType>
+    typename P1, typename P2,
+    class Allocator
+  > class FunctorContainer<ReturnType, TL::Create<P1, P2>, Allocator>
+  : public Internal::FunctorBase<ReturnType, Allocator>
   {
   public:
     typedef typename TypeTraits<P1>::ParameterType Param1;
@@ -122,9 +127,10 @@ namespace Apto {
   
   template <
     typename ReturnType,
-    typename P1, typename P2, typename P3
-  > class FunctorContainer<ReturnType, TL::Create<P1, P2, P3> >
-  : public Internal::FunctorBase<ReturnType>
+    typename P1, typename P2, typename P3,
+    class Allocator
+  > class FunctorContainer<ReturnType, TL::Create<P1, P2, P3>, Allocator>
+  : public Internal::FunctorBase<ReturnType, Allocator>
   {
   public:
     typedef typename TypeTraits<P1>::ParameterType Param1;
@@ -135,9 +141,10 @@ namespace Apto {
 
   template <
     typename ReturnType,
-    typename P1, typename P2, typename P3, typename P4
-  > class FunctorContainer<ReturnType, TL::Create<P1, P2, P3, P4> >
-  : public Internal::FunctorBase<ReturnType>
+    typename P1, typename P2, typename P3, typename P4,
+    class Allocator
+  > class FunctorContainer<ReturnType, TL::Create<P1, P2, P3, P4>, Allocator>
+  : public Internal::FunctorBase<ReturnType, Allocator>
   {
   public:
     typedef typename TypeTraits<P1>::ParameterType Param1;
@@ -149,9 +156,10 @@ namespace Apto {
 
   template <
     typename ReturnType,
-    typename P1, typename P2, typename P3, typename P4, typename P5
-  > class FunctorContainer<ReturnType, TL::Create<P1, P2, P3, P4, P5> >
-  : public Internal::FunctorBase<ReturnType>
+    typename P1, typename P2, typename P3, typename P4, typename P5,
+    class Allocator
+  > class FunctorContainer<ReturnType, TL::Create<P1, P2, P3, P4, P5>, Allocator>
+  : public Internal::FunctorBase<ReturnType, Allocator>
   {
   public:
     typedef typename TypeTraits<P1>::ParameterType Param1;
@@ -164,9 +172,10 @@ namespace Apto {
   
   template <
     typename ReturnType,
-    typename P1, typename P2, typename P3, typename P4, typename P5, typename P6
-  > class FunctorContainer<ReturnType, TL::Create<P1, P2, P3, P4, P5, P6> >
-  : public Internal::FunctorBase<ReturnType>
+    typename P1, typename P2, typename P3, typename P4, typename P5, typename P6,
+    class Allocator
+  > class FunctorContainer<ReturnType, TL::Create<P1, P2, P3, P4, P5, P6>, Allocator>
+  : public Internal::FunctorBase<ReturnType, Allocator>
   {
   public:
     typedef typename TypeTraits<P1>::ParameterType Param1;
@@ -180,8 +189,10 @@ namespace Apto {
   
   template <
     typename ReturnType,
-    typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7
-  > class FunctorContainer<ReturnType, TL::Create<P1, P2, P3, P4, P5, P6, P7> > : public Internal::FunctorBase<ReturnType>
+    typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7,
+    class Allocator
+  > class FunctorContainer<ReturnType, TL::Create<P1, P2, P3, P4, P5, P6, P7>, Allocator >
+  : public Internal::FunctorBase<ReturnType, Allocator>
   {
   public:
     typedef typename TypeTraits<P1>::ParameterType Param1;
@@ -196,9 +207,10 @@ namespace Apto {
   
   template <
     typename ReturnType,
-    typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8
-  > class FunctorContainer<ReturnType, TL::Create<P1, P2, P3, P4, P5, P6, P7, P8> >
-  : public Internal::FunctorBase<ReturnType>
+    typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8,
+    class Allocator
+  > class FunctorContainer<ReturnType, TL::Create<P1, P2, P3, P4, P5, P6, P7, P8>, Allocator>
+  : public Internal::FunctorBase<ReturnType, Allocator>
   {
   public:
     typedef typename TypeTraits<P1>::ParameterType Param1;
@@ -215,9 +227,10 @@ namespace Apto {
   template <
     typename ReturnType,
     typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8,
-    typename P9
-  > class FunctorContainer<ReturnType, TL::Create<P1, P2, P3, P4, P5, P6, P7, P8, P9> >
-  : public Internal::FunctorBase<ReturnType>
+    typename P9,
+    class Allocator
+  > class FunctorContainer<ReturnType, TL::Create<P1, P2, P3, P4, P5, P6, P7, P8, P9>, Allocator>
+  : public Internal::FunctorBase<ReturnType, Allocator>
   {
   public:
     typedef typename TypeTraits<P1>::ParameterType Param1;
@@ -235,9 +248,10 @@ namespace Apto {
   template <
     typename ReturnType,
     typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8,
-    typename P9, typename P10
-  > class FunctorContainer<ReturnType, TL::Create<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10> >
-  : public Internal::FunctorBase<ReturnType>
+    typename P9, typename P10,
+    class Allocator
+  > class FunctorContainer<ReturnType, TL::Create<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10>, Allocator>
+  : public Internal::FunctorBase<ReturnType, Allocator>
   {
   public:
     typedef typename TypeTraits<P1>::ParameterType Param1;
@@ -256,9 +270,10 @@ namespace Apto {
   template <
     typename ReturnType,
     typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8,
-    typename P9, typename P10, typename P11
-  > class FunctorContainer<ReturnType, TL::Create<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11> >
-  : public Internal::FunctorBase<ReturnType>
+    typename P9, typename P10, typename P11,
+    class Allocator
+  > class FunctorContainer<ReturnType, TL::Create<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11>, Allocator>
+  : public Internal::FunctorBase<ReturnType, Allocator>
   {
   public:
     typedef typename TypeTraits<P1>::ParameterType Param1;
@@ -279,9 +294,10 @@ namespace Apto {
   template <
     typename ReturnType,
     typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8,
-    typename P9, typename P10, typename P11, typename P12
-  > class FunctorContainer<ReturnType, TL::Create<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12> >
-  : public Internal::FunctorBase<ReturnType>
+    typename P9, typename P10, typename P11, typename P12,
+    class Allocator
+  > class FunctorContainer<ReturnType, TL::Create<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12>, Allocator>
+  : public Internal::FunctorBase<ReturnType, Allocator>
   {
   public:
     typedef typename TypeTraits<P1>::ParameterType Param1;
@@ -303,9 +319,10 @@ namespace Apto {
   template <
     typename ReturnType,
     typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8,
-    typename P9, typename P10, typename P11, typename P12, typename P13
-  > class FunctorContainer<ReturnType, TL::Create<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13> >
-  : public Internal::FunctorBase<ReturnType>
+    typename P9, typename P10, typename P11, typename P12, typename P13,
+    class Allocator
+  > class FunctorContainer<ReturnType, TL::Create<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13>, Allocator>
+  : public Internal::FunctorBase<ReturnType, Allocator>
   {
   public:
     typedef typename TypeTraits<P1>::ParameterType Param1;
@@ -328,9 +345,10 @@ namespace Apto {
   template <
     typename ReturnType,
     typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8,
-    typename P9, typename P10, typename P11, typename P12, typename P13, typename P14
-  > class FunctorContainer<ReturnType, TL::Create<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14> >
-  : public Internal::FunctorBase<ReturnType>
+    typename P9, typename P10, typename P11, typename P12, typename P13, typename P14,
+    class Allocator
+  > class FunctorContainer<ReturnType, TL::Create<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14>, Allocator>
+  : public Internal::FunctorBase<ReturnType, Allocator>
   {
   public:
     typedef typename TypeTraits<P1>::ParameterType Param1;
@@ -354,9 +372,10 @@ namespace Apto {
   template <
     typename ReturnType,
     typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8,
-    typename P9, typename P10, typename P11, typename P12, typename P13, typename P14, typename P15
-  > class FunctorContainer<ReturnType, TL::Create<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15> >
-  : public Internal::FunctorBase<ReturnType>
+    typename P9, typename P10, typename P11, typename P12, typename P13, typename P14, typename P15,
+    class Allocator
+  > class FunctorContainer<ReturnType, TL::Create<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15>, Allocator>
+  : public Internal::FunctorBase<ReturnType, Allocator>
   {
   public:
     typedef typename TypeTraits<P1>::ParameterType Param1;
@@ -381,9 +400,10 @@ namespace Apto {
   template <
     typename ReturnType,
     typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8,
-    typename P9, typename P10, typename P11, typename P12, typename P13, typename P14, typename P15, typename P16
-  > class FunctorContainer<ReturnType, TL::Create<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16> >
-  : public Internal::FunctorBase<ReturnType>
+    typename P9, typename P10, typename P11, typename P12, typename P13, typename P14, typename P15, typename P16,
+    class Allocator
+  > class FunctorContainer<ReturnType, TL::Create<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16>, Allocator>
+  : public Internal::FunctorBase<ReturnType, Allocator>
   {
   public:
     typedef typename TypeTraits<P1>::ParameterType Param1;
@@ -408,10 +428,11 @@ namespace Apto {
 
   
   template <
-  typename ReturnType,
-  typename P1
-  > class FunctorContainer<ReturnType, TypeList<P1, NullType> >
-  : public Internal::FunctorBase<ReturnType>
+    typename ReturnType,
+    typename P1,
+    class Allocator
+  > class FunctorContainer<ReturnType, TypeList<P1, NullType>, Allocator>
+  : public Internal::FunctorBase<ReturnType, Allocator>
   {
   public:
     typedef typename TypeTraits<P1>::ParameterType Param1;
@@ -419,10 +440,11 @@ namespace Apto {
   };
   
   template <
-  typename ReturnType,
-  typename P1, typename P2
-  > class FunctorContainer<ReturnType, TypeList<P2, TypeList<P1, NullType> > >
-  : public Internal::FunctorBase<ReturnType>
+    typename ReturnType,
+    typename P1, typename P2,
+    class Allocator
+  > class FunctorContainer<ReturnType, TypeList<P2, TypeList<P1, NullType> >, Allocator>
+  : public Internal::FunctorBase<ReturnType, Allocator>
   {
   public:
     typedef typename TypeTraits<P1>::ParameterType Param1;
@@ -431,10 +453,11 @@ namespace Apto {
   };
   
   template <
-  typename ReturnType,
-  typename P1, typename P2, typename P3
-  > class FunctorContainer<ReturnType, TypeList<P3, TypeList<P2, TypeList<P1, NullType> > > >
-  : public Internal::FunctorBase<ReturnType>
+    typename ReturnType,
+    typename P1, typename P2, typename P3,
+    class Allocator
+  > class FunctorContainer<ReturnType, TypeList<P3, TypeList<P2, TypeList<P1, NullType> > >, Allocator>
+  : public Internal::FunctorBase<ReturnType, Allocator>
   {
   public:
     typedef typename TypeTraits<P1>::ParameterType Param1;
@@ -444,10 +467,11 @@ namespace Apto {
   };
   
   template <
-  typename ReturnType,
-  typename P1, typename P2, typename P3, typename P4
-  > class FunctorContainer<ReturnType, TypeList<P4, TypeList<P3, TypeList<P2, TypeList<P1, NullType> > > > >
-  : public Internal::FunctorBase<ReturnType>
+    typename ReturnType,
+    typename P1, typename P2, typename P3, typename P4,
+    class Allocator
+  > class FunctorContainer<ReturnType, TypeList<P4, TypeList<P3, TypeList<P2, TypeList<P1, NullType> > > >, Allocator>
+  : public Internal::FunctorBase<ReturnType, Allocator>
   {
   public:
     typedef typename TypeTraits<P1>::ParameterType Param1;
@@ -458,10 +482,15 @@ namespace Apto {
   };
   
   template <
-  typename ReturnType,
-  typename P1, typename P2, typename P3, typename P4, typename P5
-  > class FunctorContainer<ReturnType, TypeList<P5, TypeList<P4, TypeList<P3, TypeList<P2, TypeList<P1, NullType> > > > > >
-  : public Internal::FunctorBase<ReturnType>
+    typename ReturnType,
+    typename P1, typename P2, typename P3, typename P4, typename P5,
+    class Allocator
+  > class FunctorContainer<
+    ReturnType,
+    TypeList<P5, TypeList<P4, TypeList<P3, TypeList<P2, TypeList<P1, NullType> > > > >,
+    Allocator
+  >
+  : public Internal::FunctorBase<ReturnType, Allocator>
   {
   public:
     typedef typename TypeTraits<P1>::ParameterType Param1;
@@ -473,13 +502,15 @@ namespace Apto {
   };
   
   template <
-  typename ReturnType,
-  typename P1, typename P2, typename P3, typename P4, typename P5, typename P6
+    typename ReturnType,
+    typename P1, typename P2, typename P3, typename P4, typename P5, typename P6,
+    class Allocator
   > class FunctorContainer<
     ReturnType,
-    TypeList<P6, TypeList<P5, TypeList<P4, TypeList<P3, TypeList<P2, TypeList<P1, NullType> > > > > >
+    TypeList<P6, TypeList<P5, TypeList<P4, TypeList<P3, TypeList<P2, TypeList<P1, NullType> > > > > >,
+    Allocator
   >
-  : public Internal::FunctorBase<ReturnType>
+  : public Internal::FunctorBase<ReturnType, Allocator>
   {
   public:
     typedef typename TypeTraits<P1>::ParameterType Param1;
@@ -492,12 +523,15 @@ namespace Apto {
   };
   
   template <
-  typename ReturnType,
-  typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7
+    typename ReturnType,
+    typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7,
+    class Allocator
   > class FunctorContainer<
     ReturnType,
-    TypeList<P7, TypeList<P6, TypeList<P5, TypeList<P4, TypeList<P3, TypeList<P2, TypeList<P1, NullType> > > > > > >
+    TypeList<P7, TypeList<P6, TypeList<P5, TypeList<P4, TypeList<P3, TypeList<P2, TypeList<P1, NullType> > > > > > >,
+    Allocator
   >
+  : public Internal::FunctorBase<ReturnType, Allocator>
   {
   public:
     typedef typename TypeTraits<P1>::ParameterType Param1;
@@ -511,14 +545,16 @@ namespace Apto {
   };
   
   template <
-  typename ReturnType,
-  typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8
+    typename ReturnType,
+    typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8,
+    class Allocator
   > class FunctorContainer<
     ReturnType,
     TypeList<P8, TypeList<P7, TypeList<P6, TypeList<P5, TypeList<P4, TypeList<P3, TypeList<P2,
-      TypeList<P1, NullType> > > > > > > >
+      TypeList<P1, NullType> > > > > > > >,
+    Allocator
   >
-  : public Internal::FunctorBase<ReturnType>
+  : public Internal::FunctorBase<ReturnType, Allocator>
   {
   public:
     typedef typename TypeTraits<P1>::ParameterType Param1;
@@ -533,15 +569,17 @@ namespace Apto {
   };
   
   template <
-  typename ReturnType,
-  typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8,
-  typename P9
+    typename ReturnType,
+    typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8,
+    typename P9,
+    class Allocator
   > class FunctorContainer<
     ReturnType,
     TypeList<P9, TypeList<P8, TypeList<P7, TypeList<P6, TypeList<P5, TypeList<P4, TypeList<P3, TypeList<P2,
-      TypeList<P1, NullType> > > > > > > > >
+      TypeList<P1, NullType> > > > > > > > >,
+    Allocator
   >
-  : public Internal::FunctorBase<ReturnType>
+  : public Internal::FunctorBase<ReturnType, Allocator>
   {
   public:
     typedef typename TypeTraits<P1>::ParameterType Param1;
@@ -557,15 +595,17 @@ namespace Apto {
   };
   
   template <
-  typename ReturnType,
-  typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8,
-  typename P9, typename P10
+    typename ReturnType,
+    typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8,
+    typename P9, typename P10,
+    class Allocator
   > class FunctorContainer<
     ReturnType,
     TypeList<P10, TypeList<P9, TypeList<P8, TypeList<P7, TypeList<P6, TypeList<P5, TypeList<P4, TypeList<P3, TypeList<P2,
-      TypeList<P1, NullType> > > > > > > > > >
+      TypeList<P1, NullType> > > > > > > > > >,
+    Allocator
   >
-  : public Internal::FunctorBase<ReturnType>
+  : public Internal::FunctorBase<ReturnType, Allocator>
   {
   public:
     typedef typename TypeTraits<P1>::ParameterType Param1;
@@ -582,15 +622,17 @@ namespace Apto {
   };
   
   template <
-  typename ReturnType,
-  typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8,
-  typename P9, typename P10, typename P11
+    typename ReturnType,
+    typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8,
+    typename P9, typename P10, typename P11,
+    class Allocator
   > class FunctorContainer<
     ReturnType,
     TypeList<P11, TypeList<P10, TypeList<P9, TypeList<P8, TypeList<P7, TypeList<P6, TypeList<P5, TypeList<P4, TypeList<P3,
-      TypeList<P2, TypeList<P1, NullType> > > > > > > > > > >
+      TypeList<P2, TypeList<P1, NullType> > > > > > > > > > >,
+    Allocator
   >
-  : public Internal::FunctorBase<ReturnType>
+  : public Internal::FunctorBase<ReturnType, Allocator>
   {
   public:
     typedef typename TypeTraits<P1>::ParameterType Param1;
@@ -609,15 +651,17 @@ namespace Apto {
   };
   
   template <
-  typename ReturnType,
-  typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8,
-  typename P9, typename P10, typename P11, typename P12
+    typename ReturnType,
+    typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8,
+    typename P9, typename P10, typename P11, typename P12,
+    class Allocator
   > class FunctorContainer<
     ReturnType,
     TypeList<P12, TypeList<P11, TypeList<P10, TypeList<P9, TypeList<P8, TypeList<P7, TypeList<P6, TypeList<P5, TypeList<P4,
-      TypeList<P3, TypeList<P2, TypeList<P1, NullType> > > > > > > > > > > >
+      TypeList<P3, TypeList<P2, TypeList<P1, NullType> > > > > > > > > > > >,
+    Allocator
   >
-  : public Internal::FunctorBase<ReturnType>
+  : public Internal::FunctorBase<ReturnType, Allocator>
   {
   public:
     typedef typename TypeTraits<P1>::ParameterType Param1;
@@ -637,15 +681,17 @@ namespace Apto {
   };
   
   template <
-  typename ReturnType,
-  typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8,
-  typename P9, typename P10, typename P11, typename P12, typename P13
+    typename ReturnType,
+    typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8,
+    typename P9, typename P10, typename P11, typename P12, typename P13,
+    class Allocator
   > class FunctorContainer<
     ReturnType,
     TypeList<P13, TypeList<P12, TypeList<P11, TypeList<P10, TypeList<P9, TypeList<P8, TypeList<P7, TypeList<P6, TypeList<P5,
-      TypeList<P4, TypeList<P3, TypeList<P2, TypeList<P1, NullType> > > > > > > > > > > > >
+      TypeList<P4, TypeList<P3, TypeList<P2, TypeList<P1, NullType> > > > > > > > > > > > >,
+    Allocator
   >
-  : public Internal::FunctorBase<ReturnType>
+  : public Internal::FunctorBase<ReturnType, Allocator>
   {
   public:
     typedef typename TypeTraits<P1>::ParameterType Param1;
@@ -666,15 +712,17 @@ namespace Apto {
   };
   
   template <
-  typename ReturnType,
-  typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8,
-  typename P9, typename P10, typename P11, typename P12, typename P13, typename P14
+    typename ReturnType,
+    typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8,
+    typename P9, typename P10, typename P11, typename P12, typename P13, typename P14,
+    class Allocator
   > class FunctorContainer<
     ReturnType,
     TypeList<P14, TypeList<P13, TypeList<P12, TypeList<P11, TypeList<P10, TypeList<P9, TypeList<P8, TypeList<P7, TypeList<P6,
-      TypeList<P5, TypeList<P4, TypeList<P3, TypeList<P2, TypeList<P1, NullType> > > > > > > > > > > > > >
+      TypeList<P5, TypeList<P4, TypeList<P3, TypeList<P2, TypeList<P1, NullType> > > > > > > > > > > > > >,
+    Allocator
   >
-  : public Internal::FunctorBase<ReturnType>
+  : public Internal::FunctorBase<ReturnType, Allocator>
   {
   public:
     typedef typename TypeTraits<P1>::ParameterType Param1;
@@ -696,16 +744,18 @@ namespace Apto {
   };
   
   template <
-  typename ReturnType,
-  typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8,
-  typename P9, typename P10, typename P11, typename P12, typename P13, typename P14, typename P15
+    typename ReturnType,
+    typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8,
+    typename P9, typename P10, typename P11, typename P12, typename P13, typename P14, typename P15,
+    class Allocator
   > class FunctorContainer<
     ReturnType,
     TypeList<P15, TypeList<P14, TypeList<P13, TypeList<P12, TypeList<P11, TypeList<P10, TypeList<P9, TypeList<P8,
       TypeList<P7, TypeList<P6, TypeList<P5, TypeList<P4, TypeList<P3, TypeList<P2, TypeList<P1, NullType>
-    > > > > > > > > > > > > > >
+    > > > > > > > > > > > > > >,
+    Allocator
   >
-  : public Internal::FunctorBase<ReturnType>
+  : public Internal::FunctorBase<ReturnType, Allocator>
   {
   public:
     typedef typename TypeTraits<P1>::ParameterType Param1;
@@ -728,16 +778,18 @@ namespace Apto {
   };
   
   template <
-  typename ReturnType,
-  typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8,
-  typename P9, typename P10, typename P11, typename P12, typename P13, typename P14, typename P15, typename P16
+    typename ReturnType,
+    typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8,
+    typename P9, typename P10, typename P11, typename P12, typename P13, typename P14, typename P15, typename P16,
+    class Allocator
   > class FunctorContainer<
     ReturnType,
     TypeList<P16, TypeList<P15, TypeList<P14, TypeList<P13, TypeList<P12, TypeList<P11, TypeList<P10, TypeList<P9,
       TypeList<P8, TypeList<P7, TypeList<P6, TypeList<P5, TypeList<P4, TypeList<P3, TypeList<P2, TypeList<P1, NullType>
-    > > > > > > > > > > > > > > >
+    > > > > > > > > > > > > > > >,
+    Allocator
   >
-  : public Internal::FunctorBase<ReturnType>
+  : public Internal::FunctorBase<ReturnType, Allocator>
   {
   public:
     typedef typename TypeTraits<P1>::ParameterType Param1;
@@ -1020,10 +1072,10 @@ namespace Apto {
   // Functor
   // --------------------------------------------------------------------------------------------------------------
 
-  template <typename R = void, class TList = NullType> class Functor
+  template <typename R = void, class TList = NullType, class Allocator = BasicMalloc> class Functor
   {
   public:
-    typedef FunctorContainer<R, TList> ContainerType;
+    typedef FunctorContainer<R, TList, Allocator> ContainerType;
     typedef R ReturnType;
     typedef TList ParameterList;
     typedef typename ContainerType::Param1 Param1;
@@ -1180,12 +1232,12 @@ namespace Apto {
   namespace Internal {
     
     template <class Fctor> struct BindFirstTraits;
-    template <typename R, class TList> struct BindFirstTraits<Functor<R, TList> >
+    template <typename R, class TList, class A> struct BindFirstTraits<Functor<R, TList, A> >
     {
-      typedef Functor<R, TList> OriginalFunctor;
+      typedef Functor<R, TList, A> OriginalFunctor;
       typedef typename TL::Remove<TList, typename TL::TypeAt<TList, 0>::Result>::Result ParameterList;
       typedef typename TL::TypeAt<TList, 0>::Result OriginalParam1;
-      typedef Functor<R, ParameterList> BoundFunctorType;
+      typedef Functor<R, ParameterList, A> BoundFunctorType;
       typedef typename BoundFunctorType::ContainerType ContainerType;
     };
     
@@ -1195,9 +1247,9 @@ namespace Apto {
     {
       typedef typename TypeTraits<T>::ParameterType RefOrValue;
     };
-    template <typename R, class TList> struct BindTypeStorage<Functor<R, TList> >
+    template <typename R, class TList, class A> struct BindTypeStorage<Functor<R, TList, A> >
     {
-      typedef Functor<R, TList> OriginalFunctor;
+      typedef Functor<R, TList, A> OriginalFunctor;
       typedef const typename TypeTraits<OriginalFunctor>::ReferredType RefOrValue;
     };
     

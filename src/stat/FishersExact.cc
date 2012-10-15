@@ -205,7 +205,7 @@ private:
     PastPathLength(double in_value, int in_freq) : value(in_value), observed(in_freq), next_left(-1), next_right(-1) { ; }
   };
   
-  class FExactNode : public RefCountObject
+  class FExactNode : public RefCountObject<SingleThreaded>
   {
   public:
     int key;

@@ -1,25 +1,25 @@
 /*
- *  RefCount.h
+ *  Malloc.h
  *  Apto
  *
- *  Created by David on 11/12/08.
- *  Copyright 2008-2011 David Michael Bryson. All rights reserved.
+ *  Created by David on 10/10/12.
+ *  Copyright 2012 David Michael Bryson. All rights reserved.
  *  http://programerror.com/software/apto
  *
  *  Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
  *  following conditions are met:
- *  
+ *
  *  1.  Redistributions of source code must retain the above copyright notice, this list of conditions and the
  *      following disclaimer.
  *  2.  Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the
  *      following disclaimer in the documentation and/or other materials provided with the distribution.
  *  3.  Neither the name of David Michael Bryson, nor the names of contributors may be used to endorse or promote
  *      products derived from this software without specific prior written permission.
- *  
+ *
  *  THIS SOFTWARE IS PROVIDED BY DAVID MICHAEL BRYSON AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
  *  INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
  *  DISCLAIMED. IN NO EVENT SHALL DAVID MICHAEL BRYSON OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- *  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR 
+ *  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
  *  SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
  *  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
@@ -28,36 +28,41 @@
  *
  */
 
-#ifndef AptoCoreRefCount_h
-#define AptoCoreRefCount_h
+#ifndef AptoCoreMalloc_h
+#define AptoCoreMalloc_h
 
-#include "apto/core/ThreadingModel.h"
-#include "apto/platform/Visibility.h"
+#include <cstddef>
+#include <cstdlib>
 
 
 namespace Apto {
   
-  // RefCountObject - Internal reference counted object
+  // BasicMalloc - Simply forward requests on to the system malloc and free
   // --------------------------------------------------------------------------------------------------------------
   
-  template <template <class> class ThreadingModel> class RefCountObject
+  class BasicMalloc
   {
-  private:
-    mutable typename ThreadingModel<int>::AtomicInt m_ref_count;
-    
+  public:    
+    static inline void* Allocate(std::size_t size) { return ::malloc(size); }
+    static inline void Deallocate(void* ptr) { ::free(ptr); }
+    static inline void Deallocate(void* ptr, std::size_t size) { (void)size; ::free(ptr); }
+  };
+  
+  
+  
+  // ClassAllocator - Convenience helper for replacing the new/delete calls of a class with a custom allocator
+  // --------------------------------------------------------------------------------------------------------------
+  
+  template <class Allocator>
+  class ClassAllocator
+  {
   public:
-    inline RefCountObject() { ThreadingModel<int>::Set(m_ref_count, 1); }
-    inline RefCountObject(const RefCountObject&) { ThreadingModel<int>::Set(m_ref_count, 1); }
-    virtual ~RefCountObject() { ; }
-    
-    inline RefCountObject& operator=(const RefCountObject&) { return *this; }
-    
-    inline void AddReference() const { ThreadingModel<int>::Inc(m_ref_count); }
-    inline void RemoveReference() const { if (ThreadingModel<int>::DecAndTest(m_ref_count)) delete this; }
-    
-    inline int RefCount() const { return ThreadingModel<int>::Get(m_ref_count); }
+    static void* operator new(std::size_t size) { return Allocator::Allocate(size); }
+    static void operator delete(void* ptr, std::size_t size) { Allocator::Deallocate(ptr, size); }
+    virtual ~ClassAllocator() { ; }
   };
   
 };
+
 
 #endif

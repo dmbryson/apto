@@ -45,7 +45,7 @@ namespace Apto {
   // Basic String
   // --------------------------------------------------------------------------------------------------------------
   
-  template <class ThreadingModel = ThreadSafe> class BasicString
+  template <template <class> class ThreadingModel = ThreadSafe> class BasicString
   {
   public:
     typedef char ValueType;
@@ -67,7 +67,7 @@ namespace Apto {
     inline BasicString(const char* str) : m_value((str != NULL) ? new StringRep(static_cast<int>(strlen(str)), str) : NULL) { assert(str == NULL || m_value); }
     inline BasicString(int size, const char* str) : m_value(new StringRep(size, str)) { assert(m_value); }
     inline BasicString(const BasicString& rhs) : m_value(rhs.m_value) { ; }
-    template <class T1> inline BasicString(const BasicString<T1>& rhs) : m_value(new StringRep(rhs.GetSize(), rhs.GetData())) { ; }
+    template <template <class> class T1> inline BasicString(const BasicString<T1>& rhs) : m_value(new StringRep(rhs.GetSize(), rhs.GetData())) { ; }
     
     inline ~BasicString() { ; }
     
@@ -81,7 +81,7 @@ namespace Apto {
     
     // Assignment
     inline BasicString& operator=(const BasicString& rhs) { m_value = rhs.m_value; return *this; }
-    template <class T1> inline BasicString& operator=(const BasicString<T1>& rhs)
+    template <template <class> class T1> inline BasicString& operator=(const BasicString<T1>& rhs)
     {
       m_value = new StringRep(rhs.GetSize(), rhs.GetData());
       assert(m_value);
@@ -117,23 +117,23 @@ namespace Apto {
     }
     inline bool operator==(const char* rhs) const { return Compare(rhs) == 0; }
     
-    template <class R>
+    template <template <class> class R>
     inline bool operator!=(const BasicString<R>& rhs) const { return !operator==(rhs); }
     inline bool operator!=(const char* rhs) const { return Compare(rhs) != 0; }
     
-    template <class R>
+    template <template <class> class R>
     inline bool operator<(const BasicString<R>& rhs) const { return Compare(rhs) < 0; }
     inline bool operator<(const char* rhs) const { return Compare(rhs) < 0; }
     
-    template <class R>
+    template <template <class> class R>
     inline bool operator>(const BasicString<R>& rhs) const { return Compare(rhs) > 0; }
     inline bool operator>(const char* rhs) const { return Compare(rhs) > 0; }
 
-    template <class R>
+    template <template <class> class R>
     inline bool operator<=(const BasicString<R>& rhs) const { return Compare(rhs) <= 0; }
     inline bool operator<=(const char* rhs) const { return Compare(rhs) <= 0; }
 
-    template <class R>
+    template <template <class> class R>
     inline bool operator>=(const BasicString<R>& rhs) const { return Compare(rhs) >= 0; }
     inline bool operator>=(const char* rhs) const { return Compare(rhs) >= 0; }
     
@@ -287,7 +287,7 @@ namespace Apto {
     }
 
   
-    class StringRep : public TypeSelect<ThreadingModel::UseThreadSafe, MTRefCountObject, RefCountObject>::Result
+    class StringRep : public RefCountObject<ThreadingModel>
     {
     private:
       int m_size;
@@ -371,19 +371,19 @@ namespace Apto {
     };
   };
   
-  template <class ThreadingModel>
+  template <template <class> class ThreadingModel>
   inline bool operator==(const char* lhs, const BasicString<ThreadingModel>& rhs) { return rhs == lhs; }
-  template <class ThreadingModel>
+  template <template <class> class ThreadingModel>
   inline bool operator!=(const char* lhs, const BasicString<ThreadingModel>& rhs) { return rhs != lhs; }
   
-  template <class ThreadingModel>
+  template <template <class> class ThreadingModel>
   inline bool operator<(const char* lhs, const BasicString<ThreadingModel>& rhs) { return rhs > lhs; }
-  template <class ThreadingModel>
+  template <template <class> class ThreadingModel>
   inline bool operator>(const char* lhs, const BasicString<ThreadingModel>& rhs) { return rhs < lhs; }
   
-  template <class ThreadingModel>
+  template <template <class> class ThreadingModel>
   inline bool operator<=(const char* lhs, const BasicString<ThreadingModel>& rhs) { return rhs >= lhs; }
-  template <class ThreadingModel>
+  template <template <class> class ThreadingModel>
   inline bool operator>=(const char* lhs, const BasicString<ThreadingModel>& rhs) { return rhs <= lhs; }
   
   
@@ -396,7 +396,7 @@ namespace Apto {
   // will work fine (and reasonably fast!) but some patterns will cause all
   // strings to go into the same cell.  For example, "ABC"=="CBA"=="BBB".
   template <class T, int HashFactor> class HashKey;
-  template <class ThreadingModel, int HashFactor> class HashKey<BasicString<ThreadingModel>, HashFactor>
+  template <template <class> class ThreadingModel, int HashFactor> class HashKey<BasicString<ThreadingModel>, HashFactor>
   {
   public:
     static int Hash(const BasicString<ThreadingModel>& key)

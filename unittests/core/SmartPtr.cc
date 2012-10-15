@@ -90,7 +90,7 @@ public:
 };
 
 
-class RCBaseClass : public Apto::RefCountObject
+class RCBaseClass : public Apto::RefCountObject<Apto::ThreadSafe>
 {
 private:
   static int s_constructions;

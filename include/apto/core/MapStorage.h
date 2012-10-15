@@ -493,7 +493,7 @@ namespace Apto {
       
       
       
-  template <class K, class V, int HashFactor, template <class, int> class HashFunctor = HashKey>
+  template <class K, class V, int HashFactor, template <class, int> class HashFunctor = HashKey, class Allocator = BasicMalloc>
   class HashStaticTableLinkedList
   {
   protected:
@@ -510,7 +510,7 @@ namespace Apto {
     static const bool Sorted = false;
     
   protected:
-    struct Entry {
+    struct Entry : public ClassAllocator<Allocator> {
       K key;
       V value;
       Entry* prev;
@@ -646,16 +646,16 @@ namespace Apto {
   protected:
     class Iterator
     {
-      friend class HashBTree<K, V, HashFactor, HashFunctor>;
+      friend class HashStaticTableLinkedList<K, V, HashFactor, HashFunctor, Allocator>;
     private:
-      HashStaticTableLinkedList<K, V, HashFactor, HashFunctor>* m_map;
+      HashStaticTableLinkedList<K, V, HashFactor, HashFunctor, Allocator>* m_map;
       int m_table_idx;
       Entry* m_cur_entry;
       Pair<K, V*> m_pair;
       
       Iterator(); // @not_implemented
 
-      Iterator(HashStaticTableLinkedList<K, V, HashFactor, HashFunctor>* map) : m_map(map), m_table_idx(-1), m_cur_entry(NULL) { ; }
+      Iterator(HashStaticTableLinkedList<K, V, HashFactor, HashFunctor, Allocator>* map) : m_map(map), m_table_idx(-1), m_cur_entry(NULL) { ; }
       
     public:
       Pair<K, V*>* Next()
@@ -680,16 +680,16 @@ namespace Apto {
     
     class ConstIterator
     {
-      friend class HashStaticTableLinkedList<K, V, HashFactor, HashFunctor>;
+      friend class HashStaticTableLinkedList<K, V, HashFactor, HashFunctor, Allocator>;
     private:
-      const HashBTree<K, V, HashFactor, HashFunctor>* m_map;
+      const HashStaticTableLinkedList<K, V, HashFactor, HashFunctor, Allocator>* m_map;
       int m_table_idx;
       Entry* m_cur_entry;
       Pair<K, const V*> m_pair;
       
       ConstIterator(); // @not_implemented
       
-      ConstIterator(const HashStaticTableLinkedList<K, V, HashFactor, HashFunctor>* map) : m_map(map), m_table_idx(-1), m_cur_entry(NULL) { ; }
+      ConstIterator(const HashStaticTableLinkedList<K, V, HashFactor, HashFunctor, Allocator>* map) : m_map(map), m_table_idx(-1), m_cur_entry(NULL) { ; }
       
     public:
       const Pair<K, const V*>* Next()
@@ -714,15 +714,15 @@ namespace Apto {
     
     class KeyIterator
     {
-      friend class HashStaticTableLinkedList<K, V, HashFactor, HashFunctor>;
+      friend class HashStaticTableLinkedList<K, V, HashFactor, HashFunctor, Allocator>;
     private:
-      const HashStaticTableLinkedList<K, V, HashFactor, HashFunctor>* m_map;
+      const HashStaticTableLinkedList<K, V, HashFactor, HashFunctor, Allocator>* m_map;
       int m_table_idx;
       Entry* m_cur_entry;
       
       KeyIterator(); // @not_implemented
       
-      KeyIterator(const HashStaticTableLinkedList<K, V, HashFactor, HashFunctor>* map) : m_map(map), m_table_idx(-1), m_cur_entry(NULL) { ; }
+      KeyIterator(const HashStaticTableLinkedList<K, V, HashFactor, HashFunctor, Allocator>* map) : m_map(map), m_table_idx(-1), m_cur_entry(NULL) { ; }
       
     public:
       const K* Next()
@@ -745,15 +745,15 @@ namespace Apto {
     
     class ValueIterator
     {
-      friend class HashStaticTableLinkedList<K, V, HashFactor, HashFunctor>;
+      friend class HashStaticTableLinkedList<K, V, HashFactor, HashFunctor, Allocator>;
     private:
-      HashBTree<K, V, HashFactor, HashFunctor>* m_map;
+      HashStaticTableLinkedList<K, V, HashFactor, HashFunctor, Allocator>* m_map;
       int m_table_idx;
       Entry* m_cur_entry;
       
       ValueIterator(); // @not_implemented
       
-      ValueIterator(HashStaticTableLinkedList<K, V, HashFactor, HashFunctor>* map) : m_map(map), m_table_idx(-1), m_cur_entry(NULL) { ; }
+      ValueIterator(HashStaticTableLinkedList<K, V, HashFactor, HashFunctor, Allocator>* map) : m_map(map), m_table_idx(-1), m_cur_entry(NULL) { ; }
       
     public:
       V* Next()

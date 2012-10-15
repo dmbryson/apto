@@ -43,7 +43,7 @@ namespace Apto {
   // Declarations used to allow string buffer type conversion
   // --------------------------------------------------------------------------------------------------------------
   
-  template <class ThreadingModel> class BasicString;
+  template <template <class> class ThreadingModel> class BasicString;
   
   
   // String Buffer
@@ -76,7 +76,7 @@ namespace Apto {
     inline StringBuffer(int size, const char* str) : m_value(new StringBufferRep(size, str)) { assert(m_value); }
     inline explicit StringBuffer(int size) : m_value(new StringBufferRep(size)) { assert(m_value); }
     inline StringBuffer(const StringBuffer& rhs) : m_value(NULL) { this->operator=(rhs); }
-    template <class R>
+    template <template <class> class R>
     inline StringBuffer(const BasicString<R>& rhs) : m_value(new StringBufferRep(rhs.GetSize(), rhs.GetData())) { ; }
     
     inline ~StringBuffer() { m_value->RemoveReference(); }
@@ -94,11 +94,10 @@ namespace Apto {
     {
       if (&rhs == this) return *this;
       if (m_value) m_value->RemoveReference();
-      if (rhs.m_value->IsExclusive()) m_value = new StringBufferRep(*rhs.m_value);
-      else {
-        m_value = rhs.m_value;
-        m_value->AddReference();
-      }
+      
+      m_value = rhs.m_value;
+      m_value->AddReference();
+      
       return *this;
     }
     
@@ -157,12 +156,12 @@ namespace Apto {
     inline StringBuffer& operator+=(const char c) { return append(1, &c); }
     inline StringBuffer& operator+=(const char* str) { return append(static_cast<int>(strlen(str)), str); }
     inline StringBuffer& operator+=(const StringBuffer& str) { return append(str.GetSize(), str.GetData()); }
-    template <class R>
+    template <template <class> class R>
     inline StringBuffer& operator+=(const BasicString<R>& str) { return append(str.GetSize(), str.GetData()); }
     inline StringBuffer operator+(const char c) { return concat(1, &c); }
     inline StringBuffer operator+(const char* str) { return concat(static_cast<int>(strlen(str)), str); }
     inline StringBuffer operator+(const StringBuffer& str) { return concat(str.GetSize(), str.GetData()); }
-    template <class R>
+    template <template <class> class R>
     inline StringBuffer operator+(const BasicString<R>& str) { return concat(str.GetSize(), str.GetData()); }
     
     
@@ -222,7 +221,7 @@ namespace Apto {
     }
 
     
-    class StringBufferRep : public RefCountObject
+    class StringBufferRep : public RefCountObject<SingleThreaded>
     {
     private:
       int m_capacity;
@@ -381,7 +380,7 @@ namespace Apto {
   
   inline void StringBuffer::copyOnWrite()
   {
-    if (!m_value->IsExclusive()) {
+    if (m_value->RefCount() != 1) {
       StringBufferRep* old_value = m_value;
       m_value = new StringBufferRep(*old_value);
       old_value->RemoveReference();
