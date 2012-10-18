@@ -242,7 +242,7 @@ namespace Apto {
         m_data[size] = '\0';
       }
       StringBufferRep(const StringBufferRep& rhs)
-        : RefCountObject(), m_capacity(rhs.m_size + 1), m_size(rhs.m_size), m_data(new char[m_size + 1])
+        : RefCountObject<SingleThreaded>(), m_capacity(rhs.m_size + 1), m_size(rhs.m_size), m_data(new char[m_size + 1])
       {
         assert(m_data);
         memcpy(m_data, rhs.m_data, m_size);
