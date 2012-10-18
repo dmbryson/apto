@@ -45,7 +45,7 @@ namespace Apto {
   // Basic String
   // --------------------------------------------------------------------------------------------------------------
   
-  template <template <class> class ThreadingModel = ThreadSafe> class BasicString
+  template <template <class> class ThreadingModel = SingleThreaded> class BasicString
   {
   public:
     typedef char ValueType;
@@ -71,6 +71,7 @@ namespace Apto {
     
     inline ~BasicString() { ; }
     
+    inline BasicString Clone() { return BasicString(m_value->GetSize(), m_value->GetRep()); }
     
     // Property Access
     inline int GetSize() const { return (m_value) ? m_value->GetSize() : 0; }
