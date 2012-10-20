@@ -31,6 +31,7 @@
 #include "apto/core/String.h"
 
 namespace Apto {
-  template<> BasicString<SingleThreaded>::StringRep::~StringRep() { delete [] m_data; }
-  template<> BasicString<ThreadSafe>::StringRep::~StringRep() { delete [] m_data; }
+  namespace Internal {
+    StringRep::~StringRep() { delete [] m_data; }
+  }
 };

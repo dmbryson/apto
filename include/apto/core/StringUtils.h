@@ -124,7 +124,7 @@ namespace Apto {
   public:
     ConvertToStr(T value) : m_value(value) { ; }
     
-    template <template <class> class M> inline operator Apto::BasicString<M>() const { return Apto::BasicString<M>(m_value); }
+    inline operator Apto::BasicString<SingleThreaded>() const { return Apto::BasicString<SingleThreaded>(m_value); }
   };
   
   
@@ -136,7 +136,7 @@ namespace Apto {
   public:
     ConvertToStr(char value) { m_str[0] = value; m_str[1] = '\0'; }
     
-    template <template <class> class M> inline operator Apto::BasicString<M>() const { return Apto::BasicString<M>(m_str); }
+    inline operator Apto::BasicString<SingleThreaded>() const { return Apto::BasicString<SingleThreaded>(m_str); }
   };
   
   template <> class ConvertToStr<int>
@@ -151,7 +151,7 @@ namespace Apto {
     ConvertToStr(int value) { snprintf(m_str, 64, "%d", value); m_str[63] = '\0'; }
 #endif
 
-    template <template <class> class M> inline operator Apto::BasicString<M>() const { return Apto::BasicString<M>(m_str); }
+    inline operator Apto::BasicString<SingleThreaded>() const { return Apto::BasicString<SingleThreaded>(m_str); }
   };
   
   template <> class ConvertToStr<double>
@@ -166,7 +166,7 @@ namespace Apto {
     ConvertToStr(double value) { snprintf(m_str, 128, "%g", value); m_str[127] = '\0'; }
 #endif
 
-    template <template <class> class M> inline operator Apto::BasicString<M>() const { return Apto::BasicString<M>(m_str); }
+    inline operator Apto::BasicString<SingleThreaded>() const { return Apto::BasicString<SingleThreaded>(m_str); }
   };
   
   template <> class ConvertToStr<bool>
@@ -177,7 +177,7 @@ namespace Apto {
   public:
     ConvertToStr(bool value) : m_str(value ? "true" : "false") { ; }
     
-    template <template <class> class M> inline operator Apto::BasicString<M>() const { return Apto::BasicString<M>(m_str); }
+    inline operator Apto::BasicString<SingleThreaded>() const { return Apto::BasicString<SingleThreaded>(m_str); }
   };
 
   template <template <class> class M> class ConvertToStr<Apto::BasicString<M> >
@@ -188,7 +188,7 @@ namespace Apto {
   public:
     ConvertToStr(const Apto::BasicString<M>& value) : m_str(value) { ; }
     
-    inline operator const Apto::BasicString<M>&() const { return m_str; }
+    inline operator const Apto::BasicString<SingleThreaded>&() const { return m_str; }
   };
 
   template <class T> inline ConvertToStr<T> AsStr(T value) { return ConvertToStr<T>(value); }
@@ -235,8 +235,7 @@ namespace Apto {
     }
     inline ~FormatStr() { delete [] m_buffer; }
     
-    template <template <class> class T>
-    inline operator BasicString<T>() const { return BasicString<T>(m_buffer); }
+    inline operator BasicString<SingleThreaded>() const { return BasicString<SingleThreaded>(m_buffer); }
   };
   
 

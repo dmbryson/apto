@@ -42,19 +42,80 @@
 
 namespace Apto {
   
+  // Internal String Representation Implemenation
+  // --------------------------------------------------------------------------------------------------------------
+  
+  namespace Internal {
+    class StringRep
+    {
+    private:
+      int m_size;
+      char* m_data;
+      
+    public:
+      LIB_EXPORT inline explicit StringRep(int size = 0) : m_size(size), m_data(new char[size + 1])
+      {
+        assert(m_data);
+        m_data[0] = '\0';
+        m_data[size] = '\0';
+      }
+      LIB_EXPORT inline StringRep(int size, const char* str) : m_size(size), m_data(new char[size + 1])
+      {
+        assert(m_data);
+        memcpy(m_data, str, m_size);
+        m_data[size] = '\0';
+      }
+      LIB_EXPORT inline StringRep(const StringRep& rhs) : m_size(rhs.m_size), m_data(new char[m_size + 1])
+      {
+        assert(m_data);
+        memcpy(m_data, rhs.m_data, m_size);
+        m_data[m_size] = '\0';
+      }
+      
+      LIB_EXPORT virtual ~StringRep();
+      
+      LIB_EXPORT inline int GetSize() const { return m_size; }
+      LIB_EXPORT inline const char* GetRep() const { return m_data; }
+      
+      LIB_EXPORT inline char operator[](int index) const { return m_data[index]; }
+      LIB_EXPORT inline char& operator[](int index) { return m_data[index]; }
+      
+      LIB_EXPORT virtual void AddReference() const = 0;
+      LIB_EXPORT virtual void RemoveReference() const = 0;
+    };
+
+  };
+
+  
   // Basic String
   // --------------------------------------------------------------------------------------------------------------
   
-  template <template <class> class ThreadingModel = SingleThreaded> class BasicString
+  template <template <class> class ThreadingModel> class BasicString
   {
+    friend class BasicString<SingleThreaded>;
+    friend class BasicString<ThreadSafe>;
   public:
     typedef char ValueType;
     class Iterator;
     class ConstIterator;
     
   protected:
-    class StringRep;
-    typedef SmartPtr<StringRep, InternalRCObject> StringRepPtr;
+    typedef SmartPtr<Internal::StringRep, InternalRCObject> StringRepPtr;
+    class TMStringRep : public Internal::StringRep
+    {
+    private:
+      mutable typename ThreadingModel<int>::AtomicInt m_ref_count;
+      
+    public:
+      inline explicit TMStringRep(int size = 0) : StringRep(size) { ThreadingModel<int>::Set(m_ref_count, 1); }
+      inline TMStringRep(int size, const char* str) : StringRep(size, str) { ThreadingModel<int>::Set(m_ref_count, 1); }
+      inline TMStringRep(const TMStringRep& rhs) : StringRep(rhs) { ThreadingModel<int>::Set(m_ref_count, 1); }
+      inline TMStringRep(const StringRep& rhs) : StringRep(rhs) { ThreadingModel<int>::Set(m_ref_count, 1); }
+      ~TMStringRep() { ; }
+
+      void AddReference() const { ThreadingModel<int>::Inc(m_ref_count); }
+      void RemoveReference() const { if (ThreadingModel<int>::DecAndTest(m_ref_count)) delete this; }
+    };
     
   protected:
     StringRepPtr m_value;
@@ -64,10 +125,10 @@ namespace Apto {
   public:
     // Construction
     inline BasicString() { ; }
-    inline BasicString(const char* str) : m_value((str != NULL) ? new StringRep(static_cast<int>(strlen(str)), str) : NULL) { assert(str == NULL || m_value); }
-    inline BasicString(int size, const char* str) : m_value(new StringRep(size, str)) { assert(m_value); }
-    inline BasicString(const BasicString& rhs) : m_value(rhs.m_value) { ; }
-    template <template <class> class T1> inline BasicString(const BasicString<T1>& rhs) : m_value(new StringRep(rhs.GetSize(), rhs.GetData())) { ; }
+    inline BasicString(const char* str) : m_value((str != NULL) ? new TMStringRep(static_cast<int>(strlen(str)), str) : NULL) { assert(str == NULL || m_value); }
+    inline BasicString(int size, const char* str) : m_value(new TMStringRep(size, str)) { assert(m_value); }
+    inline BasicString(const BasicString<SingleThreaded>& rhs) : m_value(rhs.m_value) { ; }
+    inline BasicString(const BasicString<ThreadSafe>& rhs) : m_value(rhs.m_value) { ; }
     
     inline ~BasicString() { ; }
     
@@ -81,18 +142,13 @@ namespace Apto {
 
     
     // Assignment
-    inline BasicString& operator=(const BasicString& rhs) { m_value = rhs.m_value; return *this; }
-    template <template <class> class T1> inline BasicString& operator=(const BasicString<T1>& rhs)
-    {
-      m_value = new StringRep(rhs.GetSize(), rhs.GetData());
-      assert(m_value);
-      return *this;
-    }
+    inline BasicString& operator=(const BasicString<SingleThreaded>& rhs) { m_value = rhs.m_value; return *this; }
+    inline BasicString& operator=(const BasicString<ThreadSafe>& rhs) { m_value = rhs.m_value; return *this; }
     
     inline BasicString& operator=(const char* rhs)
     {
       assert(rhs);
-      m_value = StringRepPtr(new StringRep(static_cast<int>(strlen(rhs)), rhs));
+      m_value = StringRepPtr(new TMStringRep(static_cast<int>(strlen(rhs)), rhs));
       assert(m_value);
       return *this;
     }
@@ -110,7 +166,13 @@ namespace Apto {
       return -1;
     }
     
-    bool operator==(const BasicString& rhs) const
+    bool operator==(const BasicString<SingleThreaded>& rhs) const
+    {
+      if (rhs.GetSize() != GetSize()) return false;
+      for (int i = 0; i < GetSize(); i++) if ((*this)[i] != rhs[i]) return false;
+      return true;
+    }
+    bool operator==(const BasicString<ThreadSafe>& rhs) const
     {
       if (rhs.GetSize() != GetSize()) return false;
       for (int i = 0; i < GetSize(); i++) if ((*this)[i] != rhs[i]) return false;
@@ -179,7 +241,7 @@ namespace Apto {
     // Modified content
     BasicString& ToLower()
     {
-      m_value = StringRepPtr(new StringRep(*m_value));
+      m_value = StringRepPtr(new TMStringRep(*m_value));
       for (int i = 0; i < m_value->GetSize(); i++) {
         if (m_value->operator[](i) >= 'A' && m_value->operator[](i) <= 'Z' )
           m_value->operator[](i) += 'a' - 'A';
@@ -190,7 +252,7 @@ namespace Apto {
 
     BasicString AsLower() const
     {
-      StringRepPtr value(new StringRep(*m_value));
+      StringRepPtr value(new TMStringRep(*m_value));
       for (int i = 0; i < value->GetSize(); i++) {
         if (value->operator[](i) >= 'A' && value->operator[](i) <= 'Z' )
           value->operator[](i) += 'a' - 'A';
@@ -201,7 +263,7 @@ namespace Apto {
     
     BasicString& ToUpper()
     {
-      m_value = StringRepPtr(new StringRep(*m_value));
+      m_value = StringRepPtr(new TMStringRep(*m_value));
       for (int i = 0; i < m_value->GetSize(); i++) {
         if (m_value->operator[](i) >= 'a' && m_value->operator[](i) <= 'z' )
           m_value->operator[](i) += 'A' - 'a';
@@ -212,7 +274,7 @@ namespace Apto {
 
     BasicString AsUpper() const
     {
-      StringRepPtr value(new StringRep(*m_value));
+      StringRepPtr value(new TMStringRep(*m_value));
       for (int i = 0; i < value->GetSize(); i++) {
         if (value->operator[](i) >= 'a' && value->operator[](i) <= 'z' )
           value->operator[](i) += 'A' - 'a';
@@ -228,7 +290,7 @@ namespace Apto {
       int end_idx = GetSize() - 1;
       while (end_idx > start_idx && IsWhitespace(end_idx)) end_idx--;
       
-      m_value = StringRepPtr(new StringRep(end_idx - start_idx + 1, m_value->GetRep() + start_idx));
+      m_value = StringRepPtr(new TMStringRep(end_idx - start_idx + 1, m_value->GetRep() + start_idx));
       
       return *this;
     }
@@ -269,7 +331,7 @@ namespace Apto {
     BasicString& append(int size, const char* str)
     {
       assert(size == 0 || str != NULL);
-      StringRepPtr newstr(new StringRep(size + GetSize()));
+      StringRepPtr newstr(new TMStringRep(size + GetSize()));
       assert(newstr);
       for (int i = 0; i < GetSize(); i++) newstr->operator[](i) = m_value->operator[](i);
       for (int i = 0; i < size; i++) newstr->operator[](i + GetSize()) = str[i];
@@ -281,47 +343,13 @@ namespace Apto {
     {
       if (size == 0) return BasicString(*this);
       assert(str != NULL);
-      StringRepPtr newstr(new StringRep(size + GetSize()));
+      StringRepPtr newstr(new TMStringRep(size + GetSize()));
       for (int i = 0; i < GetSize(); i++) newstr->operator[](i) = m_value->operator[](i);
       for (int i = 0; i < size; i++) newstr->operator[](i + GetSize()) = str[i];
       return BasicString(newstr);
     }
 
   
-    class StringRep : public RefCountObject<ThreadingModel>
-    {
-    private:
-      int m_size;
-      char* m_data;
-      
-    public:
-      LIB_EXPORT inline explicit StringRep(int size = 0) : m_size(size), m_data(new char[size + 1])
-      {
-        assert(m_data);
-        m_data[0] = '\0';
-        m_data[size] = '\0';
-      }
-      LIB_EXPORT inline StringRep(int size, const char* str) : m_size(size), m_data(new char[size + 1])
-      {
-        assert(m_data);
-        memcpy(m_data, str, m_size);
-        m_data[size] = '\0';
-      }
-      LIB_EXPORT inline StringRep(const StringRep& rhs) : m_size(rhs.m_size), m_data(new char[m_size + 1])
-      {
-        assert(m_data);
-        memcpy(m_data, rhs.m_data, m_size);
-        m_data[m_size] = '\0';
-      }
-      
-      LIB_EXPORT ~StringRep();
-      
-      LIB_EXPORT inline int GetSize() const { return m_size; }
-      LIB_EXPORT inline const char* GetRep() const { return m_data; }
-      
-      LIB_EXPORT inline char operator[](int index) const { return m_data[index]; }
-      LIB_EXPORT inline char& operator[](int index) { return m_data[index]; }
-    };
     
     
   public:
@@ -372,6 +400,17 @@ namespace Apto {
     };
   };
   
+  
+  template <> inline BasicString<ThreadSafe>::BasicString(const BasicString<SingleThreaded>& rhs)
+    : m_value(new TMStringRep(rhs.GetSize(), rhs.GetData())) { ; }
+  template <> inline BasicString<ThreadSafe>& BasicString<ThreadSafe>::operator=(const BasicString<SingleThreaded>& rhs)
+  {
+    m_value = StringRepPtr(new TMStringRep(rhs.GetSize(), rhs.GetData()));
+    assert(m_value);
+    return *this;
+  }
+  
+
   template <template <class> class ThreadingModel>
   inline bool operator==(const char* lhs, const BasicString<ThreadingModel>& rhs) { return rhs == lhs; }
   template <template <class> class ThreadingModel>
@@ -413,7 +452,7 @@ namespace Apto {
   // Apto::String
   // --------------------------------------------------------------------------------------------------------------
   
-  typedef BasicString<> String;
+  typedef BasicString<SingleThreaded> String;
 };
 
 #endif

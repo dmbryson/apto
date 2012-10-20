@@ -35,7 +35,7 @@
 
 TEST(CoreBasicString, Construction) {
   // These should all be synonymous
-  Apto::BasicString<> s1;
+  Apto::BasicString<Apto::SingleThreaded> s1;
   EXPECT_EQ(0, s1.GetSize());
   Apto::BasicString<Apto::SingleThreaded> s2;
   EXPECT_EQ(0, s2.GetSize());
