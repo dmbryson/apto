@@ -34,7 +34,7 @@
 namespace Apto {
   template<class V1, class V2> class Pair
   {
-  private:
+  protected:
     V1 m_v1;
     V2 m_v2;
     
@@ -53,6 +53,34 @@ namespace Apto {
     inline const V2& Value2() const { return m_v2; }
     
     inline void Set(const V1& v1, const V2& v2) { m_v1 = v1; m_v2 = v2; } 
+  };
+  
+  
+  template<class T> class Coord : public Pair<T, T>
+  {
+  private:
+    using Pair<T, T>::m_v1;
+    using Pair<T, T>::m_v2;
+    
+  public:
+    inline Coord() : Pair<T, T>(0, 0) { ; }
+    inline Coord(const T& x, const T& y) : Pair<T, T>(x, y) { ; }
+    
+    inline bool operator==(const Coord& rhs) const { return m_v1 == rhs.m_v1 && m_v2 == rhs.m_v2; }
+    inline bool operator!=(const Coord& rhs) const { return !operator==(rhs); }
+    
+    inline Coord& operator+=(const Coord& rhs) { m_v1 += rhs.m_v1; m_v2 += rhs.m_v2; return *this; }
+    inline Coord& operator-=(const Coord& rhs) { m_v1 -= rhs.m_v1; m_v2 -= rhs.m_v2; return *this; }
+    
+    inline Coord operator+(const Coord& rhs) const { return Coord(m_v1 + rhs.m_v1, m_v2 + rhs.m_v2); }
+    inline Coord operator-(const Coord& rhs) const { return Coord(m_v1 - rhs.m_v1, m_v2 - rhs.m_v2); }
+    inline Coord operator*(const int n) const { return Coord(m_v1 * n, m_v2 * n); }
+    
+    T& X() { return m_v1; }
+    const T& X() const { return m_v1; }
+
+    T& Y() { return m_v2; }
+    const T& Y() const { return m_v2; }
   };
 };
 
