@@ -32,6 +32,10 @@
 #define AptoCorePair_h
 
 namespace Apto {
+  
+  // Pair - a simple combination of two items
+  // --------------------------------------------------------------------------------------------------------------
+  
   template<class V1, class V2> class Pair
   {
   protected:
@@ -55,6 +59,9 @@ namespace Apto {
     inline void Set(const V1& v1, const V2& v2) { m_v1 = v1; m_v2 = v2; } 
   };
   
+  
+  // Coord - extended Pair object that adds helpful methods for x,y coordinate manipulation
+  // --------------------------------------------------------------------------------------------------------------
   
   template<class T> class Coord : public Pair<T, T>
   {
