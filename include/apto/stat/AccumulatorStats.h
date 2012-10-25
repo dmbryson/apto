@@ -274,7 +274,7 @@ namespace Apto {
           inline void addValue(ValueType value) { SubClass::addValue(value); }
           
         public:
-          inline FloatType Mean()
+          inline FloatType Mean() const
           {
             return (this->Count() > 0) ? (static_cast<FloatType>(this->Sum()) / this->Count()) :
                                                                 std::numeric_limits<FloatType>::quiet_NaN();

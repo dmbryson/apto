@@ -31,6 +31,7 @@
 #ifndef AptoStat_h
 #define AptoStat_h
 
+#include "apto/stat/Accumulator.h"
 #include "apto/stat/ContingencyTable.h"
 #include "apto/stat/Functions.h"
 

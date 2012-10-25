@@ -109,6 +109,14 @@
 		70FA3EA716385C590003971F /* AvidaRNG.cc in Sources */ = {isa = PBXBuildFile; fileRef = 70FA3EA616385C590003971F /* AvidaRNG.cc */; };
 		70FA3EA816385C590003971F /* AvidaRNG.cc in Sources */ = {isa = PBXBuildFile; fileRef = 70FA3EA616385C590003971F /* AvidaRNG.cc */; };
 		70FA3EA916386D950003971F /* Random.cc in Sources */ = {isa = PBXBuildFile; fileRef = 70FA3E9F1638484E0003971F /* Random.cc */; };
+		70FA3EB1163993210003971F /* PriorityScheduler.cc in Sources */ = {isa = PBXBuildFile; fileRef = 70FA3EB0163993210003971F /* PriorityScheduler.cc */; };
+		70FA3EB2163993210003971F /* PriorityScheduler.cc in Sources */ = {isa = PBXBuildFile; fileRef = 70FA3EB0163993210003971F /* PriorityScheduler.cc */; };
+		70FA3EB5163995280003971F /* Probabilistic.cc in Sources */ = {isa = PBXBuildFile; fileRef = 70FA3EB4163995280003971F /* Probabilistic.cc */; };
+		70FA3EB6163995280003971F /* Probabilistic.cc in Sources */ = {isa = PBXBuildFile; fileRef = 70FA3EB4163995280003971F /* Probabilistic.cc */; };
+		70FA3EB91639BB8C0003971F /* RoundRobin.cc in Sources */ = {isa = PBXBuildFile; fileRef = 70FA3EB81639BB8C0003971F /* RoundRobin.cc */; };
+		70FA3EBA1639BB8C0003971F /* RoundRobin.cc in Sources */ = {isa = PBXBuildFile; fileRef = 70FA3EB81639BB8C0003971F /* RoundRobin.cc */; };
+		70FA3EBC1639C7700003971F /* Integrated.cc in Sources */ = {isa = PBXBuildFile; fileRef = 70FA3EBB1639C7700003971F /* Integrated.cc */; };
+		70FA3EBD1639C7700003971F /* Integrated.cc in Sources */ = {isa = PBXBuildFile; fileRef = 70FA3EBB1639C7700003971F /* Integrated.cc */; };
 		8DD76F650486A84900D96B5E /* main.cc in Sources */ = {isa = PBXBuildFile; fileRef = 08FB7796FE84155DC02AAC07 /* main.cc */; settings = {ATTRIBUTES = (); }; };
 /* End PBXBuildFile section */
 
@@ -362,6 +370,16 @@
 		70FA3EA31638594F0003971F /* AvidaRNG.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AvidaRNG.h; sourceTree = "<group>"; };
 		70FA3EA41638594F0003971F /* rng.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = rng.h; path = include/apto/rng.h; sourceTree = SOURCE_ROOT; };
 		70FA3EA616385C590003971F /* AvidaRNG.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AvidaRNG.cc; sourceTree = "<group>"; };
+		70FA3EAA16398FDF0003971F /* PriorityScheduler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PriorityScheduler.h; sourceTree = "<group>"; };
+		70FA3EAC1639902B0003971F /* Probabilistic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Probabilistic.h; sourceTree = "<group>"; };
+		70FA3EAE1639902B0003971F /* scheduler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = scheduler.h; sourceTree = "<group>"; };
+		70FA3EAF163990870003971F /* Integrated.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Integrated.h; sourceTree = "<group>"; };
+		70FA3EB0163993210003971F /* PriorityScheduler.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PriorityScheduler.cc; sourceTree = "<group>"; };
+		70FA3EB4163995280003971F /* Probabilistic.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Probabilistic.cc; sourceTree = "<group>"; };
+		70FA3EB71639BB7B0003971F /* RoundRobin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoundRobin.h; sourceTree = "<group>"; };
+		70FA3EB81639BB8C0003971F /* RoundRobin.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RoundRobin.cc; sourceTree = "<group>"; };
+		70FA3EBB1639C7700003971F /* Integrated.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Integrated.cc; sourceTree = "<group>"; };
+		70FA3EBE1639D1460003971F /* Util.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Util.h; sourceTree = "<group>"; };
 		8DD76F6C0486A84900D96B5E /* apto-test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "apto-test"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -425,6 +443,7 @@
 			children = (
 				702335C612FB4274000C7BE5 /* core */,
 				7023364312FC4E31000C7BE5 /* platform */,
+				70FA3EB3163995280003971F /* scheduler */,
 				70FA3EA516385C590003971F /* rng */,
 				70EE0DA9130AED6700D6C016 /* stat */,
 				70354871132F0E7700D3865C /* CMakeLists.txt */,
@@ -461,6 +480,7 @@
 			isa = PBXGroup;
 			children = (
 				7023362012FB5A77000C7BE5 /* FileSystem.cc */,
+				70FA3EB0163993210003971F /* PriorityScheduler.cc */,
 				70FA3E9F1638484E0003971F /* Random.cc */,
 				7000B66815C84E5F00EE3F14 /* String.cc */,
 				7023369D12FC5F51000C7BE5 /* Thread.cc */,
@@ -595,6 +615,8 @@
 				703548AC132FC63500D3865C /* platform.h */,
 				70FA3EA21638594E0003971F /* rng */,
 				70FA3EA41638594F0003971F /* rng.h */,
+				70FA3EAB1639902B0003971F /* scheduler */,
+				70FA3EAE1639902B0003971F /* scheduler.h */,
 				703548AD132FC63500D3865C /* stat */,
 				703548B0132FC63500D3865C /* stat.h */,
 			);
@@ -622,6 +644,7 @@
 				7035489A132FC63500D3865C /* MapStorage.h */,
 				7035489B132FC63500D3865C /* Mutex.h */,
 				7035489C132FC63500D3865C /* Pair.h */,
+				70FA3EAA16398FDF0003971F /* PriorityScheduler.h */,
 				70FA3E9D16383C580003971F /* Random.h */,
 				7035489D132FC63500D3865C /* RefCount.h */,
 				7035489E132FC63500D3865C /* RefTransport.h */,
@@ -735,6 +758,28 @@
 			);
 			name = rng;
 			path = src/rng;
+			sourceTree = "<group>";
+		};
+		70FA3EAB1639902B0003971F /* scheduler */ = {
+			isa = PBXGroup;
+			children = (
+				70FA3EAF163990870003971F /* Integrated.h */,
+				70FA3EAC1639902B0003971F /* Probabilistic.h */,
+				70FA3EB71639BB7B0003971F /* RoundRobin.h */,
+				70FA3EBE1639D1460003971F /* Util.h */,
+			);
+			path = scheduler;
+			sourceTree = "<group>";
+		};
+		70FA3EB3163995280003971F /* scheduler */ = {
+			isa = PBXGroup;
+			children = (
+				70FA3EBB1639C7700003971F /* Integrated.cc */,
+				70FA3EB4163995280003971F /* Probabilistic.cc */,
+				70FA3EB81639BB8C0003971F /* RoundRobin.cc */,
+			);
+			name = scheduler;
+			path = src/scheduler;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -885,6 +930,10 @@
 				7000B66B15C84F5500EE3F14 /* String.cc in Sources */,
 				70FA3EA716385C590003971F /* AvidaRNG.cc in Sources */,
 				70FA3EA916386D950003971F /* Random.cc in Sources */,
+				70FA3EB1163993210003971F /* PriorityScheduler.cc in Sources */,
+				70FA3EB5163995280003971F /* Probabilistic.cc in Sources */,
+				70FA3EB91639BB8C0003971F /* RoundRobin.cc in Sources */,
+				70FA3EBC1639C7700003971F /* Integrated.cc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -914,6 +963,10 @@
 				7000B66C15C84F5500EE3F14 /* String.cc in Sources */,
 				70FA3EA11638484E0003971F /* Random.cc in Sources */,
 				70FA3EA816385C590003971F /* AvidaRNG.cc in Sources */,
+				70FA3EB2163993210003971F /* PriorityScheduler.cc in Sources */,
+				70FA3EB6163995280003971F /* Probabilistic.cc in Sources */,
+				70FA3EBA1639BB8C0003971F /* RoundRobin.cc in Sources */,
+				70FA3EBD1639C7700003971F /* Integrated.cc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
