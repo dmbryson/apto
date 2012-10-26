@@ -306,7 +306,7 @@ namespace Apto {
           inline void addValue(ValueType value) { SubClass::addValue(value); }
           
         public:
-          inline FloatType Variance()
+          inline FloatType Variance() const
           {
             FloatType mean = this->Mean();
             return this->Moment(Type::Int<2>()) - (mean * mean);
@@ -335,7 +335,7 @@ namespace Apto {
           inline void addValue(ValueType value) { SubClass::addValue(value); }
           
         public:
-          inline FloatType StdError() { return sqrt(this->Variance() / (this->Count() - 1)); }
+          inline FloatType StdError() const { return sqrt(this->Variance() / (this->Count() - 1)); }
         };
         
       };
