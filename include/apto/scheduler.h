@@ -33,6 +33,7 @@
 
 #include "apto/scheduler/Integrated.h"
 #include "apto/scheduler/Probabilistic.h"
+#include "apto/scheduler/ProbabilisticIntegrated.h"
 #include "apto/scheduler/RoundRobin.h"
 
 #endif

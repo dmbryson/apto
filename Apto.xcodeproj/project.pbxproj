@@ -117,6 +117,8 @@
 		70FA3EBA1639BB8C0003971F /* RoundRobin.cc in Sources */ = {isa = PBXBuildFile; fileRef = 70FA3EB81639BB8C0003971F /* RoundRobin.cc */; };
 		70FA3EBC1639C7700003971F /* Integrated.cc in Sources */ = {isa = PBXBuildFile; fileRef = 70FA3EBB1639C7700003971F /* Integrated.cc */; };
 		70FA3EBD1639C7700003971F /* Integrated.cc in Sources */ = {isa = PBXBuildFile; fileRef = 70FA3EBB1639C7700003971F /* Integrated.cc */; };
+		70FA3ED6163AD5570003971F /* ProbabilisticIntegrated.cc in Sources */ = {isa = PBXBuildFile; fileRef = 70FA3ED5163AD5570003971F /* ProbabilisticIntegrated.cc */; };
+		70FA3ED7163AD5570003971F /* ProbabilisticIntegrated.cc in Sources */ = {isa = PBXBuildFile; fileRef = 70FA3ED5163AD5570003971F /* ProbabilisticIntegrated.cc */; };
 		8DD76F650486A84900D96B5E /* main.cc in Sources */ = {isa = PBXBuildFile; fileRef = 08FB7796FE84155DC02AAC07 /* main.cc */; settings = {ATTRIBUTES = (); }; };
 /* End PBXBuildFile section */
 
@@ -380,6 +382,8 @@
 		70FA3EB81639BB8C0003971F /* RoundRobin.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RoundRobin.cc; sourceTree = "<group>"; };
 		70FA3EBB1639C7700003971F /* Integrated.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Integrated.cc; sourceTree = "<group>"; };
 		70FA3EBE1639D1460003971F /* Util.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Util.h; sourceTree = "<group>"; };
+		70FA3ED5163AD5570003971F /* ProbabilisticIntegrated.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ProbabilisticIntegrated.cc; sourceTree = "<group>"; };
+		70FA3F03163B28160003971F /* ProbabilisticIntegrated.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ProbabilisticIntegrated.h; sourceTree = "<group>"; };
 		8DD76F6C0486A84900D96B5E /* apto-test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "apto-test"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -765,6 +769,7 @@
 			children = (
 				70FA3EAF163990870003971F /* Integrated.h */,
 				70FA3EAC1639902B0003971F /* Probabilistic.h */,
+				70FA3F03163B28160003971F /* ProbabilisticIntegrated.h */,
 				70FA3EB71639BB7B0003971F /* RoundRobin.h */,
 				70FA3EBE1639D1460003971F /* Util.h */,
 			);
@@ -774,6 +779,7 @@
 		70FA3EB3163995280003971F /* scheduler */ = {
 			isa = PBXGroup;
 			children = (
+				70FA3ED5163AD5570003971F /* ProbabilisticIntegrated.cc */,
 				70FA3EBB1639C7700003971F /* Integrated.cc */,
 				70FA3EB4163995280003971F /* Probabilistic.cc */,
 				70FA3EB81639BB8C0003971F /* RoundRobin.cc */,
@@ -934,6 +940,7 @@
 				70FA3EB5163995280003971F /* Probabilistic.cc in Sources */,
 				70FA3EB91639BB8C0003971F /* RoundRobin.cc in Sources */,
 				70FA3EBC1639C7700003971F /* Integrated.cc in Sources */,
+				70FA3ED6163AD5570003971F /* ProbabilisticIntegrated.cc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -967,6 +974,7 @@
 				70FA3EB6163995280003971F /* Probabilistic.cc in Sources */,
 				70FA3EBA1639BB8C0003971F /* RoundRobin.cc in Sources */,
 				70FA3EBD1639C7700003971F /* Integrated.cc in Sources */,
+				70FA3ED7163AD5570003971F /* ProbabilisticIntegrated.cc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

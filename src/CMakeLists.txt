@@ -31,6 +31,7 @@ SET(SCHEDULER_DIR ${PROJECT_SOURCE_DIR}/src/scheduler)
 SET(SCHEDULER_SOURCES
   ${SCHEDULER_DIR}/Integrated.cc
   ${SCHEDULER_DIR}/Probabilistic.cc
+  ${SCHEDULER_DIR}/ProbabilisticIntegrated.cc
   ${SCHEDULER_DIR}/RoundRobin.cc
 )
 SOURCE_GROUP(src\\scheduler FILES ${SCHEDULER_SOURCES})
