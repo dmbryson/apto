@@ -24,7 +24,7 @@
  *  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- *  Authors: David M. Bryson <david@programerror.com>
+ *  Authors: David M. Bryson <david@programerror.com>, Aaron P. Wagner <apwagner@msu.edu>
  *
  */
 
@@ -38,6 +38,7 @@ namespace Apto {
   
   template <class T> const T& Min(const T& v1, const T& v2) { return !(v2 < v1) ? v1 : v2; }
   template <class T> const T& Max(const T& v1, const T& v2) { return (v1 < v2) ? v2 : v1; }
+  template <class T> const T Abs(const T& v1) { return (v1 < 0) ? -v1 : v1; }
 
 };
 
