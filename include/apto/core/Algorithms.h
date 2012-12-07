@@ -31,15 +31,23 @@
 #ifndef AptoCoreAlgorithms_h
 #define AptoCoreAlgorithms_h
 
+#include <limits>
+
 namespace Apto {
   
   // Basic Comparison Algorithms
   // --------------------------------------------------------------------------------------------------------------
   
-  template <class T> const T& Min(const T& v1, const T& v2) { return !(v2 < v1) ? v1 : v2; }
-  template <class T> const T& Max(const T& v1, const T& v2) { return (v1 < v2) ? v2 : v1; }
-  template <class T> const T Abs(const T& v1) { return (v1 < 0) ? -v1 : v1; }
+  template <class T> inline const T& Min(const T& v1, const T& v2) { return !(v2 < v1) ? v1 : v2; }
+  template <class T> inline const T& Max(const T& v1, const T& v2) { return (v1 < v2) ? v2 : v1; }
+  template <class T> inline const T Abs(const T& v1) { return (v1 < 0) ? -v1 : v1; }
 
+  inline unsigned int UAbs(int v)
+  {
+    if (v == std::numeric_limits<int>::min()) return static_cast<unsigned int>(std::numeric_limits<int>::max()) + 1u;
+    return static_cast<unsigned int>((v < 0) ? -v : v);
+  }
+  
 };
 
 
