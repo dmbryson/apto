@@ -32,6 +32,7 @@
 #define AptoCoreRandom_h
 
 #include <cassert>
+#include <limits>
 #include <cmath>
 
 
@@ -73,11 +74,13 @@ namespace Apto {
     inline double GetDouble(double max) { return GetDouble() * max; }
     inline double GetDouble(double min, double max) { return GetDouble() * (max - min) + min; }
     
+    inline unsigned int GetUInt() { return static_cast<unsigned int>(std::numeric_limits<int>::max()); }
     inline unsigned int GetUInt(unsigned int max) { return static_cast<unsigned int>(GetDouble(max)); }
     inline unsigned int GetUInt(unsigned int min, unsigned int max) { return static_cast<unsigned int>(GetDouble(min, max)); }
     
     inline unsigned int operator()(unsigned int max) { return GetUInt(max); }
     
+    inline int GetInt() { return static_cast<int>(GetDouble(std::numeric_limits<int>::min(), std::numeric_limits<int>::max())); }
     inline int GetInt(int max) { return static_cast<int>(GetDouble(max)); }
     inline int GetInt(int min, int max) { return static_cast<int>(GetDouble(min, max)); }
     
