@@ -440,3 +440,20 @@ TEST(CoreBasicString, Trimmed) {
   EXPECT_TRUE(s2t == "bar");
 }
 
+TEST(CoreBasicString, Find) {
+  Apto::String s1("the quick brown fox jumped over the lazy dog");
+  
+  EXPECT_EQ(s1.Find('q'), 4);
+  EXPECT_EQ(s1.Find('q', 5), -1);
+}
+
+TEST(CoreBasicString, FindStr) {
+  Apto::String s1("the quick brown fox jumped over the lazy dog");
+  Apto::String s2("quick");
+  
+  EXPECT_EQ(s1.Find("quick"), 4);
+  EXPECT_EQ(s1.Find("quick", 5), -1);
+  EXPECT_EQ(s1.Find(s2), 4);
+  EXPECT_EQ(s1.Find(s2, 5), -1);
+}
+

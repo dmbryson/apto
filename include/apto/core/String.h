@@ -322,6 +322,26 @@ namespace Apto {
     }
     
     
+    // Searching Operations
+    int Find(char search_char, int pos = 0) const
+    {
+      assert(pos >= 0);
+      assert(pos <= GetSize());
+      
+      if (pos <= 0) pos = 0;
+      else if (pos > GetSize()) pos = GetSize();
+      
+      while (pos < GetSize()) {
+        if (this->operator[](pos) == search_char) return pos;
+        pos++;
+      }
+      return -1;
+    }
+    
+    inline int Find(const char* search_str, int pos = 0) const { return findString(search_str, strlen(search_str), pos); }
+    inline int Find(const BasicString& search_str, int pos = 0) const { return findString(search_str, search_str.GetSize(), pos); }
+    
+    
     // Iterators
     Iterator Begin() { return Iterator(m_value); }
     ConstIterator Begin() const { return ConstIterator(m_value); }
@@ -347,6 +367,30 @@ namespace Apto {
       for (int i = 0; i < GetSize(); i++) newstr->operator[](i) = m_value->operator[](i);
       for (int i = 0; i < size; i++) newstr->operator[](i + GetSize()) = str[i];
       return BasicString(newstr);
+    }
+    
+    
+    int findString(const char* search_str, int size, int pos) const
+    {
+      assert(pos >= 0);
+      assert(pos <= GetSize());
+      
+      while (pos < GetSize()) {
+        if (GetSize() - pos < size) return -1;
+        if (this->operator[](pos) == search_str[0]) {
+          int i = 1;
+          for (; i < size; i++ ) {
+            assert(pos + i < GetSize());
+            assert(search_str[i] != '\0');
+            if (this->operator[](pos + i) != search_str[i]) break;
+          }
+          
+          if (i == size) return pos;
+        }
+        pos++;
+      }
+      
+      return -1;
     }
 
   
