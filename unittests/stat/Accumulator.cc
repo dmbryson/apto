@@ -30,17 +30,7 @@
 
 #include "apto/stat/Accumulator.h"
 
-#include "apto/platform.h"
-
 #include "gtest/gtest.h"
-
-
-#if APTO_PLATFORM(WINDOWS)
-#include <float.h>
-namespace std {
-  bool isnan(double x) { return _isnan(x); }
-}
-#endif
 
 
 TEST(StatAccumulator, Count) {

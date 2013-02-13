@@ -44,7 +44,7 @@
 #  endif
 # else
 #  if APTO_PLATFORM(MSVC)
-#   define LIB_EXPORT __declspec(dllexport) // TEMPORARY FIX ME
+#   define LIB_EXPORT __declspec(dllimport)
 #  elif APTO_PLATFORM(GNUC)
 #   define LIB_EXPORT __attribute__((dllimport))
 #  else

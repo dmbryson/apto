@@ -102,8 +102,8 @@ int Apto::Scheduler::ProbabilisticIntegrated::Next()
   }
   
   Node* cur_node = m_node_array[node_id];
-//int relative_position = round((position / m_node_weight[node_id]) * (cur_node->Size() - 1));
-  int relative_position = floor(((position / m_node_weight[node_id]) * (cur_node->Size() - 1)) + 0.5);  
+  int relative_position = round((position / m_node_weight[node_id]) * (cur_node->Size() - 1));
+  
   return cur_node->active_entries[relative_position];
 }
 
