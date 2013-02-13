@@ -66,7 +66,7 @@ namespace Apto {
       class DependsOn;
       
       template <class AccTypes, class T1, class T2, template <class, class, class> class Unit, class Root>
-      class DependsOn<AccTypes, TypeList<T1, T2>, Unit, Root>
+      class DependsOn< AccTypes, TypeList<T1, T2>, Unit, Root >
       : public TypeSelect<TL::IndexOf<typename DependsOn<AccTypes, T2, Unit, Root>::SubClass::Features, T1>::Value == -1,
                           Unit<AccTypes, T1, typename DependsOn<AccTypes, T2, Unit, Root>::SubClass>,
                           typename DependsOn<AccTypes, T2, Unit, Root>::SubClass>::Result
@@ -126,7 +126,7 @@ namespace Apto {
         // StatImpl<Count>
         // --------------------------------------------------------------------------------------------------------------
         
-        template <class AccTypes, class Base> class StatImpl<AccTypes, ::Apto::Stat::AccumulatorStats::Count, Base>
+        template <class AccTypes, class Base> class StatImpl<AccTypes, typename ::Apto::Stat::AccumulatorStats::Count, Base>
           : public Base
         {
         private:
@@ -197,12 +197,12 @@ namespace Apto {
         
         template <class AccTypes, typename Base, int N> class StatImpl<AccTypes, ::Apto::Stat::AccumulatorStats::Moment<N>, Base>
           : public DependsOn<AccTypes,
-                             typename TL::SortDerived<TL::Create<Count>::Type>::Result,
+                             typename TL::SortDerived<TL::Create< ::Apto::Stat::AccumulatorStats::Count>::Type>::Result,
                              ::Apto::Stat::AccumulatorStats::Internal::StatImpl, Base>::SubClass
         {
         public:
           typedef typename DependsOn<AccTypes,
-                                     typename TL::SortDerived<TL::Create<Count>::Type>::Result,
+                                     typename TL::SortDerived<TL::Create< ::Apto::Stat::AccumulatorStats::Count>::Type>::Result,
                                      ::Apto::Stat::AccumulatorStats::Internal::StatImpl, Base>::SubClass SubClass;
           typedef TypeList< ::Apto::Stat::AccumulatorStats::Moment<N>, typename SubClass::Features> Features;
           typedef typename AccTypes::ValueType ValueType;
@@ -263,7 +263,7 @@ namespace Apto {
         {
         public:
           typedef typename DependsOn<AccTypes,
-                                     typename TL::SortDerived<TL::Create<Count, Sum>::Type>::Result,
+                                     typename TL::SortDerived<TL::Create< ::Apto::Stat::AccumulatorStats::Count, ::Apto::Stat::AccumulatorStats::Sum>::Type>::Result,
                                      ::Apto::Stat::AccumulatorStats::Internal::StatImpl, Base>::SubClass SubClass;
           typedef TypeList< ::Apto::Stat::AccumulatorStats::Mean, typename SubClass::Features> Features;
           typedef typename AccTypes::ValueType ValueType;
@@ -290,12 +290,12 @@ namespace Apto {
         
         template <class AccTypes, typename Base> class StatImpl<AccTypes, Variance, Base>
           : public DependsOn<AccTypes,
-                             TL::Create< ::Apto::Stat::AccumulatorStats::Moment<2>, Mean>::Type,
+                             TL::Create< ::Apto::Stat::AccumulatorStats::Moment<2>, ::Apto::Stat::AccumulatorStats::Mean>::Type,
                              ::Apto::Stat::AccumulatorStats::Internal::StatImpl, Base>::SubClass
         {
         public:
           typedef typename DependsOn<AccTypes,
-                                     typename TL::SortDerived<TL::Create<Moment<2>, Mean>::Type>::Result,
+                                     typename TL::SortDerived<TL::Create< ::Apto::Stat::AccumulatorStats::Moment<2>, ::Apto::Stat::AccumulatorStats::Mean>::Type>::Result,
                                      ::Apto::Stat::AccumulatorStats::Internal::StatImpl, Base>::SubClass SubClass;
           typedef TypeList< ::Apto::Stat::AccumulatorStats::Variance, typename SubClass::Features> Features;
           typedef typename AccTypes::ValueType ValueType;
@@ -324,7 +324,7 @@ namespace Apto {
         {
         public:
           typedef typename DependsOn<AccTypes,
-                                     typename TL::Create<Variance>::Type,
+                                     typename TL::Create< ::Apto::Stat::AccumulatorStats::Variance>::Type,
                                      ::Apto::Stat::AccumulatorStats::Internal::StatImpl, Base>::SubClass SubClass;
           typedef TypeList< ::Apto::Stat::AccumulatorStats::StdError, typename SubClass::Features> Features;
           typedef typename AccTypes::ValueType ValueType;
