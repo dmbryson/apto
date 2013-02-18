@@ -48,11 +48,11 @@ namespace Apto {
       Array<bool> m_active;
       
     public:
-      inline RoundRobin(int num_entries) : m_last_id(0), m_active(num_entries) { m_active.SetAll(false); }
-      ~RoundRobin();
+      LIB_EXPORT inline RoundRobin(int num_entries) : m_last_id(0), m_active(num_entries) { m_active.SetAll(false); }
+      LIB_EXPORT ~RoundRobin();
       
-      void AdjustPriority(int entry_id, double priority);
-      int Next();
+      LIB_EXPORT void AdjustPriority(int entry_id, double priority);
+      LIB_EXPORT int Next();
     };
     
   };

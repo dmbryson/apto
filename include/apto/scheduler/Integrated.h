@@ -60,11 +60,11 @@ namespace Apto {
       Integrated& operator=(const Integrated&);
       
     public:
-      Integrated(int entry_count);
-      ~Integrated();
+      LIB_EXPORT Integrated(int entry_count);
+      LIB_EXPORT ~Integrated();
       
-      void AdjustPriority(int entry_id, double priority);
-      int Next();
+      LIB_EXPORT void AdjustPriority(int entry_id, double priority);
+      LIB_EXPORT int Next();
     
     private:
       void insertNode(int node_id);

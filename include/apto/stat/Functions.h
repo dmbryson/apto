@@ -31,11 +31,14 @@
 #ifndef AptoStatFunctions_h
 #define AptoStatFunctions_h
 
+#include "apto/platform/Visibility.h"
+
+
 namespace Apto {
   namespace Stat {
     class ContingencyTable;
     
-    double FishersExact(const ContingencyTable& table);
+    LIB_EXPORT double FishersExact(const ContingencyTable& table);
   };
 };
 

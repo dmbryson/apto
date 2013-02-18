@@ -34,6 +34,7 @@
 #include <cassert>
 
 #include "apto/core/Array.h"
+#include "apto/platform/Visibility.h"
 
 
 namespace Apto {
@@ -55,17 +56,17 @@ namespace Apto {
       ContingencyTable(); // @not_implemented
       
     public:
-      ContingencyTable(int nrow, int ncol);
+      LIB_EXPORT ContingencyTable(int nrow, int ncol);
       inline ContingencyTable(const ContingencyTable& rhs) { this->operator=(rhs); }
       
       int NumRows() const { return m_nrow; }
       int NumCols() const { return m_ncol; }
       
-      ContingencyTable& operator=(const ContingencyTable& rhs);
+      LIB_EXPORT ContingencyTable& operator=(const ContingencyTable& rhs);
       
       inline ElementProxy ElementAt(int row, int col) { return ElementProxy(*this, row, col); }
       inline int ElementAt(int row, int col) const { return m_table[(row * m_ncol) + col]; }
-      void SetElement(int row, int col, int value);
+      LIB_EXPORT void SetElement(int row, int col, int value);
       
       RowProxy operator[](int row) { return RowProxy(*this, row); }
       ConstRowProxy operator[](int row) const { return ConstRowProxy(*this, row); }

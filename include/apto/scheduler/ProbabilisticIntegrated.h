@@ -61,11 +61,11 @@ namespace Apto {
       ProbabilisticIntegrated& operator=(const ProbabilisticIntegrated&);
       
     public:
-      ProbabilisticIntegrated(int entry_count, SmartPtr<Random> rng);
-      ~ProbabilisticIntegrated();
+      LIB_EXPORT ProbabilisticIntegrated(int entry_count, SmartPtr<Random> rng);
+      LIB_EXPORT ~ProbabilisticIntegrated();
       
-      void AdjustPriority(int entry_id, double priority);
-      int Next();
+      LIB_EXPORT void AdjustPriority(int entry_id, double priority);
+      LIB_EXPORT int Next();
       
     private:
       void insertNode(int node_id);

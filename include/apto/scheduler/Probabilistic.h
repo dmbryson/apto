@@ -49,11 +49,11 @@ namespace Apto {
       SmartPtr<Random> m_rng;
       
     public:
-      inline Probabilistic(int num_entries, SmartPtr<Random> rng) : m_rng(rng), m_index(num_entries) { ; }
-      ~Probabilistic();
+      LIB_EXPORT inline Probabilistic(int num_entries, SmartPtr<Random> rng) : m_rng(rng), m_index(num_entries) { ; }
+      LIB_EXPORT ~Probabilistic();
       
-      void AdjustPriority(int entry_id, double priority);
-      int Next();
+      LIB_EXPORT void AdjustPriority(int entry_id, double priority);
+      LIB_EXPORT int Next();
       
     private:
       class WeightedIndex
@@ -64,20 +64,20 @@ namespace Apto {
         Apto::Array<double> m_subtree_weight;
         
       public:
-        WeightedIndex(int size);
-        inline ~WeightedIndex() { ; }
+        LIB_EXPORT WeightedIndex(int size);
+        LIB_EXPORT inline ~WeightedIndex() { ; }
         
-        void SetWeight(int entry_id, double weight);
+        LIB_EXPORT void SetWeight(int entry_id, double weight);
         
-        inline double TotalWeight() const { return m_subtree_weight[0]; }
-        inline int FindPosition(double position) { return findPosition(position, 0); }
+        LIB_EXPORT inline double TotalWeight() const { return m_subtree_weight[0]; }
+        LIB_EXPORT inline int FindPosition(double position) { return findPosition(position, 0); }
         
       private:
-        int findPosition(double position, int root_id);
+        LIB_EXPORT int findPosition(double position, int root_id);
         
-        inline int parentOf(int entry_id) { return (entry_id - 1) / 2; }
-        inline int leftChildOf(int entry_id) { return 2 * entry_id + 1; }
-        inline int rightChildOf(int entry_id) { return 2 * entry_id + 2; }
+        LIB_EXPORT inline int parentOf(int entry_id) { return (entry_id - 1) / 2; }
+        LIB_EXPORT inline int leftChildOf(int entry_id) { return 2 * entry_id + 1; }
+        LIB_EXPORT inline int rightChildOf(int entry_id) { return 2 * entry_id + 2; }
       };
 
       WeightedIndex m_index;

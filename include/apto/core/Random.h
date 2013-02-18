@@ -31,6 +31,8 @@
 #ifndef AptoCoreRandom_h
 #define AptoCoreRandom_h
 
+#include "apto/platform/Visibility.h"
+
 #include <cassert>
 #include <limits>
 #include <cmath>
@@ -59,7 +61,7 @@ namespace Apto {
     double m_rand_norm_exprv;
     
   public:
-    virtual ~Random() = 0;
+    LIB_EXPORT virtual ~Random() = 0;
     
     inline unsigned int UpperBound() const { return m_ubound; }
     inline int MaxSeed() const { return m_max_seed; }
@@ -86,14 +88,14 @@ namespace Apto {
     
     inline bool P(double p) { return (getNext() < (p * m_ubound)); }
     
-    double GetRandNormal();
-    double GetRandNormal(double mean, double variance) { return mean + GetRandNormal() * sqrt(variance); }
+    LIB_EXPORT double GetRandNormal();
+    inline double GetRandNormal(double mean, double variance) { return mean + GetRandNormal() * sqrt(variance); }
     
-    unsigned int GetRandPoisson(double mean);
+    LIB_EXPORT unsigned int GetRandPoisson(double mean);
     inline unsigned int GetRandPoisson(double n, double p);
     
     inline unsigned int GetFullRandBinomial(double n, double p);
-    unsigned int GetRandBinomial(double n, double p);
+    LIB_EXPORT unsigned int GetRandBinomial(double n, double p);
     
     template <class A> void Choose(int num_in, A& out_array);
   
@@ -103,12 +105,12 @@ namespace Apto {
   
   protected:
     // Internal implementation should reset based on current random seed
-    virtual void reset() = 0;
+    LIB_EXPORT virtual void reset() = 0;
     
     // Basic random number generation, should return a number [0, UpperBound)
-    virtual unsigned int getNext() = 0;
+    LIB_EXPORT virtual unsigned int getNext() = 0;
     
-    virtual int getRandomSeed();
+    LIB_EXPORT virtual int getRandomSeed();
   };
   
   

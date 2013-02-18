@@ -32,7 +32,6 @@
 #define AptoPlatform_h
 
 #include "apto/platform/Platform.h"
-#include "apto/platform/Visibility.h"
 
 #include "apto/platform/FloatingPoint.h"
 

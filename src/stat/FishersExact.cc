@@ -68,16 +68,6 @@ static const int THREADING_THRESHOLD = 20;
 static const int DEFAULT_TABLE_SIZE = 300;
 
 
-// Exported Function Declarations
-// -------------------------------------------------------------------------------------------------------------- 
-
-namespace Apto {
-  namespace Stat {
-    double FishersExact(const ContingencyTable& table);
-  };
-};
-
-
 
 // Internal Function Declarations
 // -------------------------------------------------------------------------------------------------------------- 

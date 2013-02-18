@@ -183,7 +183,7 @@ namespace Apto {
   template <template <class> class M> class ConvertToStr<Apto::BasicString<M> >
   {
   private:
-    const Apto::BasicString<M>& m_str;
+    const Apto::BasicString<M> m_str;
     
   public:
     ConvertToStr(const Apto::BasicString<M>& value) : m_str(value) { ; }

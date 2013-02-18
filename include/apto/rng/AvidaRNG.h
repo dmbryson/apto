@@ -42,20 +42,20 @@ namespace Apto {
     class AvidaRNG : public Random
     {
     private:
-      static const unsigned int UPPER_BOUND;
-      static const int MAX_SEED;
+      LIB_EXPORT static const unsigned int UPPER_BOUND;
+      LIB_EXPORT static const int MAX_SEED;
       
       int m_inext;
       int m_inextp;
       int m_ma[56];
 
     public:
-      inline AvidaRNG(int seed = -1) : Random(UPPER_BOUND, MAX_SEED), m_inext(0), m_inextp(0) { ResetSeed(seed); }
-      ~AvidaRNG();
+      LIB_EXPORT inline AvidaRNG(int seed = -1) : Random(UPPER_BOUND, MAX_SEED), m_inext(0), m_inextp(0) { ResetSeed(seed); }
+      LIB_EXPORT ~AvidaRNG();
       
     protected:
-      void reset();
-      unsigned int getNext();
+      LIB_EXPORT void reset();
+      LIB_EXPORT unsigned int getNext();
     };
     
   };

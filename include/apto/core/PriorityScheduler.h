@@ -31,6 +31,9 @@
 #ifndef AptoCorePriorityScheduler_h
 #define AptoCorePriorityScheduler_h
 
+#include "apto/platform/Visibility.h"
+
+
 namespace Apto {
   
   // PriorityScheduler
@@ -39,11 +42,11 @@ namespace Apto {
   class PriorityScheduler
   {
   public:
-    inline PriorityScheduler() { ; }
-    virtual ~PriorityScheduler();
+    LIB_EXPORT inline PriorityScheduler() { ; }
+    LIB_EXPORT virtual ~PriorityScheduler();
     
-    virtual void AdjustPriority(int entry_id, double priority) = 0;
-    virtual int Next() = 0;
+    LIB_EXPORT virtual void AdjustPriority(int entry_id, double priority) = 0;
+    LIB_EXPORT virtual int Next() = 0;
   };
   
 };

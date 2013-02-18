@@ -94,11 +94,39 @@ defined(__sparc__)
 #define NULL 0
 #endif
 
-#include "apto/platform/Visibility.h"
+// Visibility
+#if APTO_PLATFORM(WINDOWS)
+# ifdef BUILDING_DLL
+#  if APTO_PLATFORM(MSVC)
+#   define LIB_EXPORT __declspec(dllexport)
+#  elif APTO_PLATFORM(GNUC)
+#   define LIB_EXPORT __attribute__((dllexport))
+#  else
+#   define LIB_EXPORT
+#  endif
+# else
+#  if APTO_PLATFORM(MSVC)
+#   define LIB_EXPORT __declspec(dllexport)
+#  elif APTO_PLATFORM(GNUC)
+#   define LIB_EXPORT __attribute__((dllimport))
+#  else
+#   define LIB_EXPORT
+#  endif
+# endif
+# define LIB_LOCAL
+#else
+# if APTO_PLATFORM(GNUC)
+#  define LIB_EXPORT __attribute__ ((visibility("default")))
+#  define LIB_LOCAL  __attribute__ ((visibility("hidden")))
+# else
+#  define LIB_EXPORT
+#  define LIB_LOCAL
+# endif
+#endif
+
 
 namespace Apto {
-  namespace Platform
-  {
+  namespace Platform {
     LIB_EXPORT void Initialize();
     
     LIB_EXPORT int AvailableCPUs();
