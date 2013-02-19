@@ -56,5 +56,6 @@ IF(NOT MSVC)
   TARGET_LINK_LIBRARIES(apto-test aptostatic gtest pthread)
 ELSE(NOT MSVC)
   TARGET_LINK_LIBRARIES(apto-test aptostatic gtest)
+  ADD_DEFINITIONS(-D_VARIADIC_MAX=10)
 ENDIF(NOT MSVC)
 
