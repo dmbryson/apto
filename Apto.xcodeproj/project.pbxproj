@@ -86,6 +86,7 @@
 		709B2F91131C3B740081E874 /* apto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7023364912FC50C1000C7BE5 /* apto.dylib */; };
 		70AB8D7D137C6E4F0030A1AD /* Functor.cc in Sources */ = {isa = PBXBuildFile; fileRef = 70AB8D7C137C6E4F0030A1AD /* Functor.cc */; };
 		70C99F1E161630AC00592BCC /* Algorithms.cc in Sources */ = {isa = PBXBuildFile; fileRef = 70C99F1C161630AC00592BCC /* Algorithms.cc */; };
+		70E8B19516D4312C001B2AB6 /* gtest-printers.cc in Sources */ = {isa = PBXBuildFile; fileRef = 70E8B19416D4312C001B2AB6 /* gtest-printers.cc */; };
 		70EE0D711309B1C400D6C016 /* Array.cc in Sources */ = {isa = PBXBuildFile; fileRef = 702335F012FB5281000C7BE5 /* Array.cc */; };
 		70EE0D861309DB8400D6C016 /* ArrayUtils.cc in Sources */ = {isa = PBXBuildFile; fileRef = 70EE0D781309DB8300D6C016 /* ArrayUtils.cc */; };
 		70EE0D871309DB8400D6C016 /* ConditionVariable.cc in Sources */ = {isa = PBXBuildFile; fileRef = 70EE0D791309DB8300D6C016 /* ConditionVariable.cc */; };
@@ -348,6 +349,8 @@
 		70B974EE1615F231007A1C22 /* Algorithms.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Algorithms.h; sourceTree = "<group>"; };
 		70C99F1C161630AC00592BCC /* Algorithms.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Algorithms.cc; sourceTree = "<group>"; };
 		70E3711B136CA79000F35D1D /* Definitions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Definitions.h; sourceTree = "<group>"; };
+		70E8B19416D4312C001B2AB6 /* gtest-printers.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "gtest-printers.cc"; sourceTree = "<group>"; };
+		70E8B19616D43149001B2AB6 /* gtest-printers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "gtest-printers.h"; sourceTree = "<group>"; };
 		70EE0D781309DB8300D6C016 /* ArrayUtils.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ArrayUtils.cc; sourceTree = "<group>"; };
 		70EE0D791309DB8300D6C016 /* ConditionVariable.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConditionVariable.cc; sourceTree = "<group>"; };
 		70EE0D7A1309DB8300D6C016 /* FileSystem.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystem.cc; sourceTree = "<group>"; };
@@ -518,6 +521,7 @@
 				702335CF12FB51EF000C7BE5 /* gtest-death-test.cc */,
 				702335D012FB51EF000C7BE5 /* gtest-filepath.cc */,
 				702335D112FB51EF000C7BE5 /* gtest-port.cc */,
+				70E8B19416D4312C001B2AB6 /* gtest-printers.cc */,
 				702335D212FB51EF000C7BE5 /* gtest-test-part.cc */,
 				702335D312FB51EF000C7BE5 /* gtest-typed-test.cc */,
 				702335D412FB51EF000C7BE5 /* gtest.cc */,
@@ -543,6 +547,7 @@
 				702335D812FB51EF000C7BE5 /* gtest-death-test.h */,
 				702335D912FB51EF000C7BE5 /* gtest-message.h */,
 				702335DA12FB51EF000C7BE5 /* gtest-param-test.h */,
+				70E8B19616D43149001B2AB6 /* gtest-printers.h */,
 				702335DB12FB51EF000C7BE5 /* gtest-spi.h */,
 				702335DC12FB51EF000C7BE5 /* gtest-test-part.h */,
 				702335DD12FB51EF000C7BE5 /* gtest-typed-test.h */,
@@ -954,6 +959,7 @@
 				7023367112FC534E000C7BE5 /* gtest-port.cc in Sources */,
 				7023367212FC5352000C7BE5 /* gtest-test-part.cc in Sources */,
 				7023367312FC5357000C7BE5 /* gtest-typed-test.cc in Sources */,
+				70E8B19516D4312C001B2AB6 /* gtest-printers.cc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

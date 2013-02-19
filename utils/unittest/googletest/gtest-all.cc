@@ -36,12 +36,13 @@
 
 // This line ensures that gtest.h can be compiled on its own, even
 // when it's fused.
-#include <gtest/gtest.h>
+#include "gtest/gtest.h"
 
 // The following lines pull in the real gtest *.cc files.
 #include "gtest/internal/gtest.cc"
 #include "gtest/internal/gtest-death-test.cc"
 #include "gtest/internal/gtest-filepath.cc"
 #include "gtest/internal/gtest-port.cc"
+#include "gtest/internal/gtest-printers.cc"
 #include "gtest/internal/gtest-test-part.cc"
 #include "gtest/internal/gtest-typed-test.cc"

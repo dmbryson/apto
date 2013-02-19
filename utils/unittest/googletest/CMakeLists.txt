@@ -3,6 +3,7 @@ SET(GTEST_SOURCES
   ${GTEST_DIR}/gtest-death-test.cc
   ${GTEST_DIR}/gtest-filepath.cc
   ${GTEST_DIR}/gtest-port.cc
+  ${GTEST_DIR}/gtest-printers.cc
   ${GTEST_DIR}/gtest-test-part.cc
   ${GTEST_DIR}/gtest-typed-test.cc
   ${GTEST_DIR}/gtest.cc
