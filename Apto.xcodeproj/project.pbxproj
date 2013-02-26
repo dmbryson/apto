@@ -86,6 +86,19 @@
 		709B2F91131C3B740081E874 /* apto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7023364912FC50C1000C7BE5 /* apto.dylib */; };
 		70AB8D7D137C6E4F0030A1AD /* Functor.cc in Sources */ = {isa = PBXBuildFile; fileRef = 70AB8D7C137C6E4F0030A1AD /* Functor.cc */; };
 		70C99F1E161630AC00592BCC /* Algorithms.cc in Sources */ = {isa = PBXBuildFile; fileRef = 70C99F1C161630AC00592BCC /* Algorithms.cc */; };
+		70DD5B1716D7E62F00821457 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70DD5B1616D7E62F00821457 /* Cocoa.framework */; };
+		70DD5B3B16D7E79000821457 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70DD5B3A16D7E79000821457 /* Foundation.framework */; };
+		70DD5B4616D7E80600821457 /* Apto_Core.h in Headers */ = {isa = PBXBuildFile; fileRef = 70DD5B2E16D7E66D00821457 /* Apto_Core.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		70DD5B4716D7E80E00821457 /* Apto.h in Headers */ = {isa = PBXBuildFile; fileRef = 70DD5B3316D7E66D00821457 /* Apto.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		70DD5B4816D7E81500821457 /* Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 70DD5B3416D7E66D00821457 /* Prefix.pch */; settings = {ATTRIBUTES = (Public, ); }; };
+		70DD5B4B16D7E85D00821457 /* NSString+Apto.h in Headers */ = {isa = PBXBuildFile; fileRef = 70DD5B4916D7E85C00821457 /* NSString+Apto.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		70DD5B4C16D7E85D00821457 /* NSString+Apto.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70DD5B4A16D7E85C00821457 /* NSString+Apto.mm */; };
+		70DD5B4D16D7E85D00821457 /* NSString+Apto.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70DD5B4A16D7E85C00821457 /* NSString+Apto.mm */; };
+		70DD5B5716D7EE3300821457 /* AptoSourceListDataSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 70DD5B5616D7EE3300821457 /* AptoSourceListDataSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		70DD5B5A16D7EE8F00821457 /* AptoSourceList.h in Headers */ = {isa = PBXBuildFile; fileRef = 70DD5B5816D7EE8F00821457 /* AptoSourceList.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		70DD5B5B16D7EE8F00821457 /* AptoSourceList.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70DD5B5916D7EE8F00821457 /* AptoSourceList.mm */; };
+		70DD5B5D16D7EEC900821457 /* AptoSourceListDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 70DD5B5C16D7EEC900821457 /* AptoSourceListDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		70DD5B6116D8178A00821457 /* License.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 70DD5B6016D8178A00821457 /* License.rtf */; };
 		70E8B19516D4312C001B2AB6 /* gtest-printers.cc in Sources */ = {isa = PBXBuildFile; fileRef = 70E8B19416D4312C001B2AB6 /* gtest-printers.cc */; };
 		70EE0D711309B1C400D6C016 /* Array.cc in Sources */ = {isa = PBXBuildFile; fileRef = 702335F012FB5281000C7BE5 /* Array.cc */; };
 		70EE0D861309DB8400D6C016 /* ArrayUtils.cc in Sources */ = {isa = PBXBuildFile; fileRef = 70EE0D781309DB8300D6C016 /* ArrayUtils.cc */; };
@@ -237,6 +250,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
+		70DD5B3716D7E79000821457 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/${PRODUCT_NAME}";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8DD76F690486A84900D96B5E /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 8;
@@ -348,6 +370,26 @@
 		70AB8D7C137C6E4F0030A1AD /* Functor.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Functor.cc; sourceTree = "<group>"; };
 		70B974EE1615F231007A1C22 /* Algorithms.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Algorithms.h; sourceTree = "<group>"; };
 		70C99F1C161630AC00592BCC /* Algorithms.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Algorithms.cc; sourceTree = "<group>"; };
+		70DD5B1416D7E62F00821457 /* Apto.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Apto.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		70DD5B1616D7E62F00821457 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		70DD5B1916D7E62F00821457 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		70DD5B1A16D7E62F00821457 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		70DD5B1B16D7E62F00821457 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		70DD5B2B16D7E66D00821457 /* Apto-OSX-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Apto-OSX-Info.plist"; sourceTree = "<group>"; };
+		70DD5B2E16D7E66D00821457 /* Apto_Core.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Apto_Core.h; sourceTree = "<group>"; };
+		70DD5B3016D7E66D00821457 /* Apto.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Apto.h; sourceTree = "<group>"; };
+		70DD5B3116D7E66D00821457 /* Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Prefix.pch; sourceTree = "<group>"; };
+		70DD5B3316D7E66D00821457 /* Apto.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Apto.h; sourceTree = "<group>"; };
+		70DD5B3416D7E66D00821457 /* Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Prefix.pch; sourceTree = "<group>"; };
+		70DD5B3916D7E79000821457 /* libApto-iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libApto-iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		70DD5B3A16D7E79000821457 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		70DD5B4916D7E85C00821457 /* NSString+Apto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Apto.h"; sourceTree = "<group>"; };
+		70DD5B4A16D7E85C00821457 /* NSString+Apto.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSString+Apto.mm"; sourceTree = "<group>"; };
+		70DD5B5616D7EE3300821457 /* AptoSourceListDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AptoSourceListDataSource.h; sourceTree = "<group>"; };
+		70DD5B5816D7EE8F00821457 /* AptoSourceList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AptoSourceList.h; sourceTree = "<group>"; };
+		70DD5B5916D7EE8F00821457 /* AptoSourceList.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AptoSourceList.mm; sourceTree = "<group>"; };
+		70DD5B5C16D7EEC900821457 /* AptoSourceListDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AptoSourceListDelegate.h; sourceTree = "<group>"; };
+		70DD5B6016D8178A00821457 /* License.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = License.rtf; sourceTree = "<group>"; };
 		70E3711B136CA79000F35D1D /* Definitions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Definitions.h; sourceTree = "<group>"; };
 		70E8B19416D4312C001B2AB6 /* gtest-printers.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "gtest-printers.cc"; sourceTree = "<group>"; };
 		70E8B19616D43149001B2AB6 /* gtest-printers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "gtest-printers.h"; sourceTree = "<group>"; };
@@ -420,6 +462,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		70DD5B1016D7E62F00821457 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				70DD5B1716D7E62F00821457 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		70DD5B3616D7E79000821457 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				70DD5B3B16D7E79000821457 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8DD76F660486A84900D96B5E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -437,10 +495,12 @@
 			children = (
 				70354821132EC13400D3865C /* include */,
 				08FB7795FE84155DC02AAC07 /* src */,
+				70DD5B2916D7E66D00821457 /* framework */,
 				702335C212FB41EE000C7BE5 /* unittests */,
 				702335CB12FB51EF000C7BE5 /* utils */,
 				1AB674ADFE9D54B511CA2CBB /* products */,
 				70354874132F0F1800D3865C /* CMakeLists.txt */,
+				70DD5B1516D7E62F00821457 /* Frameworks */,
 			);
 			name = Apto;
 			sourceTree = "<group>";
@@ -461,10 +521,12 @@
 		1AB674ADFE9D54B511CA2CBB /* products */ = {
 			isa = PBXGroup;
 			children = (
+				70DD5B1416D7E62F00821457 /* Apto.framework */,
 				8DD76F6C0486A84900D96B5E /* apto-test */,
 				709B2F87131C3B470081E874 /* fexact */,
 				7023364912FC50C1000C7BE5 /* apto.dylib */,
 				7035484A132EF0CB00D3865C /* libapto.a */,
+				70DD5B3916D7E79000821457 /* libApto-iOS.a */,
 				7023366B12FC5320000C7BE5 /* libgtest.a */,
 			);
 			name = products;
@@ -723,6 +785,86 @@
 			path = fexact;
 			sourceTree = "<group>";
 		};
+		70DD5B1516D7E62F00821457 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				70DD5B1616D7E62F00821457 /* Cocoa.framework */,
+				70DD5B3A16D7E79000821457 /* Foundation.framework */,
+				70DD5B1816D7E62F00821457 /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		70DD5B1816D7E62F00821457 /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				70DD5B1916D7E62F00821457 /* AppKit.framework */,
+				70DD5B1A16D7E62F00821457 /* CoreData.framework */,
+				70DD5B1B16D7E62F00821457 /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		70DD5B2916D7E66D00821457 /* framework */ = {
+			isa = PBXGroup;
+			children = (
+				70DD5B2C16D7E66D00821457 /* src */,
+				70DD5B2A16D7E66D00821457 /* resources */,
+			);
+			path = framework;
+			sourceTree = "<group>";
+		};
+		70DD5B2A16D7E66D00821457 /* resources */ = {
+			isa = PBXGroup;
+			children = (
+				70DD5B2B16D7E66D00821457 /* Apto-OSX-Info.plist */,
+				70DD5B6016D8178A00821457 /* License.rtf */,
+			);
+			path = resources;
+			sourceTree = "<group>";
+		};
+		70DD5B2C16D7E66D00821457 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				70DD5B2D16D7E66D00821457 /* core */,
+				70DD5B2F16D7E66D00821457 /* ios */,
+				70DD5B3216D7E66D00821457 /* osx */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		70DD5B2D16D7E66D00821457 /* core */ = {
+			isa = PBXGroup;
+			children = (
+				70DD5B2E16D7E66D00821457 /* Apto_Core.h */,
+				70DD5B4916D7E85C00821457 /* NSString+Apto.h */,
+				70DD5B4A16D7E85C00821457 /* NSString+Apto.mm */,
+			);
+			path = core;
+			sourceTree = "<group>";
+		};
+		70DD5B2F16D7E66D00821457 /* ios */ = {
+			isa = PBXGroup;
+			children = (
+				70DD5B3016D7E66D00821457 /* Apto.h */,
+				70DD5B3116D7E66D00821457 /* Prefix.pch */,
+			);
+			path = ios;
+			sourceTree = "<group>";
+		};
+		70DD5B3216D7E66D00821457 /* osx */ = {
+			isa = PBXGroup;
+			children = (
+				70DD5B3316D7E66D00821457 /* Apto.h */,
+				70DD5B3416D7E66D00821457 /* Prefix.pch */,
+				70DD5B5816D7EE8F00821457 /* AptoSourceList.h */,
+				70DD5B5916D7EE8F00821457 /* AptoSourceList.mm */,
+				70DD5B5616D7EE3300821457 /* AptoSourceListDataSource.h */,
+				70DD5B5C16D7EEC900821457 /* AptoSourceListDelegate.h */,
+			);
+			path = osx;
+			sourceTree = "<group>";
+		};
 		70EE0D941309DD3C00D6C016 /* platform */ = {
 			isa = PBXGroup;
 			children = (
@@ -803,6 +945,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		70DD5B1116D7E62F00821457 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				70DD5B4616D7E80600821457 /* Apto_Core.h in Headers */,
+				70DD5B4716D7E80E00821457 /* Apto.h in Headers */,
+				70DD5B4816D7E81500821457 /* Prefix.pch in Headers */,
+				70DD5B4B16D7E85D00821457 /* NSString+Apto.h in Headers */,
+				70DD5B5716D7EE3300821457 /* AptoSourceListDataSource.h in Headers */,
+				70DD5B5A16D7EE8F00821457 /* AptoSourceList.h in Headers */,
+				70DD5B5D16D7EEC900821457 /* AptoSourceListDelegate.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
@@ -873,6 +1029,41 @@
 			productReference = 709B2F87131C3B470081E874 /* fexact */;
 			productType = "com.apple.product-type.tool";
 		};
+		70DD5B1316D7E62F00821457 /* Apto-OSX */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 70DD5B2616D7E62F00821457 /* Build configuration list for PBXNativeTarget "Apto-OSX" */;
+			buildPhases = (
+				70DD5B0F16D7E62F00821457 /* Sources */,
+				70DD5B1016D7E62F00821457 /* Frameworks */,
+				70DD5B1116D7E62F00821457 /* Headers */,
+				70DD5B1216D7E62F00821457 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Apto-OSX";
+			productName = Apto;
+			productReference = 70DD5B1416D7E62F00821457 /* Apto.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		70DD5B3816D7E79000821457 /* Apto-iOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 70DD5B4316D7E79000821457 /* Build configuration list for PBXNativeTarget "Apto-iOS" */;
+			buildPhases = (
+				70DD5B3516D7E79000821457 /* Sources */,
+				70DD5B3616D7E79000821457 /* Frameworks */,
+				70DD5B3716D7E79000821457 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Apto-iOS";
+			productName = "Apto-iOS";
+			productReference = 70DD5B3916D7E79000821457 /* libApto-iOS.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 		8DD76F620486A84900D96B5E /* apto-test */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1DEB923108733DC60010E9CD /* Build configuration list for PBXNativeTarget "apto-test" */;
@@ -911,6 +1102,7 @@
 				Japanese,
 				French,
 				German,
+				en,
 			);
 			mainGroup = 08FB7794FE84155DC02AAC07 /* Apto */;
 			productRefGroup = 08FB7794FE84155DC02AAC07 /* Apto */;
@@ -923,9 +1115,22 @@
 				7035483C132EF0CB00D3865C /* apto (static) */,
 				7023366A12FC5320000C7BE5 /* gtest */,
 				709B2F86131C3B470081E874 /* fexact */,
+				70DD5B1316D7E62F00821457 /* Apto-OSX */,
+				70DD5B3816D7E79000821457 /* Apto-iOS */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		70DD5B1216D7E62F00821457 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				70DD5B6116D8178A00821457 /* License.rtf in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		7023364612FC50C1000C7BE5 /* Sources */ = {
@@ -989,6 +1194,23 @@
 			buildActionMask = 2147483647;
 			files = (
 				709B2F90131C3B5B0081E874 /* main.cc in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		70DD5B0F16D7E62F00821457 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				70DD5B4C16D7E85D00821457 /* NSString+Apto.mm in Sources */,
+				70DD5B5B16D7EE8F00821457 /* AptoSourceList.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		70DD5B3516D7E79000821457 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				70DD5B4D16D7E85D00821457 /* NSString+Apto.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1098,8 +1320,6 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_SSE3_EXTENSIONS = YES;
-				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PREPROCESSOR_DEFINITIONS = NDEBUG;
@@ -1204,6 +1424,135 @@
 			};
 			name = Release;
 		};
+		70DD5B2716D7E62F00821457 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = framework/src/osx/Prefix.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				INFOPLIST_FILE = "framework/resources/Apto-OSX-Info.plist";
+				INSTALL_PATH = "@loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				PRODUCT_NAME = Apto;
+				SDKROOT = macosx;
+				USER_HEADER_SEARCH_PATHS = include;
+				WRAPPER_EXTENSION = framework;
+			};
+			name = Debug;
+		};
+		70DD5B2816D7E62F00821457 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = framework/src/osx/Prefix.pch;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				INFOPLIST_FILE = "framework/resources/Apto-OSX-Info.plist";
+				INSTALL_PATH = "@loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				PRODUCT_NAME = Apto;
+				SDKROOT = macosx;
+				USER_HEADER_SEARCH_PATHS = include;
+				WRAPPER_EXTENSION = framework;
+			};
+			name = Release;
+		};
+		70DD5B4416D7E79000821457 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				DSTROOT = /tmp/Apto_iOS.dst;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = framework/src/ios/Prefix.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				USER_HEADER_SEARCH_PATHS = include;
+			};
+			name = Debug;
+		};
+		70DD5B4516D7E79000821457 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DSTROOT = /tmp/Apto_iOS.dst;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = framework/src/ios/Prefix.pch;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				USER_HEADER_SEARCH_PATHS = include;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1269,6 +1618,22 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		70DD5B2616D7E62F00821457 /* Build configuration list for PBXNativeTarget "Apto-OSX" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				70DD5B2716D7E62F00821457 /* Debug */,
+				70DD5B2816D7E62F00821457 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		70DD5B4316D7E79000821457 /* Build configuration list for PBXNativeTarget "Apto-iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				70DD5B4416D7E79000821457 /* Debug */,
+				70DD5B4516D7E79000821457 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};
