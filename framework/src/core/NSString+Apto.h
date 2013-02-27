@@ -28,6 +28,8 @@
  *
  */
 
+#import <Foundation/Foundation.h>
+
 #include "apto/core/String.h"
 
 @interface NSString (Apto)

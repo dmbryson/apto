@@ -370,11 +370,11 @@ NSString* const AptoSLDeleteKeyPressedOnRowsNotification = @"AptoSourceListDelet
 {
 	id item = [self itemAtRow:row];
 	
-	NSCell* cell = [self preparedCellAtColumn:column row:row];
-	NSSize cellSize = [cell cellSize];
-	if (!([cell type] == NSImageCellType) && !([cell type] == NSTextCellType)) {
-		cellSize = [cell cellSizeForBounds:[super frameOfCellAtColumn:column row:row]];
-  }
+//	NSCell* cell = [self preparedCellAtColumn:column row:row];
+//	NSSize cellSize = [cell cellSize];
+//	if (!([cell type] == NSImageCellType) && !([cell type] == NSTextCellType)) {
+//		cellSize = [cell cellSizeForBounds:[super frameOfCellAtColumn:column row:row]];
+//  }
 	NSRect cellFrame = [super frameOfCellAtColumn:column row:row];
 	
 	NSRect rowRect = [self rectOfRow:row];
@@ -386,7 +386,7 @@ NSString* const AptoSLDeleteKeyPressedOnRowsNotification = @"AptoSourceListDelet
 		// margin to the left of the cell (in cellFrame), which we don't want
 		if ([self isGroupAlwaysExpanded:[self itemAtRow:row]]) minX = 7;
 		
-		return NSMakeRect(minX, NSMidY(cellFrame) - (cellSize.height / 2.0), NSWidth(rowRect) - minX, cellSize.height);
+		return NSMakeRect(minX, NSMidY(cellFrame) - (cellFrame.size.height / 2.0), NSWidth(rowRect) - minX, cellFrame.size.height);
 	} else {
 		CGFloat leftIndent = [self levelForRow:row] * [self indentationPerLevel] + DISCLOSURE_TRIANGLE_SPACE;
 		
@@ -398,8 +398,8 @@ NSString* const AptoSLDeleteKeyPressedOnRowsNotification = @"AptoSourceListDelet
 			if([slDataSource sourceList:self itemHasIcon:item]) leftIndent += [self iconSize].width + (ICON_SPACING * 2);
 		}
 		
-		return NSMakeRect(leftIndent, NSMidY(rowRect) - (cellSize.height / 2.0), NSWidth(rowRect) - rightIndent - leftIndent,
-                      cellSize.height);
+		return NSMakeRect(leftIndent, NSMidY(rowRect) - (cellFrame.size.height / 2.0), NSWidth(rowRect) - rightIndent - leftIndent,
+                      cellFrame.size.height);
 	}
 }
 
