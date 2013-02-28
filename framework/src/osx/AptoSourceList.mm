@@ -254,7 +254,7 @@ NSString* const AptoSLDeleteKeyPressedOnRowsNotification = @"AptoSourceListDelet
 		}
 	} else if (![self allowsEmptySelection] && [self numberOfSelectedRows] == 0) {
 		// Select the first non-group row if no rows are selected, and empty selection is disallowed
-		for (NSUInteger i = 0; i < [self numberOfRows]; i++) {
+		for (NSInteger i = 0; i < [self numberOfRows]; i++) {
 			if (![self isGroupItem:[self itemAtRow:i]]) {
 				[self selectRowIndexes:[NSIndexSet indexSetWithIndex:i] byExtendingSelection:NO];
 				break;
@@ -332,6 +332,7 @@ NSString* const AptoSLDeleteKeyPressedOnRowsNotification = @"AptoSourceListDelet
 	// Allows selection across groups without selecting the group rows
 	NSMutableIndexSet* newSelectionIndexes = [NSMutableIndexSet indexSet];
   [indexes enumerateRangesUsingBlock:^(NSRange range, BOOL* stop) {
+    (void)stop;
     for (NSUInteger idx = 0; idx < range.length; idx++) {
       NSUInteger selectedIndex = idx + range.location;
       if (![self isGroupItem:[self itemAtRow:selectedIndex]]) [newSelectionIndexes addIndex:selectedIndex];
@@ -633,6 +634,8 @@ NSString* const AptoSLDeleteKeyPressedOnRowsNotification = @"AptoSourceListDelet
 
 - (NSInteger) outlineView:(NSOutlineView*)outlineView numberOfChildrenOfItem:(id)item
 {
+  (void)outlineView;
+  
 	if([slDataSource conformsToProtocol:@protocol(AptoSourceListDataSource)]) {
 		return [slDataSource sourceList:self numberOfChildrenOfItem:item];
 	}
@@ -643,6 +646,8 @@ NSString* const AptoSLDeleteKeyPressedOnRowsNotification = @"AptoSourceListDelet
 
 - (id) outlineView:(NSOutlineView*)outlineView child:(NSInteger)index ofItem:(id)item
 {
+  (void)outlineView;
+  
 	if ([slDataSource conformsToProtocol:@protocol(AptoSourceListDataSource)]) {
 		return [slDataSource sourceList:self child:index ofItem:item];
 	}
@@ -653,6 +658,8 @@ NSString* const AptoSLDeleteKeyPressedOnRowsNotification = @"AptoSourceListDelet
 
 - (BOOL) outlineView:(NSOutlineView*)outlineView isItemExpandable:(id)item
 {
+  (void)outlineView;
+  
 	if ([slDataSource conformsToProtocol:@protocol(AptoSourceListDataSource)]) {
 		return [slDataSource sourceList:self isItemExpandable:item];
 	}
@@ -663,6 +670,9 @@ NSString* const AptoSLDeleteKeyPressedOnRowsNotification = @"AptoSourceListDelet
 
 - (id) outlineView:(NSOutlineView*)outlineView objectValueForTableColumn:(NSTableColumn*)tableColumn byItem:(id)item
 {
+  (void)outlineView;
+  (void)tableColumn;
+  
 	if ([slDataSource conformsToProtocol:@protocol(AptoSourceListDataSource)]) {
 		return [slDataSource sourceList:self objectValueForItem:item];
 	}
@@ -673,6 +683,9 @@ NSString* const AptoSLDeleteKeyPressedOnRowsNotification = @"AptoSourceListDelet
 
 - (void) outlineView:(NSOutlineView*)outlineView setObjectValue:(id)object forTableColumn:(NSTableColumn*)tableColumn byItem:(id)item
 {
+  (void)outlineView;
+  (void)tableColumn;
+  
 	if ([slDataSource conformsToProtocol:@protocol(AptoSourceListDataSource)]) {
 		[slDataSource sourceList:self setObjectValue:object forItem:item];
 	}
@@ -681,6 +694,8 @@ NSString* const AptoSLDeleteKeyPressedOnRowsNotification = @"AptoSourceListDelet
 
 - (id) outlineView:(NSOutlineView*)outlineView itemForPersistentObject:(id)object
 {
+  (void)outlineView;
+  
 	if ([slDataSource respondsToSelector:@selector(sourceList:itemForPersistentObject:)]) {
 		return [slDataSource sourceList:self itemForPersistentObject:object];
 	}
@@ -691,6 +706,8 @@ NSString* const AptoSLDeleteKeyPressedOnRowsNotification = @"AptoSourceListDelet
 
 - (id) outlineView:(NSOutlineView*)outlineView persistentObjectForItem:(id)item
 {
+  (void)outlineView;
+  
 	if ([slDataSource respondsToSelector:@selector(sourceList:persistentObjectForItem:)]) {
 		return [slDataSource sourceList:self persistentObjectForItem:item];
 	}
@@ -701,6 +718,8 @@ NSString* const AptoSLDeleteKeyPressedOnRowsNotification = @"AptoSourceListDelet
 
 - (BOOL) outlineView:(NSOutlineView*)outlineView writeItems:(NSArray*)items toPasteboard:(NSPasteboard*)pasteboard
 {
+  (void)outlineView;
+  
 	if ([slDataSource respondsToSelector:@selector(sourceList:writeItems:toPasteboard:)]) {
 		return [slDataSource sourceList:self writeItems:items toPasteboard:pasteboard];
 	}
@@ -711,6 +730,7 @@ NSString* const AptoSLDeleteKeyPressedOnRowsNotification = @"AptoSourceListDelet
 
 - (NSDragOperation) outlineView:(NSOutlineView*)outlineView validateDrop:(id<NSDraggingInfo>)info proposedItem:(id)item proposedChildIndex:(NSInteger)index
 {
+  (void)outlineView;
 	if ([slDataSource respondsToSelector:@selector(sourceList:validateDrop:proposedItem:proposedChildIndex:)]) {
 		return [slDataSource sourceList:self validateDrop:info proposedItem:item proposedChildIndex:index];
 	}
@@ -721,6 +741,8 @@ NSString* const AptoSLDeleteKeyPressedOnRowsNotification = @"AptoSourceListDelet
 
 - (BOOL) outlineView:(NSOutlineView*)outlineView acceptDrop:(id<NSDraggingInfo>)info item:(id)item childIndex:(NSInteger)index
 {
+  (void)outlineView;
+  
 	if ([slDataSource respondsToSelector:@selector(sourceList:acceptDrop:item:childIndex:)]) {
 		return [slDataSource sourceList:self acceptDrop:info item:item childIndex:index];
 	}
@@ -731,6 +753,8 @@ NSString* const AptoSLDeleteKeyPressedOnRowsNotification = @"AptoSourceListDelet
 
 - (NSArray*) outlineView:(NSOutlineView*)outlineView namesOfPromisedFilesDroppedAtDestination:(NSURL*)dropDestination forDraggedItems:(NSArray*)items
 {
+  (void)outlineView;
+  
 	if ([slDataSource respondsToSelector:@selector(sourceList:namesOfPromisedFilesDroppedAtDestination:forDraggedItems:)]) {
 		return [slDataSource sourceList:self namesOfPromisedFilesDroppedAtDestination:dropDestination forDraggedItems:items];
 	}
@@ -740,6 +764,8 @@ NSString* const AptoSLDeleteKeyPressedOnRowsNotification = @"AptoSourceListDelet
 
 - (id<NSPasteboardWriting>) outlineView:(NSOutlineView*)outlineView pasteboardWriterForItem:(id)item
 {
+  (void)outlineView;
+  
   if ([slDataSource respondsToSelector:@selector(sourceList:pasteboardWriterForItem:)]) {
     return [slDataSource sourceList:self pasteboardWriterForItem:item];
   }
@@ -750,6 +776,8 @@ NSString* const AptoSLDeleteKeyPressedOnRowsNotification = @"AptoSourceListDelet
 
 - (void) outlineView:(NSOutlineView*)outlineView draggingSession:(NSDraggingSession*)session willBeginAtPoint:(NSPoint)screenPoint forItems:(NSArray*)draggedItems
 {
+  (void)outlineView;
+  
   if ([slDataSource respondsToSelector:@selector(sourceList:draggingSession:willBeginAtPoint:forItems:)]) {
     return [slDataSource sourceList:self draggingSession:session willBeginAtPoint:screenPoint forItems:draggedItems];
   }
@@ -758,6 +786,8 @@ NSString* const AptoSLDeleteKeyPressedOnRowsNotification = @"AptoSourceListDelet
 
 - (void) outlineView:(NSOutlineView*)outlineView draggingSession:(NSDraggingSession*)session endedAtPoint:(NSPoint)screenPoint operation:(NSDragOperation)operation
 {
+  (void)outlineView;
+  
   if ([slDataSource respondsToSelector:@selector(sourceList:draggingSession:endedAtPoint:operation:)]) {
     return [slDataSource sourceList:self draggingSession:session endedAtPoint:screenPoint operation:operation];
   }
@@ -765,6 +795,8 @@ NSString* const AptoSLDeleteKeyPressedOnRowsNotification = @"AptoSourceListDelet
 
 - (void) outlineView:(NSOutlineView*)outlineView updateDraggingItemsForDrag:(id<NSDraggingInfo>)draggingInfo
 {
+  (void)outlineView;
+  
   if ([slDataSource respondsToSelector:@selector(sourceList:updateDraggingItemsForDrag:)]) {
     return [slDataSource sourceList:self updateDraggingItemsForDrag:draggingInfo];
   }
@@ -777,6 +809,8 @@ NSString* const AptoSLDeleteKeyPressedOnRowsNotification = @"AptoSourceListDelet
 
 - (BOOL) outlineView:(NSOutlineView*)outlineView shouldExpandItem:(id)item
 {
+  (void)outlineView;
+  
 	if ([slDelegate respondsToSelector:@selector(sourceList:shouldExpandItem:)]) {
 		return [slDelegate sourceList:self shouldExpandItem:item];
 	}
@@ -786,6 +820,8 @@ NSString* const AptoSLDeleteKeyPressedOnRowsNotification = @"AptoSourceListDelet
 
 - (BOOL) outlineView:(NSOutlineView*)outlineView shouldCollapseItem:(id)item
 {
+  (void)outlineView;
+  
 	// Make sure the item isn't displayed as always expanded
 	if ([self isGroupItem:item] && [self isGroupAlwaysExpanded:item]) return NO;
 	
@@ -798,6 +834,9 @@ NSString* const AptoSLDeleteKeyPressedOnRowsNotification = @"AptoSourceListDelet
 
 - (NSCell*) outlineView:(NSOutlineView*)outlineView dataCellForTableColumn:(NSTableColumn*)tableColumn item:(id)item
 {
+  (void)outlineView;
+  (void)tableColumn;
+  
 	if ([slDelegate respondsToSelector:@selector(sourceList:dataCellForItem:)]) {
 		return [slDelegate sourceList:self dataCellForItem:item];
 	}
@@ -810,6 +849,9 @@ NSString* const AptoSLDeleteKeyPressedOnRowsNotification = @"AptoSourceListDelet
 
 - (void) outlineView:(NSOutlineView*)outlineView willDisplayCell:(id)cell forTableColumn:(NSTableColumn*)tableColumn item:(id)item
 {
+  (void)outlineView;
+  (void)tableColumn;
+  
 	if ([slDelegate respondsToSelector:@selector(sourceList:willDisplayCell:forItem:)]) {
 		[slDelegate sourceList:self willDisplayCell:cell forItem:item];
 	}
@@ -817,7 +859,9 @@ NSString* const AptoSLDeleteKeyPressedOnRowsNotification = @"AptoSourceListDelet
 
 - (BOOL) outlineView:(NSOutlineView*)outlineView shouldSelectItem:(id)item
 {
-	//Make sure that the item isn't a group as they can't be selected
+  (void)outlineView;
+
+	// Make sure that the item isn't a group as they can't be selected
 	if (![self isGroupItem:item]) {
 		if ([slDelegate respondsToSelector:@selector(sourceList:shouldSelectItem:)]) {
 			return [slDelegate sourceList:self shouldSelectItem:item];
@@ -832,6 +876,8 @@ NSString* const AptoSLDeleteKeyPressedOnRowsNotification = @"AptoSourceListDelet
 
 - (NSIndexSet*) outlineView:(NSOutlineView*)outlineView selectionIndexesForProposedSelection:(NSIndexSet*)proposedSelectionIndexes
 {
+  (void)outlineView;
+
 	// The outline view will try to select the first row if -[allowsEmptySelection:] is set to NO – if this is a group row
 	// stop it from doing so and leave it to our implementation of-[reloadData] which will select the first non-group row
 	// for us.
@@ -848,6 +894,9 @@ NSString* const AptoSLDeleteKeyPressedOnRowsNotification = @"AptoSourceListDelet
 
 - (BOOL) outlineView:(NSOutlineView*)outlineView shouldEditTableColumn:(NSTableColumn*)tableColumn item:(id)item
 {
+  (void)outlineView;
+  (void)tableColumn;
+
 	// Group titles can't be edited
 	if ([self isGroupItem:item]) return NO;
 	
@@ -861,6 +910,9 @@ NSString* const AptoSLDeleteKeyPressedOnRowsNotification = @"AptoSourceListDelet
 
 - (BOOL) outlineView:(NSOutlineView*)outlineView shouldTrackCell:(NSCell*)cell forTableColumn:(NSTableColumn*)tableColumn item:(id)item
 {
+  (void)outlineView;
+  (void)tableColumn;
+
 	if ([slDelegate respondsToSelector:@selector(sourceList:shouldTrackCell:forItem:)]) {
 		return [slDelegate sourceList:self shouldTrackCell:cell forItem:item];
 	}
@@ -870,7 +922,9 @@ NSString* const AptoSLDeleteKeyPressedOnRowsNotification = @"AptoSourceListDelet
 
 - (CGFloat) outlineView:(NSOutlineView*)outlineView heightOfRowByItem:(id)item
 {
-	if ([slDelegate respondsToSelector:@selector(sourceList:heightOfRowByItem:)]) {
+  (void)outlineView;
+
+  if ([slDelegate respondsToSelector:@selector(sourceList:heightOfRowByItem:)]) {
 		return [slDelegate sourceList:self heightOfRowByItem:item];
 	}
 	
@@ -879,6 +933,8 @@ NSString* const AptoSLDeleteKeyPressedOnRowsNotification = @"AptoSourceListDelet
 
 - (BOOL) outlineView:(NSOutlineView*)outlineView isGroupItem:(id)item
 {
+  (void)outlineView;
+
 	return [self isGroupItem:item];
 }
 
@@ -889,12 +945,16 @@ NSString* const AptoSLDeleteKeyPressedOnRowsNotification = @"AptoSourceListDelet
 
 - (void) outlineViewSelectionIsChanging:(NSNotification*)notification
 {
+  (void)notification;
+  
 	[[NSNotificationCenter defaultCenter] postNotificationName:AptoSLSelectionIsChangingNotification object:self];
 }
 
 
 - (void) outlineViewSelectionDidChange:(NSNotification*)notification
 {
+  (void)notification;
+  
 	[[NSNotificationCenter defaultCenter] postNotificationName:AptoSLSelectionDidChangeNotification object:self];
 }
 
