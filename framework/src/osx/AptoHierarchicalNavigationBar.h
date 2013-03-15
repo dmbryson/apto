@@ -1,8 +1,8 @@
 //
-//  Prefix.pch
-//  Apto-OSX
+//  AptoHierarchicalNavigationBar.h
+//  Apto
 //
-//  Created by David on 2/22/13.
+//  Created by David on 3/15/13.
 //  Copyright 2013 David Michael Bryson. All rights reserved.
 //  http://programerror.com/software/apto
 //
@@ -27,10 +27,8 @@
 //  Authors: David M. Bryson <david@programerror.com>
 //
 
-//
-// Prefix header for all source files of the 'Apto' target in the 'Apto' project
-//
+#import "AptoNavigationBar.h"
 
-#ifdef __OBJC__
-  #import <Cocoa/Cocoa.h>
-#endif
+@interface AptoHierarchicalNavigationBar : AptoNavigationBar
+
+@end

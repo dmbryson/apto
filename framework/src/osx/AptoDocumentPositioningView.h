@@ -1,8 +1,8 @@
 //
-//  Prefix.pch
-//  Apto-OSX
+//  AptoDocumentPositioningView.h
+//  Apto
 //
-//  Created by David on 2/22/13.
+//  Created by David Bryson on 3/15/13.
 //  Copyright 2013 David Michael Bryson. All rights reserved.
 //  http://programerror.com/software/apto
 //
@@ -27,10 +27,15 @@
 //  Authors: David M. Bryson <david@programerror.com>
 //
 
-//
-// Prefix header for all source files of the 'Apto' target in the 'Apto' project
-//
+#import <Cocoa/Cocoa.h>
 
-#ifdef __OBJC__
-  #import <Cocoa/Cocoa.h>
-#endif
+@interface AptoDocumentPositioningView : NSView {
+@private
+  NSView* documentView;
+  NSImageAlignment documentViewAlignment;
+}
+
+@property (readwrite, nonatomic) NSView* documentView;
+@property (readwrite, nonatomic) NSImageAlignment documentViewAlignment;
+
+@end

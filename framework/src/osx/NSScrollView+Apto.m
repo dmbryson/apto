@@ -1,8 +1,8 @@
 //
-//  Prefix.pch
+//  NSScrollView+Apto.h
 //  Apto-OSX
 //
-//  Created by David on 2/22/13.
+//  Created by David on 3/15/13.
 //  Copyright 2013 David Michael Bryson. All rights reserved.
 //  http://programerror.com/software/apto
 //
@@ -27,10 +27,38 @@
 //  Authors: David M. Bryson <david@programerror.com>
 //
 
-//
-// Prefix header for all source files of the 'Apto' target in the 'Apto' project
-//
+#import "NSScrollView+Apto.h"
 
-#ifdef __OBJC__
-  #import <Cocoa/Cocoa.h>
-#endif
+#import "AptoDocumentPositioningView.h"
+
+
+@implementation NSScrollView (Apto)
+
+- (NSImageAlignment)documentViewAlignment;
+{
+  NSView* documentView = [self documentView];
+  
+  if ([documentView isKindOfClass:[AptoDocumentPositioningView class]]) {
+    return [(AptoDocumentPositioningView*)documentView documentViewAlignment];
+  } else {
+    // Default NSClipView behavior
+    return NSImageAlignBottomLeft;
+  }
+}
+
+- (void)setDocumentViewAlignment:(NSImageAlignment)value;
+{
+  AptoDocumentPositioningView* documentView = (AptoDocumentPositioningView*)[self documentView];
+  
+  // If the current document view not a positioning view, create one...
+  if (![documentView isKindOfClass:[AptoDocumentPositioningView class]]) {
+    AptoDocumentPositioningView* newPositioningView = [[AptoDocumentPositioningView alloc] initWithFrame:[[self contentView] bounds]];
+    [self setDocumentView:newPositioningView];
+    [newPositioningView setDocumentView:documentView];
+    documentView = newPositioningView;
+  }
+  
+  [documentView setDocumentViewAlignment:value];
+}
+
+@end

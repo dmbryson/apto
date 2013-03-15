@@ -1,8 +1,8 @@
 //
-//  Prefix.pch
-//  Apto-OSX
+//  AptoHierarchicalNavigationBar.mm
+//  Apto
 //
-//  Created by David on 2/22/13.
+//  Created by David on 3/15/13.
 //  Copyright 2013 David Michael Bryson. All rights reserved.
 //  http://programerror.com/software/apto
 //
@@ -27,10 +27,23 @@
 //  Authors: David M. Bryson <david@programerror.com>
 //
 
-//
-// Prefix header for all source files of the 'Apto' target in the 'Apto' project
-//
+#import "AptoHierarchicalNavigationBar.h"
 
-#ifdef __OBJC__
-  #import <Cocoa/Cocoa.h>
-#endif
+@implementation AptoHierarchicalNavigationBar
+
+- (id)initWithFrame:(NSRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        // Initialization code here.
+    }
+    
+    return self;
+}
+
+- (void)drawRect:(NSRect)dirtyRect
+{
+    // Drawing code here.
+}
+
+@end

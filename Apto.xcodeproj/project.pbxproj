@@ -77,6 +77,14 @@
 		703548DE132FE0A000D3865C /* StringUtils.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 703548DD132FE08000D3865C /* StringUtils.h */; };
 		703548E0132FE6A800D3865C /* StringUtils.cc in Sources */ = {isa = PBXBuildFile; fileRef = 703548DF132FE6A800D3865C /* StringUtils.cc */; };
 		704031F61314259100F2F055 /* Functions.cc in Sources */ = {isa = PBXBuildFile; fileRef = 704031F51314259100F2F055 /* Functions.cc */; };
+		706B82B016F38B78007F19FE /* AptoNavigationBar.h in Headers */ = {isa = PBXBuildFile; fileRef = 706B82AE16F38B78007F19FE /* AptoNavigationBar.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		706B82B116F38B78007F19FE /* AptoNavigationBar.mm in Sources */ = {isa = PBXBuildFile; fileRef = 706B82AF16F38B78007F19FE /* AptoNavigationBar.mm */; };
+		706B82B416F38B95007F19FE /* AptoHierarchicalNavigationBar.h in Headers */ = {isa = PBXBuildFile; fileRef = 706B82B216F38B95007F19FE /* AptoHierarchicalNavigationBar.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		706B82B516F38B95007F19FE /* AptoHierarchicalNavigationBar.mm in Sources */ = {isa = PBXBuildFile; fileRef = 706B82B316F38B95007F19FE /* AptoHierarchicalNavigationBar.mm */; };
+		706B82B816F3AB1A007F19FE /* NSScrollView+Apto.h in Headers */ = {isa = PBXBuildFile; fileRef = 706B82B616F3AB1A007F19FE /* NSScrollView+Apto.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		706B82B916F3AB1A007F19FE /* NSScrollView+Apto.m in Sources */ = {isa = PBXBuildFile; fileRef = 706B82B716F3AB1A007F19FE /* NSScrollView+Apto.m */; };
+		706B82BC16F3B1D1007F19FE /* AptoDocumentPositioningView.h in Headers */ = {isa = PBXBuildFile; fileRef = 706B82BA16F3B1D0007F19FE /* AptoDocumentPositioningView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		706B82BD16F3B1D1007F19FE /* AptoDocumentPositioningView.m in Sources */ = {isa = PBXBuildFile; fileRef = 706B82BB16F3B1D0007F19FE /* AptoDocumentPositioningView.m */; };
 		7073BBA216275CA400A05A1C /* FixedSegment.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7073BBA016275CA400A05A1C /* FixedSegment.cc */; };
 		7073BBA316275CA400A05A1C /* TCFreeList.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7073BBA116275CA400A05A1C /* TCFreeList.cc */; };
 		7073BBA616275D6100A05A1C /* Malloc.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7073BBA516275D6100A05A1C /* Malloc.cc */; };
@@ -354,6 +362,14 @@
 		70608C8C1625D75B00E98385 /* Malloc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Malloc.h; sourceTree = "<group>"; };
 		70608C8D1625E03200E98385 /* Singleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Singleton.h; sourceTree = "<group>"; };
 		70608C8E1625E80600E98385 /* ThreadingModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThreadingModel.h; sourceTree = "<group>"; };
+		706B82AE16F38B78007F19FE /* AptoNavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AptoNavigationBar.h; sourceTree = "<group>"; };
+		706B82AF16F38B78007F19FE /* AptoNavigationBar.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AptoNavigationBar.mm; sourceTree = "<group>"; };
+		706B82B216F38B95007F19FE /* AptoHierarchicalNavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AptoHierarchicalNavigationBar.h; sourceTree = "<group>"; };
+		706B82B316F38B95007F19FE /* AptoHierarchicalNavigationBar.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AptoHierarchicalNavigationBar.mm; sourceTree = "<group>"; };
+		706B82B616F3AB1A007F19FE /* NSScrollView+Apto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSScrollView+Apto.h"; sourceTree = "<group>"; };
+		706B82B716F3AB1A007F19FE /* NSScrollView+Apto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSScrollView+Apto.m"; sourceTree = "<group>"; };
+		706B82BA16F3B1D0007F19FE /* AptoDocumentPositioningView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AptoDocumentPositioningView.h; sourceTree = "<group>"; };
+		706B82BB16F3B1D0007F19FE /* AptoDocumentPositioningView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AptoDocumentPositioningView.m; sourceTree = "<group>"; };
 		7073BBA016275CA400A05A1C /* FixedSegment.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FixedSegment.cc; sourceTree = "<group>"; };
 		7073BBA116275CA400A05A1C /* TCFreeList.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TCFreeList.cc; sourceTree = "<group>"; };
 		7073BBA516275D6100A05A1C /* Malloc.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Malloc.cc; sourceTree = "<group>"; };
@@ -857,10 +873,18 @@
 			children = (
 				70DD5B3316D7E66D00821457 /* Apto.h */,
 				70DD5B3416D7E66D00821457 /* Prefix.pch */,
+				706B82BA16F3B1D0007F19FE /* AptoDocumentPositioningView.h */,
+				706B82BB16F3B1D0007F19FE /* AptoDocumentPositioningView.m */,
+				706B82B216F38B95007F19FE /* AptoHierarchicalNavigationBar.h */,
+				706B82B316F38B95007F19FE /* AptoHierarchicalNavigationBar.mm */,
+				706B82AE16F38B78007F19FE /* AptoNavigationBar.h */,
+				706B82AF16F38B78007F19FE /* AptoNavigationBar.mm */,
 				70DD5B5816D7EE8F00821457 /* AptoSourceList.h */,
 				70DD5B5916D7EE8F00821457 /* AptoSourceList.mm */,
 				70DD5B5616D7EE3300821457 /* AptoSourceListDataSource.h */,
 				70DD5B5C16D7EEC900821457 /* AptoSourceListDelegate.h */,
+				706B82B616F3AB1A007F19FE /* NSScrollView+Apto.h */,
+				706B82B716F3AB1A007F19FE /* NSScrollView+Apto.m */,
 			);
 			path = osx;
 			sourceTree = "<group>";
@@ -956,6 +980,10 @@
 				70DD5B5716D7EE3300821457 /* AptoSourceListDataSource.h in Headers */,
 				70DD5B5A16D7EE8F00821457 /* AptoSourceList.h in Headers */,
 				70DD5B5D16D7EEC900821457 /* AptoSourceListDelegate.h in Headers */,
+				706B82B016F38B78007F19FE /* AptoNavigationBar.h in Headers */,
+				706B82B416F38B95007F19FE /* AptoHierarchicalNavigationBar.h in Headers */,
+				706B82B816F3AB1A007F19FE /* NSScrollView+Apto.h in Headers */,
+				706B82BC16F3B1D1007F19FE /* AptoDocumentPositioningView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1203,6 +1231,10 @@
 			files = (
 				70DD5B4C16D7E85D00821457 /* NSString+Apto.mm in Sources */,
 				70DD5B5B16D7EE8F00821457 /* AptoSourceList.mm in Sources */,
+				706B82B116F38B78007F19FE /* AptoNavigationBar.mm in Sources */,
+				706B82B516F38B95007F19FE /* AptoHierarchicalNavigationBar.mm in Sources */,
+				706B82B916F3AB1A007F19FE /* NSScrollView+Apto.m in Sources */,
+				706B82BD16F3B1D1007F19FE /* AptoDocumentPositioningView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
