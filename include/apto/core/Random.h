@@ -84,7 +84,7 @@ namespace Apto {
     
     inline int GetInt() { return static_cast<int>(GetDouble(std::numeric_limits<int>::min(), std::numeric_limits<int>::max())); }
     inline int GetInt(int max) { return static_cast<int>(GetDouble(max)); }
-    inline int GetInt(int min, int max) { return static_cast<int>(GetDouble(min, max)); }
+    inline int GetInt(int min, int max) { return static_cast<int>(floor(GetDouble(min, max))); }
     
     inline bool P(double p) { return (getNext() < (p * m_ubound)); }
     
