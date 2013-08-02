@@ -996,7 +996,8 @@ inline bool FExact::generateFirstDaughter(const MarginalArray& row_marginals, in
 bool FExact::generateNewDaughter(int kmax, const MarginalArray& row_marginals, MarginalArray& row_diff, int& idx_dec, int& idx_inc)
 {
   if (idx_inc == -1) {
-    while (row_diff[++idx_inc] == row_marginals[idx_inc]) ;
+    idx_inc++;
+    while (row_diff[idx_inc] == row_marginals[idx_inc]) idx_inc++;
   }
   
   // Find node to decrement
