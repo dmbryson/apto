@@ -221,124 +221,220 @@ namespace Apto {
     bool Remove(const K& key)
     {
       int hash = HF::Hash(key);
-      if (m_table[hash].GetSize() == 0) return false;
+      Array<Entry, ManagedPointer>& tbl = m_table[hash];
+      if (tbl.GetSize() == 0) return false;
       
+//      std::cout << "\nRemove Start " << key << " -- " << hash << std::endl;
+//      for (int i = 0; i < tbl.GetSize(); i++) {
+//        printf("%d -- l: %d  r: %d  p: %d  ", i, tbl[i].left, tbl[i].right, tbl[i].parent);
+//        std::cout << tbl[i].key << std::endl;
+//      }
+
       int cur_idx = 0;
       int past_idx = 0;
       while (true) {
-        if (key < m_table[hash][cur_idx].key) {
+        if (key < tbl[cur_idx].key) {
           past_idx = cur_idx;
-          cur_idx = m_table[hash][cur_idx].left;
+          cur_idx = tbl[cur_idx].left;
           if (cur_idx >= 0) continue;
-        } else if (key > m_table[hash][cur_idx].key) {
+        } else if (key > tbl[cur_idx].key) {
           past_idx = cur_idx;
-          cur_idx = m_table[hash][cur_idx].right;
+          cur_idx = tbl[cur_idx].right;
           if (cur_idx >= 0) continue;
         } else {
-          int last_idx = m_table[hash].GetSize() - 1;
+          int last_idx = tbl.GetSize() - 1;
           
           if (cur_idx != last_idx) {
-            if (m_table[hash][cur_idx].left < 0 && m_table[hash][cur_idx].right < 0) {
+            if (tbl[cur_idx].left < 0 && tbl[cur_idx].right < 0) {
               // handle removing leaf node
               
               // Update parent node subtree index to be blank
-              if (m_table[hash][past_idx].left == cur_idx) m_table[hash][past_idx].left = -1;
-              else m_table[hash][past_idx].right = -1;
+              if (tbl[past_idx].left == cur_idx) tbl[past_idx].left = -1;
+              else tbl[past_idx].right = -1;
               
               // Move last node to this position in the array
-              m_table[hash][cur_idx] = m_table[hash][last_idx];
-              int parent_idx = m_table[hash][last_idx].parent;
-              if (m_table[hash][parent_idx].left == last_idx) m_table[hash][parent_idx].left = cur_idx;
-              else m_table[hash][parent_idx].right = cur_idx;
+              tbl[cur_idx] = tbl[last_idx];
+              int parent_idx = tbl[last_idx].parent;
+              if (tbl[parent_idx].left == last_idx) tbl[parent_idx].left = cur_idx;
+              else tbl[parent_idx].right = cur_idx;
               
-            } else if (m_table[hash][cur_idx].left < 0) {
+              if (tbl[cur_idx].left >= 0) tbl[tbl[cur_idx].left].parent = cur_idx;
+              if (tbl[cur_idx].right >= 0) tbl[tbl[cur_idx].right].parent = cur_idx;
+              
+            } else if (tbl[cur_idx].left < 0) {
               // all child nodes greater than current
               
               // Find next right node
-              int sub_idx = m_table[hash][cur_idx].right;
-              while (m_table[hash][sub_idx].left > 0) sub_idx = m_table[hash][sub_idx].left;
+              int sub_idx = tbl[cur_idx].right;
+              while (tbl[sub_idx].left > 0) sub_idx = tbl[sub_idx].left;
               
               // Move next right node to current position
-              int right_idx = m_table[hash][cur_idx].right;             // Save right subtree index
-              m_table[hash][cur_idx].key = m_table[hash][sub_idx].key;
-              m_table[hash][cur_idx].value = m_table[hash][sub_idx].value;
-              m_table[hash][m_table[hash][sub_idx].parent].left = m_table[hash][sub_idx].right;
-              if (m_table[hash][sub_idx].right >= 0)
-                m_table[hash][m_table[hash][sub_idx].right].parent = m_table[hash][sub_idx].parent;
-              if (sub_idx != right_idx) m_table[hash][cur_idx].right = right_idx;
-              else m_table[hash][cur_idx].right = -1;
+              int right_idx = tbl[cur_idx].right;             // Save right subtree index
+              tbl[cur_idx].key = tbl[sub_idx].key;
+              tbl[cur_idx].value = tbl[sub_idx].value;
+              tbl[tbl[sub_idx].parent].left = tbl[sub_idx].right;
+              if (tbl[sub_idx].right >= 0)
+                tbl[tbl[sub_idx].right].parent = tbl[sub_idx].parent;
+              if (sub_idx != right_idx) tbl[cur_idx].right = right_idx;
+              else tbl[cur_idx].right = -1;
               
               // Move last node to the position of the old subtree leaf node
               if (sub_idx != last_idx) {
-                m_table[hash][sub_idx] = m_table[hash][last_idx];
-                int parent_idx = m_table[hash][last_idx].parent;
-                if (m_table[hash][parent_idx].left == last_idx) m_table[hash][parent_idx].left = sub_idx;
-                else m_table[hash][parent_idx].right = sub_idx;
+                tbl[sub_idx] = tbl[last_idx];
+                int parent_idx = tbl[last_idx].parent;
+                if (tbl[parent_idx].left == last_idx) tbl[parent_idx].left = sub_idx;
+                else tbl[parent_idx].right = sub_idx;
+                if (tbl[sub_idx].left >= 0) tbl[tbl[sub_idx].left].parent = sub_idx;
+                if (tbl[sub_idx].right >= 0) tbl[tbl[sub_idx].right].parent = sub_idx;
               }
-            } else if (m_table[hash][cur_idx].right < 0) {
+            } else if (tbl[cur_idx].right < 0) {
               // all child node less than current
               
               // Find next left node
-              int sub_idx = m_table[hash][cur_idx].left;
-              while (m_table[hash][sub_idx].right > 0) sub_idx = m_table[hash][sub_idx].right;
+              int sub_idx = tbl[cur_idx].left;
+              while (tbl[sub_idx].right > 0) sub_idx = tbl[sub_idx].right;
               
               // Move extreme right node to current position
-              int left_idx = m_table[hash][cur_idx].left;               // Save right subtree index
-              m_table[hash][cur_idx].key = m_table[hash][sub_idx].key;
-              m_table[hash][cur_idx].value = m_table[hash][sub_idx].value;
-              m_table[hash][m_table[hash][sub_idx].parent].right = m_table[hash][sub_idx].left;
-              if (m_table[hash][sub_idx].left >= 0)
-                m_table[hash][m_table[hash][sub_idx].left].parent = m_table[hash][sub_idx].parent;
-              if (sub_idx != left_idx) m_table[hash][cur_idx].left = left_idx;
-              else m_table[hash][cur_idx].left = -1;
+              int left_idx = tbl[cur_idx].left;               // Save right subtree index
+              tbl[cur_idx].key = tbl[sub_idx].key;
+              tbl[cur_idx].value = tbl[sub_idx].value;
+              tbl[tbl[sub_idx].parent].right = tbl[sub_idx].left;
+              if (tbl[sub_idx].left >= 0)
+                tbl[tbl[sub_idx].left].parent = tbl[sub_idx].parent;
+              if (sub_idx != left_idx) tbl[cur_idx].left = left_idx;
+              else tbl[cur_idx].left = -1;
               
               // Move last node to the position of the old subtree leaf node
               if (sub_idx != last_idx) {
-                m_table[hash][sub_idx] = m_table[hash][last_idx];
-                int parent_idx = m_table[hash][last_idx].parent;
-                if (m_table[hash][parent_idx].left == last_idx) m_table[hash][parent_idx].left = sub_idx;
-                else m_table[hash][parent_idx].right = sub_idx;
+                tbl[sub_idx] = tbl[last_idx];
+                int parent_idx = tbl[last_idx].parent;
+                if (tbl[parent_idx].left == last_idx) tbl[parent_idx].left = sub_idx;
+                else tbl[parent_idx].right = sub_idx;
+                if (tbl[sub_idx].left >= 0) tbl[tbl[sub_idx].left].parent = sub_idx;
+                if (tbl[sub_idx].right >= 0) tbl[tbl[sub_idx].right].parent = sub_idx;
               }
               
             } else {
               // tossup
               
-              int sub_idx = m_table[hash][cur_idx].right;
-              while (m_table[hash][sub_idx].left > 0) sub_idx = m_table[hash][sub_idx].left;
+              int sub_idx = tbl[cur_idx].right;
+              while (tbl[sub_idx].left > 0) sub_idx = tbl[sub_idx].left;
               
               // Move extreme right node to current position
-              m_table[hash][cur_idx].key = m_table[hash][sub_idx].key;
-              m_table[hash][cur_idx].value = m_table[hash][sub_idx].value;
-              m_table[hash][m_table[hash][sub_idx].parent].right = m_table[hash][sub_idx].right;
-              if (m_table[hash][sub_idx].right >= 0)
-                m_table[hash][m_table[hash][sub_idx].right].parent = m_table[hash][sub_idx].parent;
-              if (m_table[hash][cur_idx].right == sub_idx) m_table[hash][cur_idx].right = -1;
-              if (m_table[hash][cur_idx].left == sub_idx) m_table[hash][cur_idx].left = -1;
+              tbl[cur_idx].key = tbl[sub_idx].key;
+              tbl[cur_idx].value = tbl[sub_idx].value;
+              tbl[tbl[sub_idx].parent].right = tbl[sub_idx].right;
+              if (tbl[sub_idx].right >= 0)
+                tbl[tbl[sub_idx].right].parent = tbl[sub_idx].parent;
+              if (tbl[cur_idx].right == sub_idx) tbl[cur_idx].right = -1;
+              if (tbl[cur_idx].left == sub_idx) tbl[cur_idx].left = -1;
               
               // Move last node to the position of the old subtree leaf node
               if (sub_idx != last_idx) {
-                m_table[hash][sub_idx] = m_table[hash][last_idx];
-                int parent_idx = m_table[hash][last_idx].parent;
-                if (m_table[hash][parent_idx].left == last_idx) m_table[hash][parent_idx].left = sub_idx;
-                else m_table[hash][parent_idx].right = sub_idx;
+                tbl[sub_idx] = tbl[last_idx];
+                int parent_idx = tbl[last_idx].parent;
+                if (tbl[parent_idx].left == last_idx) tbl[parent_idx].left = sub_idx;
+                else tbl[parent_idx].right = sub_idx;
+                if (tbl[sub_idx].left >= 0) tbl[tbl[sub_idx].left].parent = sub_idx;
+                if (tbl[sub_idx].right >= 0) tbl[tbl[sub_idx].right].parent = sub_idx;
               }
               
             }
           } else {
-            int parent_idx = m_table[hash][last_idx].parent;
+            int parent_idx = tbl[last_idx].parent;
             if (parent_idx >= 0) {
-              if (m_table[hash][parent_idx].left == last_idx) m_table[hash][parent_idx].left = -1;
-              else m_table[hash][parent_idx].right = -1;
+              
+              
+              if (tbl[last_idx].left < 0 && tbl[last_idx].right < 0) {
+                // handle removing leaf node
+                if (tbl[parent_idx].left == last_idx) tbl[parent_idx].left = -1;
+                else tbl[parent_idx].right = -1;
+              } else if (tbl[last_idx].left < 0) {
+                // all child nodes greater than current
+                
+                // Find next right node
+                int sub_idx = tbl[last_idx].right;
+                while (tbl[sub_idx].left > 0) sub_idx = tbl[sub_idx].left;
+                
+
+                // update parent subtree
+                if (tbl[parent_idx].left == last_idx) tbl[parent_idx].left = sub_idx;
+                else tbl[parent_idx].right = sub_idx;
+                
+                // Move next right node to current tree position
+                if (sub_idx != tbl[last_idx].right && tbl[sub_idx].right >= 0) {
+                  tbl[tbl[sub_idx].right].parent = tbl[sub_idx].parent;
+                  tbl[tbl[sub_idx].parent].left = tbl[sub_idx].right;
+                }
+                tbl[sub_idx].parent = parent_idx;
+                if (tbl[last_idx].right != sub_idx) {
+                  tbl[sub_idx].right = tbl[last_idx].right;
+                  if (tbl[sub_idx].right >= 0) tbl[tbl[sub_idx].right].parent = sub_idx;
+                }
+                tbl[sub_idx].left = tbl[last_idx].left;
+                if (tbl[sub_idx].left >= 0) tbl[tbl[sub_idx].left].parent = sub_idx;
+                
+              } else if (tbl[last_idx].right < 0) {
+                // all child node less than current
+                
+                // Find next left node
+                int sub_idx = tbl[last_idx].left;
+                while (tbl[sub_idx].right > 0) sub_idx = tbl[sub_idx].right;
+                
+                
+                // update parent subtree
+                if (tbl[parent_idx].left == last_idx) tbl[parent_idx].left = sub_idx;
+                else tbl[parent_idx].right = sub_idx;
+                
+                // Move next right node to current tree position
+                if (sub_idx != tbl[last_idx].left == tbl[sub_idx].left >= 0) {
+                  tbl[tbl[sub_idx].left].parent = tbl[sub_idx].parent;
+                  tbl[tbl[sub_idx].parent].right = tbl[sub_idx].left;
+                }
+                tbl[sub_idx].parent = parent_idx;
+                if (tbl[last_idx].left != sub_idx) {
+                  tbl[sub_idx].left = tbl[last_idx].left;
+                  if (tbl[sub_idx].left >= 0) tbl[tbl[sub_idx].left].parent = sub_idx;
+                }
+                tbl[sub_idx].right = tbl[last_idx].right;
+                if (tbl[sub_idx].right >= 0) tbl[tbl[sub_idx].right].parent = sub_idx;
+               
+              } else {
+                // tossup
+                
+                // Find next left node
+                int sub_idx = tbl[last_idx].left;
+                while (tbl[sub_idx].right > 0) sub_idx = tbl[sub_idx].right;
+                
+                
+                // update parent subtree
+                if (tbl[parent_idx].left == last_idx) tbl[parent_idx].left = sub_idx;
+                else tbl[parent_idx].right = sub_idx;
+                
+                // Move next right node to current tree position
+                if (sub_idx != tbl[last_idx].left == tbl[sub_idx].left >= 0) {
+                  tbl[tbl[sub_idx].left].parent = tbl[sub_idx].parent;
+                  tbl[tbl[sub_idx].parent].right = tbl[sub_idx].left;
+                }
+                tbl[sub_idx].parent = parent_idx;
+                if (tbl[last_idx].left != sub_idx) {
+                  tbl[sub_idx].left = tbl[last_idx].left;
+                  if (tbl[sub_idx].left >= 0) tbl[tbl[sub_idx].left].parent = sub_idx;
+                }
+                tbl[sub_idx].right = tbl[last_idx].right;
+                if (tbl[sub_idx].right >= 0) tbl[tbl[sub_idx].right].parent = sub_idx;
+              }
+              
             }
           }
           
-          m_table[hash].Resize(last_idx);
+          tbl.Resize(last_idx);
           m_size--;
           
-//          std::cout << "\nRemove " << key << std::endl;
-//          for (int i = 0; i < m_table[hash].GetSize(); i++) {
-//            printf("%d -- l: %d  r: %d  p: %d  ", i, m_table[hash][i].left, m_table[hash][i].right, m_table[hash][i].parent);
-//            std::cout << m_table[hash][i].key << std::endl;
+//          std::cout << "\nRemove " << key << " -- " << hash << std::endl;
+//          for (int i = 0; i < tbl.GetSize(); i++) {
+//            printf("%d -- l: %d  r: %d  p: %d  ", i, tbl[i].left, tbl[i].right, tbl[i].parent);
+//            std::cout << tbl[i].key << std::endl;
 //          }          
           
           return true;

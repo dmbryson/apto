@@ -80,6 +80,20 @@ TEST(CoreHashBTreeMap, Indexing) {
 }
 
 
+TEST(CoreHashBTreeMap, AddRemove100) {
+  Apto::Map<int, int> map;
+  for (int i = 0; i < 100; i++) { map.Set(i, i); }
+  for (int i = 0; i < 100; i++) { map.Remove(i); }
+}
+
+TEST(CoreHashBTreeMap, Remove1000) {
+  Apto::Map<int, int> map;
+  for (int i = 0; i < 1000; i++) { map.Set(i, i); }
+  for (int i = 0; i < 1000; i++) { map.Remove(i); }
+}
+
+
+
 TEST(CoreHashBTreeMap, Assignment) {
   Apto::Map<int, int, Apto::DefaultHashBTree> map1;
   for (int i = 0; i < 4; i++) map1[i] = i;

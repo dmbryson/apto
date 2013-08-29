@@ -58,6 +58,24 @@ TEST(CoreHashBTreeSet, Insertion) {
   EXPECT_EQ(6, set.GetSize());
 }
 
+TEST(CoreHashBTreeSet, AddRemove100) {
+  Apto::Set<int> set;
+  for (int i = 0; i < 100; i++) { set.Insert(i); }
+  for (int i = 0; i < 100; i++) { set.Remove(i); }
+  
+  for (int i = 0; i < 100; i++) { set.Insert(i); }
+  for (int i = 99; i >= 0; i--) { set.Remove(i); }
+}
+
+TEST(CoreHashBTreeSet, AddRemove1000) {
+  Apto::Set<int> set;
+  for (int i = 0; i < 1000; i++) { set.Insert(i); }
+  for (int i = 0; i < 1000; i++) { set.Remove(i); }
+  
+  for (int i = 0; i < 1000; i++) { set.Insert(i); }
+  for (int i = 999; i >= 0; i--) { set.Remove(i); }
+}
+
 
 TEST(CoreHashBTreeSet, Assignment) {
   Apto::Set<int, Apto::DefaultHashBTree> set1;
