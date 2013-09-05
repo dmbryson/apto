@@ -47,7 +47,8 @@ namespace Apto {
     if (v == std::numeric_limits<int>::min()) return static_cast<unsigned int>(std::numeric_limits<int>::max()) + 1u;
     return static_cast<unsigned int>((v < 0) ? -v : v);
   }
-  
+
+  template <typename T> inline void Swap(T& op1, T& op2) { const T tmp = op1; op1 = op2; op2 = tmp; }
 };
 
 

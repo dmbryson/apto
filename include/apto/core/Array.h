@@ -55,7 +55,7 @@ namespace Apto {
     class ConstSlice;
     
   public:
-    inline explicit Array(int size = 0) : SP(size) { ; }
+    inline explicit Array(SizeType size = 0) : SP(size) { ; }
     
     template <typename T1, template <class> class SP1>
     inline explicit Array(const Array<T1, SP1>& rhs) : SP(rhs.GetSize()) { this->operator=(rhs); }
@@ -66,49 +66,49 @@ namespace Apto {
     Array& operator=(const Array<T1, SP1>& rhs)
     {
       if (SP::GetSize() != rhs.GetSize()) SP::Resize(rhs.GetSize());
-      for (int i = 0; i < GetSize(); i++) SP::operator[](i) = rhs[i];
+      for (SizeType i = 0; i < GetSize(); i++) SP::operator[](i) = rhs[i];
       return *this;
     }
     
     Array& operator=(const Slice& rhs)
     {
       if (SP::GetSize() != rhs.GetSize()) SP::Resize(rhs.GetSize());
-      for (int i = 0; i < GetSize(); i++) SP::operator[](i) = rhs[i];
+      for (SizeType i = 0; i < GetSize(); i++) SP::operator[](i) = rhs[i];
       return *this;
     }
     
     Array& operator=(const ConstSlice& rhs)
     {
       if (SP::GetSize() != rhs.GetSize()) SP::Resize(rhs.GetSize());
-      for (int i = 0; i < GetSize(); i++) SP::operator[](i) = rhs[i];
+      for (SizeType i = 0; i < GetSize(); i++) SP::operator[](i) = rhs[i];
       return *this;
     }
     
     template <typename T1, template <class> class SP1>
     Array& operator+=(const Array<T1, SP1>& rhs)
     {
-      int old_size = SP::GetSize();
-      int rhs_size = rhs.GetSize();
+      SizeType old_size = SP::GetSize();
+      SizeType rhs_size = rhs.GetSize();
       SP::Resize(old_size + rhs_size);
-      for (int i = 0; i < rhs_size; i++) SP::operator[](i + old_size) = rhs[i];
+      for (SizeType i = 0; i < rhs_size; i++) SP::operator[](i + old_size) = rhs[i];
       return *this;
     }
 
     Array& operator+=(const Slice& rhs)
     {
-      int old_size = SP::GetSize();
-      int rhs_size = rhs.GetSize();
+      SizeType old_size = SP::GetSize();
+      SizeType rhs_size = rhs.GetSize();
       SP::Resize(old_size + rhs_size);
-      for (int i = 0; i < rhs_size; i++) SP::operator[](i + old_size) = rhs[i];
+      for (SizeType i = 0; i < rhs_size; i++) SP::operator[](i + old_size) = rhs[i];
       return *this;
     }
 
     Array& operator+=(const ConstSlice& rhs)
     {
-      int old_size = SP::GetSize();
-      int rhs_size = rhs.GetSize();
+      SizeType old_size = SP::GetSize();
+      SizeType rhs_size = rhs.GetSize();
       SP::Resize(old_size + rhs_size);
-      for (int i = 0; i < rhs_size; i++) SP::operator[](i + old_size) = rhs[i];
+      for (SizeType i = 0; i < rhs_size; i++) SP::operator[](i + old_size) = rhs[i];
       return *this;
     }
 
@@ -116,24 +116,24 @@ namespace Apto {
     Array operator+(const Array<T1, SP1>& rhs) const
     {
       Array new_arr(SP::GetSize() + rhs.GetSize());
-      for (int i = 0; i < SP::GetSize(); i++) new_arr[i] = SP::operator[](i);
-      for (int i = 0; i < rhs.GetSize(); i++) new_arr[SP::GetSize() + i] = rhs[i];
+      for (SizeType i = 0; i < SP::GetSize(); i++) new_arr[i] = SP::operator[](i);
+      for (SizeType i = 0; i < rhs.GetSize(); i++) new_arr[SP::GetSize() + i] = rhs[i];
       return new_arr;
     }
 
     Array operator+(const Slice& rhs) const
     {
       Array new_arr(SP::GetSize() + rhs.GetSize());
-      for (int i = 0; i < SP::GetSize(); i++) new_arr[i] = SP::operator[](i);
-      for (int i = 0; i < rhs.GetSize(); i++) new_arr[SP::GetSize() + i] = rhs[i];
+      for (SizeType i = 0; i < SP::GetSize(); i++) new_arr[i] = SP::operator[](i);
+      for (SizeType i = 0; i < rhs.GetSize(); i++) new_arr[SP::GetSize() + i] = rhs[i];
       return new_arr;
     }
 
     Array operator+(const ConstSlice& rhs) const
     {
       Array new_arr(SP::GetSize() + rhs.GetSize());
-      for (int i = 0; i < SP::GetSize(); i++) new_arr[i] = SP::operator[](i);
-      for (int i = 0; i < rhs.GetSize(); i++) new_arr[SP::GetSize() + i] = rhs[i];
+      for (SizeType i = 0; i < SP::GetSize(); i++) new_arr[i] = SP::operator[](i);
+      for (SizeType i = 0; i < rhs.GetSize(); i++) new_arr[SP::GetSize() + i] = rhs[i];
       return new_arr;
     }
 
@@ -141,21 +141,21 @@ namespace Apto {
     bool operator==(const Array<T1, SP1>& rhs)
     {
       if (SP::GetSize() != rhs.GetSize()) return false;
-      for (int i = 0; i < SP::GetSize(); i++) if (SP::operator[](i) != rhs[i]) return false;
+      for (SizeType i = 0; i < SP::GetSize(); i++) if (SP::operator[](i) != rhs[i]) return false;
       return true;
     }
 
     bool operator==(const Slice& rhs)
     {
       if (SP::GetSize() != rhs.GetSize()) return false;
-      for (int i = 0; i < SP::GetSize(); i++) if (SP::operator[](i) != rhs[i]) return false;
+      for (SizeType i = 0; i < SP::GetSize(); i++) if (SP::operator[](i) != rhs[i]) return false;
       return true;
     }
 
     bool operator==(const ConstSlice& rhs)
     {
       if (SP::GetSize() != rhs.GetSize()) return false;
-      for (int i = 0; i < SP::GetSize(); i++) if (SP::operator[](i) != rhs[i]) return false;
+      for (SizeType i = 0; i < SP::GetSize(); i++) if (SP::operator[](i) != rhs[i]) return false;
       return true;
     }
     
@@ -165,42 +165,42 @@ namespace Apto {
     bool operator!=(const Slice& rhs) { return !operator==(rhs); }
     bool operator!=(const ConstSlice& rhs) { return !operator==(rhs); }
 
-    inline int GetSize() const { return SP::GetSize(); }
+    inline SizeType GetSize() const { return SP::GetSize(); }
     
-    inline void ResizeClear(const int in_size)
+    inline void ResizeClear(const SizeType in_size)
     {
       assert(in_size >= 0);
       SP::ResizeClear(in_size);
     }
     
-    inline void Resize(int new_size)
+    inline void Resize(SizeType new_size)
     {
       assert(new_size >= 0);
       SP::Resize(new_size);
     }
     
-    void Resize(int new_size, const T& empty_value)
+    void Resize(SizeType new_size, const T& empty_value)
     {
-      int old_size = SP::GetSize();
+      SizeType old_size = SP::GetSize();
       SP::Resize(new_size);
-      for (int i = old_size; i < new_size; i++) SP::operator[](i) = empty_value;
+      for (SizeType i = old_size; i < new_size; i++) SP::operator[](i) = empty_value;
     }
     
-    T& operator[](const int index)
+    T& operator[](const SizeType index)
     {
       assert(index >= 0);       // Lower Bounds Error
       assert(index < SP::GetSize()); // Upper Bounds Error
       return SP::operator[](index);
     }
-    const T& operator[](const int index) const
+    const T& operator[](const SizeType index) const
     {
       assert(index >= 0);       // Lower Bounds Error
       assert(index < SP::GetSize()); // Upper Bounds Error
       return SP::operator[](index);
     }
     
-    inline T& Get(const int index) { return operator[](index); }
-    inline const T& Get(const int index) const { return operator[](index); }
+    inline T& Get(const SizeType index) { return operator[](index); }
+    inline const T& Get(const SizeType index) const { return operator[](index); }
     
     // Stack-like Methods...
     void Push(const T& value)
@@ -217,7 +217,7 @@ namespace Apto {
     }
     
     
-    void Swap(int idx1, int idx2)
+    void Swap(SizeType idx1, SizeType idx2)
     {
       assert(idx1 >= 0);      // Lower Bounds Error
       assert(idx1 < SP::GetSize());  // Upper Bounds Error
@@ -228,26 +228,26 @@ namespace Apto {
     }  
     
     
-    void RemoveAt(int idx)
+    void RemoveAt(SizeType idx)
     {
       assert(idx >= 0);
       assert(idx < SP::GetSize());
       
-      for (int i = idx; i < SP::GetSize() - 1; i++) SP::operator[](i) = SP::operator[](i + 1);
+      for (SizeType i = idx; i < SP::GetSize() - 1; i++) SP::operator[](i) = SP::operator[](i + 1);
       SP::Resize(SP::GetSize() - 1);
     }
     
     
     void SetAll(const T& value)
     {
-      for (int i = 0; i < SP::GetSize(); i++) SP::operator[](i) = value;
+      for (SizeType i = 0; i < SP::GetSize(); i++) SP::operator[](i) = value;
     }
     
     Iterator Begin() { return Iterator(*this); }
     ConstIterator Begin() const { return ConstIterator(*this); }
     
-    Slice Range(int start_idx, int end_idx) { return Slice(*this, start_idx, end_idx); }
-    ConstSlice Range(int start_idx, int end_idx) const { return ConstSlice(*this, start_idx, end_idx); }
+    Slice Range(SizeType start_idx, SizeType end_idx) { return Slice(*this, start_idx, end_idx); }
+    ConstSlice Range(SizeType start_idx, SizeType end_idx) const { return ConstSlice(*this, start_idx, end_idx); }
     
     
   public:
@@ -257,7 +257,7 @@ namespace Apto {
       
     private:
       Array& m_arr;
-      int m_index;
+      SizeType m_index;
       
       Iterator(); // @not_implemented
       Iterator(Array& arr) : m_arr(arr), m_index(-1) { ; }
@@ -272,7 +272,7 @@ namespace Apto {
       friend class Array;
     private:
       const Array& m_arr;
-      int m_index;
+      SizeType m_index;
       
       ConstIterator(); // @not_implemented
       ConstIterator(const Array& arr) : m_arr(arr), m_index(-1) { ; }
@@ -288,11 +288,11 @@ namespace Apto {
       
     private:
       Array& m_arr;
-      int m_start_idx;
-      int m_end_idx;
+      SizeType m_start_idx;
+      SizeType m_end_idx;
       
       Slice(); // @not_implemented
-      inline Slice(Array& arr, int start_idx, int end_idx) : m_arr(arr), m_start_idx(start_idx), m_end_idx(end_idx)
+      inline Slice(Array& arr, SizeType start_idx, SizeType end_idx) : m_arr(arr), m_start_idx(start_idx), m_end_idx(end_idx)
       {
         assert(end_idx >= start_idx);
         assert(end_idx < arr.GetSize());
@@ -300,26 +300,26 @@ namespace Apto {
       }
       
     public:
-      inline int GetSize() const { return m_end_idx - m_start_idx + 1; }
+      inline SizeType GetSize() const { return m_end_idx - m_start_idx + 1; }
 
-      inline T& operator[](const int index)
+      inline T& operator[](const SizeType index)
       {
         assert(index >= 0);        // Lower Bounds Error
         assert(index < GetSize()); // Upper Bounds Error
         return m_arr[m_start_idx + index];
       }
-      inline const T& operator[](const int index) const
+      inline const T& operator[](const SizeType index) const
       {
         assert(index >= 0);       // Lower Bounds Error
         assert(index < GetSize()); // Upper Bounds Error
         return m_arr[m_start_idx + index];
       }
       
-      inline T& Get(const int index) { return operator[](index); }
-      inline const T& Get(const int index) const { return operator[](index); }
+      inline T& Get(const SizeType index) { return operator[](index); }
+      inline const T& Get(const SizeType index) const { return operator[](index); }
       
-      Slice Range(int start_idx, int end_idx) { return Slice(m_arr, m_start_idx + start_idx, m_start_idx + end_idx); }
-      ConstSlice Range(int start_idx, int end_idx) const { return ConstSlice(m_arr, m_start_idx + start_idx, m_start_idx + end_idx); }
+      Slice Range(SizeType start_idx, SizeType end_idx) { return Slice(m_arr, m_start_idx + start_idx, m_start_idx + end_idx); }
+      ConstSlice Range(SizeType start_idx, SizeType end_idx) const { return ConstSlice(m_arr, m_start_idx + start_idx, m_start_idx + end_idx); }
     };
 
     class ConstSlice
@@ -328,11 +328,11 @@ namespace Apto {
       
     private:
       const Array& m_arr;
-      int m_start_idx;
-      int m_end_idx;
+      SizeType m_start_idx;
+      SizeType m_end_idx;
       
       ConstSlice(); // @not_implemented
-      inline ConstSlice(Array& arr, int start_idx, int end_idx) : m_arr(arr), m_start_idx(start_idx), m_end_idx(end_idx)
+      inline ConstSlice(Array& arr, SizeType start_idx, SizeType end_idx) : m_arr(arr), m_start_idx(start_idx), m_end_idx(end_idx)
       {
         assert(end_idx >= start_idx);
         assert(end_idx < arr.GetSize());
@@ -340,18 +340,18 @@ namespace Apto {
       }
       
     public:
-      inline int GetSize() const { return m_end_idx - m_start_idx + 1; }
+      inline SizeType GetSize() const { return m_end_idx - m_start_idx + 1; }
       
-      inline const T& operator[](const int index) const
+      inline const T& operator[](const SizeType index) const
       {
         assert(index >= 0);       // Lower Bounds Error
         assert(index < GetSize()); // Upper Bounds Error
         return m_arr[m_start_idx + index];
       }
       
-      inline const T& Get(const int index) const { return operator[](index); }
+      inline const T& Get(const SizeType index) const { return operator[](index); }
 
-      ConstSlice Range(int start_idx, int end_idx) const { return ConstSlice(m_arr, m_start_idx + start_idx, m_start_idx + end_idx); }
+      ConstSlice Range(SizeType start_idx, SizeType end_idx) const { return ConstSlice(m_arr, m_start_idx + start_idx, m_start_idx + end_idx); }
     };
   };
 };

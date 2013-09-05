@@ -44,17 +44,17 @@ namespace Apto {
   {
   protected:
     T* m_data;    // Data Array
-    int m_size;   // Array Size
+    SizeType m_size;   // Array Size
     
     typedef T StoredType;
     
-    explicit Basic(int size = 0) : m_data(NULL), m_size(0) { ResizeClear(size); }
+    explicit Basic(SizeType size = 0) : m_data(NULL), m_size(0) { ResizeClear(size); }
     Basic(const Basic& rhs) : m_data(NULL), m_size(0) { this->operator=(rhs); }
     ~Basic() { delete [] m_data; }
     
-    int GetSize() const { return m_size; }
+    SizeType GetSize() const { return m_size; }
     
-    void ResizeClear(const int in_size)
+    void ResizeClear(const SizeType in_size)
     {
       if (m_data != NULL) delete [] m_data;
       
@@ -67,7 +67,7 @@ namespace Apto {
       m_size = in_size;
     }
     
-    void Resize(int new_size)
+    void Resize(SizeType new_size)
     {
       // If we're already at the size we want, don't bother doing anything.
       if (new_size == m_size) return;
@@ -84,7 +84,7 @@ namespace Apto {
       assert(new_data != NULL); // Memory Allocation Error: Out of Memory?
       
       // Copy over old data...
-      for (int i = 0; i < m_size && i < new_size; i++) new_data[i] = m_data[i];
+      for (SizeType i = 0; i < m_size && i < new_size; i++) new_data[i] = m_data[i];
       if (m_data != NULL) delete [] m_data;  // remove old data if exists
       
       m_data = new_data;
@@ -94,14 +94,14 @@ namespace Apto {
     Basic& operator=(const Basic& rhs)
     {
       if (m_size != rhs.m_size) ResizeClear(rhs.m_size);
-      for (int i = 0; i < rhs.m_size; i++) m_data[i] = rhs.m_data[i];
+      for (SizeType i = 0; i < rhs.m_size; i++) m_data[i] = rhs.m_data[i];
       return *this;
     }
     
-    inline T& operator[](const int index) { return m_data[index]; }
-    inline const T& operator[](const int index) const { return m_data[index]; }
+    inline T& operator[](const SizeType index) { return m_data[index]; }
+    inline const T& operator[](const SizeType index) const { return m_data[index]; }
     
-    void Swap(int idx1, int idx2)
+    void Swap(SizeType idx1, SizeType idx2)
     {
       T v = m_data[idx1];
       m_data[idx1] = m_data[idx2];
@@ -114,24 +114,24 @@ namespace Apto {
   {
   protected:
     T* m_data;    // Data Array
-    int m_size;   // Array Size
-    int m_active; // Active Size
-    int m_reserve;
+    SizeType m_size;   // Array Size
+    SizeType m_active; // Active Size
+    SizeType m_reserve;
     
     // "I am so smart..."
-    static const int SMRT_INCREASE_MINIMUM = 4;
-    static const int SMRT_INCREASE_FACTOR = 2;
-    static const int SMRT_SHRINK_TEST_FACTOR = 4;
+    static const SizeType SMRT_INCREASE_MINIMUM = 4;
+    static const SizeType SMRT_INCREASE_FACTOR = 2;
+    static const SizeType SMRT_SHRINK_TEST_FACTOR = 4;
     
     typedef T StoredType;
     
-    explicit Smart(int size = 0) : m_data(NULL), m_size(0), m_active(0), m_reserve(0) { ResizeClear(size); }
+    explicit Smart(SizeType size = 0) : m_data(NULL), m_size(0), m_active(0), m_reserve(0) { ResizeClear(size); }
     Smart(const Smart& rhs) : m_data(NULL), m_size(0), m_active(0), m_reserve(0) { this->operator=(rhs); }
     ~Smart() { delete [] m_data; }
     
-    int GetSize() const { return m_active; }
+    SizeType GetSize() const { return m_active; }
     
-    void ResizeClear(const int in_size)
+    void ResizeClear(const SizeType in_size)
     {
       m_active = in_size;
       m_size = (in_size >= m_reserve) ? in_size : m_reserve;    
@@ -145,7 +145,7 @@ namespace Apto {
       else m_data = NULL;
     }
     
-    void Resize(int new_size)
+    void Resize(SizeType new_size)
     {
       // If we're already at the size we want, don't bother doing anything.
       if (new_size == m_active) return;
@@ -163,17 +163,17 @@ namespace Apto {
       }
       
       // Determine if we need to adjust the allocated array sizes...
-      int shrink_test = new_size * SMRT_SHRINK_TEST_FACTOR;
+      SizeType shrink_test = new_size * SMRT_SHRINK_TEST_FACTOR;
       if (new_size > m_size || (shrink_test < m_size && shrink_test >= m_reserve)) {
-        int new_array_size = new_size * SMRT_INCREASE_FACTOR;
-        int new_array_min = (new_size + SMRT_INCREASE_MINIMUM) < m_reserve ? m_reserve : (new_size + SMRT_INCREASE_MINIMUM);
+        SizeType new_array_size = new_size * SMRT_INCREASE_FACTOR;
+        SizeType new_array_min = (new_size + SMRT_INCREASE_MINIMUM) < m_reserve ? m_reserve : (new_size + SMRT_INCREASE_MINIMUM);
         if (new_array_min > new_array_size) new_array_size = new_array_min;
         
         T* new_data = new T[new_array_size];
         assert(new_data != NULL); // Memory Allocation Error: Out of Memory?
         
         // Copy over old data...
-        for (int i = 0; i < m_active && i < new_size; i++) {
+        for (SizeType i = 0; i < m_active && i < new_size; i++) {
           new_data[i] = m_data[i];
         }
         if (m_data != NULL) delete [] m_data;  // remove old data if exists
@@ -188,15 +188,15 @@ namespace Apto {
     Smart& operator=(const Smart& rhs)
     {
       if (GetSize() != rhs.GetSize()) ResizeClear(rhs.GetSize());
-      for (int i = 0; i < rhs.GetSize(); i++) m_data[i] = rhs.m_data[i];
+      for (SizeType i = 0; i < rhs.GetSize(); i++) m_data[i] = rhs.m_data[i];
       return *this;
     }
     
 
-    inline T& operator[](const int index) { return m_data[index]; }
-    inline const T& operator[](const int index) const { return m_data[index]; }
+    inline T& operator[](const SizeType index) { return m_data[index]; }
+    inline const T& operator[](const SizeType index) const { return m_data[index]; }
     
-    void Swap(int idx1, int idx2)
+    void Swap(SizeType idx1, SizeType idx2)
     {
       T v = m_data[idx1];
       m_data[idx1] = m_data[idx2];
@@ -205,9 +205,9 @@ namespace Apto {
     
     
   public:
-    int GetReserve() const { return m_reserve; }
-    void SetReserve(int reserve) { m_reserve = reserve; }
-    int GetCapacity() const { return m_size; }
+    SizeType GetReserve() const { return m_reserve; }
+    void SetReserve(SizeType reserve) { m_reserve = reserve; }
+    SizeType GetCapacity() const { return m_size; }
   };
   
   
@@ -215,24 +215,24 @@ namespace Apto {
   {
   protected:
     T** m_data;    // Data Array
-    int m_size;   // Array Size
+    SizeType m_size;   // Array Size
     
     typedef T StoredType;
     
-    explicit ManagedPointer(int size = 0) : m_data(NULL), m_size(0) { ResizeClear(size); }
+    explicit ManagedPointer(SizeType size = 0) : m_data(NULL), m_size(0) { ResizeClear(size); }
     ManagedPointer(const ManagedPointer& rhs) : m_data(NULL), m_size(0) { this->operator=(rhs); }
     
     ~ManagedPointer()
     {
-      for (int i = 0; i < m_size; i++) delete m_data[i];
+      for (SizeType i = 0; i < m_size; i++) delete m_data[i];
       delete [] m_data;
     }
     
-    int GetSize() const { return m_size; }
+    SizeType GetSize() const { return m_size; }
     
-    void ResizeClear(const int in_size)
+    void ResizeClear(const SizeType in_size)
     {
-      for (int i = 0; i < m_size; i++) delete m_data[i];
+      for (SizeType i = 0; i < m_size; i++) delete m_data[i];
       if (m_data != NULL) delete [] m_data;  // remove old data if exists
       
       m_size = in_size;
@@ -241,19 +241,19 @@ namespace Apto {
       if (m_size > 0) {
         m_data = new T*[m_size];   // Allocate block for data
         assert(m_data != NULL); // Memory allocation error: Out of Memory?
-        for (int i = 0; i < m_size; i++) m_data[i] = new T;
+        for (SizeType i = 0; i < m_size; i++) m_data[i] = new T;
       }
       else m_data = NULL;
     }
     
-    void Resize(int new_size)
+    void Resize(SizeType new_size)
     {
       // If we're already at the size we want, don't bother doing anything.
       if (m_size == new_size) return;
       
       // If new size is 0, clean up and go!
       if (new_size == 0) {
-        for (int i = 0; i < m_size; i++) delete m_data[i];
+        for (SizeType i = 0; i < m_size; i++) delete m_data[i];
         if (m_data != NULL) delete [] m_data;
         m_data = NULL;
         m_size = 0;
@@ -265,14 +265,14 @@ namespace Apto {
       
       if (m_size < new_size) {
         // Fill out the new portion of the array, if needed
-        for (int i = m_size; i < new_size; i++) new_data[i] = new T;
+        for (SizeType i = m_size; i < new_size; i++) new_data[i] = new T;
       } else if (new_size < m_size) {
         // Clean up old portion of the array, if needed
-        for (int i = new_size; i < m_size; i++) delete m_data[i];
+        for (SizeType i = new_size; i < m_size; i++) delete m_data[i];
       }
       
       // Copy over old data...
-      for (int i = 0; i < m_size && i < new_size; i++) {
+      for (SizeType i = 0; i < m_size && i < new_size; i++) {
         new_data[i] = m_data[i];
       }
       if (m_data != NULL) delete [] m_data;  // remove old data if exists
@@ -284,14 +284,14 @@ namespace Apto {
     ManagedPointer& operator=(const ManagedPointer& rhs)
     {
       if (m_size != rhs.GetSize()) Resize(rhs.GetSize());
-      for(int i = 0; i < m_size; i++) *m_data[i] = rhs[i];
+      for(SizeType i = 0; i < m_size; i++) *m_data[i] = rhs[i];
       return *this;
     }
 
-    inline T& operator[](const int index) { return *m_data[index]; }
-    inline const T& operator[](const int index) const { return *m_data[index]; }
+    inline T& operator[](const SizeType index) { return *m_data[index]; }
+    inline const T& operator[](const SizeType index) const { return *m_data[index]; }
     
-    void Swap(int idx1, int idx2)
+    void Swap(SizeType idx1, SizeType idx2)
     {
       T* v = m_data[idx1];
       m_data[idx1] = m_data[idx2];

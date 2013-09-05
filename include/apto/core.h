@@ -42,6 +42,7 @@
 #include "apto/core/List.h"
 #include "apto/core/Map.h"
 #include "apto/core/Mutex.h"
+#include "apto/core/Matrix.h"
 #include "apto/core/Pair.h"
 #include "apto/core/PriorityScheduler.h"
 #include "apto/core/Random.h"

@@ -36,13 +36,13 @@
 
 namespace Apto {
   
-  const int QUICKSORT_THRESHOLD = 10;
+  const SizeType QUICKSORT_THRESHOLD = 10;
   
   template <class A> inline void QSort(A& array)
   {
     QSort(array, 0, array.GetSize() - 1);
   }
-  template <class A> void QSort(A& array, int begin, int end)
+  template <class A> void QSort(A& array, SizeType begin, SizeType end)
   {
     if (end < begin) return;
     
@@ -52,8 +52,8 @@ namespace Apto {
     }
     
     typename A::ValueType pivot = array[begin];
-    int l = begin + 1;
-    int r = end;
+    SizeType l = begin + 1;
+    SizeType r = end;
     
     while (l != r - 1) {
       if (array[l] < pivot)
@@ -78,11 +78,11 @@ namespace Apto {
   }
   
   
-  template <class A> inline void QSort(A& array, Functor<int, Apto::TL::Create<const typename A::ValueType&, const typename A::ValueType&> > comparator)
+  template <class A> inline void QSort(A& array, Functor<SizeType, Apto::TL::Create<const typename A::ValueType&, const typename A::ValueType&> > comparator)
   {
     QSort(array, 0, array.GetSize() - 1, comparator);
   }
-  template <class A> void QSort(A& array, int begin, int end, Functor<int, Apto::TL::Create<const typename A::ValueType&, const typename A::ValueType&> > comparator)
+  template <class A> void QSort(A& array, SizeType begin, SizeType end, Functor<SizeType, Apto::TL::Create<const typename A::ValueType&, const typename A::ValueType&> > comparator)
   {
     if (end < begin) return;
     
@@ -92,8 +92,8 @@ namespace Apto {
     }
     
     typename A::ValueType pivot = array[begin];
-    int l = begin + 1;
-    int r = end;
+    SizeType l = begin + 1;
+    SizeType r = end;
     
     while (l != r - 1) {
       if (comparator(array[l], pivot) < 0)
@@ -120,13 +120,13 @@ namespace Apto {
   
 
   template<class A> inline void ISort(A& array) { ISort(array, 0, array.GetSize() - 1); }
-  template<class A> void ISort(A& array, int begin, int end)
+  template<class A> void ISort(A& array, SizeType begin, SizeType end)
   {
     typename A::ValueType value;
-    int j;
+    SizeType j;
     
     // for each entry
-    for (int i = begin + 1; i <= end; i++) {
+    for (SizeType i = begin + 1; i <= end; i++) {
       // insert into array starting from the end of our sub-array
       value = array[i];
       j = i - 1;
@@ -139,17 +139,17 @@ namespace Apto {
   }
 
   
-  template<class A> inline void ISort(A& array, Functor<int, Apto::TL::Create<const typename A::ValueType&, const typename A::ValueType&> > comparator)
+  template<class A> inline void ISort(A& array, Functor<SizeType, Apto::TL::Create<const typename A::ValueType&, const typename A::ValueType&> > comparator)
   {
     ISort(array, 0, array.GetSize() - 1, comparator);
   }
-  template<class A> void ISort(A& array, int begin, int end, Functor<int, Apto::TL::Create<const typename A::ValueType&, const typename A::ValueType&> > comparator)
+  template<class A> void ISort(A& array, SizeType begin, SizeType end, Functor<SizeType, Apto::TL::Create<const typename A::ValueType&, const typename A::ValueType&> > comparator)
   {
     typename A::ValueType value;
-    int j;
+    SizeType j;
     
     // for each entry
-    for (int i = begin + 1; i <= end; i++) {
+    for (SizeType i = begin + 1; i <= end; i++) {
       // insert into array starting from the end of our sub-array
       value = array[i];
       j = i - 1;

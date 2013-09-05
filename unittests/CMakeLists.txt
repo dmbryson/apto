@@ -11,6 +11,7 @@ SET(CORE_SOURCES
   ${CORE_DIR}/List.cc
   ${CORE_DIR}/Malloc.cc
   ${CORE_DIR}/Map.cc
+  ${CORE_DIR}/Matrix.cc
   ${CORE_DIR}/Mutex.cc
   ${CORE_DIR}/Pair.cc
   ${CORE_DIR}/RWLock.cc

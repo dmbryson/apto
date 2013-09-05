@@ -28,6 +28,7 @@
 /* Begin PBXBuildFile section */
 		7000B66B15C84F5500EE3F14 /* String.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7000B66815C84E5F00EE3F14 /* String.cc */; };
 		7000B66C15C84F5500EE3F14 /* String.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7000B66815C84E5F00EE3F14 /* String.cc */; };
+		701C30F817D8E1D90027FCD9 /* Matrix.cc in Sources */ = {isa = PBXBuildFile; fileRef = 701C30F717D8E1D90027FCD9 /* Matrix.cc */; };
 		701C38C614C0B14700EB6B41 /* FileSystem.cc in Sources */ = {isa = PBXBuildFile; fileRef = 701C38C514C0B14700EB6B41 /* FileSystem.cc */; };
 		701C38C714C0B14700EB6B41 /* FileSystem.cc in Sources */ = {isa = PBXBuildFile; fileRef = 701C38C514C0B14700EB6B41 /* FileSystem.cc */; };
 		7023366612FC52E0000C7BE5 /* Platform.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7023364412FC4E31000C7BE5 /* Platform.cc */; };
@@ -281,6 +282,9 @@
 /* Begin PBXFileReference section */
 		08FB7796FE84155DC02AAC07 /* main.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cc; sourceTree = "<group>"; };
 		7000B66815C84E5F00EE3F14 /* String.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = String.cc; sourceTree = "<group>"; };
+		701C30F517D8D6230027FCD9 /* Matrix.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Matrix.h; sourceTree = "<group>"; };
+		701C30F617D8D6920027FCD9 /* MatrixStorage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MatrixStorage.h; sourceTree = "<group>"; };
+		701C30F717D8E1D90027FCD9 /* Matrix.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Matrix.cc; sourceTree = "<group>"; };
 		701C38C314C0B0E900EB6B41 /* FileSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileSystem.h; sourceTree = "<group>"; };
 		701C38C514C0B14700EB6B41 /* FileSystem.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystem.cc; sourceTree = "<group>"; };
 		702335CE12FB51EF000C7BE5 /* gtest-all.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "gtest-all.cc"; sourceTree = "<group>"; };
@@ -667,6 +671,7 @@
 				70EE0D7B1309DB8300D6C016 /* List.cc */,
 				7073BBA516275D6100A05A1C /* Malloc.cc */,
 				70EE0D7C1309DB8300D6C016 /* Map.cc */,
+				701C30F717D8E1D90027FCD9 /* Matrix.cc */,
 				70EE0D7D1309DB8300D6C016 /* Mutex.cc */,
 				70EE0D7E1309DB8300D6C016 /* Pair.cc */,
 				70EE0D7F1309DB8300D6C016 /* RWLock.cc */,
@@ -729,6 +734,8 @@
 				70608C8C1625D75B00E98385 /* Malloc.h */,
 				70354899132FC63500D3865C /* Map.h */,
 				7035489A132FC63500D3865C /* MapStorage.h */,
+				701C30F517D8D6230027FCD9 /* Matrix.h */,
+				701C30F617D8D6920027FCD9 /* MatrixStorage.h */,
 				7035489B132FC63500D3865C /* Mutex.h */,
 				7035489C132FC63500D3865C /* Pair.h */,
 				70FA3EAA16398FDF0003971F /* PriorityScheduler.h */,
@@ -1266,6 +1273,7 @@
 				70EE0D911309DB8400D6C016 /* StringBuffer.cc in Sources */,
 				70EE0D921309DB8400D6C016 /* Thread.cc in Sources */,
 				70EE0D931309DB8400D6C016 /* ThreadSpecific.cc in Sources */,
+				701C30F817D8E1D90027FCD9 /* Matrix.cc in Sources */,
 				70EE0D961309DD3D00D6C016 /* FloatingPoint.cc in Sources */,
 				70EE0DB7130B17B100D6C016 /* ContingencyTable.cc in Sources */,
 				704031F61314259100F2F055 /* Functions.cc in Sources */,
