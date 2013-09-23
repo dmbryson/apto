@@ -178,6 +178,98 @@ TEST(CoreHashBTreeMap, Removal) {
   EXPECT_FALSE(map2.Has("DIVIDE_DEL_PROB"));
   EXPECT_TRUE(map2.Has("RETURN_STORED_ON_DEATH"));
   EXPECT_TRUE(map2.Has("REQUIRED_RESOURCE_LEVEL"));
+  
+  
+  
+  Apto::Map<Apto::String, int> map3;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org0-ud-1-grp-1_ft6-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org1-ud-1-grp-1_ft6-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org2-ud-1-grp-1_ft3-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org3-ud-1-grp-1_ft6-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org4-ud-1-grp-1_ft5-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org5-ud-1-grp-1_ft3-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org6-ud-1-grp-1_ft1-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org7-ud-1-grp-1_ft6-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org8-ud-1-grp-1_ft0-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org9-ud-1-grp-1_ft5-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org10-ud-1-grp-1_ft4-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org11-ud-1-grp-1_ft5-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org12-ud-1-grp-1_ft5-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org13-ud-1-grp-1_ft6-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org14-ud-1-grp-1_ft4-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org15-ud-1-grp-1_ft5-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org16-ud-1-grp-1_ft4-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org17-ud-1-grp-1_ft1-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org18-ud-1-grp-1_ft1-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org19-ud-1-grp-1_ft1-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org20-ud-1-grp-1_ft6-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org21-ud-1-grp-1_ft3-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org22-ud-1-grp-1_ft3-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org23-ud-1-grp-1_ft5-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org24-ud-1-grp-1_ft3-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org25-ud-1-grp-1_ft3-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org26-ud-1-grp-1_ft2-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org27-ud-1-grp-1_ft1-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org28-ud-1-grp-1_ft6-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org29-ud-1-grp-1_ft4-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org30-ud-1-grp-1_ft5-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org31-ud-1-grp-1_ft5-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org32-ud-1-grp-1_ft1-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org33-ud-1-grp-1_ft1-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org34-ud-1-grp-1_ft5-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org35-ud-1-grp-1_ft4-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org36-ud-1-grp-1_ft1-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org37-ud-1-grp-1_ft6-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org38-ud-1-grp-1_ft4-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org39-ud-1-grp-1_ft3-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org40-ud-1-grp-1_ft3-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org41-ud-1-grp-1_ft6-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org42-ud-1-grp-1_ft6-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org43-ud-1-grp-1_ft6-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org44-ud-1-grp-1_ft6-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org45-ud-1-grp-1_ft6-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org46-ud-1-grp-1_ft6-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org47-ud-1-grp-1_ft1-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org48-ud-1-grp-1_ft1-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org49-ud-1-grp-1_ft3-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org50-ud-1-grp-1_ft0-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org51-ud-1-grp-1_ft1-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org52-ud-1-grp-1_ft6-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org53-ud-1-grp-1_ft6-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org54-ud-1-grp-1_ft6-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org55-ud-1-grp-1_ft4-gt1.trc"] = 1;
+  map3["/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org56-ud-1-grp-1_ft5-gt1.trc"] = 1;
+  
+  map3.Remove("/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org26-ud-1-grp-1_ft2-gt1.trc");
+  map3.Remove("/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org37-ud-1-grp-1_ft6-gt1.trc");
+  map3.Remove("/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org50-ud-1-grp-1_ft0-gt1.trc");
+  map3.Remove("/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org0-ud-1-grp-1_ft6-gt1.trc");
+  map3.Remove("/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org1-ud-1-grp-1_ft6-gt1.trc");
+  map3.Remove("/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org2-ud-1-grp-1_ft3-gt1.trc");
+  map3.Remove("/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org3-ud-1-grp-1_ft6-gt1.trc");
+  map3.Remove("/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org4-ud-1-grp-1_ft5-gt1.trc");
+  map3.Remove("/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org5-ud-1-grp-1_ft3-gt1.trc");
+  map3.Remove("/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org6-ud-1-grp-1_ft1-gt1.trc");
+  map3.Remove("/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org7-ud-1-grp-1_ft6-gt1.trc");
+  map3.Remove("/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org8-ud-1-grp-1_ft0-gt1.trc");
+  map3.Remove("/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org9-ud-1-grp-1_ft5-gt1.trc");
+  map3.Remove("/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org10-ud-1-grp-1_ft4-gt1.trc");
+  map3.Remove("/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org11-ud-1-grp-1_ft5-gt1.trc");
+  map3.Remove("/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org12-ud-1-grp-1_ft5-gt1.trc");
+  map3.Remove("/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org13-ud-1-grp-1_ft6-gt1.trc");
+  map3.Remove("/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org14-ud-1-grp-1_ft4-gt1.trc");
+  map3.Remove("/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org15-ud-1-grp-1_ft5-gt1.trc");
+  map3.Remove("/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org16-ud-1-grp-1_ft4-gt1.trc");
+  map3.Remove("/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org17-ud-1-grp-1_ft1-gt1.trc");
+  map3.Remove("/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org18-ud-1-grp-1_ft1-gt1.trc");
+  map3.Remove("/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org19-ud-1-grp-1_ft1-gt1.trc");
+  map3.Remove("/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org20-ud-1-grp-1_ft6-gt1.trc");
+  map3.Remove("/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org21-ud-1-grp-1_ft3-gt1.trc");
+  map3.Remove("/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org22-ud-1-grp-1_ft3-gt1.trc");
+  map3.Remove("/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org23-ud-1-grp-1_ft5-gt1.trc");
+  map3.Remove("/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org24-ud-1-grp-1_ft3-gt1.trc");
+  map3.Remove("/Users/apwagner/current/experiment_files/niche/GP8/traces/crash_test/data//minitraces/org25-ud-1-grp-1_ft3-gt1.trc");
+  
 }
 
 
