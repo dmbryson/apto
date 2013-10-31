@@ -387,7 +387,7 @@ namespace Apto {
                 else tbl[parent_idx].right = sub_idx;
                 
                 // Move next right node to current tree position
-                if (sub_idx != tbl[last_idx].left == tbl[sub_idx].left >= 0) {
+                if (sub_idx != tbl[last_idx].left && tbl[sub_idx].left >= 0) {
                   tbl[tbl[sub_idx].left].parent = tbl[sub_idx].parent;
                   tbl[tbl[sub_idx].parent].right = tbl[sub_idx].left;
                 }
@@ -412,7 +412,7 @@ namespace Apto {
                 else tbl[parent_idx].right = sub_idx;
                 
                 // Move next right node to current tree position
-                if (sub_idx != tbl[last_idx].left == tbl[sub_idx].left >= 0) {
+                if (sub_idx != tbl[last_idx].left && tbl[sub_idx].left >= 0) {
                   tbl[tbl[sub_idx].left].parent = tbl[sub_idx].parent;
                   tbl[tbl[sub_idx].parent].right = tbl[sub_idx].left;
                 }
