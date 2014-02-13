@@ -35,7 +35,8 @@
 #define NULL 0
 #endif
 
-typedef int SizeType; // Data structure index and size type - this value must be signed
-
+namespace Apto {
+  typedef int SizeType; // Data structure index and size type - this value must be signed
+};
 
 #endif
