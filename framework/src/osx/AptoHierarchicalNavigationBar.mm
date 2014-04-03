@@ -44,6 +44,7 @@
 - (void)drawRect:(NSRect)dirtyRect
 {
     // Drawing code here.
+  (void)dirtyRect;
 }
 
 @end

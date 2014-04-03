@@ -68,7 +68,7 @@
 
 @synthesize documentView;
 
-- (void) setDocumentView:(NSView*)value;
+- (void) setDocumentView:(NSView*)value
 {
   if (documentView == value) return;
   
@@ -91,7 +91,7 @@
 
 @synthesize documentViewAlignment;
 
-- (void) setDocumentViewAlignment:(NSImageAlignment)value;
+- (void) setDocumentViewAlignment:(NSImageAlignment)value
 {
   documentViewAlignment = value;
   [self positionDocumentView];
@@ -119,7 +119,7 @@
 // --------------------------------------------------------------------------------------------------------------
 #pragma mark - NSView
 
-- (void) resizeSubviewsWithOldSize:(NSSize)oldFrameSize;
+- (void) resizeSubviewsWithOldSize:(NSSize)oldFrameSize
 {
   [super resizeSubviewsWithOldSize:oldFrameSize];
   [self positionDocumentView];
@@ -130,7 +130,7 @@
 // --------------------------------------------------------------------------------------------------------------
 #pragma mark - Notification Handling
 
-- (void) documentViewFrameChangedNotification:(NSNotification*)notification;
+- (void) documentViewFrameChangedNotification:(NSNotification*)notification
 {
   [self positionDocumentView];
   [self setNeedsDisplay:YES];
@@ -141,7 +141,7 @@
 // --------------------------------------------------------------------------------------------------------------
 #pragma mark - Layout
 
-- (void) positionDocumentView;
+- (void) positionDocumentView
 {
   NSView* superview = [self superview];
   if (superview == nil) return;

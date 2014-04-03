@@ -34,7 +34,7 @@
 
 @implementation NSScrollView (Apto)
 
-- (NSImageAlignment)documentViewAlignment;
+- (NSImageAlignment)documentViewAlignment
 {
   NSView* documentView = [self documentView];
   
@@ -46,7 +46,7 @@
   }
 }
 
-- (void)setDocumentViewAlignment:(NSImageAlignment)value;
+- (void)setDocumentViewAlignment:(NSImageAlignment)value
 {
   AptoDocumentPositioningView* documentView = (AptoDocumentPositioningView*)[self documentView];
   
