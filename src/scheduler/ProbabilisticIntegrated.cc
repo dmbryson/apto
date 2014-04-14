@@ -108,6 +108,12 @@ int Apto::Scheduler::ProbabilisticIntegrated::Next()
 }
 
 
+int Apto::Scheduler::ProbabilisticIntegrated::EntryLimit() const
+{
+  return m_priority_chart.GetSize();
+}
+
+
 
 void Apto::Scheduler::ProbabilisticIntegrated::insertNode(int node_id)
 {

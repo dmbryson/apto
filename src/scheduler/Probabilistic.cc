@@ -45,6 +45,13 @@ int Apto::Scheduler::Probabilistic::Next()
   return m_index.FindPosition(m_rng->GetDouble(m_index.TotalWeight()));
 }
 
+int Apto::Scheduler::Probabilistic::EntryLimit() const
+{
+  return m_index.Size();
+}
+
+
+
 
 Apto::Scheduler::Probabilistic::WeightedIndex::WeightedIndex(int size)
   : m_size(size), m_item_weight(size), m_subtree_weight(size)

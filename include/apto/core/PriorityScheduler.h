@@ -47,6 +47,8 @@ namespace Apto {
     
     LIB_EXPORT virtual void AdjustPriority(int entry_id, double priority) = 0;
     LIB_EXPORT virtual int Next() = 0;
+    
+    LIB_EXPORT virtual int EntryLimit() const; // Maximim number of accepted entries (-1 indicates no limit, the default)
   };
   
 };

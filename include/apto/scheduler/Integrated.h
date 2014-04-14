@@ -65,6 +65,8 @@ namespace Apto {
       
       LIB_EXPORT void AdjustPriority(int entry_id, double priority);
       LIB_EXPORT int Next();
+      
+      LIB_EXPORT int EntryLimit() const;
     
     private:
       void insertNode(int node_id);

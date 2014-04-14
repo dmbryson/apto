@@ -50,3 +50,9 @@ int Apto::Scheduler::RoundRobin::Next()
 
   return m_last_id;
 }
+
+int Apto::Scheduler::RoundRobin::EntryLimit() const
+{
+  return m_active.GetSize();
+}
+

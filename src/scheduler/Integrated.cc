@@ -96,6 +96,11 @@ int Apto::Scheduler::Integrated::Next()
 }
 
 
+int Apto::Scheduler::Integrated::EntryLimit() const
+{
+  return m_priority_chart.GetSize();
+}
+
 
 void Apto::Scheduler::Integrated::insertNode(int node_id)
 {

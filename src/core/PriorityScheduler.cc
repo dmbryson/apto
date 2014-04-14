@@ -32,3 +32,9 @@
 
 
 Apto::PriorityScheduler::~PriorityScheduler() { ; }
+
+int Apto::PriorityScheduler::EntryLimit() const
+{
+  // Default -- No limit
+  return -1;
+}

@@ -55,6 +55,8 @@ namespace Apto {
       LIB_EXPORT void AdjustPriority(int entry_id, double priority);
       LIB_EXPORT int Next();
       
+      LIB_EXPORT int EntryLimit() const;
+      
     private:
       class WeightedIndex
       {
@@ -66,6 +68,8 @@ namespace Apto {
       public:
         LIB_EXPORT WeightedIndex(int size);
         LIB_EXPORT inline ~WeightedIndex() { ; }
+        
+        LIB_EXPORT inline int Size() const { return m_size; }
         
         LIB_EXPORT void SetWeight(int entry_id, double weight);
         
