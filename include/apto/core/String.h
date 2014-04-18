@@ -237,6 +237,23 @@ namespace Apto {
       return rtn;
     }
     
+    BasicString PopWord()
+    {
+      if (GetSize() == 0) return BasicString();
+      
+      const int start_pos = WhitespaceAt(0);
+      const int word_size = WordSizeAt(start_pos);
+      
+      BasicString rv(Substring(start_pos, word_size));
+      
+      // Trim off the front
+      const int word_end = start_pos + word_size;
+      const int new_start = word_end + WhitespaceAt(word_end);
+      (*this) = Substring(new_start);
+      
+      return rv;
+    }
+    
     
     // Modified content
     BasicString& ToLower()
@@ -319,6 +336,96 @@ namespace Apto {
              (*this)[idx] == '\r' ||  // carriage return
              (*this)[idx] == '\t' ||  // horizontal tab
              (*this)[idx] == '\v';    // vertical tab
+    }
+    
+    
+    // Whole string inspection
+    bool IsNumber() const
+    {
+      int start_idx = 0;
+      
+      // Allow +/- prefix
+      if ((*this)[0] == '+' || (*this)[0] == '-') start_idx = 1;
+
+      bool has_decimal = false;
+      bool has_exponent = false;
+      for (int i = start_idx; i < GetSize(); i++) {
+        
+        // Handle possible decimal point
+        if ((*this)[i] == '.') {
+          if (has_decimal) return false; // cannot have more then one decimal point
+          has_decimal = true;
+          continue;
+        }
+        
+        // Handle possible exponent
+        if ((*this)[i] == 'E' || (*this)[i] == 'e') {
+          if ((i + 1) >= GetSize()) return false; // malformed exponent
+          
+          // Check for +/- prefix on exponent
+          if ((*this)[i + 1] == '+' || (*this)[i + 1] == '-') i++;
+          
+          has_exponent = true;
+          has_decimal = true; // make sure no decimal points are allowed in the exponent
+          continue;
+        }
+        
+        if (!IsNumber(i)) return false;
+      }
+      
+      return true;
+    }
+    
+
+    // Counting Methods
+    int WhitespaceAt(int start) const
+    {
+      assert(start >= 0);
+      if (start >= GetSize()) return 0;
+      int count = 0;
+      while (start + count < GetSize() && IsWhitespace(start + count)) count++;
+      return count;
+    }
+    
+    
+    int WordSizeAt(int start) const
+    {
+      assert(start >= 0);
+      if (start >= GetSize()) return 0;
+      int count = 0;
+      while ((start + count) < GetSize() && !IsWhitespace(start + count)) count++;
+      return count;
+    }
+    
+    
+    int LineSizeAt(int start) const
+    {
+      assert(start >= 0);
+      if (start >= GetSize())  return 0;
+      int count = 0;
+      while ((start + count) < GetSize() && (*this)[start + count] != '\n') count++;
+      return count;
+    }
+    
+    
+    int NumLines() const
+    {
+      int num_lines = 1;
+      for (int i = 0; i < GetSize(); i++) if ((*this)[i] == '\n') num_lines++;
+      return num_lines;
+    }
+    
+    
+    int NumWords() const
+    {
+      int num_words = 0;
+      int pos = WhitespaceAt(0);     // Skip initial whitespace.
+      while (pos < GetSize()) {
+        pos += WordSizeAt(pos);
+        pos += WhitespaceAt(pos);
+        num_words++;
+      }
+      return num_words;
     }
     
     
