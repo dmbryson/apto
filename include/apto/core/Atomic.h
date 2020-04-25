@@ -3,7 +3,7 @@
  *  Apto
  *
  *  Created by David on 2/4/11.
- *  Copyright 2011 David Michael Bryson. All rights reserved.
+ *  Copyright 2011-2020 David Michael Bryson. All rights reserved.
  *  http://programerror.com/software/apto
  *
  *  Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -33,86 +33,26 @@
 
 #include "apto/platform/Platform.h"
 
+#include <atomic>
 
+// FIXME: Deprecate these in favor of direct use of std::atomic now
 namespace Apto {
   namespace Atomic {
-    inline int Add(volatile int* atomic, int value);
-    inline int Get(volatile int* atomic);
-    inline void Set(volatile int* atomic, int value);
-    
-    inline void Inc(volatile int* atomic) { Add(atomic, 1); }
-    inline bool DecAndTest(volatile int* atomic) { return (Add(atomic, -1) == 0); }
+    typedef std::atomic<int> AtomicInt;
+
+    inline int Add(AtomicInt& atomic, int value) {
+      return (atomic += value);
+    }
+    inline int Get(AtomicInt& atomic) {
+      return atomic.load();
+    }
+    inline void Set(AtomicInt& atomic, int value) {
+      atomic.store(value);
+    }
+
+    inline void Inc(AtomicInt& atomic) { Add(atomic, 1); }
+    inline bool DecAndTest(AtomicInt& atomic) { return (Add(atomic, -1) == 0); }
   };
 };
-
-
-#if APTO_PLATFORM(APPLE)
-
-#include <libkern/OSAtomic.h>
-
-inline int Apto::Atomic::Add(volatile int* atomic, int value)
-{
-  return OSAtomicAdd32Barrier(value, atomic);
-}
-
-inline int Apto::Atomic::Get(volatile int* atomic)
-{
-  OSMemoryBarrier();
-  return *atomic;
-}
-
-inline void Apto::Atomic::Set(volatile int* atomic, int value)
-{
-  OSMemoryBarrier();
-  *atomic = value;
-}
-
-#elif APTO_PLATFORM(WINDOWS)
-
-#include <Windows.h>
-
-inline int Apto::Atomic::Add(volatile int* atomic, int value)
-{
-  return InterlockedExchangeAdd(reinterpret_cast<volatile LONG*>(atomic), static_cast<LONG>(value)) + value;
-}
-
-inline int Apto::Atomic::Get(volatile int* atomic)
-{
-  MemoryBarrier();
-  return *atomic;
-}
-
-inline void Apto::Atomic::Set(volatile int* atomic, int value)
-{
-  MemoryBarrier();
-  *atomic = value;
-}
-
-#else
-
-// Assuming x86
-inline int Apto::Atomic::Add(volatile int* atomic, int value)
-{
-  int temp = value;
-  __asm__ __volatile__("lock; xaddl %0,%1"
-                       : "+r" (temp), "+m" (*atomic)
-                       : : "memory");
-  return temp + value;
-}
-
-inline int Apto::Atomic::Get(volatile int* atomic)
-{
-  __asm__ __volatile__("" : : : "memory");
-  return *atomic;
-}
-
-inline void Apto::Atomic::Set(volatile int* atomic, int value)
-{
-  __asm__ __volatile__("mfence" : : : "memory");
-  *atomic = value;
-}
-
-#endif
-
 
 #endif

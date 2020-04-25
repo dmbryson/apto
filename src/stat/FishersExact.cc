@@ -3,7 +3,7 @@
  *  Apto
  *
  *  Created by David on 2/15/11.
- *  Copyright 2011 David Michael Bryson. All rights reserved.
+ *  Copyright 2011-2020 David Michael Bryson. All rights reserved.
  *  http://programerror.com/software/apto
  *
  *  Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -66,14 +66,6 @@ using namespace Apto;
 static const double TOLERANCE = 3.4525e-7;  // Tolerance, as used in Algorithm 643
 static const int THREADING_THRESHOLD = 20;
 static const int DEFAULT_TABLE_SIZE = 300;
-
-
-
-// Internal Function Declarations
-// -------------------------------------------------------------------------------------------------------------- 
-
-static double cummulativeGamma(double q, double alpha, bool& fault);
-static double logGamma(double x, bool& fault);
 
 
 
@@ -1649,73 +1641,4 @@ void FExact::shortestPath(const MarginalArray::Slice& row_marginals, const Margi
     y_stack[istk] = y;
     l = 0;
   } while (true);
-  
-}
-
-
-
-// Internal Function Definitions
-// -------------------------------------------------------------------------------------------------------------- 
-
-double cummulativeGamma(double q, double alpha, bool& fault)
-{
-  if (q <= 0.0 || alpha <= 0.0) {
-    fault = true;
-    return 0.0;
-  }
-  
-  double f = exp(alpha * log(q) - logGamma(alpha + 1.0, fault) - q); // no need to test logGamma fail as an error is impossible
-  if (f == 0.0) {
-    fault = true;
-    return 0.0;
-  }
-  
-  fault = false;
-  
-  double c = 1.0;
-  double ret_val = 1.0;
-  double a = alpha;
-
-  do {
-    a += 1.0;
-    c = c * q / a;
-    ret_val += c;
-  } while (c / ret_val > (1e-6));
-  ret_val *= f;
-  
-  return ret_val;
-}
-
-
-double logGamma(double x, bool& fault)
-{
-  const double a1 = .918938533204673;
-  const double a2 = 5.95238095238e-4;
-  const double a3 = 7.93650793651e-4;
-  const double a4 = .002777777777778;
-  const double a5 = .083333333333333;
-  
-  if (x < 0.0) {
-    fault = true;
-    return 0.0;
-  }
-  
-  fault = false;
-  
-  double f = 0.0;
-  
-  if (x < 7.0) {
-    f = x;
-    
-    x += 1.0;
-    while (x < 7.0) {
-      f *= x;
-      x += 1.0;
-    }
-
-    f = -log(f);
-  }
-  
-  double z = 1 / (x * x);
-  return f + (x - .5) * log(x) - x + a1 + (((-a2 * z + a3) * z - a4) * z + a5) / x;
 }

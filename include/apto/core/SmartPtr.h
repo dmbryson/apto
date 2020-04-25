@@ -3,7 +3,7 @@
  *  Apto
  *
  *  Created by David on 2/7/11.
- *  Copyright 2011 David Michael Bryson. All rights reserved.
+ *  Copyright 2011-2020 David Michael Bryson. All rights reserved.
  *  http://programerror.com/software/apto
  *
  *  Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -32,7 +32,6 @@
 #ifndef AptoCoreSmartPtr_h
 #define AptoCoreSmartPtr_h
 
-#include "apto/core/Atomic.h"
 #include "apto/core/Definitions.h"
 #include "apto/core/RefTransport.h"
 #include "apto/core/StaticCheck.h"
@@ -40,6 +39,7 @@
 
 #include "apto/platform/Visibility.h"
 
+#include <atomic>
 #include <cassert>
 #include <functional>
 #include <string>
@@ -210,13 +210,12 @@ namespace Apto {
   {
     template <class T1> friend class ThreadSafeRefCount;
   private:
-    volatile int* m_p_refs;
+    std::atomic<int>* m_p_refs;
     
   protected:
-    ThreadSafeRefCount() : m_p_refs(new int)
+    ThreadSafeRefCount() : m_p_refs(new std::atomic<int>(1))
     {
       assert(m_p_refs);
-      Atomic::Set(m_p_refs, 1);
     }
     ThreadSafeRefCount(const ThreadSafeRefCount& rhs) : m_p_refs(rhs.m_p_refs) { ; }
     
@@ -225,13 +224,13 @@ namespace Apto {
     
     T Clone(const T& value)
     {
-      Atomic::Inc(m_p_refs);
+      m_p_refs->fetch_add(1);
       return value;
     }
     
     bool Release(const T&)
     {
-      if (Atomic::DecAndTest(m_p_refs)) {
+      if (m_p_refs->fetch_sub(1) == 1) {
         delete m_p_refs;
         m_p_refs = NULL;
         return true;
@@ -241,9 +240,7 @@ namespace Apto {
     
     void Swap(ThreadSafeRefCount& rhs)
     {
-      volatile int* temp = m_p_refs;
-      m_p_refs = rhs.m_p_refs;
-      rhs.m_p_refs = temp;
+      m_p_refs->store(rhs.m_p_refs->exchange(m_p_refs->load()));
     }
     
     enum { CopyIsDestructive = false };

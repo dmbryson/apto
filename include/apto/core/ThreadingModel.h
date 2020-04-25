@@ -3,7 +3,7 @@
  *  Apto
  *
  *  Created by David on 10/10/12.
- *  Copyright 2012 David Michael Bryson. All rights reserved.
+ *  Copyright 2012-2020 David Michael Bryson. All rights reserved.
  *  http://programerror.com/software/apto
  *
  *  Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -70,9 +70,9 @@ namespace Apto {
     class ClassLockMutex;
     
   public:
-    typedef volatile T VolatileType;
-    typedef volatile int AtomicInt;
-    
+    typedef T VolatileType;
+    typedef Atomic::AtomicInt AtomicInt;
+
     class ClassLock
     {
     public:
@@ -80,12 +80,12 @@ namespace Apto {
       inline ~ClassLock() { ClassLockMutex::Get().Unlock(); }
     };
     
-    static inline int Add(AtomicInt& atomic, int value) { return Atomic::Add(&atomic, value); }
-    static inline int Get(AtomicInt& atomic) { return Atomic::Get(&atomic); }
-    static inline void Set(AtomicInt& atomic, int value) { Atomic::Set(&atomic, value); }
+    static inline int Add(AtomicInt& atomic, int value) { return Atomic::Add(atomic, value); }
+    static inline int Get(AtomicInt& atomic) { return Atomic::Get(atomic); }
+    static inline void Set(AtomicInt& atomic, int value) { Atomic::Set(atomic, value); }
     
-    static inline void Inc(AtomicInt& atomic) { Atomic::Inc(&atomic); }
-    static inline bool DecAndTest(AtomicInt& atomic) { return Atomic::DecAndTest(&atomic); }
+    static inline void Inc(AtomicInt& atomic) { Atomic::Inc(atomic); }
+    static inline bool DecAndTest(AtomicInt& atomic) { return Atomic::DecAndTest(atomic); }
     
   private:
     class ClassLockMutex
